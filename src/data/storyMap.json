@@ -1,0 +1,74 @@
+{
+  "title": "Kino-Ticketsystem User Story Map",
+  "releases": [
+    { "id": 1, "name": "Release 1 – MVP", "color": "#d4edda", "borderColor": "#437a22" },
+    { "id": 2, "name": "Release 2 – Erweiterung", "color": "#fff3cd", "borderColor": "#d19900" },
+    { "id": 3, "name": "Release 3 – Vollausbau", "color": "#f8d7da", "borderColor": "#a13544" }
+  ],
+  "activities": [
+    {
+      "id": "ticket-kaufen",
+      "name": "TICKET KAUFEN",
+      "icon": "ticket",
+      "steps": [
+        { "id": "schnellkauf", "name": "Kassenverkauf", "stories": ["U01", "U02", "U03"] },
+        { "id": "online-kauf", "name": "Online kaufen", "stories": ["U04", "U05", "U06"] },
+        { "id": "rabatte", "name": "Rabatte & Gruppen", "stories": ["U28", "U18"] }
+      ]
+    },
+    {
+      "id": "programm",
+      "name": "PROGRAMM & SUCHE",
+      "icon": "search",
+      "steps": [
+        { "id": "suche", "name": "Film suchen", "stories": ["U22", "U24"] },
+        { "id": "empfehlung", "name": "Empfehlungen", "stories": ["U23", "U30"] }
+      ]
+    },
+    {
+      "id": "sitzplan",
+      "name": "SITZPLAN & KATEGORIEN",
+      "icon": "layout-grid",
+      "steps": [
+        { "id": "sitzwahl", "name": "Sitz auswählen", "stories": ["U07", "U09"] },
+        { "id": "sitzpraef", "name": "Präferenzen", "stories": ["U08", "U10"] }
+      ]
+    },
+    {
+      "id": "einlass",
+      "name": "EINLASS & VALIDIERUNG",
+      "icon": "scan-line",
+      "steps": [
+        { "id": "scan", "name": "Ticket scannen", "stories": ["U15", "U16"] },
+        { "id": "kontrolle", "name": "Einlasskontrolle", "stories": ["U17", "U29"] }
+      ]
+    },
+    {
+      "id": "verwaltung",
+      "name": "VORSTELLUNG VERWALTEN",
+      "icon": "calendar",
+      "steps": [
+        { "id": "programm-pflege", "name": "Programm pflegen", "stories": ["U11", "U12"] },
+        { "id": "reporting", "name": "Berichte & Analyse", "stories": ["U13", "U14"] }
+      ]
+    },
+    {
+      "id": "konto",
+      "name": "KONTO & LOYALITÄT",
+      "icon": "user-circle",
+      "steps": [
+        { "id": "profil", "name": "Profil & Zahlung", "stories": ["U19", "U21"] },
+        { "id": "punkte", "name": "Bonuspunkte", "stories": ["U20"] }
+      ]
+    },
+    {
+      "id": "system",
+      "name": "SYSTEM & ADMIN",
+      "icon": "settings",
+      "steps": [
+        { "id": "preise", "name": "Preise & Rollen", "stories": ["U25", "U26"] },
+        { "id": "schicht", "name": "Kasse & Schicht", "stories": ["U27"] }
+      ]
+    }
+  ]
+}
