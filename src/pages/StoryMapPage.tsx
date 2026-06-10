@@ -9,6 +9,7 @@ import storiesData from '@/data/userStories.json'
 import personasData from '@/data/personas.json'
 import type { UserStory, Persona, ReleaseNumber } from '@/types'
 import { Ticket, ScanLine, Calendar, UserCircle, Settings, CheckCircle2, Search, LayoutGrid } from 'lucide-react'
+import { useAppStore } from '@/store/appStore'
 
 const stories = storiesData as UserStory[]
 const personas = personasData as Persona[]
@@ -28,25 +29,103 @@ const activityColors = [
 ]
 
 const releaseConfig: Record<number, {
-  bg: string; bgDark: string; border: string; text: string; label: string; dot: string
+  bg: string; bgDark: string; border: string; borderDark: string
+  text: string; textDark: string; label: string; dot: string
 }> = {
-  1: { bg: '#e4f5ed', bgDark: '#1a3d28', border: '#437a22', text: '#165c35', label: 'Release 1 – MVP', dot: '#437a22' },
-  2: { bg: '#fef7de', bgDark: '#3f2d00', border: '#d19900', text: '#7a5400', label: 'Release 2 – Erweiterung', dot: '#d19900' },
-  3: { bg: '#fde8e1', bgDark: '#3f1210', border: '#a13544', text: '#9e2f14', label: 'Release 3 – Vollausbau', dot: '#a13544' },
+  1: { bg: '#e4f5ed', bgDark: '#1a3d28', border: '#437a22', borderDark: '#2d6b44', text: '#165c35', textDark: '#6ee7a8', label: 'Release 1 – MVP', dot: '#437a22' },
+  2: { bg: '#fef7de', bgDark: '#3f2d00', border: '#d19900', borderDark: '#b07d00', text: '#7a5400', textDark: '#fbbf24', label: 'Release 2 – Erweiterung', dot: '#d19900' },
+  3: { bg: '#fde8e1', bgDark: '#3f1210', border: '#a13544', borderDark: '#c0404f', text: '#9e2f14', textDark: '#f87171', label: 'Release 3 – Vollausbau', dot: '#a13544' },
 }
 
 const priorityDot: Record<string, string> = {
   high: '#ef4444', medium: '#f59e0b', low: '#22c55e',
 }
 
+function StoryCard({
+  story,
+  persona,
+  acColor,
+  rc,
+  isDark,
+  onClick,
+}: {
+  story: UserStory
+  persona: Persona | null
+  acColor: string
+  rc: typeof releaseConfig[1]
+  isDark: boolean
+  onClick: () => void
+}) {
+  const [hovered, setHovered] = useState(false)
+
+  const cardBg = isDark
+    ? hovered ? '#2a2a2a' : '#1e1e1e'
+    : hovered ? rc.bg : 'white'
+  const cardBorder = isDark ? rc.borderDark : rc.border
+  const textColor = isDark ? '#e5e7eb' : '#1a1a1a'
+
+  return (
+    <button
+      className="w-full text-left rounded-lg p-2 transition-all duration-150"
+      style={{
+        background: cardBg,
+        border: `1px solid ${cardBorder}`,
+        borderLeft: `3px solid ${cardBorder}`,
+        boxShadow: hovered ? '0 3px 8px rgba(0,0,0,0.18)' : '0 1px 2px rgba(0,0,0,0.08)',
+        transform: hovered ? 'translateY(-1px)' : 'none',
+      }}
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <div className="flex items-center justify-between mb-1">
+        <span className="font-mono font-bold text-xs" style={{ color: acColor }}>
+          {story.id}
+        </span>
+        <div className="flex items-center gap-1">
+          {persona && (
+            <div
+              className="w-4 h-4 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0"
+              style={{ background: persona.color, fontSize: '8px' }}
+            >
+              {persona.avatar[0]}
+            </div>
+          )}
+          <span className="w-1.5 h-1.5 rounded-full" style={{ background: priorityDot[story.priority] }} />
+        </div>
+      </div>
+      <p className="text-xs leading-snug" style={{ color: textColor }}>
+        {story.title}
+      </p>
+    </button>
+  )
+}
+
 export default function StoryMapPage() {
   const [selectedStory, setSelectedStory] = useState<UserStory | null>(null)
   const [activeRelease, setActiveRelease] = useState<ReleaseNumber | null>(null)
+  const { theme } = useAppStore()
+  const isDark = theme === 'dark'
 
   const getPersona = (id: string) => personas.find(p => p.id === id)
 
   const totalStories = stories.length
   const storyCountByRelease = [1, 2, 3].map(r => stories.filter(s => s.release === r).length)
+
+  // Pre-compute fixed row height per release so all cells in a row are identical height
+  const rowHeights = Object.fromEntries(
+    ([1, 2, 3] as ReleaseNumber[]).map((r) => {
+      const maxCards = Math.max(
+        ...storyMapData.activities.flatMap(a =>
+          a.steps.map(s =>
+            stories.filter(st => s.stories.includes(st.id) && st.release === r).length
+          )
+        ),
+        1
+      )
+      return [r, 16 + maxCards * 62 + Math.max(maxCards - 1, 0) * 6]
+    })
+  ) as Record<ReleaseNumber, number>
 
   return (
     <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
@@ -99,44 +178,53 @@ export default function StoryMapPage() {
       </div>
 
       {/* Scroll hint */}
-      <p className="text-xs mb-3" style={{ color: 'var(--text-secondary)' }}>
-        Horizontal scrollen · Klick auf Story für Details
-      </p>
+      <div className="flex items-center gap-1.5 mb-3 text-xs font-medium px-2 py-1.5 rounded-lg w-fit"
+        style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}
+      >
+        <span>←</span>
+        <span>Horizontal scrollen</span>
+        <span style={{ color: 'var(--border-color)' }}>·</span>
+        <span>Klick auf Story für Details</span>
+        <span>→</span>
+      </div>
 
       <div className="overflow-x-auto pb-4 rounded-xl" style={{ border: '1px solid var(--border-color)' }}>
         <TooltipProvider>
           <div className="inline-flex min-w-max">
-            {/* Release-Row labels on the left */}
-            <div className="flex flex-col flex-shrink-0">
+
+            {/* ── H: Sticky Release-Row labels ── */}
+            <div
+              className="flex flex-col flex-shrink-0"
+              style={{
+                position: 'sticky',
+                left: 0,
+                zIndex: 20,
+                background: 'var(--card-bg)',
+              }}
+            >
               {/* Spacer for Activity + Step rows */}
-              <div style={{ height: '48px' }} />
-              <div style={{ height: '40px' }} />
+              <div style={{ height: '48px', background: isDark ? '#111' : '#f8f8f8' }} />
+              <div style={{ height: '40px', background: isDark ? '#111' : '#f8f8f8', borderBottom: '1px solid var(--border-color)' }} />
               {([1, 2, 3] as ReleaseNumber[]).map((r) => {
                 const rc = releaseConfig[r]
-                const maxCards = Math.max(
-                  ...storyMapData.activities.flatMap(a =>
-                    a.steps.flatMap(s =>
-                      [stories.filter(st => s.stories.includes(st.id) && st.release === r).length]
-                    )
-                  ),
-                  1
-                )
-                const minH = maxCards * 60 + 16
+                const bandBg = isDark ? rc.bgDark : rc.bg
+                const bandBorder = isDark ? rc.borderDark : rc.border
+                const bandText = isDark ? rc.textDark : rc.text
                 return (
                   <div
                     key={r}
                     className="flex items-center justify-center px-2"
                     style={{
-                      minHeight: `${minH}px`,
-                      background: rc.bg,
-                      borderTop: `1px solid ${rc.border}`,
+                      height: `${rowHeights[r as ReleaseNumber]}px`,
+                      background: bandBg,
+                      borderTop: `1px solid ${bandBorder}`,
                       writingMode: 'vertical-lr',
                       transform: 'rotate(180deg)',
                       fontSize: '10px',
                       fontWeight: 700,
                       letterSpacing: '0.06em',
                       textTransform: 'uppercase',
-                      color: rc.text,
+                      color: bandText,
                       width: '36px',
                     }}
                   >
@@ -158,7 +246,8 @@ export default function StoryMapPage() {
                     className="flex items-center gap-2 px-4 font-bold text-xs text-white uppercase tracking-wider"
                     style={{
                       background: acColor,
-                      minWidth: `${Math.max(activity.steps.length, 1) * 190}px`,
+                      width: `${activity.steps.length * 190}px`,
+                      minWidth: `${activity.steps.length * 190}px`,
                       height: '48px',
                       borderRight: '2px solid rgba(255,255,255,0.2)',
                     }}
@@ -176,7 +265,7 @@ export default function StoryMapPage() {
                           className="flex items-center px-3 font-semibold text-xs"
                           style={{
                             height: '40px',
-                            background: `${acColor}14`,
+                            background: `${acColor}22`,
                             borderRight: '1px solid var(--border-color)',
                             borderBottom: '1px solid var(--border-color)',
                             color: acColor,
@@ -185,23 +274,26 @@ export default function StoryMapPage() {
                           {step.name}
                         </div>
 
-                        {/* Release bands */}
+                        {/* ── A+B: Release bands with correct dark-mode background ── */}
                         {([1, 2, 3] as ReleaseNumber[]).map((r) => {
                           const rc = releaseConfig[r]
                           const band = stories.filter(
                             s => step.stories.includes(s.id) && s.release === r
                           )
                           const dimmed = activeRelease !== null && activeRelease !== r
+                          const bandBg = isDark ? rc.bgDark : rc.bg
+                          const bandBorder = isDark ? rc.borderDark : rc.border
 
                           return (
                             <div
                               key={r}
                               className="p-2 flex flex-col gap-1.5"
                               style={{
-                                background: rc.bg,
+                                background: bandBg,
                                 borderRight: '1px solid var(--border-color)',
                                 borderBottom: '1px solid var(--border-color)',
-                                minHeight: '72px',
+                                height: `${rowHeights[r as ReleaseNumber]}px`,
+                                overflow: 'hidden',
                                 opacity: dimmed ? 0.3 : 1,
                                 transition: 'opacity 0.2s',
                               }}
@@ -211,65 +303,42 @@ export default function StoryMapPage() {
                                 return (
                                   <Tooltip key={story.id}>
                                     <TooltipTrigger asChild>
-                                      <button
-                                        className="w-full text-left rounded-lg p-2 transition-all duration-150 group"
-                                        style={{
-                                          background: 'white',
-                                          border: `1px solid ${rc.border}`,
-                                          borderLeft: `3px solid ${rc.border}`,
-                                          boxShadow: '0 1px 2px rgba(0,0,0,0.06)',
-                                        }}
+                                      <StoryCard
+                                        story={story}
+                                        persona={persona ?? null}
+                                        acColor={acColor}
+                                        rc={rc}
+                                        isDark={isDark}
                                         onClick={() => setSelectedStory(story)}
-                                      >
-                                        <div className="flex items-center justify-between mb-1">
-                                          <span
-                                            className="font-mono font-bold text-xs"
-                                            style={{ color: acColor }}
-                                          >
-                                            {story.id}
-                                          </span>
-                                          <div className="flex items-center gap-1">
-                                            {persona && (
-                                              <div
-                                                className="w-4 h-4 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0"
-                                                style={{ background: persona.color, fontSize: '8px' }}
-                                              >
-                                                {persona.avatar[0]}
-                                              </div>
-                                            )}
-                                            <span
-                                              className="w-1.5 h-1.5 rounded-full"
-                                              style={{ background: priorityDot[story.priority] }}
-                                            />
-                                          </div>
-                                        </div>
-                                        <p
-                                          className="text-xs leading-snug group-hover:underline"
-                                          style={{ color: '#1a1a1a' }}
-                                        >
-                                          {story.title}
-                                        </p>
-                                      </button>
+                                      />
                                     </TooltipTrigger>
-                                    <TooltipContent
-                                      side="top"
-                                      className="max-w-72 text-xs"
-                                    >
+                                    <TooltipContent side="top" className="max-w-72 text-xs">
                                       <p className="font-semibold mb-1">{story.title}</p>
                                       <p className="leading-relaxed">{story.story}</p>
                                     </TooltipContent>
                                   </Tooltip>
                                 )
                               })}
+
+                              {/* ── F: Tooltip on empty cells ── */}
                               {band.length === 0 && (
-                                <div className="flex-1 flex items-center justify-center">
-                                  <span
-                                    className="text-xs"
-                                    style={{ color: rc.text, opacity: 0.4 }}
-                                  >
-                                    —
-                                  </span>
-                                </div>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <div className="flex-1 flex items-center justify-center py-3 cursor-default">
+                                      <div
+                                        className="w-full rounded-md"
+                                        style={{
+                                          height: '28px',
+                                          border: `1.5px dashed ${bandBorder}`,
+                                          opacity: 0.35,
+                                        }}
+                                      />
+                                    </div>
+                                  </TooltipTrigger>
+                                  <TooltipContent side="top" className="text-xs">
+                                    Keine Story in {rc.label} geplant
+                                  </TooltipContent>
+                                </Tooltip>
                               )}
                             </div>
                           )

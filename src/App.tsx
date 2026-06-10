@@ -29,7 +29,7 @@ function AppContent() {
   useTheme()
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/Kino-Project-Vorbereitung">
       <AppShell>
         <Suspense fallback={<Skeleton />}>
           <Routes>

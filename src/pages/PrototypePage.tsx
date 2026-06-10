@@ -4,12 +4,12 @@ import {
   ChevronLeft, Check, QrCode, Download,
   Home, Search, Star, Clock, Wifi, Battery, Signal,
   MapPin, Film, Zap, Heart, Share2, Ticket, User,
-  ShieldCheck, ChevronRight
+  ShieldCheck, ChevronRight, Bell, CreditCard, HelpCircle, LogOut, BookOpen
 } from 'lucide-react'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { pageVariants, screenVariants } from '@/lib/transitions'
 
-type Screen = 'home' | 'detail' | 'seats' | 'checkout' | 'confirm'
+type Screen = 'home' | 'detail' | 'seats' | 'checkout' | 'confirm' | 'profile'
 
 interface PrototypeState {
   screen: Screen
@@ -61,9 +61,10 @@ const screenInfo: Record<Screen, { title: string; desc: string; step: number }> 
   seats: { title: 'Sitzplan', desc: 'Interaktiver Saalplan – bis zu 4 Sitze wählbar', step: 3 },
   checkout: { title: 'Checkout', desc: 'Bestellübersicht, Studentenrabatt & Zahlung', step: 4 },
   confirm: { title: 'Bestätigung', desc: 'QR-Code-Ticket und Download-Option', step: 5 },
+  profile: { title: 'Profil', desc: 'Nutzerprofil, Buchungshistorie und Einstellungen', step: 6 },
 }
 
-const screens: Screen[] = ['home', 'detail', 'seats', 'checkout', 'confirm']
+const screens: Screen[] = ['home', 'detail', 'seats', 'checkout', 'confirm', 'profile']
 const times = [
   { t: '14:30', hall: 'Saal 2', available: true },
   { t: '17:00', hall: 'Saal 4', available: true },
@@ -102,7 +103,6 @@ function StatusBar({ light = false }: { light?: boolean }) {
         fontSize: '11px',
         color: c,
         fontWeight: 600,
-        // Mask out center 130px so Dynamic Island shows through
         WebkitMaskImage: 'linear-gradient(to right, black 0%, black calc(50% - 70px), transparent calc(50% - 65px), transparent calc(50% + 65px), black calc(50% + 70px), black 100%)',
         maskImage: 'linear-gradient(to right, black 0%, black calc(50% - 70px), transparent calc(50% - 65px), transparent calc(50% + 65px), black calc(50% + 70px), black 100%)',
         pointerEvents: 'none',
@@ -118,12 +118,57 @@ function StatusBar({ light = false }: { light?: boolean }) {
   )
 }
 
+// ── TAB BAR ──────────────────────────────────────────────
+function TabBar({ activeScreen, dispatch }: { activeScreen: Screen; dispatch: React.Dispatch<Action> }) {
+  const tabs: { icon: React.ElementType; label: string; screen: Screen }[] = [
+    { icon: Home, label: 'Home', screen: 'home' },
+    { icon: Film, label: 'Programm', screen: 'detail' },
+    { icon: Ticket, label: 'Tickets', screen: 'confirm' },
+    { icon: User, label: 'Profil', screen: 'profile' },
+  ]
+
+  const activeTab =
+    activeScreen === 'home' ? 'Home'
+    : activeScreen === 'detail' || activeScreen === 'seats' || activeScreen === 'checkout' ? 'Programm'
+    : activeScreen === 'confirm' ? 'Tickets'
+    : activeScreen === 'profile' ? 'Profil'
+    : 'Home'
+
+  return (
+    <div
+      className="flex-shrink-0 flex justify-around items-center py-2 px-2 border-t"
+      style={{ background: 'white', borderColor: '#f3f4f6' }}
+    >
+      {tabs.map(({ icon: Icon, label, screen }) => {
+        const active = label === activeTab
+        return (
+          <button
+            key={label}
+            className="flex flex-col items-center gap-0.5 px-3 py-1"
+            onClick={() => dispatch({ type: 'GO_TO', screen })}
+          >
+            <div
+              className="w-8 h-8 rounded-xl flex items-center justify-center"
+              style={{ background: active ? '#01696f' : 'transparent' }}
+            >
+              <Icon size={18} style={{ color: active ? 'white' : '#9ca3af' }} />
+            </div>
+            <span className="text-xs" style={{ color: active ? '#01696f' : '#9ca3af', fontWeight: active ? 600 : 400 }}>
+              {label}
+            </span>
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
 // ── HOME SCREEN ──────────────────────────────────────────
 function HomeScreen({ dispatch }: { dispatch: React.Dispatch<Action> }) {
   return (
     <div className="flex flex-col h-full bg-white overflow-hidden">
-      {/* Dark hero area */}
-      <div style={{ background: 'linear-gradient(160deg, #0d1117 0%, #1a1a2e 100%)' }}>
+      {/* Dark hero area — starts at top:0 so gradient reaches behind Dynamic Island */}
+      <div style={{ background: 'linear-gradient(160deg, #0d1117 0%, #1a1a2e 100%)', paddingTop: '54px' }}>
 
         {/* Top bar */}
         <div className="flex items-center justify-between px-5 pb-3">
@@ -239,31 +284,6 @@ function HomeScreen({ dispatch }: { dispatch: React.Dispatch<Action> }) {
           </div>
         </div>
       </div>
-
-      {/* Bottom Tab Bar */}
-      <div
-        className="flex justify-around items-center py-2 px-2 border-t"
-        style={{ background: 'white', borderColor: '#f3f4f6' }}
-      >
-        {[
-          { icon: Home, label: 'Home', active: true },
-          { icon: Film, label: 'Programm', active: false },
-          { icon: Ticket, label: 'Tickets', active: false },
-          { icon: User, label: 'Profil', active: false },
-        ].map(({ icon: Icon, label, active }) => (
-          <div key={label} className="flex flex-col items-center gap-0.5 px-3 py-1">
-            <div
-              className="w-8 h-8 rounded-xl flex items-center justify-center"
-              style={{ background: active ? '#01696f' : 'transparent' }}
-            >
-              <Icon size={18} style={{ color: active ? 'white' : '#9ca3af' }} />
-            </div>
-            <span className="text-xs" style={{ color: active ? '#01696f' : '#9ca3af', fontWeight: active ? 600 : 400 }}>
-              {label}
-            </span>
-          </div>
-        ))}
-      </div>
     </div>
   )
 }
@@ -275,7 +295,7 @@ function DetailScreen({ state, dispatch }: { state: PrototypeState; dispatch: Re
       {/* Hero */}
       <div
         className="relative flex-shrink-0"
-        style={{ background: 'linear-gradient(160deg, #0d1117, #1a1a2e)', height: '190px' }}
+        style={{ background: 'linear-gradient(160deg, #0d1117, #1a1a2e)', height: '200px' }}
       >
         <div className="absolute inset-0 flex items-center justify-center">
           <div
@@ -295,15 +315,16 @@ function DetailScreen({ state, dispatch }: { state: PrototypeState; dispatch: Re
           <h2 className="text-white font-bold text-2xl" style={{ fontFamily: 'var(--font-display)' }}>Interstellar</h2>
         </div>
 
+        {/* Fix 2.3a/b: buttons unterhalb Dynamic Island (top: 54px) */}
         <button
-          className="absolute top-8 left-4 w-8 h-8 rounded-full flex items-center justify-center"
-          style={{ background: 'rgba(0,0,0,0.4)' }}
+          className="absolute left-4 w-8 h-8 rounded-full flex items-center justify-center"
+          style={{ top: '54px', background: 'rgba(0,0,0,0.4)' }}
           onClick={() => dispatch({ type: 'GO_TO', screen: 'home' })}
         >
           <ChevronLeft size={16} color="white" />
         </button>
 
-        <div className="absolute top-8 right-4 flex gap-2">
+        <div className="absolute right-4 flex gap-2" style={{ top: '54px' }}>
           <button
             className="w-8 h-8 rounded-full flex items-center justify-center"
             style={{ background: 'rgba(0,0,0,0.4)' }}
@@ -395,7 +416,11 @@ function SeatsScreen({ state, dispatch }: { state: PrototypeState; dispatch: Rea
 
   return (
     <div className="flex flex-col h-full bg-white">
-      <div className="flex items-center gap-3 px-4 py-2 border-b" style={{ borderColor: '#f3f4f6' }}>
+      {/* Fix 2.3c: paddingTop für StatusBar-Bereich */}
+      <div
+        className="flex items-center gap-3 px-4 py-2 border-b"
+        style={{ borderColor: '#f3f4f6', paddingTop: '54px' }}
+      >
         <button
           className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
           style={{ background: '#f3f4f6' }}
@@ -532,7 +557,7 @@ function CheckoutScreen({ state, dispatch }: { state: PrototypeState; dispatch: 
 
   return (
     <div className="flex flex-col h-full bg-gray-50 overflow-y-auto">
-      <div className="bg-white border-b" style={{ borderColor: '#f3f4f6' }}>
+      <div className="bg-white border-b" style={{ borderColor: '#f3f4f6', paddingTop: '54px' }}>
         <div className="flex items-center gap-3 px-4 py-2">
           <button
             className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
@@ -653,10 +678,10 @@ function ConfirmScreen({ state, dispatch }: { state: PrototypeState; dispatch: R
 
   return (
     <div className="flex flex-col h-full bg-white overflow-y-auto">
-      {/* Success Header */}
+      {/* Fix 2.3d: mehr Abstand oben nach StatusBar */}
       <div
-        className="flex flex-col items-center pt-4 pb-6 px-6"
-        style={{ background: 'linear-gradient(160deg, #f0fdf4, #dcfce7)' }}
+        className="flex flex-col items-center pb-6 px-6"
+        style={{ background: 'linear-gradient(160deg, #f0fdf4, #dcfce7)', paddingTop: '62px' }}
       >
         <motion.div
           initial={{ scale: 0 }}
@@ -730,7 +755,7 @@ function ConfirmScreen({ state, dispatch }: { state: PrototypeState; dispatch: R
             >
               <QrCode size={100} style={{ color: '#1a1a1a' }} />
               <p className="text-xs mt-2 font-mono font-bold" style={{ color: '#9ca3af' }}>
-                CIN-2026-{Math.random().toString(36).slice(2, 8).toUpperCase()}
+                CIN-2026-A7F3K2
               </p>
             </div>
           </div>
@@ -757,6 +782,142 @@ function ConfirmScreen({ state, dispatch }: { state: PrototypeState; dispatch: R
   )
 }
 
+// ── PROFILE SCREEN ───────────────────────────────────────
+function ProfileScreen({ dispatch }: { dispatch: React.Dispatch<Action> }) {
+  const history = [
+    { title: 'Interstellar', date: '9. Juni 2026', seats: 'D4, D5', price: '21,60 €', hall: 'Saal 1' },
+    { title: 'Oppenheimer', date: '14. Mai 2026', seats: 'E3', price: '10,80 €', hall: 'Saal 2' },
+    { title: 'Everything Everywhere', date: '2. April 2026', seats: 'B6, B7', price: '21,60 €', hall: 'Saal 4' },
+  ]
+
+  const settings = [
+    { icon: Bell, label: 'Benachrichtigungen', sub: 'Push & E-Mail aktiv' },
+    { icon: CreditCard, label: 'Zahlungsmethoden', sub: 'Kreditkarte •••• 4242' },
+    { icon: BookOpen, label: 'Studentenstatus', sub: 'Verifiziert bis Sep 2026' },
+    { icon: HelpCircle, label: 'Hilfe & Support', sub: 'FAQ, Kontakt' },
+  ]
+
+  return (
+    <div className="flex flex-col h-full bg-gray-50 overflow-y-auto">
+      {/* Header */}
+      <div
+        className="flex-shrink-0 px-5 pb-5"
+        style={{ background: 'linear-gradient(160deg, #0d1117 0%, #1a1a2e 100%)', paddingTop: '54px' }}
+      >
+        <div className="flex items-center gap-4">
+          <div
+            className="w-16 h-16 rounded-full flex items-center justify-center font-bold text-xl text-white flex-shrink-0"
+            style={{ background: '#a12c7b', border: '3px solid rgba(255,255,255,0.2)' }}
+          >
+            LF
+          </div>
+          <div>
+            <p className="font-bold text-white text-lg">Lena Fischer</p>
+            <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.5)' }}>lena@example.de</p>
+            <span
+              className="inline-block text-xs px-2 py-0.5 rounded-full font-semibold mt-1.5"
+              style={{ background: '#01696f', color: 'white' }}
+            >
+              Studentin · verifiziert
+            </span>
+          </div>
+        </div>
+
+        {/* Stats */}
+        <div className="flex gap-3 mt-4">
+          {[
+            { value: '3', label: 'Buchungen' },
+            { value: '53,00 €', label: 'Gespart' },
+            { value: '7', label: 'Filme gesehen' },
+          ].map(({ value, label }) => (
+            <div
+              key={label}
+              className="flex-1 rounded-xl px-3 py-2 text-center"
+              style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)' }}
+            >
+              <p className="font-bold text-white text-base">{value}</p>
+              <p className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>{label}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex-1 px-4 py-4 space-y-4">
+        {/* Buchungshistorie */}
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wider mb-2 px-1" style={{ color: '#9ca3af' }}>
+            Buchungshistorie
+          </p>
+          <div className="space-y-2">
+            {history.map((booking) => (
+              <div
+                key={booking.title + booking.date}
+                className="flex items-center gap-3 p-3 rounded-2xl"
+                style={{ background: 'white', border: '1px solid #f3f4f6' }}
+              >
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-lg"
+                  style={{ background: '#0d1117' }}
+                >
+                  🎬
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-sm truncate" style={{ color: '#1a1a1a' }}>{booking.title}</p>
+                  <p className="text-xs mt-0.5" style={{ color: '#6b7280' }}>
+                    {booking.date} · {booking.hall} · Plätze {booking.seats}
+                  </p>
+                </div>
+                <div className="text-right flex-shrink-0">
+                  <p className="text-xs font-semibold" style={{ color: '#01696f' }}>{booking.price}</p>
+                  <p className="text-xs" style={{ color: '#6b7280' }}>−20%</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Einstellungen */}
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wider mb-2 px-1" style={{ color: '#9ca3af' }}>
+            Einstellungen
+          </p>
+          <div className="rounded-2xl overflow-hidden" style={{ background: 'white', border: '1px solid #f3f4f6' }}>
+            {settings.map(({ icon: Icon, label, sub }, idx) => (
+              <button
+                key={label}
+                className="w-full flex items-center gap-3 px-4 py-3 text-left"
+                style={{ borderBottom: idx < settings.length - 1 ? '1px solid #f9fafb' : 'none' }}
+              >
+                <div
+                  className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
+                  style={{ background: '#f3f4f6' }}
+                >
+                  <Icon size={15} style={{ color: '#6b7280' }} />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium" style={{ color: '#1a1a1a' }}>{label}</p>
+                  <p className="text-xs" style={{ color: '#9ca3af' }}>{sub}</p>
+                </div>
+                <ChevronRight size={14} style={{ color: '#d1d5db' }} />
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Abmelden */}
+        <button
+          className="w-full flex items-center justify-center gap-2 py-3 rounded-2xl text-sm font-medium"
+          style={{ background: '#fff1f2', color: '#ef4444', border: '1px solid #fecdd3' }}
+          onClick={() => dispatch({ type: 'GO_TO', screen: 'home' })}
+        >
+          <LogOut size={15} />
+          Abmelden
+        </button>
+      </div>
+    </div>
+  )
+}
+
 // ── MAIN COMPONENT ───────────────────────────────────────
 export default function PrototypePage() {
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -769,6 +930,7 @@ export default function PrototypePage() {
       case 'seats': return <SeatsScreen state={state} dispatch={dispatch} />
       case 'checkout': return <CheckoutScreen state={state} dispatch={dispatch} />
       case 'confirm': return <ConfirmScreen state={state} dispatch={dispatch} />
+      case 'profile': return <ProfileScreen dispatch={dispatch} />
     }
   }
 
@@ -794,26 +956,14 @@ export default function PrototypePage() {
             }}
           >
             {/* Side buttons */}
-            <div
-              className="absolute"
-              style={{ left: '-3px', top: '120px', width: '3px', height: '32px', background: '#333', borderRadius: '2px 0 0 2px' }}
-            />
-            <div
-              className="absolute"
-              style={{ left: '-3px', top: '170px', width: '3px', height: '56px', background: '#333', borderRadius: '2px 0 0 2px' }}
-            />
-            <div
-              className="absolute"
-              style={{ left: '-3px', top: '240px', width: '3px', height: '56px', background: '#333', borderRadius: '2px 0 0 2px' }}
-            />
-            <div
-              className="absolute"
-              style={{ right: '-3px', top: '160px', width: '3px', height: '80px', background: '#333', borderRadius: '0 2px 2px 0' }}
-            />
+            <div className="absolute" style={{ left: '-3px', top: '120px', width: '3px', height: '32px', background: '#333', borderRadius: '2px 0 0 2px' }} />
+            <div className="absolute" style={{ left: '-3px', top: '170px', width: '3px', height: '56px', background: '#333', borderRadius: '2px 0 0 2px' }} />
+            <div className="absolute" style={{ left: '-3px', top: '240px', width: '3px', height: '56px', background: '#333', borderRadius: '2px 0 0 2px' }} />
+            <div className="absolute" style={{ right: '-3px', top: '160px', width: '3px', height: '80px', background: '#333', borderRadius: '0 2px 2px 0' }} />
 
             {/* Screen */}
             <div
-              className="relative overflow-hidden"
+              className="relative overflow-hidden flex flex-col"
               style={{
                 width: '100%',
                 height: '100%',
@@ -835,9 +985,10 @@ export default function PrototypePage() {
                 }}
               />
 
-              {/* Global status bar — sits above content, flanks the Dynamic Island */}
+              {/* Global status bar */}
               <StatusBar light={state.screen === 'home' || state.screen === 'detail'} />
 
+              {/* Screen content — flex-1 so TabBar sticks to bottom */}
               <AnimatePresence mode="wait">
                 <motion.div
                   key={state.screen}
@@ -845,10 +996,12 @@ export default function PrototypePage() {
                   initial="initial"
                   animate="animate"
                   exit="exit"
-                  className="absolute inset-0"
-                  style={{ paddingTop: '60px' }}
+                  className="absolute inset-0 flex flex-col"
                 >
-                  {renderScreen()}
+                  <div className="flex-1 overflow-hidden">
+                    {renderScreen()}
+                  </div>
+                  <TabBar activeScreen={state.screen} dispatch={dispatch} />
                 </motion.div>
               </AnimatePresence>
             </div>
