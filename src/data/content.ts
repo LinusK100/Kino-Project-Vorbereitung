@@ -4,7 +4,7 @@
 import { useMode } from '@/store/appStore'
 import type {
   Persona, UserStory, StoryMap, UmlDiagram, SequenceDiagram,
-  StateMachine, TraceEntry, Innovation, GlossaryCategory,
+  StateMachine, Innovation,
 } from '@/types'
 
 import personasBasis from './personas.basis.json'
@@ -16,9 +16,7 @@ import storymapErweitert from './storymap.erweitert.json'
 import umlRaw from './uml.json'
 import sequencesRaw from './sequences.json'
 import statesRaw from './states.json'
-import traceabilityRaw from './traceability.json'
 import innovationRaw from './innovation.json'
-import glossaryRaw from './glossary.json'
 import prototypeRaw from './prototype.json'
 
 export const personas = {
@@ -37,19 +35,10 @@ export const storyMaps = {
 export const uml = (umlRaw as { diagram: UmlDiagram }).diagram
 export const sequences = (sequencesRaw as { diagrams: SequenceDiagram[] }).diagrams
 export const stateMachines = (statesRaw as { machines: StateMachine[]; crossLinks: { id: string; trigger: string; effect: string; classes: string[] }[] })
-export const traceability = traceabilityRaw as {
-  stats: { stories: number; implementiert: number; roadmap: number }
-  entries: TraceEntry[]
-}
 export const innovation = innovationRaw as {
   title: string; subtitle: string
   legend: { feasibility: Record<string, string>; status: Record<string, string> }
   innovations: Innovation[]
-}
-export const glossary = glossaryRaw as {
-  title: string; subtitle: string
-  categories: GlossaryCategory[]
-  roles: { role: string; personas: string; area: string }[]
 }
 export const prototype = prototypeRaw as {
   beschreibung: string
@@ -61,10 +50,6 @@ export const prototype = prototypeRaw as {
 // All personas keyed by id (full set) — used for avatar/color lookups everywhere.
 export const personaById: Record<string, Persona> = Object.fromEntries(
   (personasErweitert as Persona[]).map((p) => [p.id, p]),
-)
-// Some datasets (traceability) reference personas by display name.
-export const personaByName: Record<string, Persona> = Object.fromEntries(
-  (personasErweitert as Persona[]).map((p) => [p.name, p]),
 )
 
 // ── Mode-aware hooks ──

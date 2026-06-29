@@ -52,7 +52,7 @@ export function SectionShell({
 
           <div className="flex items-center gap-2 flex-shrink-0 flex-wrap">
             {modes && <ModeToggle accent={accent} />}
-            {presentation.length > 0 && <Presentation steps={presentation} accent={accent} />}
+            {presentation.length > 0 && <Presentation steps={presentation} accent={accent} title={title} />}
           </div>
         </div>
 

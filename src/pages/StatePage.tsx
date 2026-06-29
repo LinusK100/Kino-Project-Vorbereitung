@@ -13,7 +13,7 @@ const ACCENT = '#7a39bb'
 
 const steps: PresentationStep[] = [
   { id: 'intro', title: 'Zustandsdiagramme', body: 'Ein Zustandsautomat beschreibt den Lebenszyklus genau eines Objekts über die Zeit: welche Zustände es annimmt und welche Ereignisse Übergänge auslösen.', target: '[data-pres="section-header"]' },
-  { id: 'sitz', title: 'Sitzplatz je Vorstellung', body: 'Der wichtigste Automat: VorstellungSitz wandert FREI → AUSGEWÄHLT → RESERVIERT → BELEGT. Der RESERVIERT-Hold blockiert andere und verhindert Doppelbuchungen.', target: '[data-pres="diagram"]', mode: 'einfach' },
+  { id: 'sitz', title: 'Sitzplatz je Vorstellung', body: 'VorstellungSitz wandert FREI → AUSGEWÄHLT → RESERVIERT → BELEGT. Der RESERVIERT-Hold blockiert andere Käufer und verhindert Doppelbuchungen.', target: '[data-pres="diagram"]', mode: 'einfach' },
   { id: 'tabs', title: 'Mehrere Automaten', body: 'Über die Reiter wechselst du zwischen den Automaten. Sitz und Ticket sind gekoppelt – ein Ticket entsteht erst, wenn der Sitz BELEGT wird.', target: '[data-pres="machine-tabs"]' },
   { id: 'enums', title: 'Erweitert: Enums als Automaten', body: 'Im Erweitert-Modus kommen Buchung und Zahlung hinzu. Jeder Status-Enum wird so als eigener, übersichtlicher Automat darstellbar.', target: '[data-pres="machine-tabs"]', mode: 'erweitert' },
   { id: 'cross', title: 'Kopplung der Automaten', body: 'Die Cross-Links zeigen, wie ein Übergang in einem Automaten andere auslöst – z. B. Storno: Ticket→STORNIERT, Buchung→STORNIERT, Zahlung→ERSTATTET, Sitz→FREI.', target: '[data-pres="crosslinks"]' },
@@ -76,7 +76,7 @@ export default function StatePage() {
 
       {/* State details */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
-        {machine.states.filter((s) => s.kind !== 'initial').map((s) => (
+        {machine.states.filter((s) => s.kind !== 'initial' && !s.id.startsWith('_')).map((s) => (
           <div key={s.id} className="rounded-xl p-3.5" style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
             <div className="flex items-center gap-2 mb-1">
               <span className="w-3 h-3 rounded-full" style={{ background: s.color }} />
@@ -119,7 +119,7 @@ export default function StatePage() {
 function StateLegend({ machine }: { machine: StateMachine }) {
   return (
     <div className="flex flex-wrap gap-x-4 gap-y-1.5">
-      {machine.states.filter((s) => s.kind !== 'initial').map((s) => (
+      {machine.states.filter((s) => s.kind !== 'initial' && !s.id.startsWith('_')).map((s) => (
         <div key={s.id} className="flex items-center gap-1.5 text-xs" style={{ color: 'var(--text-secondary)' }}>
           <span className="w-3 h-3 rounded" style={{ background: s.color }} />{s.label}
         </div>

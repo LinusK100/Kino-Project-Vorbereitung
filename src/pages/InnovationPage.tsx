@@ -42,9 +42,9 @@ export default function InnovationPage() {
       presentation={steps}
       intro={
         <div className="space-y-3">
-          <Callout kind="idea" title="Warum ein Innovations-Layer">
-            Ideen, die über den MVP hinausgehen, werden hier gebündelt – jede ist im Modell verankert und klar
-            als umsetzbar bzw. Konzept gekennzeichnet, statt Machbarkeit zu suggerieren.
+          <Callout kind="idea">
+            Ideen über den MVP hinaus – jede mit Persona, Stories und UML-Klassen verknüpft und als
+            umsetzbar bzw. Konzept gekennzeichnet.
           </Callout>
           <div className="flex flex-wrap gap-2" data-pres="legend">
             {Object.entries(feasCfg).map(([k, v]) => (

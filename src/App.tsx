@@ -13,9 +13,7 @@ const StoryMapPage = lazy(() => import('@/pages/StoryMapPage'))
 const ClassDiagramPage = lazy(() => import('@/pages/ClassDiagramPage'))
 const SequencePage = lazy(() => import('@/pages/SequencePage'))
 const StatePage = lazy(() => import('@/pages/StatePage'))
-const TraceabilityPage = lazy(() => import('@/pages/TraceabilityPage'))
 const InnovationPage = lazy(() => import('@/pages/InnovationPage'))
-const GlossaryPage = lazy(() => import('@/pages/GlossaryPage'))
 const PrototypePage = lazy(() => import('@/pages/PrototypePage'))
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'))
 
@@ -46,9 +44,7 @@ function AnimatedRoutes() {
           <Route path="/klassendiagramm" element={<ClassDiagramPage />} />
           <Route path="/sequenzdiagramme" element={<SequencePage />} />
           <Route path="/zustandsdiagramme" element={<StatePage />} />
-          <Route path="/traceability" element={<TraceabilityPage />} />
           <Route path="/innovation" element={<InnovationPage />} />
-          <Route path="/glossar" element={<GlossaryPage />} />
           <Route path="/prototyp" element={<PrototypePage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

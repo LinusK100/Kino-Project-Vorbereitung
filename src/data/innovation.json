@@ -45,7 +45,7 @@
       "effort": 3,
       "summary": "Least-Privilege-Rollen, lückenloses Audit-Log, erzwungene 2FA sowie DSGVO-Auskunft und -Löschung.",
       "detail": "Jede sicherheitsrelevante Aktion landet unveränderbar im Audit-Log; Rollen folgen dem Least-Privilege-Prinzip. DSGVO-Auskunfts- und Löschanfragen werden fristgerecht bearbeitet. Standard-Sicherheitstechnik – voll im Projektrahmen umsetzbar.",
-      "note": "Governance statt Magie: realistischer, hochrelevanter Layer."
+      "note": "Standard-Sicherheitstechnik, kein KI-Anteil – voll umsetzbar."
     },
     {
       "id": "ki-sitz",

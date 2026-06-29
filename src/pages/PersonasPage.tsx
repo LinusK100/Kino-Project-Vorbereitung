@@ -11,7 +11,7 @@ import type { Persona, PresentationStep } from '@/types'
 const ACCENT = '#006494'
 
 const steps: PresentationStep[] = [
-  { id: 'intro', title: 'Was sind Personas?', body: 'Personas sind archetypische Nutzer:innen mit Zielen und Frustrationen. Sie geben den Anforderungen ein Gesicht – jede spätere User Story gehört zu genau einer Persona.', target: '[data-pres="section-header"]' },
+  { id: 'intro', title: 'Was sind Personas?', body: 'Personas beschreiben die Nutzergruppen des Systems mit ihren Zielen und Frustrationen. Jede spätere User Story gehört zu genau einer Persona.', target: '[data-pres="section-header"]' },
   { id: 'einfach', title: 'Einfach: 4 Kern-Personas', body: 'Im Einfach-Modus siehst du die 4 MVP-Personas: die Dach-Persona „Endkunde" plus Kassiererin, Manager und Einlass. Genau die Rollen, die der Prototyp umsetzt.', target: '[data-pres="mode-toggle"]', mode: 'einfach' },
   { id: 'erweitert', title: 'Erweitert: 12 Personas', body: 'Im Erweitert-Modus differenziert sich „Endkunde" in Lara, Jonas, Hannelore und Sandra – plus Service, Facility, Marke und Admin. Eine echte Obermenge der Basis.', target: '[data-pres="group-filter"]', mode: 'erweitert' },
   { id: 'anatomy', title: 'Aufbau einer Persona', body: 'Jede Karte zeigt Ziele (was die Person erreichen will) und Frustrationen (was heute nervt). Aus genau diesem Spannungsfeld entstehen die User Stories.', target: '[data-pres="persona-first"]', mode: 'erweitert' },
@@ -40,10 +40,10 @@ export default function PersonasPage() {
       accent={ACCENT}
       presentation={steps}
       intro={
-        <Callout kind="info" title="Idee">
-          Personas geben den Anforderungen ein Gesicht. Im <strong>Einfach</strong>-Modus die 4 Kern-Personas
-          des MVP, im <strong>Erweitert</strong>-Modus alle 12 – gegliedert nach Bereich. Jede User Story
-          referenziert später genau eine Persona.
+        <Callout kind="info">
+          Jede Persona steht für eine Nutzergruppe mit Zielen und Frustrationen.
+          <strong> Einfach</strong> zeigt die 4 Kern-Personas (MVP), <strong>Erweitert</strong> alle 12.
+          Jede User Story gehört zu genau einer Persona.
         </Callout>
       }
     >

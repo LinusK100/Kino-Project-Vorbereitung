@@ -19,7 +19,7 @@ const groupLabel: Record<string, string> = { domain: 'Domäne', service: 'Servic
 const steps: PresentationStep[] = [
   { id: 'intro', title: 'Klassendiagramm', body: 'Das Klassendiagramm zeigt die Struktur des Systems: Klassen mit Attributen und Operationen sowie ihre Beziehungen. Es modelliert das ganze Produkt – der Prototyp setzt eine Teilmenge um.', target: '[data-pres="section-header"]' },
   { id: 'kern', title: 'Der fachliche Kern', body: 'Die Kern-Ansicht zeigt das Rückgrat: vom Kino über Saal & Sitzplatz bis zu Vorstellung, Buchung, Ticket und Zahlung – ohne Überfrachtung.', target: '[data-pres="diagram"]', mode: 'einfach' },
-  { id: 'assoc', title: 'VorstellungSitz – Assoziationsklasse', body: 'Der Schlüssel gegen Doppelbuchungen: VorstellungSitz trägt die Operationen reservieren/belegen/freigeben – Status-Operationen am Objekt selbst, nicht beim Nutzer.', target: '[data-pres="diagram"]', mode: 'einfach' },
+  { id: 'assoc', title: 'VorstellungSitz – Assoziationsklasse', body: 'VorstellungSitz trägt die Operationen reservieren/belegen/freigeben am Objekt selbst (nicht beim Nutzer) und verhindert so Doppelbuchungen.', target: '[data-pres="diagram"]', mode: 'einfach' },
   { id: 'ops', title: 'Operationen am richtigen Ort', body: 'Status-ändernde Operationen stehen an den Domänenobjekten (Buchung.bestätigen(), Ticket.einlösen()), Enums sind separate Aufzählungen. Akteure rufen nur auf.', target: '[data-pres="ops-callout"]' },
   { id: 'all', title: 'Erweitert: alle 82 Klassen', body: 'Im Erweitert-Modus lassen sich alle 82 Klassen in 5 Gruppen erkunden – Domäne, Services, Stores, DTOs und Enums. Über die Ansicht filterst du je Gruppe.', target: '[data-pres="view-select"]', mode: 'erweitert' },
 ]
@@ -51,18 +51,11 @@ export default function ClassDiagramPage() {
       accent={ACCENT}
       presentation={steps}
       intro={
-        <div className="space-y-3">
+        <div data-pres="ops-callout">
           <Callout kind="info" title="Notation">
-            UML-Klassendiagramm mit drei Feldern (Name · Attribute · Operationen). <strong>◆</strong> Komposition,
-            <strong> ▷</strong> Vererbung, <strong>→</strong> Assoziation, <strong>⇢</strong> Abhängigkeit. Grüner Punkt = im Prototyp implementiert.
+            Name · Attribute · Operationen. <strong>◆</strong> Komposition · <strong>▷</strong> Vererbung · <strong>→</strong> Assoziation · <strong>⇢</strong> Abhängigkeit · grüner Punkt = implementiert.
+            Status-Operationen stehen an den <strong>Objekten</strong> (<code>VorstellungSitz.reservieren()</code>), nicht bei den Akteuren; Enums sind separate Aufzählungen.
           </Callout>
-          <div data-pres="ops-callout">
-            <Callout kind="idea" title="Operationen am richtigen Ort">
-              Status-ändernde Operationen sitzen an den Domänen­objekten – z. B. <code>VorstellungSitz.reservieren()</code>,
-              <code>Buchung.bestätigen()</code>, <code>Ticket.einlösen()</code> – <strong>nicht</strong> bei den Akteuren.
-              Akteure (Kunde, Kassierer) lösen Aktionen nur aus; die Enums (Sitzstatus, Ticketstatus …) sind separate Aufzählungen.
-            </Callout>
-          </div>
         </div>
       }
     >

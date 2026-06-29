@@ -174,22 +174,24 @@ export function StateDiagram({ machine }: { machine: StateMachine }) {
 
       {/* nodes */}
       {Object.entries(L.nodes).map(([id, pos]) => {
+        // Initial pseudostate: filled circle
         if (id === '_initial') {
           return <circle key={id} cx={pos.x} cy={pos.y} r={9} fill="var(--text-primary)" />
         }
         const st = machine.states.find((s) => s.id === id)
         if (!st) return null
-        const col = nodeColor(id)
-        if (st.kind === 'final') {
+        // Final pseudostate (abstract end, id like "_ende"): ringed circle + caption
+        if (id.startsWith('_')) {
           return (
             <g key={id}>
-              <rect x={pos.x - HW} y={pos.y - HH} width={HW * 2} height={HH * 2} rx={14} fill={col} stroke="#000" strokeOpacity={0.15} />
-              <rect x={pos.x - HW + 3} y={pos.y - HH + 3} width={HW * 2 - 6} height={HH * 2 - 6} rx={11} fill="none" stroke={contrastText(col)} strokeOpacity={0.5} strokeWidth={1.5} />
-              <text x={pos.x} y={pos.y - 2} textAnchor="middle" fontSize={13} fontWeight={700} fill={contrastText(col)}>{st.label}</text>
-              <text x={pos.x} y={pos.y + 13} textAnchor="middle" fontSize={9} fill={contrastText(col)} opacity={0.85} style={{ fontFamily: 'var(--mono, monospace)' }}>{st.id}</text>
+              <circle cx={pos.x} cy={pos.y} r={13} fill="none" stroke="var(--text-primary)" strokeWidth={2} />
+              <circle cx={pos.x} cy={pos.y} r={6} fill="var(--text-primary)" />
+              <text x={pos.x} y={pos.y + 30} textAnchor="middle" fontSize={11} fill="var(--text-secondary)">{st.label}</text>
             </g>
           )
         }
+        // All named states (including terminal ones) are normal rounded-rect states
+        const col = nodeColor(id)
         return (
           <g key={id}>
             <rect x={pos.x - HW} y={pos.y - HH} width={HW * 2} height={HH * 2} rx={12} fill={col} />

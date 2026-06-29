@@ -10,16 +10,15 @@ import type { PresentationStep, Mode } from '@/types'
 interface PresentationProps {
   steps: PresentationStep[]
   accent: string
-  /** label override for the trigger button */
+  title: string
   label?: string
 }
 
 const SPEEDS = [4000, 6000, 9000]
 const SPEED_LABEL: Record<number, string> = { 4000: 'schnell', 6000: 'normal', 9000: 'langsam' }
 
-export function Presentation({ steps, accent, label = 'Präsentation' }: PresentationProps) {
+export function Presentation({ steps, accent, title, label = 'Präsentation' }: PresentationProps) {
   const [active, setActive] = useState(false)
-
   if (steps.length === 0) return null
 
   return (
@@ -28,22 +27,21 @@ export function Presentation({ steps, accent, label = 'Präsentation' }: Present
         onClick={() => setActive(true)}
         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-white transition-transform hover:-translate-y-0.5"
         style={{ background: accent, boxShadow: `0 2px 10px ${accent}55` }}
-        data-pres-trigger
       >
         <PresentationIcon size={14} />
         {label}
       </button>
       {active && createPortal(
-        <PresentationOverlay steps={steps} accent={accent} onClose={() => setActive(false)} />,
+        <PresentationMode steps={steps} accent={accent} title={title} onClose={() => setActive(false)} />,
         document.body,
       )}
     </>
   )
 }
 
-function PresentationOverlay({
-  steps, accent, onClose,
-}: { steps: PresentationStep[]; accent: string; onClose: () => void }) {
+function PresentationMode({
+  steps, accent, title, onClose,
+}: { steps: PresentationStep[]; accent: string; title: string; onClose: () => void }) {
   const [index, setIndex] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [speedIdx, setSpeedIdx] = useState(1)
@@ -54,12 +52,16 @@ function PresentationOverlay({
   const step = steps[index]
   const total = steps.length
   const atEnd = index === total - 1
+  const go = useCallback((n: number) => setIndex(Math.max(0, Math.min(total - 1, n))), [total])
 
-  const go = useCallback((next: number) => {
-    setIndex(Math.max(0, Math.min(total - 1, next)))
-  }, [total])
+  // Lock page scroll while presenting
+  useEffect(() => {
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = prev }
+  }, [])
 
-  // Apply step side effects (mode switch + onEnter), then locate target.
+  // Apply step effects + locate the spotlight target
   useEffect(() => {
     if (step.mode) setMode(step.mode)
     step.onEnter?.()
@@ -68,8 +70,7 @@ function PresentationOverlay({
       const el = document.querySelector(step.target) as HTMLElement | null
       if (!el) { setRect(null); return }
       el.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      // recompute after the smooth scroll settles
-      window.setTimeout(() => setRect(el.getBoundingClientRect()), 320)
+      window.setTimeout(() => setRect(el.getBoundingClientRect()), 340)
     }
     const t = window.setTimeout(locate, 60)
     const onMove = () => {
@@ -86,17 +87,15 @@ function PresentationOverlay({
     }
   }, [step, setMode])
 
-  // Auto-advance (no setState in effect — simply stop scheduling at the end)
+  // Auto-advance
   useEffect(() => {
     if (!playing || atEnd) return
     const id = window.setTimeout(() => go(index + 1), SPEEDS[speedIdx])
     return () => window.clearTimeout(id)
   }, [playing, index, atEnd, speedIdx, go])
 
-  // Restore mode on unmount
   useEffect(() => () => { setMode(originalMode.current) }, [setMode])
 
-  // Keyboard
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
@@ -108,121 +107,104 @@ function PresentationOverlay({
     return () => window.removeEventListener('keydown', onKey)
   }, [index, go, onClose])
 
-  const pad = 8
-  const hole = rect
-    ? { left: rect.left - pad, top: rect.top - pad, width: rect.width + pad * 2, height: rect.height + pad * 2 }
-    : null
+  const BAR = 56
+  const pad = 10
+  const hole = rect ? {
+    left: Math.max(4, rect.left - pad),
+    top: Math.max(BAR + 4, rect.top - pad),
+    width: rect.width + pad * 2,
+    height: rect.height + pad * 2,
+  } : null
+
+  const scrim = 'rgba(10,12,22,0.62)'
+  const panel = (style: React.CSSProperties) => (
+    <div className="fixed" style={{ background: scrim, backdropFilter: 'blur(3px)', WebkitBackdropFilter: 'blur(3px)', ...style }} />
+  )
 
   return (
     <div className="fixed inset-0 z-[100]" role="dialog" aria-modal="true" aria-label="Präsentationsmodus">
-      {/* Dim layer with spotlight hole */}
+      {/* Blurred surround (4 panels leaving a crisp spotlight hole) */}
       {hole ? (
-        <motion.div
-          key={step.id}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="absolute rounded-xl pointer-events-none"
-          style={{
-            left: hole.left, top: hole.top, width: hole.width, height: hole.height,
-            boxShadow: '0 0 0 9999px rgba(8,10,20,0.74)',
-            outline: `3px solid ${accent}`,
-            transition: 'all 0.35s cubic-bezier(0.16,1,0.3,1)',
-          }}
-        />
+        <>
+          {panel({ left: 0, top: BAR, width: '100vw', height: Math.max(0, hole.top - BAR) })}
+          {panel({ left: 0, top: hole.top + hole.height, width: '100vw', bottom: 0 })}
+          {panel({ left: 0, top: hole.top, width: hole.left, height: hole.height })}
+          {panel({ left: hole.left + hole.width, top: hole.top, right: 0, height: hole.height })}
+          <motion.div
+            key={step.id}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+            className="fixed rounded-xl pointer-events-none"
+            style={{
+              left: hole.left, top: hole.top, width: hole.width, height: hole.height,
+              outline: `2.5px solid ${accent}`, boxShadow: `0 0 0 2px ${accent}40, 0 0 28px ${accent}55`,
+              transition: 'all 0.35s cubic-bezier(0.16,1,0.3,1)',
+            }}
+          />
+        </>
       ) : (
-        <div className="absolute inset-0" style={{ background: 'rgba(8,10,20,0.74)' }} />
+        panel({ inset: 0, top: BAR })
       )}
 
-      {/* Click-catcher to close on backdrop */}
-      <button className="absolute inset-0 w-full h-full cursor-default" aria-label="Schließen" onClick={onClose} />
+      {/* Presentation top bar */}
+      <div className="fixed top-0 inset-x-0 flex items-center justify-between px-4 text-white z-[2]" style={{ height: BAR, background: accent }}>
+        <div className="flex items-center gap-2.5 min-w-0">
+          <PresentationIcon size={18} />
+          <span className="text-xs font-bold uppercase tracking-wider opacity-80">Präsentation</span>
+          <span className="opacity-50">·</span>
+          <span className="font-semibold truncate" style={{ fontFamily: 'var(--font-display)' }}>{title}</span>
+        </div>
+        <div className="flex items-center gap-3 flex-shrink-0">
+          <span className="text-sm font-mono opacity-90">{index + 1} / {total}</span>
+          <button onClick={onClose} className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium" style={{ background: 'rgba(255,255,255,0.18)' }}>
+            <X size={16} /> Beenden
+          </button>
+        </div>
+      </div>
 
-      {/* Caption card */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={step.id}
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -16 }}
-          transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-          className="absolute left-1/2 -translate-x-1/2 bottom-6 w-[min(620px,92vw)] rounded-2xl p-5 shadow-2xl"
-          style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)' }}
-        >
-          {/* progress */}
-          <div className="flex gap-1 mb-3">
-            {steps.map((s, i) => (
-              <button
-                key={s.id}
-                onClick={() => { setPlaying(false); go(i) }}
-                className="h-1.5 flex-1 rounded-full transition-all"
-                style={{ background: i <= index ? accent : 'var(--border-color)' }}
-                aria-label={`Schritt ${i + 1}`}
-              />
-            ))}
-          </div>
-
-          <div className="flex items-start justify-between gap-3 mb-1">
-            <div className="flex items-center gap-2 min-w-0">
-              <span
-                className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full text-white flex-shrink-0"
-                style={{ background: accent }}
-              >
-                {index + 1} / {total}
-              </span>
-              <h3 className="font-bold text-base truncate" style={{ fontFamily: 'var(--font-display)', color: 'var(--text-primary)' }}>
-                {step.title}
-              </h3>
+      {/* Caption panel */}
+      <div className="fixed inset-x-0 bottom-0 flex justify-center px-4 pb-6 z-[2] pointer-events-none">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={step.id}
+            initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            className="w-[min(720px,94vw)] rounded-2xl p-5 shadow-2xl pointer-events-auto"
+            style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)' }}
+          >
+            <div className="flex gap-1 mb-3">
+              {steps.map((s, i) => (
+                <button key={s.id} onClick={() => { setPlaying(false); go(i) }} aria-label={`Schritt ${i + 1}`}
+                  className="h-1.5 flex-1 rounded-full transition-all" style={{ background: i <= index ? accent : 'var(--border-color)' }} />
+              ))}
             </div>
-            <button onClick={onClose} className="flex-shrink-0 p-1 rounded-lg hover:bg-black/5" style={{ color: 'var(--text-secondary)' }} aria-label="Präsentation beenden">
-              <X size={18} />
-            </button>
-          </div>
 
-          <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--text-secondary)' }}>
-            {step.body}
-          </p>
+            <h3 className="font-bold text-lg md:text-xl mb-1.5" style={{ fontFamily: 'var(--font-display)', color: 'var(--text-primary)' }}>{step.title}</h3>
+            <p className="text-sm md:text-[15px] leading-relaxed mb-4" style={{ color: 'var(--text-secondary)' }}>{step.body}</p>
 
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              <CtrlBtn onClick={() => { setPlaying(false); go(index - 1) }} disabled={index === 0} label="Zurück">
-                <ChevronLeft size={18} />
-              </CtrlBtn>
-              <button
-                onClick={() => setPlaying((p) => !p)}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-white text-sm font-semibold"
-                style={{ background: accent }}
-              >
-                {playing && !atEnd ? <Pause size={16} /> : <Play size={16} />}
-                {atEnd ? 'Fertig' : playing ? 'Pause' : 'Auto'}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1.5">
+                <CtrlBtn onClick={() => { setPlaying(false); go(index - 1) }} disabled={index === 0} label="Zurück"><ChevronLeft size={18} /></CtrlBtn>
+                <button onClick={() => setPlaying((p) => !p)} className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-sm font-semibold" style={{ background: accent }}>
+                  {playing && !atEnd ? <Pause size={16} /> : <Play size={16} />}
+                  {atEnd ? 'Fertig' : playing ? 'Pause' : 'Automatisch'}
+                </button>
+                <CtrlBtn onClick={() => { setPlaying(false); if (atEnd) onClose(); else go(index + 1) }} label="Weiter"><ChevronRight size={18} /></CtrlBtn>
+              </div>
+              <button onClick={() => setSpeedIdx((s) => (s + 1) % SPEEDS.length)} className="inline-flex items-center gap-1 text-xs font-medium px-2 py-1.5 rounded-lg" style={{ color: 'var(--text-secondary)', border: '1px solid var(--border-color)' }} title="Tempo">
+                <Gauge size={13} /> {SPEED_LABEL[SPEEDS[speedIdx]]}
               </button>
-              <CtrlBtn onClick={() => { setPlaying(false); if (atEnd) onClose(); else go(index + 1) }} label="Weiter">
-                <ChevronRight size={18} />
-              </CtrlBtn>
             </div>
-
-            <button
-              onClick={() => setSpeedIdx((s) => (s + 1) % SPEEDS.length)}
-              className="inline-flex items-center gap-1 text-xs font-medium px-2 py-1.5 rounded-lg"
-              style={{ color: 'var(--text-secondary)', border: '1px solid var(--border-color)' }}
-              title="Tempo der Auto-Wiedergabe"
-            >
-              <Gauge size={13} /> {SPEED_LABEL[SPEEDS[speedIdx]]}
-            </button>
-          </div>
-        </motion.div>
-      </AnimatePresence>
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </div>
   )
 }
 
 function CtrlBtn({ children, onClick, disabled, label }: { children: React.ReactNode; onClick: () => void; disabled?: boolean; label: string }) {
   return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      aria-label={label}
-      className="p-2 rounded-xl transition-colors disabled:opacity-30"
-      style={{ color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}
-    >
+    <button onClick={onClick} disabled={disabled} aria-label={label}
+      className="p-2 rounded-xl transition-colors disabled:opacity-30" style={{ color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}>
       {children}
     </button>
   )

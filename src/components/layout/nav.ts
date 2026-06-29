@@ -1,6 +1,6 @@
 import {
   LayoutDashboard, Users, ListChecks, Map, Boxes, Workflow, CircleDot,
-  GitCompareArrows, Sparkles, BookMarked, Smartphone,
+  Sparkles, Smartphone,
 } from 'lucide-react'
 
 export interface NavItem { path: string; label: string; icon: React.ElementType; accent: string }
@@ -28,15 +28,10 @@ export const NAV: NavGroup[] = [
     ],
   },
   {
-    title: 'Synthese',
+    title: 'Ergebnis',
     items: [
-      { path: '/traceability', label: 'Traceability', icon: GitCompareArrows, accent: '#437a22' },
+      { path: '/prototyp', label: 'Prototyp', icon: Smartphone, accent: '#964219' },
       { path: '/innovation', label: 'Innovation', icon: Sparkles, accent: '#437a22' },
-      { path: '/glossar', label: 'Glossar', icon: BookMarked, accent: '#437a22' },
     ],
-  },
-  {
-    title: 'Produkt',
-    items: [{ path: '/prototyp', label: 'Prototyp', icon: Smartphone, accent: '#964219' }],
   },
 ]

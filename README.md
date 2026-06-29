@@ -38,8 +38,10 @@ npm run lint
 | Start | Dashboard (Onboarding: Aufbau + Bedienung) |
 | Anforderungen | Personas · User Stories · Story Map |
 | Modellierung | Klassendiagramm · Sequenzdiagramme · Zustandsdiagramme |
-| Synthese | Traceability · Innovation · Glossar |
-| Produkt | Prototyp (startet die echte App in neuem Tab) |
+| Ergebnis | Prototyp (startet die echte App in neuem Tab) · Innovation |
+
+Der **Präsentationsmodus** ist eine eigene Vollbild-Oberfläche (eigene Kopfleiste,
+abgeblendeter Hintergrund, Spotlight auf das erklärte Element).
 
 Alle Diagramme werden **nativ als SVG** aus JSON gerendert (kein Bild-Export):
 - **Klassendiagramm** – Auto-Layout via `elkjs`, UML-Boxen mit Operationen an den

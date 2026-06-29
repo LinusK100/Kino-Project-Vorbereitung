@@ -121,14 +121,6 @@ export interface StateMachine {
   states: SmState[]; transitions: SmTransition[]
 }
 
-// ── Traceability ──
-export interface TraceEntry {
-  id: string; title: string
-  personaErweitert: string; personaBasis: string | null
-  activity: string; release: ReleaseNumber; priority: Priority
-  prototyp: 'implementiert' | 'roadmap'; umlClasses: string[]
-}
-
 // ── Innovation ──
 export interface Innovation {
   id: string; name: string; icon: string; tier: 'basis' | 'erweitert'
@@ -138,10 +130,6 @@ export interface Innovation {
   impact: number; effort: number
   summary: string; detail: string; note: string
 }
-
-// ── Glossary ──
-export interface GlossaryTerm { term: string; definition: string; delimitation: string }
-export interface GlossaryCategory { id: string; name: string; tier: 'basis' | 'erweitert'; terms: GlossaryTerm[] }
 
 // ─────────────────────────────────────────────────────────────
 // Presentation engine
