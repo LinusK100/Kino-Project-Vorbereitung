@@ -4,10 +4,27 @@ import {
   ChevronLeft, Check, QrCode, Download,
   Home, Search, Star, Clock, Wifi, Battery, Signal,
   MapPin, Film, Zap, Heart, Share2, Ticket, User,
-  ShieldCheck, ChevronRight, Bell, CreditCard, HelpCircle, LogOut, BookOpen
+  ShieldCheck, ChevronRight, Bell, CreditCard, HelpCircle, LogOut, BookOpen,
+  Smartphone, ExternalLink, Rocket,
 } from 'lucide-react'
-import { PageHeader } from '@/components/shared/PageHeader'
-import { pageVariants, screenVariants } from '@/lib/transitions'
+import { SectionShell } from '@/components/shared/SectionShell'
+import { Callout } from '@/components/shared/Callout'
+import { screenVariants } from '@/lib/transitions'
+import { useAppStore } from '@/store/appStore'
+import { prototype } from '@/data/content'
+import type { PresentationStep } from '@/types'
+
+const ACCENT = '#964219'
+// The full interactive Hi-Fi prototype is a separate app; this section is the
+// only place that opens an external tab (per project requirement).
+const PROTOTYPE_URL = import.meta.env.BASE_URL + 'prototyp-app/'
+
+const protoSteps: PresentationStep[] = [
+  { id: 'intro', title: 'Prototyp', body: 'Der Prototyp setzt den MVP-Kern als klickbares Hi-Fi-Modell um. Hier siehst du den Online-Buchungs-Flow eines Studenten Schritt für Schritt.', target: '[data-pres="section-header"]' },
+  { id: 'launch', title: 'In neuem Tab starten', body: 'Der vollständige interaktive Prototyp öffnet sich als eigene App in einem neuen Tab – als einziger Abschnitt der Website.', target: '[data-pres="launch"]' },
+  { id: 'phone', title: 'Klickbarer Flow', body: 'Im iPhone-Rahmen klickst du dich durch: Home → Film → Sitzplan → Checkout → Bestätigung. Genau der Flow aus dem Sequenzdiagramm „Online-Buchung".', target: '[data-pres="phone"]' },
+  { id: 'roadmap', title: 'Erweitert: Roadmap', body: 'Im Erweitert-Modus siehst du, welche Module schon implementiert sind und welche als Roadmap modelliert wurden (Modell ⊇ Prototyp).', target: '[data-pres="status"]', mode: 'erweitert' },
+]
 
 type Screen = 'home' | 'detail' | 'seats' | 'checkout' | 'confirm' | 'profile'
 
@@ -174,14 +191,12 @@ function HomeScreen({ dispatch }: { dispatch: React.Dispatch<Action> }) {
         <div className="flex items-center justify-between px-5 pb-3">
           <div>
             <p className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>Heute, 9. Juni</p>
-            <p className="font-bold text-white text-base">Guten Abend, Lena 👋</p>
+            <p className="font-bold text-white text-base">Guten Abend, Jonas 👋</p>
           </div>
           <div
             className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm"
             style={{ background: '#a12c7b', color: 'white' }}
-          >
-            LF
-          </div>
+          >JS</div>
         </div>
 
         {/* Search */}
@@ -808,11 +823,9 @@ function ProfileScreen({ dispatch }: { dispatch: React.Dispatch<Action> }) {
           <div
             className="w-16 h-16 rounded-full flex items-center justify-center font-bold text-xl text-white flex-shrink-0"
             style={{ background: '#a12c7b', border: '3px solid rgba(255,255,255,0.2)' }}
-          >
-            LF
-          </div>
+          >JS</div>
           <div>
-            <p className="font-bold text-white text-lg">Lena Fischer</p>
+            <p className="font-bold text-white text-lg">Jonas Schmidt</p>
             <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.5)' }}>lena@example.de</p>
             <span
               className="inline-block text-xs px-2 py-0.5 rounded-full font-semibold mt-1.5"
@@ -934,14 +947,35 @@ export default function PrototypePage() {
     }
   }
 
-  return (
-    <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
-      <PageHeader
-        title="Prototyp"
-        description="Klickbarer Online-Ticketkauf · Lena's Flow (Studentin, 21 J.)"
-      />
+  const { mode } = useAppStore()
 
-      <div className="flex flex-col lg:flex-row gap-8 items-start">
+  return (
+    <SectionShell
+      kicker="Produkt"
+      title="Prototyp"
+      subtitle="Klickbarer Hi-Fi-Prototyp · Online-Buchungs-Flow"
+      icon={Smartphone}
+      accent={ACCENT}
+      presentation={protoSteps}
+      intro={
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3" data-pres="launch">
+          <a
+            href={PROTOTYPE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-white font-semibold text-sm flex-shrink-0 transition-transform hover:-translate-y-0.5"
+            style={{ background: ACCENT, boxShadow: `0 4px 16px ${ACCENT}55` }}
+          >
+            <Rocket size={18} /> Vollständigen Prototyp starten <ExternalLink size={15} />
+          </a>
+          <Callout kind="info">
+            Der vollständige interaktive Prototyp öffnet sich in einem <strong>neuen Tab</strong> – als einziger Abschnitt der Website.
+            Unten siehst du eine eingebettete Vorschau des Buchungs-Flows.
+          </Callout>
+        </div>
+      }
+    >
+      <div className="flex flex-col lg:flex-row gap-8 items-start" data-pres="phone">
         {/* Phone */}
         <div className="flex-shrink-0 mx-auto lg:mx-0">
           <div
@@ -1092,23 +1126,47 @@ export default function PrototypePage() {
           {/* Persona Info */}
           <div
             className="p-4 rounded-2xl flex items-center gap-3"
-            style={{ background: 'rgba(161,44,123,0.06)', border: '1px solid rgba(161,44,123,0.15)' }}
+            style={{ background: 'rgba(0,100,148,0.06)', border: '1px solid rgba(0,100,148,0.15)' }}
           >
             <div
               className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
-              style={{ background: '#a12c7b' }}
+              style={{ background: '#006494' }}
             >
-              LF
+              JS
             </div>
             <div>
-              <p className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>Lena Fischer</p>
+              <p className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>Jonas Schmidt</p>
               <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
-                Studentin · 21 J. · Ziel: Ticket in &lt; 60 Sek.
+                Student · Ziel: Ticket in &lt; 60 Sek. (Story U04)
               </p>
             </div>
           </div>
         </div>
       </div>
-    </motion.div>
+
+      {/* Module status & roadmap (erweitert) */}
+      {mode === 'erweitert' && (
+        <div className="mt-7" data-pres="status">
+          <h3 className="text-sm font-bold mb-1" style={{ color: 'var(--text-primary)' }}>Module: implementiert vs. Roadmap</h3>
+          <p className="text-xs mb-3" style={{ color: 'var(--text-secondary)' }}>
+            Der Prototyp setzt {prototype.stats.rollenImplementiert}/{prototype.stats.rollenGesamt} Rollen und {prototype.stats.umlImplementiert} UML-Klassen um – {prototype.stats.umlDesignOnly} sind als Roadmap modelliert (Modell ⊇ Prototyp).
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            {prototype.module.map((m) => (
+              <div key={m.id} className="flex items-start gap-2.5 rounded-xl p-3" style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
+                <span className="mt-0.5 text-xs px-2 py-0.5 rounded-full font-semibold flex-shrink-0"
+                  style={{ background: m.status === 'implementiert' ? '#437a2220' : '#d1990020', color: m.status === 'implementiert' ? '#437a22' : '#d19900' }}>
+                  {m.status === 'implementiert' ? 'live' : 'Roadmap'}
+                </span>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{m.name}</p>
+                  <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>{m.beschreibung}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </SectionShell>
   )
 }

@@ -1,0 +1,766 @@
+{
+  "version": "1.1",
+  "title": "CineTicket – Traceability-Matrix",
+  "generated": "2026-06-21",
+  "legend": {
+    "prototyp": {
+      "implementiert": "im Hi-Fi-Prototyp umgesetzt",
+      "roadmap": "modelliert (UML), im Prototyp noch nicht umgesetzt"
+    },
+    "personaBasis": "null = Story existiert nur im erweiterten Set (U31–U51) oder Persona nur dort"
+  },
+  "stats": {
+    "stories": 51,
+    "implementiert": 20,
+    "roadmap": 31
+  },
+  "entries": [
+    {
+      "id": "U01",
+      "title": "Schnellverkauf starten",
+      "personaErweitert": "Monika Berger",
+      "personaBasis": "Monika Berger",
+      "activity": "TICKET KAUFEN",
+      "release": 1,
+      "priority": "high",
+      "prototyp": "implementiert",
+      "umlClasses": [
+        "Warenkorb",
+        "Kassierer",
+        "Vorstellung"
+      ]
+    },
+    {
+      "id": "U02",
+      "title": "Zahlungsart auswählen",
+      "personaErweitert": "Monika Berger",
+      "personaBasis": "Monika Berger",
+      "activity": "TICKET KAUFEN",
+      "release": 1,
+      "priority": "high",
+      "prototyp": "implementiert",
+      "umlClasses": [
+        "Zahlungsart",
+        "Zahlung",
+        "Buchung",
+        "Warenkorb"
+      ]
+    },
+    {
+      "id": "U03",
+      "title": "Ticket stornieren",
+      "personaErweitert": "Monika Berger",
+      "personaBasis": "Monika Berger",
+      "activity": "TICKET KAUFEN",
+      "release": 1,
+      "priority": "medium",
+      "prototyp": "implementiert",
+      "umlClasses": [
+        "Buchung",
+        "Zahlung",
+        "BuchungService",
+        "Kassierer"
+      ]
+    },
+    {
+      "id": "U04",
+      "title": "Mobil kaufen (unter 60 Sek.)",
+      "personaErweitert": "Lara Hoffmann",
+      "personaBasis": "Endkunde / Nutzer",
+      "activity": "TICKET KAUFEN",
+      "release": 1,
+      "priority": "high",
+      "prototyp": "implementiert",
+      "umlClasses": [
+        "BuchungsAssistent",
+        "Buchungsantrag",
+        "BuchungService"
+      ]
+    },
+    {
+      "id": "U05",
+      "title": "Online im Voraus kaufen",
+      "personaErweitert": "Lara Hoffmann",
+      "personaBasis": "Endkunde / Nutzer",
+      "activity": "TICKET KAUFEN",
+      "release": 1,
+      "priority": "high",
+      "prototyp": "implementiert",
+      "umlClasses": [
+        "Vorstellung",
+        "VorstellungService",
+        "Buchung"
+      ]
+    },
+    {
+      "id": "U06",
+      "title": "Gruppen-Tickets buchen",
+      "personaErweitert": "Jonas Schmidt",
+      "personaBasis": "Endkunde / Nutzer",
+      "activity": "TICKET KAUFEN",
+      "release": 1,
+      "priority": "high",
+      "prototyp": "implementiert",
+      "umlClasses": [
+        "BuchungsAssistent",
+        "Sitzplatz",
+        "Ticket"
+      ]
+    },
+    {
+      "id": "U07",
+      "title": "Interaktiven Sitzplan anzeigen",
+      "personaErweitert": "Lara Hoffmann",
+      "personaBasis": "Endkunde / Nutzer",
+      "activity": "SITZPLAN & KATEGORIEN",
+      "release": 2,
+      "priority": "medium",
+      "prototyp": "implementiert",
+      "umlClasses": [
+        "Sitzplan",
+        "SitzMitStatus",
+        "VorstellungSitz",
+        "Sitzstatus",
+        "VorstellungService"
+      ]
+    },
+    {
+      "id": "U08",
+      "title": "Lieblingssitz speichern",
+      "personaErweitert": "Lara Hoffmann",
+      "personaBasis": "Endkunde / Nutzer",
+      "activity": "SITZPLAN & KATEGORIEN",
+      "release": 2,
+      "priority": "medium",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "Kunde",
+        "Sitzplatz"
+      ]
+    },
+    {
+      "id": "U09",
+      "title": "Barrierefreie Plätze buchen",
+      "personaErweitert": "Hannelore Wagner",
+      "personaBasis": "Endkunde / Nutzer",
+      "activity": "SITZPLAN & KATEGORIEN",
+      "release": 1,
+      "priority": "high",
+      "prototyp": "implementiert",
+      "umlClasses": [
+        "Sitzplatz",
+        "Kinosaal"
+      ]
+    },
+    {
+      "id": "U10",
+      "title": "Saalauslastung einsehen",
+      "personaErweitert": "Monika Berger",
+      "personaBasis": "Monika Berger",
+      "activity": "SITZPLAN & KATEGORIEN",
+      "release": 2,
+      "priority": "medium",
+      "prototyp": "implementiert",
+      "umlClasses": [
+        "Kinosaal",
+        "AnalyseService",
+        "KennzahlenÜbersicht"
+      ]
+    },
+    {
+      "id": "U11",
+      "title": "Neue Vorstellung anlegen",
+      "personaErweitert": "Thomas Kuhn",
+      "personaBasis": "Thomas Kuhn",
+      "activity": "VORSTELLUNG VERWALTEN",
+      "release": 1,
+      "priority": "high",
+      "prototyp": "implementiert",
+      "umlClasses": [
+        "VorstellungService",
+        "VorstellungAntrag",
+        "Vorstellung"
+      ]
+    },
+    {
+      "id": "U12",
+      "title": "Vorstellung bearbeiten",
+      "personaErweitert": "Thomas Kuhn",
+      "personaBasis": "Thomas Kuhn",
+      "activity": "VORSTELLUNG VERWALTEN",
+      "release": 1,
+      "priority": "high",
+      "prototyp": "implementiert",
+      "umlClasses": [
+        "VorstellungService",
+        "Vorstellung"
+      ]
+    },
+    {
+      "id": "U13",
+      "title": "Tagesbericht abrufen",
+      "personaErweitert": "Thomas Kuhn",
+      "personaBasis": "Thomas Kuhn",
+      "activity": "VORSTELLUNG VERWALTEN",
+      "release": 2,
+      "priority": "medium",
+      "prototyp": "implementiert",
+      "umlClasses": [
+        "AnalyseService",
+        "KennzahlenÜbersicht",
+        "Bericht"
+      ]
+    },
+    {
+      "id": "U14",
+      "title": "Auslastungs-Dashboard",
+      "personaErweitert": "Thomas Kuhn",
+      "personaBasis": "Thomas Kuhn",
+      "activity": "VORSTELLUNG VERWALTEN",
+      "release": 3,
+      "priority": "low",
+      "prototyp": "implementiert",
+      "umlClasses": [
+        "AnalyseService",
+        "Manager"
+      ]
+    },
+    {
+      "id": "U15",
+      "title": "QR-Code scannen",
+      "personaErweitert": "Kevin Mayer",
+      "personaBasis": "Kevin Mayer",
+      "activity": "EINLASS & VALIDIERUNG",
+      "release": 1,
+      "priority": "high",
+      "prototyp": "implementiert",
+      "umlClasses": [
+        "EinlassService",
+        "Ticket",
+        "Einlasskontrolleur"
+      ]
+    },
+    {
+      "id": "U16",
+      "title": "Offline-Validierung",
+      "personaErweitert": "Kevin Mayer",
+      "personaBasis": "Kevin Mayer",
+      "activity": "EINLASS & VALIDIERUNG",
+      "release": 1,
+      "priority": "high",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "EinlassService",
+        "Ticket"
+      ]
+    },
+    {
+      "id": "U17",
+      "title": "Doppelnutzung verhindern",
+      "personaErweitert": "Kevin Mayer",
+      "personaBasis": "Kevin Mayer",
+      "activity": "EINLASS & VALIDIERUNG",
+      "release": 2,
+      "priority": "medium",
+      "prototyp": "implementiert",
+      "umlClasses": [
+        "Ticket",
+        "Ticketstatus",
+        "EinlassService"
+      ]
+    },
+    {
+      "id": "U18",
+      "title": "Studentenrabatt verifizieren",
+      "personaErweitert": "Jonas Schmidt",
+      "personaBasis": "Endkunde / Nutzer",
+      "activity": "KONTO & LOYALITÄT",
+      "release": 1,
+      "priority": "high",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "KontoService",
+        "Verifizierungsstatus",
+        "Ticketkategorie"
+      ]
+    },
+    {
+      "id": "U19",
+      "title": "Bonuspunkte einsehen",
+      "personaErweitert": "Lara Hoffmann",
+      "personaBasis": "Endkunde / Nutzer",
+      "activity": "KONTO & LOYALITÄT",
+      "release": 2,
+      "priority": "medium",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "Bonuspunktekonto",
+        "Punktebuchung",
+        "KontoService"
+      ]
+    },
+    {
+      "id": "U20",
+      "title": "Bonuspunkte einlösen",
+      "personaErweitert": "Lara Hoffmann",
+      "personaBasis": "Endkunde / Nutzer",
+      "activity": "KONTO & LOYALITÄT",
+      "release": 2,
+      "priority": "medium",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "Bonuspunktekonto",
+        "KontoService",
+        "Zahlungsart"
+      ]
+    },
+    {
+      "id": "U21",
+      "title": "Apple/Google Pay bezahlen",
+      "personaErweitert": "Lara Hoffmann",
+      "personaBasis": "Endkunde / Nutzer",
+      "activity": "KONTO & LOYALITÄT",
+      "release": 3,
+      "priority": "low",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "Zahlungsart",
+        "Buchung"
+      ]
+    },
+    {
+      "id": "U22",
+      "title": "Filmprogramm durchsuchen",
+      "personaErweitert": "Jonas Schmidt",
+      "personaBasis": "Endkunde / Nutzer",
+      "activity": "PROGRAMM & SUCHE",
+      "release": 2,
+      "priority": "medium",
+      "prototyp": "implementiert",
+      "umlClasses": [
+        "FilmService",
+        "Film"
+      ]
+    },
+    {
+      "id": "U23",
+      "title": "Film-Empfehlungen erhalten",
+      "personaErweitert": "Lara Hoffmann",
+      "personaBasis": "Endkunde / Nutzer",
+      "activity": "PROGRAMM & SUCHE",
+      "release": 3,
+      "priority": "low",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "EmpfehlungsService",
+        "Film"
+      ]
+    },
+    {
+      "id": "U24",
+      "title": "Trailer direkt ansehen",
+      "personaErweitert": "Jonas Schmidt",
+      "personaBasis": "Endkunde / Nutzer",
+      "activity": "PROGRAMM & SUCHE",
+      "release": 2,
+      "priority": "medium",
+      "prototyp": "implementiert",
+      "umlClasses": [
+        "Film"
+      ]
+    },
+    {
+      "id": "U25",
+      "title": "Preismatrix verwalten",
+      "personaErweitert": "Thomas Kuhn",
+      "personaBasis": "Thomas Kuhn",
+      "activity": "SYSTEM & ADMIN",
+      "release": 1,
+      "priority": "high",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "Tarif",
+        "PreisService",
+        "Sitzkategorie",
+        "Ticketkategorie"
+      ]
+    },
+    {
+      "id": "U26",
+      "title": "Benutzerrollen verwalten",
+      "personaErweitert": "Nora Krause",
+      "personaBasis": "Nora Krause",
+      "activity": "SYSTEM & ADMIN",
+      "release": 2,
+      "priority": "medium",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "Administrator",
+        "AdminService",
+        "Nutzerrolle"
+      ]
+    },
+    {
+      "id": "U27",
+      "title": "Schichtübergabe dokumentieren",
+      "personaErweitert": "Monika Berger",
+      "personaBasis": "Monika Berger",
+      "activity": "SYSTEM & ADMIN",
+      "release": 2,
+      "priority": "medium",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "Kassierer",
+        "Buchung"
+      ]
+    },
+    {
+      "id": "U28",
+      "title": "Seniorenrabatt an der Kasse",
+      "personaErweitert": "Hannelore Wagner",
+      "personaBasis": "Endkunde / Nutzer",
+      "activity": "TICKET KAUFEN",
+      "release": 1,
+      "priority": "high",
+      "prototyp": "implementiert",
+      "umlClasses": [
+        "Ticketkategorie",
+        "Kassierer"
+      ]
+    },
+    {
+      "id": "U29",
+      "title": "Einlassbericht anzeigen",
+      "personaErweitert": "Kevin Mayer",
+      "personaBasis": "Kevin Mayer",
+      "activity": "EINLASS & VALIDIERUNG",
+      "release": 3,
+      "priority": "low",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "EinlassBericht",
+        "EinlassService"
+      ]
+    },
+    {
+      "id": "U30",
+      "title": "Vorstellung mit Freunden teilen",
+      "personaErweitert": "Jonas Schmidt",
+      "personaBasis": "Endkunde / Nutzer",
+      "activity": "PROGRAMM & SUCHE",
+      "release": 2,
+      "priority": "medium",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "Vorstellung"
+      ]
+    },
+    {
+      "id": "U31",
+      "title": "Bestellung am Sitzplatz aufnehmen",
+      "personaErweitert": "Aylin Demir",
+      "personaBasis": null,
+      "activity": "GASTRO & SERVICE",
+      "release": 2,
+      "priority": "high",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "Bestellung",
+        "Servicekraft",
+        "BestellService"
+      ]
+    },
+    {
+      "id": "U32",
+      "title": "Theken-Verkauf in unter 30 Sek.",
+      "personaErweitert": "Aylin Demir",
+      "personaBasis": null,
+      "activity": "GASTRO & SERVICE",
+      "release": 2,
+      "priority": "high",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "Bestellung",
+        "Artikel",
+        "BestellService"
+      ]
+    },
+    {
+      "id": "U33",
+      "title": "Allergene am Terminal nachschlagen",
+      "personaErweitert": "Aylin Demir",
+      "personaBasis": null,
+      "activity": "GASTRO & SERVICE",
+      "release": 2,
+      "priority": "medium",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "Artikel",
+        "Allergen"
+      ]
+    },
+    {
+      "id": "U34",
+      "title": "Verzehr aufs Ticketkonto buchen",
+      "personaErweitert": "Aylin Demir",
+      "personaBasis": null,
+      "activity": "GASTRO & SERVICE",
+      "release": 3,
+      "priority": "low",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "Bestellung",
+        "Ticket"
+      ]
+    },
+    {
+      "id": "U35",
+      "title": "Standortübergreifendes KPI-Dashboard",
+      "personaErweitert": "Stefan Reinhardt",
+      "personaBasis": null,
+      "activity": "MARKE & MULTI-SITE",
+      "release": 2,
+      "priority": "high",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "MarkeService",
+        "StandortKennzahl",
+        "Kette"
+      ]
+    },
+    {
+      "id": "U36",
+      "title": "Preisaktion markenweit ausrollen",
+      "personaErweitert": "Stefan Reinhardt",
+      "personaBasis": null,
+      "activity": "MARKE & MULTI-SITE",
+      "release": 2,
+      "priority": "high",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "Preisaktion",
+        "MarkeService"
+      ]
+    },
+    {
+      "id": "U37",
+      "title": "Wochenreport als PDF",
+      "personaErweitert": "Stefan Reinhardt",
+      "personaBasis": null,
+      "activity": "MARKE & MULTI-SITE",
+      "release": 3,
+      "priority": "medium",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "Bericht",
+        "MarkeService"
+      ]
+    },
+    {
+      "id": "U38",
+      "title": "Kindertickets mit FSK-Prüfung buchen",
+      "personaErweitert": "Sandra Vogel",
+      "personaBasis": null,
+      "activity": "TICKET KAUFEN",
+      "release": 1,
+      "priority": "high",
+      "prototyp": "implementiert",
+      "umlClasses": [
+        "Ticketkategorie",
+        "Film"
+      ]
+    },
+    {
+      "id": "U39",
+      "title": "Defekten Sitz per AR melden",
+      "personaErweitert": "Ben Lorenz",
+      "personaBasis": null,
+      "activity": "FACILITY & WARTUNG",
+      "release": 2,
+      "priority": "high",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "Wartungsticket",
+        "Haustechniker",
+        "FacilityService",
+        "Sitzstatus"
+      ]
+    },
+    {
+      "id": "U40",
+      "title": "Saal nach Reinigung freigeben",
+      "personaErweitert": "Ben Lorenz",
+      "personaBasis": null,
+      "activity": "FACILITY & WARTUNG",
+      "release": 2,
+      "priority": "medium",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "Kinosaal",
+        "Reinigungsstatus",
+        "FacilityService"
+      ]
+    },
+    {
+      "id": "U41",
+      "title": "Audit-Log & Sicherheit einsehen",
+      "personaErweitert": "Nora Krause",
+      "personaBasis": null,
+      "activity": "SYSTEM & ADMIN",
+      "release": 2,
+      "priority": "high",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "AuditEintrag",
+        "AdminService",
+        "Nutzer"
+      ]
+    },
+    {
+      "id": "U42",
+      "title": "DSGVO-Auskunft & Löschung",
+      "personaErweitert": "Nora Krause",
+      "personaBasis": null,
+      "activity": "SYSTEM & ADMIN",
+      "release": 2,
+      "priority": "high",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "AdminService",
+        "Nutzer"
+      ]
+    },
+    {
+      "id": "U43",
+      "title": "Dynamische Preise nach Auslastung",
+      "personaErweitert": "Thomas Kuhn",
+      "personaBasis": null,
+      "activity": "SYSTEM & ADMIN",
+      "release": 2,
+      "priority": "medium",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "Tarif",
+        "Preisregel",
+        "PreisService"
+      ]
+    },
+    {
+      "id": "U44",
+      "title": "Besten Platz per KI vorschlagen",
+      "personaErweitert": "Lara Hoffmann",
+      "personaBasis": null,
+      "activity": "SITZPLAN & KATEGORIEN",
+      "release": 2,
+      "priority": "medium",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "EmpfehlungsService",
+        "Sitzplatz"
+      ]
+    },
+    {
+      "id": "U45",
+      "title": "Barrierefreiheits-Brille dazubuchen",
+      "personaErweitert": "Hannelore Wagner",
+      "personaBasis": null,
+      "activity": "SITZPLAN & KATEGORIEN",
+      "release": 2,
+      "priority": "medium",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "Barrierefreiheitsoption",
+        "Vorstellung"
+      ]
+    },
+    {
+      "id": "U46",
+      "title": "Auslastung prognostizieren",
+      "personaErweitert": "Thomas Kuhn",
+      "personaBasis": null,
+      "activity": "VORSTELLUNG VERWALTEN",
+      "release": 3,
+      "priority": "low",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "Auslastungsprognose",
+        "AnalyseService"
+      ]
+    },
+    {
+      "id": "U47",
+      "title": "Sitzplatz verbindlich reservieren (Hold)",
+      "personaErweitert": "Lara Hoffmann",
+      "personaBasis": null,
+      "activity": "SITZPLAN & KATEGORIEN",
+      "release": 1,
+      "priority": "high",
+      "prototyp": "implementiert",
+      "umlClasses": [
+        "VorstellungSitz",
+        "Sitzstatus",
+        "BuchungService"
+      ]
+    },
+    {
+      "id": "U48",
+      "title": "Film bewerten & Reviews lesen",
+      "personaErweitert": "Lara Hoffmann",
+      "personaBasis": null,
+      "activity": "PROGRAMM & SUCHE",
+      "release": 3,
+      "priority": "low",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "Bewertung",
+        "Film",
+        "EmpfehlungsService"
+      ]
+    },
+    {
+      "id": "U49",
+      "title": "Film auf Merkliste setzen",
+      "personaErweitert": "Jonas Schmidt",
+      "personaBasis": null,
+      "activity": "PROGRAMM & SUCHE",
+      "release": 2,
+      "priority": "medium",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "Merkliste",
+        "Film",
+        "EmpfehlungsService"
+      ]
+    },
+    {
+      "id": "U50",
+      "title": "Barrierefreiheits-Profil hinterlegen",
+      "personaErweitert": "Hannelore Wagner",
+      "personaBasis": null,
+      "activity": "KONTO & LOYALITÄT",
+      "release": 2,
+      "priority": "medium",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "Barrierefreiheitsprofil",
+        "Barrierefreiheitsoption",
+        "Kunde"
+      ]
+    },
+    {
+      "id": "U51",
+      "title": "Gutschein/Aktionscode einlösen",
+      "personaErweitert": "Sandra Vogel",
+      "personaBasis": null,
+      "activity": "TICKET KAUFEN",
+      "release": 2,
+      "priority": "medium",
+      "prototyp": "roadmap",
+      "umlClasses": [
+        "Gutschein",
+        "Rabatttyp",
+        "KontoService"
+      ]
+    }
+  ]
+}

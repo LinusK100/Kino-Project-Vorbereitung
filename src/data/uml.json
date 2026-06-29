@@ -1,0 +1,1370 @@
+{
+  "version": "5.1",
+  "diagram": {
+    "title": "CineTicket – Klassendiagramm",
+    "subtitle": "Systemanalyse und Entwurf · Universität · Modell ⊇ Prototyp (implementierte Teilmenge per implementedInPrototype-Flag)",
+    "groups": [
+      { "id": "domain",  "label": "Domäne",          "color": "violet" },
+      { "id": "service", "label": "API-Services",    "color": "indigo" },
+      { "id": "store",   "label": "Frontend-Stores", "color": "rose"   },
+      { "id": "dto",     "label": "DTOs",            "color": "amber"  },
+      { "id": "enum",    "label": "Aufzählungen",    "color": "cyan"   }
+    ],
+    "classes": [
+
+      {
+        "id": "Kette",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "id",   "type": "String" },
+          { "visibility": "-", "name": "name", "type": "String" }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "standorte", "params": "", "returnType": "Kino[]" }
+        ]
+      },
+
+      {
+        "id": "Kino",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "id",      "type": "String" },
+          { "visibility": "-", "name": "name",    "type": "String" },
+          { "visibility": "-", "name": "adresse", "type": "String" }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "aktiveSäle", "params": "", "returnType": "Kinosaal[]" }
+        ]
+      },
+
+      {
+        "id": "Kinosaal",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "id",               "type": "String"          },
+          { "visibility": "-", "name": "name",             "type": "String"          },
+          { "visibility": "-", "name": "kapazität",        "type": "int"             },
+          { "visibility": "-", "name": "reihen",           "type": "int"             },
+          { "visibility": "-", "name": "plätzeProReihe",   "type": "int"             },
+          { "visibility": "-", "name": "barrierefrei",     "type": "boolean"         },
+          { "visibility": "-", "name": "reinigungsstatus", "type": "Reinigungsstatus" }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "auslastung", "params": "v: Vorstellung", "returnType": "double" }
+        ]
+      },
+
+      {
+        "id": "Sitzplatz",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "id",           "type": "String"        },
+          { "visibility": "-", "name": "reihe",        "type": "String"        },
+          { "visibility": "-", "name": "nummer",       "type": "int"           },
+          { "visibility": "-", "name": "kategorie",    "type": "Sitzkategorie" },
+          { "visibility": "-", "name": "barrierefrei", "type": "boolean"       }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "getLabel", "params": "", "returnType": "String" }
+        ]
+      },
+
+      {
+        "id": "Film",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "id",             "type": "String"   },
+          { "visibility": "-", "name": "titel",          "type": "String"   },
+          { "visibility": "-", "name": "beschreibung",   "type": "String"   },
+          { "visibility": "-", "name": "dauerMinuten",   "type": "int"      },
+          { "visibility": "-", "name": "genres",         "type": "String[]" },
+          { "visibility": "-", "name": "altersfreigabe", "type": "String"   },
+          { "visibility": "-", "name": "bewertung",      "type": "double"   },
+          { "visibility": "-", "name": "trailerUrl",     "type": "String"   },
+          { "visibility": "-", "name": "istAktiv",       "type": "boolean"  }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "istVerfügbar", "params": "", "returnType": "boolean" },
+          { "visibility": "+", "name": "formatDauer",  "params": "", "returnType": "String"  }
+        ]
+      },
+
+      {
+        "id": "Vorstellung",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "id",              "type": "String"                     },
+          { "visibility": "-", "name": "beginn",          "type": "Date"                       },
+          { "visibility": "-", "name": "ende",            "type": "Date"                       },
+          { "visibility": "-", "name": "status",          "type": "Vorstellungsstatus"         },
+          { "visibility": "-", "name": "sprache",         "type": "Vorstellungssprache"        },
+          { "visibility": "-", "name": "projektion",      "type": "Projektionsart"             },
+          { "visibility": "-", "name": "barrierefreiheit","type": "Barrierefreiheitsoption[]"  }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "istBuchbar",     "params": "",                 "returnType": "boolean" },
+          { "visibility": "+", "name": "freieKapazität", "params": "",                 "returnType": "int"     },
+          { "visibility": "+", "name": "preisFür",       "params": "k: Sitzkategorie", "returnType": "int"     }
+        ]
+      },
+
+      {
+        "id": "Tarif",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "id",        "type": "String"  },
+          { "visibility": "-", "name": "gültigAb",  "type": "Date"    },
+          { "visibility": "-", "name": "gültigBis", "type": "Date"    },
+          { "visibility": "-", "name": "dynamisch", "type": "boolean" }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "preis", "params": "s: Sitzkategorie, t: Ticketkategorie", "returnType": "int" }
+        ]
+      },
+
+      {
+        "id": "Preisregel",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "id",             "type": "String"        },
+          { "visibility": "-", "name": "schwelleProzent","type": "int"           },
+          { "visibility": "-", "name": "faktor",         "type": "double"        },
+          { "visibility": "-", "name": "sitzkategorie",  "type": "Sitzkategorie" }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "anwenden", "params": "basisCent: int", "returnType": "int" }
+        ]
+      },
+
+      {
+        "id": "Preisaktion",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "id",            "type": "String" },
+          { "visibility": "-", "name": "name",          "type": "String" },
+          { "visibility": "-", "name": "rabattProzent", "type": "int"    },
+          { "visibility": "-", "name": "beginn",        "type": "Date"   },
+          { "visibility": "-", "name": "ende",          "type": "Date"   }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "ausrollen",    "params": "standorte: String[]", "returnType": "void" },
+          { "visibility": "+", "name": "zurückrollen", "params": "",                    "returnType": "void" }
+        ]
+      },
+
+      {
+        "id": "Buchung",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "id",          "type": "String"         },
+          { "visibility": "-", "name": "summeCent",   "type": "int"            },
+          { "visibility": "-", "name": "status",      "type": "Buchungsstatus" },
+          { "visibility": "-", "name": "zahlungsart", "type": "Zahlungsart"    },
+          { "visibility": "-", "name": "gebuchtAm",   "type": "Date"           },
+          { "visibility": "-", "name": "kundenEmail", "type": "String"         }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "bestätigen", "params": "", "returnType": "void" },
+          { "visibility": "+", "name": "stornieren", "params": "", "returnType": "void" },
+          { "visibility": "+", "name": "einchecken", "params": "", "returnType": "void" }
+        ]
+      },
+
+      {
+        "id": "Ticket",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "id",        "type": "String"          },
+          { "visibility": "-", "name": "kategorie", "type": "Ticketkategorie" },
+          { "visibility": "-", "name": "preisCent", "type": "int"             },
+          { "visibility": "-", "name": "qrCode",    "type": "String"          },
+          { "visibility": "-", "name": "status",    "type": "Ticketstatus"    }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "istGültig", "params": "", "returnType": "boolean" },
+          { "visibility": "+", "name": "einlösen",  "params": "", "returnType": "void"    }
+        ]
+      },
+
+      {
+        "id": "Bonuspunktekonto",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "id",          "type": "String" },
+          { "visibility": "-", "name": "punktestand", "type": "int"    }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "gutschreiben", "params": "p: int", "returnType": "void"            },
+          { "visibility": "+", "name": "einlösen",     "params": "p: int", "returnType": "boolean"         },
+          { "visibility": "+", "name": "verlauf",      "params": "",       "returnType": "Punktebuchung[]" }
+        ]
+      },
+
+      {
+        "id": "Bestellung",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "id",        "type": "String"        },
+          { "visibility": "-", "name": "saal",      "type": "String"        },
+          { "visibility": "-", "name": "reihe",     "type": "String"        },
+          { "visibility": "-", "name": "platz",     "type": "int"           },
+          { "visibility": "-", "name": "status",    "type": "Bestellstatus" },
+          { "visibility": "-", "name": "summeCent", "type": "int"           },
+          { "visibility": "-", "name": "ticketId",  "type": "String"        }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "aufnehmen",  "params": "", "returnType": "void" },
+          { "visibility": "+", "name": "ausliefern", "params": "", "returnType": "void" }
+        ]
+      },
+
+      {
+        "id": "Artikel",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "id",        "type": "String"          },
+          { "visibility": "-", "name": "name",      "type": "String"          },
+          { "visibility": "-", "name": "preisCent", "type": "int"             },
+          { "visibility": "-", "name": "kategorie", "type": "Artikelkategorie" },
+          { "visibility": "-", "name": "allergene", "type": "Allergen[]"      }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "istVerfügbar", "params": "", "returnType": "boolean" }
+        ]
+      },
+
+      {
+        "id": "Wartungsticket",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "id",          "type": "String"         },
+          { "visibility": "-", "name": "sitzId",      "type": "String"         },
+          { "visibility": "-", "name": "beschreibung","type": "String"         },
+          { "visibility": "-", "name": "fotoUrl",     "type": "String"         },
+          { "visibility": "-", "name": "status",      "type": "Wartungsstatus" },
+          { "visibility": "-", "name": "gemeldetAm",  "type": "Date"           },
+          { "visibility": "-", "name": "gemeldetVon", "type": "String"         }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "zuweisen",  "params": "m: String", "returnType": "void" },
+          { "visibility": "+", "name": "erledigen", "params": "",          "returnType": "void" }
+        ]
+      },
+
+      {
+        "id": "AuditEintrag",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "id",        "type": "String" },
+          { "visibility": "-", "name": "zeitpunkt", "type": "Date"   },
+          { "visibility": "-", "name": "akteur",    "type": "String" },
+          { "visibility": "-", "name": "aktion",    "type": "String" },
+          { "visibility": "-", "name": "ziel",      "type": "String" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Nutzer",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "id",             "type": "String"      },
+          { "visibility": "-", "name": "email",          "type": "String"      },
+          { "visibility": "-", "name": "name",           "type": "String"      },
+          { "visibility": "-", "name": "rolle",          "type": "Nutzerrolle" },
+          { "visibility": "-", "name": "erstelltAm",     "type": "Date"        },
+          { "visibility": "-", "name": "zweiFaktorAktiv","type": "boolean"     }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "darf", "params": "aktion: String", "returnType": "boolean" }
+        ]
+      },
+
+      {
+        "id": "Kunde",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [],
+        "methods": [
+          { "visibility": "+", "name": "meineBuchungen", "params": "", "returnType": "Buchung[]" },
+          { "visibility": "+", "name": "buchen",         "params": "v: Vorstellung, sitze: Sitzplatz[]", "returnType": "Buchung" },
+          { "visibility": "+", "name": "merken",         "params": "f: Film",                 "returnType": "void"      },
+          { "visibility": "+", "name": "bewerten",       "params": "f: Film, sterne: int",    "returnType": "Bewertung" }
+        ]
+      },
+
+      {
+        "id": "Kassierer",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [],
+        "methods": [
+          { "visibility": "+", "name": "ticketVerkaufen", "params": "v: Vorstellung, kat: Ticketkategorie", "returnType": "Buchung" },
+          { "visibility": "+", "name": "stornieren",      "params": "b: Buchung", "returnType": "void" }
+        ]
+      },
+
+      {
+        "id": "Manager",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [],
+        "methods": [
+          { "visibility": "+", "name": "auslastungAbrufen", "params": "",          "returnType": "double" },
+          { "visibility": "+", "name": "umsatzAbrufen",     "params": "tage: int", "returnType": "int[]"  }
+        ]
+      },
+
+      {
+        "id": "Einlasskontrolleur",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [],
+        "methods": [
+          { "visibility": "+", "name": "scannen",       "params": "qrCode: String", "returnType": "boolean" },
+          { "visibility": "+", "name": "manuellPrüfen", "params": "id: String",     "returnType": "boolean" }
+        ]
+      },
+
+      {
+        "id": "Servicekraft",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [],
+        "methods": [
+          { "visibility": "+", "name": "bestellungAufnehmen", "params": "saal: String, reihe: String, platz: int", "returnType": "Bestellung" },
+          { "visibility": "+", "name": "thekenverkauf",       "params": "pos: Bestellposition[]",                   "returnType": "Bestellung" }
+        ]
+      },
+
+      {
+        "id": "Haustechniker",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [],
+        "methods": [
+          { "visibility": "+", "name": "defektMelden", "params": "sitzId: String, foto: String, notiz: String", "returnType": "Wartungsticket" },
+          { "visibility": "+", "name": "saalFreigeben","params": "saalId: String",                              "returnType": "void"          }
+        ]
+      },
+
+      {
+        "id": "Markenmanager",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [],
+        "methods": [
+          { "visibility": "+", "name": "standortKennzahlen", "params": "",                                  "returnType": "StandortKennzahl[]" },
+          { "visibility": "+", "name": "aktionAusrollen",    "params": "a: Preisaktion, standorte: String[]","returnType": "void"              },
+          { "visibility": "+", "name": "wochenreport",       "params": "",                                  "returnType": "Bericht"            }
+        ]
+      },
+
+      {
+        "id": "Administrator",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [],
+        "methods": [
+          { "visibility": "+", "name": "rolleZuweisen", "params": "nutzer: String, rolle: Nutzerrolle", "returnType": "void"           },
+          { "visibility": "+", "name": "auditLog",      "params": "",                                   "returnType": "AuditEintrag[]" },
+          { "visibility": "+", "name": "datenAuskunft", "params": "email: String",                      "returnType": "Object"         },
+          { "visibility": "+", "name": "datenLöschen",  "params": "email: String",                      "returnType": "void"           }
+        ]
+      },
+
+      {
+        "id": "VorstellungSitz",
+        "group": "domain",
+        "stereotype": "«assoziationsklasse»",
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "id",           "type": "String"     },
+          { "visibility": "-", "name": "status",       "type": "Sitzstatus" },
+          { "visibility": "-", "name": "reserviertBis","type": "Date"       },
+          { "visibility": "-", "name": "reserviertVon","type": "String"     },
+          { "visibility": "-", "name": "buchungId",    "type": "String"     }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "reservieren",  "params": "sessionId: String", "returnType": "boolean" },
+          { "visibility": "+", "name": "belegen",      "params": "b: Buchung",        "returnType": "void"    },
+          { "visibility": "+", "name": "freigeben",    "params": "",                  "returnType": "void"    },
+          { "visibility": "+", "name": "istAbgelaufen","params": "",                  "returnType": "boolean" }
+        ]
+      },
+
+      {
+        "id": "Zahlung",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "id",            "type": "String"         },
+          { "visibility": "-", "name": "betragCent",    "type": "int"            },
+          { "visibility": "-", "name": "art",           "type": "Zahlungsart"    },
+          { "visibility": "-", "name": "status",        "type": "Zahlungsstatus" },
+          { "visibility": "-", "name": "transaktionsId","type": "String"         },
+          { "visibility": "-", "name": "verarbeitetAm", "type": "Date"           }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "verarbeiten", "params": "", "returnType": "boolean" },
+          { "visibility": "+", "name": "erstatten",   "params": "", "returnType": "boolean" }
+        ]
+      },
+
+      {
+        "id": "Gutschein",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "id",            "type": "String"    },
+          { "visibility": "-", "name": "code",          "type": "String"    },
+          { "visibility": "-", "name": "rabatttyp",     "type": "Rabatttyp" },
+          { "visibility": "-", "name": "wert",          "type": "int"       },
+          { "visibility": "-", "name": "gültigBis",     "type": "Date"      },
+          { "visibility": "-", "name": "nutzungslimit", "type": "int"       },
+          { "visibility": "-", "name": "nutzungsanzahl","type": "int"       }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "istGültig", "params": "",              "returnType": "boolean" },
+          { "visibility": "+", "name": "anwenden",  "params": "betragCent: int","returnType": "int"     }
+        ]
+      },
+
+      {
+        "id": "Bewertung",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "id",               "type": "String"  },
+          { "visibility": "-", "name": "sterne",           "type": "int"     },
+          { "visibility": "-", "name": "kommentar",        "type": "String"  },
+          { "visibility": "-", "name": "verifizierterKauf","type": "boolean" },
+          { "visibility": "-", "name": "erstelltAm",       "type": "Date"    }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Merkliste",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "id",         "type": "String" },
+          { "visibility": "-", "name": "erstelltAm", "type": "Date"   }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "hinzufügen", "params": "filmId: String", "returnType": "void" },
+          { "visibility": "+", "name": "entfernen",  "params": "filmId: String", "returnType": "void" }
+        ]
+      },
+
+      {
+        "id": "Barrierefreiheitsprofil",
+        "group": "domain",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "benötigtRollstuhl",      "type": "boolean" },
+          { "visibility": "-", "name": "benötigtAudiodeskription","type": "boolean" },
+          { "visibility": "-", "name": "benötigtUntertitel",     "type": "boolean" },
+          { "visibility": "-", "name": "induktionsschleife",     "type": "boolean" }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "passendeOptionen", "params": "", "returnType": "Barrierefreiheitsoption[]" }
+        ]
+      },
+
+      {
+        "id": "FilmService",
+        "group": "service",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "client", "type": "ApiClient" }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "liste", "params": "nurAktive: boolean", "returnType": "Film[]" },
+          { "visibility": "+", "name": "lade",  "params": "id: String",         "returnType": "Film"   }
+        ]
+      },
+
+      {
+        "id": "VorstellungService",
+        "group": "service",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "client", "type": "ApiClient" }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "liste",        "params": "filmId: String",                "returnType": "Vorstellung[]" },
+          { "visibility": "+", "name": "lade",         "params": "id: String",                    "returnType": "Vorstellung"   },
+          { "visibility": "+", "name": "sitzplan",     "params": "id: String",                    "returnType": "Sitzplan"      },
+          { "visibility": "+", "name": "anlegen",      "params": "p: VorstellungAntrag",          "returnType": "Vorstellung"   },
+          { "visibility": "+", "name": "aktualisieren","params": "id: String, p: VorstellungAntrag","returnType": "Vorstellung"  }
+        ]
+      },
+
+      {
+        "id": "BuchungService",
+        "group": "service",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "client", "type": "ApiClient" }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "liste",      "params": "",                  "returnType": "Buchung[]" },
+          { "visibility": "+", "name": "lade",       "params": "id: String",        "returnType": "Buchung"   },
+          { "visibility": "+", "name": "reservieren","params": "vorstellungId: String, sitzIds: String[]", "returnType": "boolean" },
+          { "visibility": "+", "name": "anlegen",    "params": "p: Buchungsantrag", "returnType": "Buchung"   },
+          { "visibility": "+", "name": "stornieren", "params": "id: String",        "returnType": "void"      }
+        ]
+      },
+
+      {
+        "id": "EinlassService",
+        "group": "service",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "client", "type": "ApiClient" }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "validiere", "params": "qrCode: String",       "returnType": "Ticket"        },
+          { "visibility": "+", "name": "manuell",   "params": "id: String",           "returnType": "Ticket"        },
+          { "visibility": "+", "name": "bericht",   "params": "vorstellungId: String","returnType": "EinlassBericht" }
+        ]
+      },
+
+      {
+        "id": "AnalyseService",
+        "group": "service",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "client", "type": "ApiClient" }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "übersicht",      "params": "", "returnType": "KennzahlenÜbersicht"   },
+          { "visibility": "+", "name": "umsatzProTag",   "params": "", "returnType": "int[]"                 },
+          { "visibility": "+", "name": "saalAuslastung", "params": "", "returnType": "double[]"              },
+          { "visibility": "+", "name": "prognose",       "params": "", "returnType": "Auslastungsprognose[]" }
+        ]
+      },
+
+      {
+        "id": "PreisService",
+        "group": "service",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "client", "type": "ApiClient" }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "tarif",     "params": "",         "returnType": "Tarif"        },
+          { "visibility": "+", "name": "speichern", "params": "t: Tarif", "returnType": "void"         },
+          { "visibility": "+", "name": "regeln",    "params": "",         "returnType": "Preisregel[]" }
+        ]
+      },
+
+      {
+        "id": "KontoService",
+        "group": "service",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "client", "type": "ApiClient" }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "punktestand",      "params": "",                                "returnType": "int"                 },
+          { "visibility": "+", "name": "einlösen",         "params": "p: int",                          "returnType": "boolean"             },
+          { "visibility": "+", "name": "verlauf",          "params": "",                                "returnType": "Punktebuchung[]"     },
+          { "visibility": "+", "name": "verifiziere",      "params": "typ: Ticketkategorie, nachweis: String", "returnType": "Verifizierungsstatus" },
+          { "visibility": "+", "name": "gutscheinEinlösen","params": "code: String",                    "returnType": "Gutschein"           }
+        ]
+      },
+
+      {
+        "id": "BestellService",
+        "group": "service",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "client", "type": "ApiClient" }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "anlegen",     "params": "b: Bestellantrag",              "returnType": "Bestellung"   },
+          { "visibility": "+", "name": "liste",       "params": "saalId: String",                "returnType": "Bestellung[]" },
+          { "visibility": "+", "name": "statusSetzen","params": "id: String, status: Bestellstatus","returnType": "void"      }
+        ]
+      },
+
+      {
+        "id": "FacilityService",
+        "group": "service",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "client", "type": "ApiClient" }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "defektMelden",  "params": "t: Wartungsticket", "returnType": "Wartungsticket"   },
+          { "visibility": "+", "name": "wartungsliste", "params": "",                  "returnType": "Wartungsticket[]" },
+          { "visibility": "+", "name": "saalFreigeben", "params": "saalId: String",    "returnType": "void"             }
+        ]
+      },
+
+      {
+        "id": "AdminService",
+        "group": "service",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "client", "type": "ApiClient" }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "rolleZuweisen", "params": "nutzer: String, rolle: Nutzerrolle", "returnType": "void"           },
+          { "visibility": "+", "name": "auditLog",      "params": "",                                   "returnType": "AuditEintrag[]" },
+          { "visibility": "+", "name": "datenAuskunft", "params": "email: String",                      "returnType": "Object"         },
+          { "visibility": "+", "name": "datenLöschen",  "params": "email: String",                      "returnType": "void"           }
+        ]
+      },
+
+      {
+        "id": "EmpfehlungsService",
+        "group": "service",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "client", "type": "ApiClient" }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "bestePlätze",      "params": "vorstellungId: String, präferenz: String", "returnType": "Sitzplatz[]" },
+          { "visibility": "+", "name": "filmEmpfehlungen", "params": "kundeId: String",                          "returnType": "Film[]"      }
+        ]
+      },
+
+      {
+        "id": "MarkeService",
+        "group": "service",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "client", "type": "ApiClient" }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "kennzahlen",      "params": "",                                   "returnType": "StandortKennzahl[]" },
+          { "visibility": "+", "name": "aktionAusrollen", "params": "a: Preisaktion, standorte: String[]","returnType": "void"               },
+          { "visibility": "+", "name": "wochenreport",    "params": "",                                   "returnType": "Bericht"            }
+        ]
+      },
+
+      {
+        "id": "ApiClient",
+        "group": "service",
+        "stereotype": "«singleton»",
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "basisUrl", "type": "String"    },
+          { "visibility": "-", "name": "instanz",  "type": "ApiClient" }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "getInstance", "params": "",             "returnType": "ApiClient" },
+          { "visibility": "+", "name": "get",         "params": "pfad: String", "returnType": "Object"    },
+          { "visibility": "+", "name": "post",        "params": "pfad, body",   "returnType": "Object"    },
+          { "visibility": "+", "name": "patch",       "params": "pfad, body",   "returnType": "Object"    }
+        ]
+      },
+
+      {
+        "id": "BuchungsAssistent",
+        "group": "store",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "schritt",         "type": "int"         },
+          { "visibility": "-", "name": "ausgewählteSitze","type": "String[]"    },
+          { "visibility": "-", "name": "zahlungsart",     "type": "Zahlungsart" }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "weiter",       "params": "",           "returnType": "void" },
+          { "visibility": "+", "name": "zurück",       "params": "",           "returnType": "void" },
+          { "visibility": "+", "name": "sitzToggle",   "params": "id: String", "returnType": "void" },
+          { "visibility": "+", "name": "zurücksetzen", "params": "",           "returnType": "void" }
+        ]
+      },
+
+      {
+        "id": "Warenkorb",
+        "group": "store",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "positionen", "type": "Warenkorbposition[]" }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "hinzufügen",  "params": "v: Vorstellung, k: Sitzkategorie", "returnType": "void" },
+          { "visibility": "+", "name": "entfernen",   "params": "id: String",                       "returnType": "void" },
+          { "visibility": "+", "name": "summe",       "params": "",                                  "returnType": "int"  },
+          { "visibility": "+", "name": "abschließen", "params": "",                                  "returnType": "void" }
+        ]
+      },
+
+      {
+        "id": "RolleStore",
+        "group": "store",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "aktuelleRolle", "type": "Nutzerrolle" }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "getRolle", "params": "",               "returnType": "Nutzerrolle" },
+          { "visibility": "+", "name": "setRolle", "params": "r: Nutzerrolle", "returnType": "void"        }
+        ]
+      },
+
+      {
+        "id": "ThemeStore",
+        "group": "store",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "modus", "type": "Themenmodus" }
+        ],
+        "methods": [
+          { "visibility": "+", "name": "setzen",    "params": "m: Themenmodus", "returnType": "void" },
+          { "visibility": "+", "name": "umschalten","params": "",               "returnType": "void" }
+        ]
+      },
+
+      {
+        "id": "Buchungsantrag",
+        "group": "dto",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "vorstellungId","type": "String"      },
+          { "visibility": "-", "name": "sitzIds",      "type": "String[]"    },
+          { "visibility": "-", "name": "zahlungsart",  "type": "Zahlungsart" },
+          { "visibility": "-", "name": "kundenName",   "type": "String"      },
+          { "visibility": "-", "name": "kundenEmail",  "type": "String"      }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "VorstellungAntrag",
+        "group": "dto",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "filmId",     "type": "String"              },
+          { "visibility": "-", "name": "saalId",     "type": "String"              },
+          { "visibility": "-", "name": "beginn",     "type": "Date"                },
+          { "visibility": "-", "name": "sprache",    "type": "Vorstellungssprache" },
+          { "visibility": "-", "name": "projektion", "type": "Projektionsart"      },
+          { "visibility": "-", "name": "tarifId",    "type": "String"              }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Bestellantrag",
+        "group": "dto",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "saal",       "type": "String"             },
+          { "visibility": "-", "name": "reihe",      "type": "String"             },
+          { "visibility": "-", "name": "platz",      "type": "int"                },
+          { "visibility": "-", "name": "positionen", "type": "Bestellposition[]"  },
+          { "visibility": "-", "name": "ticketId",   "type": "String"             }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Sitzplan",
+        "group": "dto",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "vorstellung", "type": "Vorstellung" },
+          { "visibility": "-", "name": "saal",        "type": "Kinosaal"    }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "SitzMitStatus",
+        "group": "dto",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "sitz",   "type": "Sitzplatz"  },
+          { "visibility": "-", "name": "status", "type": "Sitzstatus" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "BuchungDetail",
+        "group": "dto",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "buchung",     "type": "Buchung"     },
+          { "visibility": "-", "name": "film",        "type": "Film"        },
+          { "visibility": "-", "name": "vorstellung", "type": "Vorstellung" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Warenkorbposition",
+        "group": "dto",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "filmTitel",       "type": "String"          },
+          { "visibility": "-", "name": "kategorie",       "type": "Ticketkategorie" },
+          { "visibility": "-", "name": "menge",           "type": "int"             },
+          { "visibility": "-", "name": "einzelpreisCent", "type": "int"             }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Bestellposition",
+        "group": "dto",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "artikel", "type": "Artikel" },
+          { "visibility": "-", "name": "menge",   "type": "int"     }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Punktebuchung",
+        "group": "dto",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "datum",       "type": "Date"   },
+          { "visibility": "-", "name": "deltaPunkte", "type": "int"    },
+          { "visibility": "-", "name": "grund",       "type": "String" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "StandortKennzahl",
+        "group": "dto",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "standort",          "type": "String" },
+          { "visibility": "-", "name": "umsatzCent",        "type": "int"    },
+          { "visibility": "-", "name": "tickets",           "type": "int"    },
+          { "visibility": "-", "name": "auslastungProzent", "type": "double" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "KennzahlenÜbersicht",
+        "group": "dto",
+        "stereotype": null,
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "-", "name": "umsatzHeuteCent",    "type": "int"    },
+          { "visibility": "-", "name": "ticketsHeute",       "type": "int"    },
+          { "visibility": "-", "name": "vorstellungenHeute", "type": "int"    },
+          { "visibility": "-", "name": "auslastungProzent",  "type": "double" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Auslastungsprognose",
+        "group": "dto",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "vorstellungId",            "type": "String" },
+          { "visibility": "-", "name": "erwarteteAuslastungProzent","type": "double" },
+          { "visibility": "-", "name": "konfidenz",                "type": "double" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "EinlassBericht",
+        "group": "dto",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "vorstellungId", "type": "String" },
+          { "visibility": "-", "name": "validiert",     "type": "int"    },
+          { "visibility": "-", "name": "abgelehnt",     "type": "int"    }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Bericht",
+        "group": "dto",
+        "stereotype": null,
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "-", "name": "titel",     "type": "String" },
+          { "visibility": "-", "name": "zeitraum",  "type": "String" },
+          { "visibility": "-", "name": "erzeugtAm", "type": "Date"   }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Buchungsstatus",
+        "group": "enum",
+        "stereotype": "«enumeration»",
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "", "name": "AUSSTEHEND", "type": "" },
+          { "visibility": "", "name": "BESTÄTIGT",  "type": "" },
+          { "visibility": "", "name": "STORNIERT",  "type": "" },
+          { "visibility": "", "name": "EINGELÖST",  "type": "" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Ticketstatus",
+        "group": "enum",
+        "stereotype": "«enumeration»",
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "", "name": "GÜLTIG",     "type": "" },
+          { "visibility": "", "name": "EINGELÖST",  "type": "" },
+          { "visibility": "", "name": "STORNIERT",  "type": "" },
+          { "visibility": "", "name": "ABGELAUFEN", "type": "" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Vorstellungsstatus",
+        "group": "enum",
+        "stereotype": "«enumeration»",
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "", "name": "GEPLANT",  "type": "" },
+          { "visibility": "", "name": "OFFEN",    "type": "" },
+          { "visibility": "", "name": "ABGESAGT", "type": "" },
+          { "visibility": "", "name": "BEENDET",  "type": "" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Zahlungsart",
+        "group": "enum",
+        "stereotype": "«enumeration»",
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "", "name": "KARTE",       "type": "" },
+          { "visibility": "", "name": "BAR",         "type": "" },
+          { "visibility": "", "name": "ONLINE",      "type": "" },
+          { "visibility": "", "name": "APPLE_PAY",   "type": "" },
+          { "visibility": "", "name": "GOOGLE_PAY",  "type": "" },
+          { "visibility": "", "name": "BONUSPUNKTE", "type": "" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Vorstellungssprache",
+        "group": "enum",
+        "stereotype": "«enumeration»",
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "", "name": "DEUTSCH", "type": "" },
+          { "visibility": "", "name": "OV",      "type": "" },
+          { "visibility": "", "name": "OmU",     "type": "" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Projektionsart",
+        "group": "enum",
+        "stereotype": "«enumeration»",
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "", "name": "ZWEI_D", "type": "" },
+          { "visibility": "", "name": "DREI_D", "type": "" },
+          { "visibility": "", "name": "IMAX",   "type": "" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Sitzkategorie",
+        "group": "enum",
+        "stereotype": "«enumeration»",
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "", "name": "STANDARD", "type": "" },
+          { "visibility": "", "name": "PREMIUM",  "type": "" },
+          { "visibility": "", "name": "VIP",      "type": "" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Sitzstatus",
+        "group": "enum",
+        "stereotype": "«enumeration»",
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "", "name": "FREI",       "type": "" },
+          { "visibility": "", "name": "AUSGEWÄHLT", "type": "" },
+          { "visibility": "", "name": "RESERVIERT", "type": "" },
+          { "visibility": "", "name": "BELEGT",     "type": "" },
+          { "visibility": "", "name": "DEFEKT",     "type": "" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Nutzerrolle",
+        "group": "enum",
+        "stereotype": "«enumeration»",
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "", "name": "KUNDE",    "type": "" },
+          { "visibility": "", "name": "KASSE",    "type": "" },
+          { "visibility": "", "name": "MANAGER",  "type": "" },
+          { "visibility": "", "name": "EINLASS",  "type": "" },
+          { "visibility": "", "name": "SERVICE",  "type": "" },
+          { "visibility": "", "name": "FACILITY", "type": "" },
+          { "visibility": "", "name": "MARKE",    "type": "" },
+          { "visibility": "", "name": "ADMIN",    "type": "" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Ticketkategorie",
+        "group": "enum",
+        "stereotype": "«enumeration»",
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "", "name": "ERWACHSEN", "type": "" },
+          { "visibility": "", "name": "KIND",      "type": "" },
+          { "visibility": "", "name": "SENIOR",    "type": "" },
+          { "visibility": "", "name": "STUDENT",   "type": "" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Bestellstatus",
+        "group": "enum",
+        "stereotype": "«enumeration»",
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "", "name": "OFFEN",          "type": "" },
+          { "visibility": "", "name": "IN_ZUBEREITUNG", "type": "" },
+          { "visibility": "", "name": "AUSGELIEFERT",   "type": "" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Artikelkategorie",
+        "group": "enum",
+        "stereotype": "«enumeration»",
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "", "name": "SNACK",    "type": "" },
+          { "visibility": "", "name": "GETRAENK", "type": "" },
+          { "visibility": "", "name": "MENU",     "type": "" },
+          { "visibility": "", "name": "MERCH",    "type": "" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Allergen",
+        "group": "enum",
+        "stereotype": "«enumeration»",
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "", "name": "GLUTEN",         "type": "" },
+          { "visibility": "", "name": "KRUSTENTIERE",   "type": "" },
+          { "visibility": "", "name": "EIER",           "type": "" },
+          { "visibility": "", "name": "FISCH",          "type": "" },
+          { "visibility": "", "name": "ERDNUESSE",      "type": "" },
+          { "visibility": "", "name": "SOJA",           "type": "" },
+          { "visibility": "", "name": "MILCH",          "type": "" },
+          { "visibility": "", "name": "SCHALENFRUECHTE","type": "" },
+          { "visibility": "", "name": "SELLERIE",       "type": "" },
+          { "visibility": "", "name": "SENF",           "type": "" },
+          { "visibility": "", "name": "SESAM",          "type": "" },
+          { "visibility": "", "name": "SCHWEFELDIOXID", "type": "" },
+          { "visibility": "", "name": "LUPINEN",        "type": "" },
+          { "visibility": "", "name": "WEICHTIERE",     "type": "" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Reinigungsstatus",
+        "group": "enum",
+        "stereotype": "«enumeration»",
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "", "name": "AUSSTEHEND",  "type": "" },
+          { "visibility": "", "name": "IN_ARBEIT",   "type": "" },
+          { "visibility": "", "name": "FREIGEGEBEN", "type": "" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Wartungsstatus",
+        "group": "enum",
+        "stereotype": "«enumeration»",
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "", "name": "OFFEN",     "type": "" },
+          { "visibility": "", "name": "IN_ARBEIT", "type": "" },
+          { "visibility": "", "name": "ERLEDIGT",  "type": "" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Barrierefreiheitsoption",
+        "group": "enum",
+        "stereotype": "«enumeration»",
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "", "name": "UNTERTITEL_BRILLE",  "type": "" },
+          { "visibility": "", "name": "AUDIODESKRIPTION",   "type": "" },
+          { "visibility": "", "name": "INDUKTIONSSCHLEIFE", "type": "" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Verifizierungsstatus",
+        "group": "enum",
+        "stereotype": "«enumeration»",
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "", "name": "AUSSTEHEND", "type": "" },
+          { "visibility": "", "name": "BESTÄTIGT",  "type": "" },
+          { "visibility": "", "name": "ABGELEHNT",  "type": "" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Themenmodus",
+        "group": "enum",
+        "stereotype": "«enumeration»",
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "", "name": "HELL",   "type": "" },
+          { "visibility": "", "name": "DUNKEL", "type": "" },
+          { "visibility": "", "name": "SYSTEM", "type": "" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Zahlungsstatus",
+        "group": "enum",
+        "stereotype": "«enumeration»",
+        "implementedInPrototype": true,
+        "attributes": [
+          { "visibility": "", "name": "AUSSTEHEND",     "type": "" },
+          { "visibility": "", "name": "ERFOLGREICH",    "type": "" },
+          { "visibility": "", "name": "FEHLGESCHLAGEN", "type": "" },
+          { "visibility": "", "name": "ERSTATTET",      "type": "" }
+        ],
+        "methods": []
+      },
+
+      {
+        "id": "Rabatttyp",
+        "group": "enum",
+        "stereotype": "«enumeration»",
+        "implementedInPrototype": false,
+        "attributes": [
+          { "visibility": "", "name": "PROZENT", "type": "" },
+          { "visibility": "", "name": "BETRAG",  "type": "" }
+        ],
+        "methods": []
+      }
+
+    ],
+
+    "relationships": [
+
+      { "id": "r1", "type": "composition", "from": "Kette",       "to": "Kino",        "label": "umfasst",         "fromMultiplicity": "1",    "toMultiplicity": "1..*" },
+      { "id": "r2", "type": "composition", "from": "Kino",        "to": "Kinosaal",    "label": "besitzt",         "fromMultiplicity": "1",    "toMultiplicity": "1..*" },
+      { "id": "r3", "type": "composition", "from": "Kinosaal",    "to": "Sitzplatz",   "label": "enthält",         "fromMultiplicity": "1",    "toMultiplicity": "1..*" },
+      { "id": "r4", "type": "association", "from": "Vorstellung", "to": "Film",        "label": "zeigt",           "fromMultiplicity": "*",    "toMultiplicity": "1"    },
+      { "id": "r5", "type": "association", "from": "Vorstellung", "to": "Kinosaal",    "label": "findet statt in", "fromMultiplicity": "*",    "toMultiplicity": "1"    },
+      { "id": "r6", "type": "association", "from": "Vorstellung", "to": "Tarif",       "label": "tarifiert nach",  "fromMultiplicity": "*",    "toMultiplicity": "1"    },
+      { "id": "r7", "type": "composition", "from": "Tarif",       "to": "Preisregel",  "label": "hat",             "fromMultiplicity": "1",    "toMultiplicity": "*"    },
+      { "id": "r8", "type": "association", "from": "Preisaktion", "to": "Kino",        "label": "betrifft",        "fromMultiplicity": "*",    "toMultiplicity": "*"    },
+      { "id": "r9", "type": "association", "from": "Nutzer",      "to": "Buchung",     "label": "tätigt",          "fromMultiplicity": "0..1", "toMultiplicity": "*"    },
+      { "id": "r10","type": "association", "from": "Buchung",     "to": "Vorstellung", "label": "gehört zu",       "fromMultiplicity": "*",    "toMultiplicity": "1"    },
+      { "id": "r11","type": "composition", "from": "Buchung",     "to": "Ticket",      "label": "enthält",         "fromMultiplicity": "1",    "toMultiplicity": "1..*" },
+      { "id": "r12","type": "association", "from": "Ticket",      "to": "VorstellungSitz", "label": "gilt für",    "fromMultiplicity": "1",    "toMultiplicity": "1"    },
+      { "id": "r13","type": "association", "from": "Kunde",       "to": "Bonuspunktekonto", "label": "sammelt",    "fromMultiplicity": "1",    "toMultiplicity": "0..1" },
+      { "id": "r14","type": "composition", "from": "Bonuspunktekonto", "to": "Punktebuchung", "label": "protokolliert", "fromMultiplicity": "1", "toMultiplicity": "*" },
+      { "id": "r15","type": "association", "from": "Servicekraft","to": "Bestellung",  "label": "nimmt auf",       "fromMultiplicity": "1",    "toMultiplicity": "*"    },
+      { "id": "r16","type": "composition", "from": "Bestellung",  "to": "Bestellposition", "label": "enthält",    "fromMultiplicity": "1",    "toMultiplicity": "1..*" },
+      { "id": "r17","type": "association", "from": "Bestellposition", "to": "Artikel", "label": "bezieht",         "fromMultiplicity": "*",    "toMultiplicity": "1"    },
+      { "id": "r18","type": "association", "from": "Bestellung",  "to": "Ticket",      "label": "verrechnet auf",  "fromMultiplicity": "*",    "toMultiplicity": "0..1" },
+      { "id": "r19","type": "association", "from": "Haustechniker","to": "Wartungsticket", "label": "meldet",     "fromMultiplicity": "1",    "toMultiplicity": "*"    },
+      { "id": "r20","type": "association", "from": "Wartungsticket","to": "Sitzplatz", "label": "betrifft",        "fromMultiplicity": "*",    "toMultiplicity": "1"    },
+      { "id": "r21","type": "association", "from": "Markenmanager","to": "Kette",      "label": "verantwortet",    "fromMultiplicity": "1",    "toMultiplicity": "1"    },
+      { "id": "r22","type": "association", "from": "Administrator","to": "AuditEintrag","label": "prüft",          "fromMultiplicity": "1",    "toMultiplicity": "*"    },
+      { "id": "r23","type": "composition", "from": "Vorstellung", "to": "VorstellungSitz", "label": "belegt mit",  "fromMultiplicity": "1",    "toMultiplicity": "1..*" },
+      { "id": "r24","type": "association", "from": "Sitzplatz",   "to": "VorstellungSitz", "label": "Status je Vorstellung", "fromMultiplicity": "1", "toMultiplicity": "*" },
+      { "id": "r25","type": "composition", "from": "Buchung",     "to": "Zahlung",     "label": "bezahlt durch",   "fromMultiplicity": "1",    "toMultiplicity": "1"    },
+      { "id": "r26","type": "association", "from": "Buchung",     "to": "Gutschein",   "label": "verwendet",       "fromMultiplicity": "*",    "toMultiplicity": "0..1" },
+      { "id": "r27","type": "composition", "from": "Kunde",       "to": "Merkliste",   "label": "führt",           "fromMultiplicity": "1",    "toMultiplicity": "0..1" },
+      { "id": "r28","type": "association", "from": "Merkliste",   "to": "Film",        "label": "enthält",         "fromMultiplicity": "*",    "toMultiplicity": "*"    },
+      { "id": "r29","type": "association", "from": "Kunde",       "to": "Bewertung",   "label": "schreibt",        "fromMultiplicity": "1",    "toMultiplicity": "*"    },
+      { "id": "r30","type": "association", "from": "Bewertung",   "to": "Film",        "label": "bewertet",        "fromMultiplicity": "*",    "toMultiplicity": "1"    },
+      { "id": "r31","type": "composition", "from": "Kunde",       "to": "Barrierefreiheitsprofil", "label": "hat", "fromMultiplicity": "1",    "toMultiplicity": "0..1" },
+
+      { "id": "i1", "type": "inheritance", "from": "Kunde",              "to": "Nutzer", "label": "", "fromMultiplicity": "", "toMultiplicity": "" },
+      { "id": "i2", "type": "inheritance", "from": "Kassierer",          "to": "Nutzer", "label": "", "fromMultiplicity": "", "toMultiplicity": "" },
+      { "id": "i3", "type": "inheritance", "from": "Manager",            "to": "Nutzer", "label": "", "fromMultiplicity": "", "toMultiplicity": "" },
+      { "id": "i4", "type": "inheritance", "from": "Einlasskontrolleur", "to": "Nutzer", "label": "", "fromMultiplicity": "", "toMultiplicity": "" },
+      { "id": "i5", "type": "inheritance", "from": "Servicekraft",       "to": "Nutzer", "label": "", "fromMultiplicity": "", "toMultiplicity": "" },
+      { "id": "i6", "type": "inheritance", "from": "Haustechniker",      "to": "Nutzer", "label": "", "fromMultiplicity": "", "toMultiplicity": "" },
+      { "id": "i7", "type": "inheritance", "from": "Markenmanager",      "to": "Nutzer", "label": "", "fromMultiplicity": "", "toMultiplicity": "" },
+      { "id": "i8", "type": "inheritance", "from": "Administrator",      "to": "Nutzer", "label": "", "fromMultiplicity": "", "toMultiplicity": "" },
+
+      { "id": "s1",  "type": "dependency",  "from": "FilmService",        "to": "Film",                "label": "" },
+      { "id": "s2",  "type": "dependency",  "from": "VorstellungService", "to": "Vorstellung",         "label": "" },
+      { "id": "s3",  "type": "dependency",  "from": "VorstellungService", "to": "Sitzplan",            "label": "" },
+      { "id": "s4",  "type": "dependency",  "from": "VorstellungService", "to": "VorstellungAntrag",   "label": "" },
+      { "id": "s5",  "type": "dependency",  "from": "BuchungService",     "to": "Buchung",             "label": "" },
+      { "id": "s6",  "type": "dependency",  "from": "BuchungService",     "to": "Buchungsantrag",      "label": "" },
+      { "id": "s7",  "type": "dependency",  "from": "EinlassService",     "to": "Ticket",              "label": "" },
+      { "id": "s8",  "type": "dependency",  "from": "EinlassService",     "to": "EinlassBericht",      "label": "" },
+      { "id": "s9",  "type": "dependency",  "from": "AnalyseService",     "to": "KennzahlenÜbersicht", "label": "" },
+      { "id": "s10", "type": "dependency",  "from": "AnalyseService",     "to": "Auslastungsprognose", "label": "" },
+      { "id": "s11", "type": "dependency",  "from": "AnalyseService",     "to": "Bericht",             "label": "" },
+      { "id": "s12", "type": "dependency",  "from": "PreisService",       "to": "Tarif",               "label": "" },
+      { "id": "s13", "type": "dependency",  "from": "PreisService",       "to": "Preisregel",          "label": "" },
+      { "id": "s14", "type": "dependency",  "from": "KontoService",       "to": "Bonuspunktekonto",    "label": "" },
+      { "id": "s15", "type": "dependency",  "from": "KontoService",       "to": "Punktebuchung",       "label": "" },
+      { "id": "s16", "type": "dependency",  "from": "BestellService",     "to": "Bestellung",          "label": "" },
+      { "id": "s17", "type": "dependency",  "from": "BestellService",     "to": "Bestellantrag",       "label": "" },
+      { "id": "s18", "type": "dependency",  "from": "FacilityService",    "to": "Wartungsticket",      "label": "" },
+      { "id": "s19", "type": "dependency",  "from": "AdminService",       "to": "AuditEintrag",        "label": "" },
+      { "id": "s20", "type": "dependency",  "from": "AdminService",       "to": "Nutzer",              "label": "" },
+      { "id": "s21", "type": "dependency",  "from": "EmpfehlungsService", "to": "Sitzplatz",           "label": "" },
+      { "id": "s22", "type": "dependency",  "from": "EmpfehlungsService", "to": "Film",                "label": "" },
+      { "id": "s23", "type": "dependency",  "from": "MarkeService",       "to": "StandortKennzahl",    "label": "" },
+      { "id": "s24", "type": "dependency",  "from": "MarkeService",       "to": "Preisaktion",         "label": "" },
+      { "id": "s25", "type": "dependency",  "from": "MarkeService",       "to": "Bericht",             "label": "" },
+      { "id": "s26", "type": "dependency",  "from": "BuchungService",     "to": "VorstellungSitz",     "label": "" },
+      { "id": "s27", "type": "dependency",  "from": "BuchungService",     "to": "Zahlung",             "label": "" },
+      { "id": "s28", "type": "dependency",  "from": "VorstellungService", "to": "VorstellungSitz",     "label": "" },
+      { "id": "s29", "type": "dependency",  "from": "EmpfehlungsService", "to": "Merkliste",           "label": "" },
+      { "id": "s30", "type": "dependency",  "from": "EmpfehlungsService", "to": "Bewertung",           "label": "" },
+      { "id": "s31", "type": "dependency",  "from": "KontoService",       "to": "Gutschein",           "label": "" },
+
+      { "id": "a1",  "type": "association", "from": "FilmService",        "to": "ApiClient", "label": "", "fromMultiplicity": "*", "toMultiplicity": "1" },
+      { "id": "a2",  "type": "association", "from": "VorstellungService", "to": "ApiClient", "label": "", "fromMultiplicity": "*", "toMultiplicity": "1" },
+      { "id": "a3",  "type": "association", "from": "BuchungService",     "to": "ApiClient", "label": "", "fromMultiplicity": "*", "toMultiplicity": "1" },
+      { "id": "a4",  "type": "association", "from": "EinlassService",     "to": "ApiClient", "label": "", "fromMultiplicity": "*", "toMultiplicity": "1" },
+      { "id": "a5",  "type": "association", "from": "AnalyseService",     "to": "ApiClient", "label": "", "fromMultiplicity": "*", "toMultiplicity": "1" },
+      { "id": "a6",  "type": "association", "from": "PreisService",       "to": "ApiClient", "label": "", "fromMultiplicity": "*", "toMultiplicity": "1" },
+      { "id": "a7",  "type": "association", "from": "KontoService",       "to": "ApiClient", "label": "", "fromMultiplicity": "*", "toMultiplicity": "1" },
+      { "id": "a8",  "type": "association", "from": "BestellService",     "to": "ApiClient", "label": "", "fromMultiplicity": "*", "toMultiplicity": "1" },
+      { "id": "a9",  "type": "association", "from": "FacilityService",    "to": "ApiClient", "label": "", "fromMultiplicity": "*", "toMultiplicity": "1" },
+      { "id": "a10", "type": "association", "from": "AdminService",       "to": "ApiClient", "label": "", "fromMultiplicity": "*", "toMultiplicity": "1" },
+      { "id": "a11", "type": "association", "from": "EmpfehlungsService", "to": "ApiClient", "label": "", "fromMultiplicity": "*", "toMultiplicity": "1" },
+      { "id": "a12", "type": "association", "from": "MarkeService",       "to": "ApiClient", "label": "", "fromMultiplicity": "*", "toMultiplicity": "1" },
+
+      { "id": "d1",  "type": "composition", "from": "Sitzplan",      "to": "SitzMitStatus",   "label": "", "fromMultiplicity": "1", "toMultiplicity": "1..*" },
+      { "id": "d2",  "type": "association", "from": "SitzMitStatus", "to": "Sitzplatz",       "label": "", "fromMultiplicity": "1", "toMultiplicity": "1"    },
+      { "id": "d3",  "type": "association", "from": "Sitzplan",      "to": "Vorstellung",     "label": "", "fromMultiplicity": "*", "toMultiplicity": "1"    },
+      { "id": "d4",  "type": "association", "from": "BuchungDetail", "to": "Buchung",         "label": "", "fromMultiplicity": "1", "toMultiplicity": "1"    },
+      { "id": "d5",  "type": "association", "from": "BuchungDetail", "to": "Ticket",          "label": "", "fromMultiplicity": "1", "toMultiplicity": "1..*" },
+      { "id": "d6",  "type": "composition", "from": "Bestellantrag", "to": "Bestellposition","label": "", "fromMultiplicity": "1", "toMultiplicity": "1..*" },
+      { "id": "d7",  "type": "dependency",  "from": "SitzMitStatus", "to": "VorstellungSitz", "label": "projiziert" },
+
+      { "id": "w1",  "type": "dependency",  "from": "BuchungsAssistent", "to": "BuchungService",     "label": "" },
+      { "id": "w2",  "type": "dependency",  "from": "BuchungsAssistent", "to": "EmpfehlungsService", "label": "" },
+      { "id": "w3",  "type": "dependency",  "from": "BuchungsAssistent", "to": "Sitzplatz",          "label": "" },
+      { "id": "w4",  "type": "dependency",  "from": "BuchungsAssistent", "to": "Vorstellung",        "label": "" },
+      { "id": "w5",  "type": "composition", "from": "Warenkorb",         "to": "Warenkorbposition",  "label": "", "fromMultiplicity": "1", "toMultiplicity": "1..*" },
+      { "id": "w6",  "type": "dependency",  "from": "RolleStore",        "to": "Nutzer",             "label": "" }
+
+    ]
+  }
+}

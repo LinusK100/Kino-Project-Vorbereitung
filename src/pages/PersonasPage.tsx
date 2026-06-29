@@ -1,239 +1,209 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
-import { ChevronDown, Target, Frown, Quote, Users, Briefcase, UserCheck } from 'lucide-react'
-import { PageHeader } from '@/components/shared/PageHeader'
-import { pageVariants, containerVariants, cardVariants } from '@/lib/transitions'
-import personasData from '@/data/personas.json'
-import type { Persona } from '@/types'
+import { ChevronDown, Target, Frown, Quote, Users, Crown, GitBranch } from 'lucide-react'
+import { SectionShell } from '@/components/shared/SectionShell'
+import { Callout } from '@/components/shared/Callout'
+import { containerVariants, cardVariants } from '@/lib/transitions'
+import { usePersonas, personaById } from '@/data/content'
+import { useAppStore } from '@/store/appStore'
+import type { Persona, PresentationStep } from '@/types'
 
-const personas = personasData as Persona[]
-const employeeIds = new Set(['monika', 'thomas', 'kevin'])
+const ACCENT = '#006494'
 
-type Filter = 'all' | 'employee' | 'customer'
-
-const filterConfig: { value: Filter; label: string; icon: React.ElementType }[] = [
-  { value: 'all', label: 'Alle Personas', icon: Users },
-  { value: 'employee', label: 'Mitarbeiter', icon: Briefcase },
-  { value: 'customer', label: 'Kunden', icon: UserCheck },
+const steps: PresentationStep[] = [
+  { id: 'intro', title: 'Was sind Personas?', body: 'Personas sind archetypische Nutzer:innen mit Zielen und Frustrationen. Sie geben den Anforderungen ein Gesicht – jede spätere User Story gehört zu genau einer Persona.', target: '[data-pres="section-header"]' },
+  { id: 'einfach', title: 'Einfach: 4 Kern-Personas', body: 'Im Einfach-Modus siehst du die 4 MVP-Personas: die Dach-Persona „Endkunde" plus Kassiererin, Manager und Einlass. Genau die Rollen, die der Prototyp umsetzt.', target: '[data-pres="mode-toggle"]', mode: 'einfach' },
+  { id: 'erweitert', title: 'Erweitert: 12 Personas', body: 'Im Erweitert-Modus differenziert sich „Endkunde" in Lara, Jonas, Hannelore und Sandra – plus Service, Facility, Marke und Admin. Eine echte Obermenge der Basis.', target: '[data-pres="group-filter"]', mode: 'erweitert' },
+  { id: 'anatomy', title: 'Aufbau einer Persona', body: 'Jede Karte zeigt Ziele (was die Person erreichen will) und Frustrationen (was heute nervt). Aus genau diesem Spannungsfeld entstehen die User Stories.', target: '[data-pres="persona-first"]', mode: 'erweitert' },
+  { id: 'umbrella', title: 'Dach-Persona & Ausprägungen', body: 'Die Dach-Persona „Endkunde" bündelt konkrete Kunden-Ausprägungen. So bleibt die Basis schlank, ohne im Erweitert-Modus an Differenzierung zu verlieren.', target: '[data-pres="persona-endkunde"]', mode: 'erweitert' },
 ]
 
 export default function PersonasPage() {
-  const [filter, setFilter] = useState<Filter>('all')
+  const personas = usePersonas()
+  const { mode } = useAppStore()
+  const [group, setGroup] = useState<string>('all')
   const [allOpen, setAllOpen] = useState(false)
 
-  const filtered = personas.filter(p => {
-    if (filter === 'employee') return employeeIds.has(p.id)
-    if (filter === 'customer') return !employeeIds.has(p.id)
-    return true
-  })
+  // reset group filter when the dataset (mode) changes — render-time pattern
+  const [prevMode, setPrevMode] = useState(mode)
+  if (mode !== prevMode) { setPrevMode(mode); setGroup('all') }
+
+  const groups = Array.from(new Set(personas.map((p) => p.group)))
+  const filtered = group === 'all' ? personas : personas.filter((p) => p.group === group)
 
   return (
-    <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
-      <PageHeader
-        title="Personas"
-        description="6 Nutzerprofile des CineTicket-Systems"
-        action={
-          <button
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all"
-            style={{
-              background: allOpen ? '#01696f' : 'var(--card-bg)',
-              color: allOpen ? 'white' : 'var(--text-secondary)',
-              borderColor: allOpen ? '#01696f' : 'var(--border-color)',
-            }}
-            onClick={() => setAllOpen(o => !o)}
-          >
-            <ChevronDown
-              size={13}
-              style={{
-                transform: allOpen ? 'rotate(180deg)' : 'none',
-                transition: 'transform 0.25s',
-              }}
-            />
-            {allOpen ? 'Alle einklappen' : 'Alle ausklappen'}
-          </button>
-        }
-      />
-
-      {/* Filter Tabs */}
-      <div className="flex gap-2 mb-6 flex-wrap">
-        {filterConfig.map(({ value, label, icon: Icon }) => (
-          <button
-            key={value}
-            onClick={() => setFilter(value)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium border transition-all duration-150"
-            style={{
-              background: filter === value ? '#01696f' : 'var(--card-bg)',
-              color: filter === value ? 'white' : 'var(--text-secondary)',
-              borderColor: filter === value ? '#01696f' : 'var(--border-color)',
-            }}
-          >
-            <Icon size={14} />
-            {label}
-          </button>
-        ))}
+    <SectionShell
+      kicker="Anforderungen"
+      title="Personas"
+      subtitle={`${personas.length} Nutzerprofile · ${mode === 'einfach' ? 'Basis (MVP)' : 'Vollausbau'}`}
+      icon={Users}
+      accent={ACCENT}
+      presentation={steps}
+      intro={
+        <Callout kind="info" title="Idee">
+          Personas geben den Anforderungen ein Gesicht. Im <strong>Einfach</strong>-Modus die 4 Kern-Personas
+          des MVP, im <strong>Erweitert</strong>-Modus alle 12 – gegliedert nach Bereich. Jede User Story
+          referenziert später genau eine Persona.
+        </Callout>
+      }
+    >
+      {/* Group filter */}
+      <div className="flex items-center justify-between gap-3 mb-4 flex-wrap" data-pres="group-filter">
+        <div className="flex gap-2 flex-wrap">
+          <FilterChip label="Alle" active={group === 'all'} onClick={() => setGroup('all')} accent={ACCENT} />
+          {groups.map((g) => (
+            <FilterChip key={g} label={g} active={group === g} onClick={() => setGroup(g)} accent={ACCENT} />
+          ))}
+        </div>
+        <button
+          onClick={() => setAllOpen((o) => !o)}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all"
+          style={{
+            background: allOpen ? ACCENT : 'var(--card-bg)',
+            color: allOpen ? 'white' : 'var(--text-secondary)',
+            borderColor: allOpen ? ACCENT : 'var(--border-color)',
+          }}
+        >
+          <ChevronDown size={13} style={{ transform: allOpen ? 'rotate(180deg)' : 'none', transition: 'transform .25s' }} />
+          {allOpen ? 'Alle einklappen' : 'Alle ausklappen'}
+        </button>
       </div>
 
-      {/* Grid — pass allOpen as key to force re-render when toggled globally */}
       <motion.div
-        key={filter}
+        key={`${mode}-${group}`}
         className="grid grid-cols-1 md:grid-cols-2 gap-4"
         variants={containerVariants}
         initial="initial"
         animate="animate"
       >
-        {filtered.map((persona) => (
-          <PersonaCardWrapper key={`${persona.id}-${allOpen}`} persona={persona} forceOpen={allOpen} />
+        {filtered.map((p, i) => (
+          <PersonaCard
+            key={`${p.id}-${allOpen}`}
+            persona={p}
+            forceOpen={allOpen}
+            presAttr={i === 0 ? 'persona-first' : p.id === 'endkunde' ? 'persona-endkunde' : undefined}
+          />
         ))}
       </motion.div>
-    </motion.div>
+    </SectionShell>
   )
 }
 
-function PersonaCardWrapper({ persona, forceOpen }: { persona: Persona; forceOpen: boolean }) {
-  const [open, setOpen] = useState(forceOpen)
-  const isEmployee = employeeIds.has(persona.id)
+function FilterChip({ label, active, onClick, accent }: { label: string; active: boolean; onClick: () => void; accent: string }) {
+  return (
+    <button
+      onClick={onClick}
+      className="px-3 py-1.5 rounded-full text-sm font-medium border transition-all duration-150"
+      style={{
+        background: active ? accent : 'var(--card-bg)',
+        color: active ? 'white' : 'var(--text-secondary)',
+        borderColor: active ? accent : 'var(--border-color)',
+      }}
+    >
+      {label}
+    </button>
+  )
+}
 
-  // Sync with global toggle
+function PersonaCard({ persona, forceOpen, presAttr }: { persona: Persona; forceOpen: boolean; presAttr?: string }) {
+  const [open, setOpen] = useState(forceOpen)
   const [prevForce, setPrevForce] = useState(forceOpen)
-  if (forceOpen !== prevForce) {
-    setPrevForce(forceOpen)
-    setOpen(forceOpen)
-  }
+  if (forceOpen !== prevForce) { setPrevForce(forceOpen); setOpen(forceOpen) }
+
+  const isUmbrella = !!persona.umbrella
+  const refinesParent = persona.refines ? personaById[persona.refines] : null
 
   return (
     <motion.article
       variants={cardVariants}
-      className="rounded-2xl overflow-hidden transition-shadow duration-200 hover:shadow-md"
-      style={{
-        background: 'var(--card-bg)',
-        border: '1px solid var(--border-color)',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.07)',
-      }}
+      className="rounded-2xl overflow-hidden hover:shadow-md transition-shadow duration-200"
+      style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)', boxShadow: '0 1px 3px rgba(0,0,0,0.07)' }}
+      data-pres={presAttr}
     >
       <div className="h-1 w-full" style={{ background: persona.color }} />
-
-      <button
-        className="w-full text-left px-5 py-4 flex items-center gap-4"
-        onClick={() => setOpen(o => !o)}
-        aria-expanded={open}
-      >
+      <button className="w-full text-left px-5 py-4 flex items-center gap-4" onClick={() => setOpen((o) => !o)} aria-expanded={open}>
         <div
           className="w-11 h-11 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
           style={{ background: persona.color, boxShadow: `0 2px 8px ${persona.color}50` }}
         >
           {persona.avatar}
         </div>
-
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>
-              {persona.name}
-            </span>
-            <span
-              className="text-xs px-2 py-0.5 rounded-full font-medium"
-              style={{
-                background: isEmployee ? 'rgba(1,105,111,0.1)' : 'rgba(122,57,187,0.1)',
-                color: isEmployee ? '#01696f' : '#7a39bb',
-              }}
-            >
-              {isEmployee ? 'Mitarbeiter' : 'Kunde'}
+            <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>{persona.name}</span>
+            {isUmbrella && (
+              <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold inline-flex items-center gap-1" style={{ background: `${persona.color}1a`, color: persona.color }}>
+                <Crown size={10} /> Dach-Persona
+              </span>
+            )}
+            <span className="text-[10px] px-2 py-0.5 rounded-full font-mono font-semibold" style={{ background: 'var(--border-color)', color: 'var(--text-secondary)' }}>
+              {persona.roleEnum}
             </span>
           </div>
           <p className="text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>
-            {persona.role} · {persona.age} Jahre
+            {persona.role} · {persona.age} Jahre · {persona.group}
+            {refinesParent && <> · <span className="inline-flex items-center gap-0.5"><GitBranch size={10} /> aus {refinesParent.name.split(' ')[0]}</span></>}
           </p>
         </div>
-
-        <motion.div
-          animate={{ rotate: open ? 180 : 0 }}
-          transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          className="flex-shrink-0"
-          style={{ color: 'var(--text-secondary)' }}
-        >
+        <motion.div animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.25 }} className="flex-shrink-0" style={{ color: 'var(--text-secondary)' }}>
           <ChevronDown size={18} />
         </motion.div>
       </button>
 
-      {/* Motto preview */}
       <div className="px-5 pb-3 -mt-1">
-        <blockquote
-          className="text-xs italic pl-3 leading-relaxed"
-          style={{ color: 'var(--text-secondary)', borderLeft: `2px solid ${persona.color}` }}
-        >
+        <blockquote className="text-xs italic pl-3 leading-relaxed" style={{ color: 'var(--text-secondary)', borderLeft: `2px solid ${persona.color}` }}>
           „{persona.motto}"
         </blockquote>
       </div>
 
       <AnimatePresence initial={false}>
         {open && (
-          <motion.div
-            key="body"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            style={{ overflow: 'hidden' }}
-          >
-            <div
-              className="mx-4 mb-4 rounded-xl overflow-hidden text-sm"
-              style={{ border: '1px solid var(--border-color)' }}
-            >
-              {/* Background */}
+          <motion.div key="body" initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }} style={{ overflow: 'hidden' }}>
+            <div className="mx-4 mb-4 rounded-xl overflow-hidden text-sm" style={{ border: '1px solid var(--border-color)' }}>
               <div className="px-4 py-3" style={{ background: `${persona.color}08` }}>
-                <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-                  {persona.background}
-                </p>
+                <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{persona.background}</p>
+                {persona.refinedBy && persona.refinedBy.length > 0 && (
+                  <p className="text-xs mt-2" style={{ color: 'var(--text-secondary)' }}>
+                    <strong style={{ color: persona.color }}>Ausprägungen:</strong>{' '}
+                    {persona.refinedBy.map((id) => personaById[id]?.name.split(' ')[0] ?? id).join(', ')}
+                  </p>
+                )}
               </div>
-
               <div className="grid grid-cols-2" style={{ borderTop: '1px solid var(--border-color)' }}>
                 <div className="px-4 py-3" style={{ borderRight: '1px solid var(--border-color)' }}>
-                  <div className="flex items-center gap-1.5 mb-2">
-                    <Target size={12} color="#437a22" />
-                    <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#437a22' }}>
-                      Ziele
-                    </span>
-                  </div>
-                  <ul className="space-y-1.5">
-                    {persona.goals.map((g, i) => (
-                      <li key={i} className="flex items-start gap-1.5 text-xs" style={{ color: 'var(--text-secondary)' }}>
-                        <span className="mt-1.5 w-1 h-1 rounded-full flex-shrink-0" style={{ background: '#437a22' }} />
-                        {g}
-                      </li>
-                    ))}
-                  </ul>
+                  <ListBlock icon={Target} color="#437a22" label="Ziele" items={persona.goals} />
                 </div>
-
                 <div className="px-4 py-3">
-                  <div className="flex items-center gap-1.5 mb-2">
-                    <Frown size={12} color="#ef4444" />
-                    <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#ef4444' }}>
-                      Frustrationen
-                    </span>
-                  </div>
-                  <ul className="space-y-1.5">
-                    {persona.frustrations.map((f, i) => (
-                      <li key={i} className="flex items-start gap-1.5 text-xs" style={{ color: 'var(--text-secondary)' }}>
-                        <span className="mt-1.5 w-1 h-1 rounded-full flex-shrink-0" style={{ background: '#ef4444' }} />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
+                  <ListBlock icon={Frown} color="#a13544" label="Frustrationen" items={persona.frustrations} />
                 </div>
               </div>
-
-              <div
-                className="px-4 py-3 flex items-start gap-2"
-                style={{ background: `${persona.color}10`, borderTop: '1px solid var(--border-color)' }}
-              >
+              <div className="px-4 py-3 flex items-start gap-2" style={{ background: `${persona.color}10`, borderTop: '1px solid var(--border-color)' }}>
                 <Quote size={14} className="flex-shrink-0 mt-0.5" style={{ color: persona.color }} />
-                <p className="text-xs italic leading-relaxed" style={{ fontFamily: 'var(--font-display)', color: persona.color }}>
-                  {persona.motto}
-                </p>
+                <p className="text-xs italic leading-relaxed" style={{ fontFamily: 'var(--font-display)', color: persona.color }}>{persona.motto}</p>
               </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
     </motion.article>
+  )
+}
+
+function ListBlock({ icon: Icon, color, label, items }: { icon: React.ElementType; color: string; label: string; items: string[] }) {
+  return (
+    <>
+      <div className="flex items-center gap-1.5 mb-2">
+        <Icon size={12} color={color} />
+        <span className="text-[11px] font-semibold uppercase tracking-wider" style={{ color }}>{label}</span>
+      </div>
+      <ul className="space-y-1.5">
+        {items.map((t, i) => (
+          <li key={i} className="flex items-start gap-1.5 text-xs" style={{ color: 'var(--text-secondary)' }}>
+            <span className="mt-1.5 w-1 h-1 rounded-full flex-shrink-0" style={{ background: color }} />
+            {t}
+          </li>
+        ))}
+      </ul>
+    </>
   )
 }

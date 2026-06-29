@@ -1,23 +1,35 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+import type { Theme, Mode } from '@/types'
 
-interface AppStore {
-  theme: 'light' | 'dark';
-  toggleTheme: () => void;
-  activePersonaFilter: string | null;
-  setPersonaFilter: (id: string | null) => void;
-  activePriorityFilter: string[];
-  setPriorityFilter: (priorities: string[]) => void;
-  activeReleaseFilter: number | null;
-  setReleaseFilter: (release: number | null) => void;
+function systemTheme(): Theme {
+  if (typeof window !== 'undefined' && window.matchMedia) {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+  return 'light'
 }
 
-export const useAppStore = create<AppStore>((set) => ({
-  theme: 'light',
-  toggleTheme: () => set((state) => ({ theme: state.theme === 'light' ? 'dark' : 'light' })),
-  activePersonaFilter: null,
-  setPersonaFilter: (id) => set({ activePersonaFilter: id }),
-  activePriorityFilter: [],
-  setPriorityFilter: (priorities) => set({ activePriorityFilter: priorities }),
-  activeReleaseFilter: null,
-  setReleaseFilter: (release) => set({ activeReleaseFilter: release }),
-}))
+interface AppStore {
+  theme: Theme
+  mode: Mode
+  setTheme: (t: Theme) => void
+  toggleTheme: () => void
+  setMode: (m: Mode) => void
+  toggleMode: () => void
+}
+
+export const useAppStore = create<AppStore>()(
+  persist(
+    (set) => ({
+      theme: systemTheme(),
+      mode: 'einfach',
+      setTheme: (theme) => set({ theme }),
+      toggleTheme: () => set((s) => ({ theme: s.theme === 'light' ? 'dark' : 'light' })),
+      setMode: (mode) => set({ mode }),
+      toggleMode: () => set((s) => ({ mode: s.mode === 'einfach' ? 'erweitert' : 'einfach' })),
+    }),
+    { name: 'cineticket-ui', partialize: (s) => ({ theme: s.theme, mode: s.mode }) },
+  ),
+)
+
+export const useMode = () => useAppStore((s) => s.mode)

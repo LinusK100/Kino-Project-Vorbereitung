@@ -1,0 +1,316 @@
+[
+  {
+    "id": "endkunde",
+    "name": "Endkunde / Nutzer",
+    "role": "Kinobesucher:in",
+    "age": 35,
+    "avatar": "EK",
+    "color": "#7a39bb",
+    "tier": "basis",
+    "group": "Kundschaft",
+    "roleEnum": "KUNDE",
+    "umbrella": true,
+    "refinedBy": ["stammkunde", "student", "rentner", "familie"],
+    "background": "Dach-Persona für alle Kinobesucher:innen. Wird im erweiterten Modell ausdifferenziert in Stammkundin (Lara), Student (Jonas), Seniorin (Hannelore) und Familienmutter (Sandra). Bucht online (Web/Mobile) oder an der Kasse – je nach Lebenslage und Bedürfnis.",
+    "goals": [
+      "Schnell und unkompliziert Tickets kaufen (mobil unter 60 Sekunden)",
+      "Den besten freien Platz per KI-Vorschlag mit einem Tipp übernehmen",
+      "Rabatte (Senior, Student, Kind, Gruppe) ohne Hürden anwenden",
+      "Barrierefreie Plätze und Begleitperson-Optionen klar erkennen",
+      "Bonuspunkte sammeln, einsehen und einlösen"
+    ],
+    "frustrations": [
+      "Lange Ladezeiten und komplizierte Mobile-Buchung",
+      "Sitzplan ohne Komfort- oder Barrierefreiheits-Details",
+      "Gruppen-Tickets nur einzeln buchbar",
+      "Keine modernen Zahlmittel (Apple Pay / Google Pay)"
+    ],
+    "motto": "In 60 Sekunden gebucht, der Lieblingsplatz reserviert."
+  },
+  {
+    "id": "stammkunde",
+    "name": "Lara Hoffmann",
+    "role": "Stammkundin",
+    "age": 32,
+    "avatar": "LH",
+    "color": "#7a39bb",
+    "tier": "erweitert",
+    "group": "Kundschaft",
+    "roleEnum": "KUNDE",
+    "refines": "endkunde",
+    "background": "Geht alle 2 Wochen ins Kino, hat ein Konto seit 4 Jahren, sammelt Bonuspunkte und kennt ihren Lieblingsplatz auswendig.",
+    "goals": [
+      "Ticket in unter 60 Sekunden mobil kaufen",
+      "Besten verfügbaren Platz per KI passend zu ihren Präferenzen vorgeschlagen bekommen",
+      "Den gewählten Platz beim Bezahlen verbindlich gehalten wissen (keine Doppelbuchung)",
+      "Bonuspunkte direkt beim Checkout einlösen",
+      "Mit Apple/Google Pay biometrisch bezahlen",
+      "Vorstellungen 14 Tage im Voraus reservieren",
+      "Gesehene Filme bewerten und Reviews anderer lesen"
+    ],
+    "frustrations": [
+      "Bonuspunktestand nur über Umwege sichtbar",
+      "Keine Erinnerung an verfügbare Punkte beim Kauf",
+      "App vergisst gespeicherte Zahlungsmethode"
+    ],
+    "motto": "In 60 Sekunden zum Lieblingsplatz – mit Punkten bezahlt."
+  },
+  {
+    "id": "student",
+    "name": "Jonas Schmidt",
+    "role": "Student",
+    "age": 23,
+    "avatar": "JS",
+    "color": "#2d6a8c",
+    "tier": "erweitert",
+    "group": "Kundschaft",
+    "roleEnum": "KUNDE",
+    "refines": "endkunde",
+    "background": "Sieht 1–2 Filme pro Monat, plant spontan mit der WG, bucht ausschließlich mobil und sucht den günstigsten Slot.",
+    "goals": [
+      "Studentenrabatt einmalig digital verifizieren",
+      "Bis zu 8 Tickets in einer Buchung als Gruppe",
+      "Vorstellungslink in WhatsApp teilen",
+      "Trailer in der App ansehen ohne YouTube-Umweg",
+      "Günstigste Vorstellung nach Uhrzeit filtern",
+      "Interessante Filme auf einer persönlichen Merkliste vormerken"
+    ],
+    "frustrations": [
+      "Studentenstatus muss bei jeder Buchung neu nachgewiesen werden",
+      "Gruppenbuchungen nur einzeln möglich",
+      "Keine Filter nach Preis oder Tageszeit"
+    ],
+    "motto": "Studi-Rabatt einmal nachweisen – dann nur noch tippen."
+  },
+  {
+    "id": "rentner",
+    "name": "Hannelore Wagner",
+    "role": "Gelegenheitsbesucherin (Seniorin)",
+    "age": 68,
+    "avatar": "HW",
+    "color": "#8c5a2b",
+    "tier": "erweitert",
+    "group": "Kundschaft",
+    "roleEnum": "KUNDE",
+    "refines": "endkunde",
+    "background": "Geht 1–2 Mal pro Quartal ins Kino, bevorzugt die Kasse vor Ort und nutzt kein Smartphone für Buchungen. Trägt ein Hörgerät und ist auf gute Verständlichkeit angewiesen.",
+    "goals": [
+      "Seniorenrabatt ohne Ausweisvorzeigen erhalten",
+      "An der Kasse persönlich beraten werden",
+      "Sitzplatz mit guter Sicht und ohne Treppen wählen",
+      "Barrierefreiheits-Bedürfnisse einmal im Profil hinterlegen, damit passende Vorstellungen und Sitze automatisch markiert werden",
+      "Untertitel- oder Audiodeskriptions-Brille für die Vorstellung dazubuchen",
+      "Begleitperson für barrierefreien Platz mitbuchen"
+    ],
+    "frustrations": [
+      "Online-Buchung mit zu kleinen Schaltflächen",
+      "Verpflichtende App-Installation für Tickets",
+      "Keine klare Kennzeichnung barrierearmer Plätze",
+      "Dialoge im Originalton schlecht zu verstehen"
+    ],
+    "motto": "An der Kasse bezahlen, im Saal entspannen – und alles gut verstehen."
+  },
+  {
+    "id": "familie",
+    "name": "Sandra Vogel",
+    "role": "Familienmutter",
+    "age": 39,
+    "avatar": "SV",
+    "color": "#c2410c",
+    "tier": "erweitert",
+    "group": "Kundschaft",
+    "roleEnum": "KUNDE",
+    "refines": "endkunde",
+    "background": "Geht mit zwei Kindern (6 und 10) etwa einmal im Monat ins Kino, plant Familienausflüge im Voraus und achtet auf Altersfreigaben, zusammenhängende Sitzplätze und kinderfreundliche Anfangszeiten.",
+    "goals": [
+      "Kindertickets mit automatischer FSK-Prüfung passend zur Altersfreigabe buchen",
+      "Bis zu 6 Plätze als Familienblock garantiert nebeneinander reservieren",
+      "Nur Vorstellungen mit kindgerechter Uhrzeit und passender Altersfreigabe sehen",
+      "Kindermenüs (Snack + Getränk) gleich mitbestellen",
+      "Gutscheine und Geschenkkarten direkt am Checkout einlösen",
+      "Familien-/Kinderrabatt automatisch beim Kinderticket angewendet bekommen"
+    ],
+    "frustrations": [
+      "Plätze für die Familie liegen verstreut im Saal",
+      "Altersfreigabe erst nach dem Kauf ersichtlich",
+      "Kein Kindertarif oder Familienpaket sichtbar",
+      "Snacks müssen separat in langer Schlange geholt werden"
+    ],
+    "motto": "Plätze nebeneinander, FSK passt, Popcorn dabei – Familienkino ohne Stress."
+  },
+  {
+    "id": "monika",
+    "name": "Monika Berger",
+    "role": "Kassiererin",
+    "age": 38,
+    "avatar": "MB",
+    "color": "#01696f",
+    "tier": "basis",
+    "group": "Betrieb",
+    "roleEnum": "KASSE",
+    "background": "Arbeitet seit 8 Jahren als Kassiererin im Kino. Ist täglich mit dem System konfrontiert und kennt jeden Handgriff.",
+    "goals": [
+      "Tickets schnell und fehlerfrei verkaufen",
+      "Warteschlangen minimieren",
+      "Einfache Stornierungen durchführen"
+    ],
+    "frustrations": [
+      "Langsame Ladezeiten im System",
+      "Komplizierte Sitzplatzbuchung unter Zeitdruck",
+      "Keine Übersicht bei ausverkauften Vorstellungen"
+    ],
+    "motto": "Schnell, korrekt, freundlich – in dieser Reihenfolge."
+  },
+  {
+    "id": "kevin",
+    "name": "Kevin Mayer",
+    "role": "Einlasspersonal",
+    "age": 22,
+    "avatar": "KM",
+    "color": "#437a22",
+    "tier": "basis",
+    "group": "Betrieb",
+    "roleEnum": "EINLASS",
+    "background": "Studentenjob, arbeitet Wochenenden. Scannt Tickets und kontrolliert den Einlass bei Premieren.",
+    "goals": [
+      "Tickets schnell und eindeutig validieren",
+      "Bei technischen Problemen einfache Fallbacks",
+      "Klare Sitzinformationen auf dem Ticket"
+    ],
+    "frustrations": [
+      "Scanner-App stürzt bei großem Andrang ab",
+      "Unleserliche QR-Codes auf Handybildschirmen",
+      "Keine Offline-Funktionalität"
+    ],
+    "motto": "Einfach reinlassen – ohne Drama."
+  },
+  {
+    "id": "service",
+    "name": "Aylin Demir",
+    "role": "Service-Personal Gastronomie",
+    "age": 26,
+    "avatar": "AD",
+    "color": "#d19900",
+    "tier": "erweitert",
+    "group": "Betrieb",
+    "roleEnum": "SERVICE",
+    "background": "Bedient an Theke und am Platz, nimmt Bestellungen vor und während der Vorstellung auf, arbeitet mit einem Hand-Terminal.",
+    "goals": [
+      "Bestellung am Sitzplatz mit Reihen- und Platznummer aufnehmen",
+      "Theken-Bestellung in unter 30 Sekunden abschließen",
+      "Bestellungen pro Saal und Vorstellung gebündelt sehen",
+      "Allergene und Zutaten am Terminal nachschlagen",
+      "Zahlung bar, Karte oder gegen Ticketkonto verbuchen"
+    ],
+    "frustrations": [
+      "Bestellungen können nicht am Sitzplatz aufgegeben werden",
+      "Keine Verknüpfung zwischen Ticket und Verzehr",
+      "Bonpapier reißt mitten im Service ab",
+      "Nachfüllbedarf an der Theke ist nicht sichtbar"
+    ],
+    "motto": "Bestellung am Sitz – Popcorn vor dem Trailer."
+  },
+  {
+    "id": "facility",
+    "name": "Ben Lorenz",
+    "role": "Haustechnik & Reinigung (AR)",
+    "age": 29,
+    "avatar": "BL",
+    "color": "#0e7490",
+    "tier": "erweitert",
+    "group": "Betrieb",
+    "roleEnum": "FACILITY",
+    "background": "Verantwortet Sauberkeit und Technik der Säle. Geht mit einer AR-Datenbrille durch die Reihen, sieht gemeldete Defekte direkt am betroffenen Sitz eingeblendet und gibt Säle nach der Reinigung für die nächste Vorstellung frei.",
+    "goals": [
+      "Defekte Sitze per AR-Brille mit Foto und Sprachnotiz in Sekunden melden",
+      "Gemeldete Defekte im Saal direkt am betroffenen Platz eingeblendet sehen",
+      "Defekte Sitze sofort systemweit sperren, damit sie nicht mehr verkauft werden",
+      "Saal nach der Reinigung mit einem Tipp für die nächste Vorstellung freigeben",
+      "Offene Wartungstickets nach Priorität abarbeiten"
+    ],
+    "frustrations": [
+      "Defekte werden auf Zetteln notiert und gehen verloren",
+      "Kaputte Sitze werden trotzdem weiterverkauft",
+      "Keine Übersicht, welcher Saal schon gereinigt und freigegeben ist",
+      "Hände sind beim Putzen voll – Tippen am Handy unmöglich"
+    ],
+    "motto": "Einmal hinschauen, antippen, gemeldet – kein kaputter Sitz wird verkauft."
+  },
+  {
+    "id": "thomas",
+    "name": "Thomas Kuhn",
+    "role": "Kinomanager",
+    "age": 45,
+    "avatar": "TK",
+    "color": "#006494",
+    "tier": "basis",
+    "group": "Management & IT",
+    "roleEnum": "MANAGER",
+    "background": "Leitet das Kino seit 12 Jahren. Verantwortlich für Programm, Personal und Umsatzplanung.",
+    "goals": [
+      "Tagesberichte und Auslastung einsehen",
+      "Vorstellungen und Preise verwalten – auch dynamisch nach Nachfrage",
+      "Auslastung kommender Vorstellungen prognostizieren",
+      "Personalplanung optimieren"
+    ],
+    "frustrations": [
+      "Keine konsolidierte Umsatzansicht",
+      "Manuelle Berichte aus verschiedenen Quellen",
+      "Fehlende Echtzeitdaten zur Auslastung",
+      "Preise lassen sich nicht an Nachfragespitzen anpassen"
+    ],
+    "motto": "Was man nicht messen kann, kann man nicht verbessern."
+  },
+  {
+    "id": "marken-manager",
+    "name": "Stefan Reinhardt",
+    "role": "Marken-Manager (Multi-Site)",
+    "age": 51,
+    "avatar": "SR",
+    "color": "#a13544",
+    "tier": "erweitert",
+    "group": "Management & IT",
+    "roleEnum": "MARKE",
+    "background": "Verantwortet 14 Standorte einer Kinokette, koordiniert Programm, Preise und Personal über alle Häuser und berichtet an die Geschäftsführung.",
+    "goals": [
+      "Standortübergreifende Auslastung in einem Dashboard sehen",
+      "Preisaktionen markenweit ausrollen statt einzeln pflegen",
+      "Top- und Schwach-Standorte nach KPIs vergleichen",
+      "Auslastung je Standort prognostizieren und Personal danach ausgleichen",
+      "Wöchentlichen Markenreport als PDF an die Geschäftsführung versenden"
+    ],
+    "frustrations": [
+      "Daten müssen aus 14 Systemen zusammengeführt werden",
+      "Keine einheitliche Preispflege über Standorte hinweg",
+      "Personalengpässe an Standort A trotz Überkapazität an B",
+      "Brand-Konsistenz ist nur manuell überprüfbar"
+    ],
+    "motto": "Eine Marke, 14 Standorte, ein Dashboard."
+  },
+  {
+    "id": "admin",
+    "name": "Nora Krause",
+    "role": "System-Administratorin / IT-Sicherheit",
+    "age": 35,
+    "avatar": "NK",
+    "color": "#4338ca",
+    "tier": "erweitert",
+    "group": "Management & IT",
+    "roleEnum": "ADMIN",
+    "background": "Verantwortet Benutzerkonten, Zugriffsrechte und Datenschutz über alle Rollen hinweg. Sorgt für sichere Anmeldung und lückenlose Nachvollziehbarkeit und ist Ansprechpartnerin für DSGVO-Anfragen.",
+    "goals": [
+      "Rollen und Rechte zentral nach dem Least-Privilege-Prinzip vergeben",
+      "Sicherheitsrelevante Aktionen lückenlos im Audit-Log nachvollziehen",
+      "Zwei-Faktor-Authentifizierung für alle Mitarbeiterkonten erzwingen",
+      "DSGVO-Auskunfts- und Löschanfragen fristgerecht bearbeiten",
+      "Verdächtige Anmeldeversuche früh erkennen und sperren"
+    ],
+    "frustrations": [
+      "Rechte sind über mehrere Stellen verstreut und schwer prüfbar",
+      "Kein zentrales Protokoll, wer was geändert hat",
+      "Kundendaten lassen sich nicht gezielt exportieren oder löschen",
+      "Passwörter ohne zweiten Faktor sind ein Sicherheitsrisiko"
+    ],
+    "motto": "Jeder sieht genau, was er darf – und alles ist nachvollziehbar."
+  }
+]

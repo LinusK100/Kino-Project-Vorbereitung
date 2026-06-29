@@ -1,274 +1,229 @@
-import { useState, useMemo } from 'react'
-import { motion } from 'motion/react'
-import { Download, ChevronRight } from 'lucide-react'
-import { PageHeader } from '@/components/shared/PageHeader'
-import { BadgePriority } from '@/components/shared/BadgePriority'
+import { useMemo, useState } from 'react'
+import { ListChecks, Download, ChevronRight, CheckCircle2 } from 'lucide-react'
+import { SectionShell } from '@/components/shared/SectionShell'
+import { Callout } from '@/components/shared/Callout'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from '@/components/ui/table'
-import { pageVariants } from '@/lib/transitions'
-import storiesData from '@/data/userStories.json'
-import personasData from '@/data/personas.json'
-import type { UserStory, Persona, Priority } from '@/types'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { useStories, personaById } from '@/data/content'
+import { useAppStore } from '@/store/appStore'
+import type { UserStory, Priority, PresentationStep } from '@/types'
 
-const stories = storiesData as UserStory[]
-const personas = personasData as Persona[]
-
-const activities = [...new Set(stories.map(s => s.activity))]
+const ACCENT = '#006494'
 const priorities: Priority[] = ['high', 'medium', 'low']
-
 const priorityLabel: Record<Priority, string> = { high: 'Hoch', medium: 'Mittel', low: 'Niedrig' }
+const priorityColor: Record<Priority, string> = { high: '#ef4444', medium: '#f59e0b', low: '#22c55e' }
+const releaseLabel: Record<number, string> = { 1: 'R1 – MVP', 2: 'R2 – Erweiterung', 3: 'R3 – Vollausbau' }
+const releaseColor: Record<number, string> = { 1: '#437a22', 2: '#d19900', 3: '#a13544' }
+
+const steps: PresentationStep[] = [
+  { id: 'intro', title: 'User Stories', body: 'Eine User Story beschreibt eine Anforderung aus Nutzersicht: „Als … möchte ich … um …". Jede Story gehört zu genau einer Persona und einer Aktivität.', target: '[data-pres="section-header"]' },
+  { id: 'modi', title: 'Einfach vs. Erweitert', body: 'Einfach zeigt die 30 MVP-Stories (U01–U30). Erweitert zeigt alle 51 (bis U51) – inkl. Gastro, Facility, Multi-Site, Sicherheit und Innovation.', target: '[data-pres="mode-toggle"]' },
+  { id: 'verteilung', title: 'Verteilung nach Release & Priorität', body: 'Die Leiste zeigt, wie sich die Stories auf die drei Releases und die MoSCoW-Prioritäten verteilen – der MVP bündelt die High-Priority-Stories.', target: '[data-pres="stats"]' },
+  { id: 'filter', title: 'Gezielt filtern', body: 'Nach Persona, Priorität, Release oder Aktivität filtern, um Zusammenhänge zu prüfen – z. B. alle High-Stories einer Persona.', target: '[data-pres="filters"]' },
+  { id: 'detail', title: 'Akzeptanzkriterien', body: 'Klick auf eine Zeile öffnet die Story mit ihren Akzeptanzkriterien – die testbare Definition von „fertig".', target: '[data-pres="table"]' },
+]
 
 export default function UserStoriesPage() {
-  const [selectedStory, setSelectedStory] = useState<UserStory | null>(null)
-  const [personaFilter, setPersonaFilter] = useState<string>('all')
-  const [priorityFilter, setPriorityFilter] = useState<string>('all')
-  const [releaseFilter, setReleaseFilter] = useState<string>('all')
-  const [activityFilter, setActivityFilter] = useState<string>('all')
+  const stories = useStories()
+  const { mode } = useAppStore()
+  const [selected, setSelected] = useState<UserStory | null>(null)
+  const [persona, setPersona] = useState('all')
+  const [priority, setPriority] = useState('all')
+  const [release, setRelease] = useState('all')
+  const [activity, setActivity] = useState('all')
 
-  const filtered = useMemo(() => {
-    return stories.filter(s => {
-      if (personaFilter !== 'all' && s.persona !== personaFilter) return false
-      if (priorityFilter !== 'all' && s.priority !== priorityFilter) return false
-      if (releaseFilter !== 'all' && s.release !== Number(releaseFilter)) return false
-      if (activityFilter !== 'all' && s.activity !== activityFilter) return false
-      return true
-    })
-  }, [personaFilter, priorityFilter, releaseFilter, activityFilter])
+  const [prevMode, setPrevMode] = useState(mode)
+  if (mode !== prevMode) { setPrevMode(mode); setPersona('all'); setPriority('all'); setRelease('all'); setActivity('all') }
 
-  const getPersona = (id: string) => personas.find(p => p.id === id)
+  const activities = useMemo(() => [...new Set(stories.map((s) => s.activity))], [stories])
+  const personaIds = useMemo(() => [...new Set(stories.map((s) => s.persona))], [stories])
+
+  const filtered = useMemo(() => stories.filter((s) => {
+    if (persona !== 'all' && s.persona !== persona) return false
+    if (priority !== 'all' && s.priority !== priority) return false
+    if (release !== 'all' && s.release !== Number(release)) return false
+    if (activity !== 'all' && s.activity !== activity) return false
+    return true
+  }), [stories, persona, priority, release, activity])
+
+  const byRelease = [1, 2, 3].map((r) => stories.filter((s) => s.release === r).length)
+  const byPriority = priorities.map((p) => stories.filter((s) => s.priority === p).length)
+  const hasFilter = persona !== 'all' || priority !== 'all' || release !== 'all' || activity !== 'all'
 
   const exportCsv = () => {
     const headers = ['ID', 'Persona', 'Aktivität', 'Titel', 'Priorität', 'Release', 'Story']
-    const rows = filtered.map(s => [
-      s.id,
-      getPersona(s.persona)?.name ?? s.persona,
-      s.activity,
-      s.title,
-      priorityLabel[s.priority],
-      `Release ${s.release}`,
-      `"${s.story.replace(/"/g, '""')}"`,
+    const rows = filtered.map((s) => [
+      s.id, personaById[s.persona]?.name ?? s.persona, s.activity, s.title,
+      priorityLabel[s.priority], `Release ${s.release}`, `"${s.story.replace(/"/g, '""')}"`,
     ])
-    const csv = [headers, ...rows].map(r => r.join(';')).join('\n')
+    const csv = [headers, ...rows].map((r) => r.join(';')).join('\n')
     const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' })
-    const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
-    a.href = url
+    a.href = URL.createObjectURL(blob)
     a.download = 'user-stories.csv'
     a.click()
-    URL.revokeObjectURL(url)
+    URL.revokeObjectURL(a.href)
   }
 
   return (
-    <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
-      <PageHeader
-        title="User Stories"
-        description={`${stories.length} Stories · Gefiltert: ${filtered.length}`}
-        action={
-          <Button onClick={exportCsv} variant="outline" size="sm" className="gap-2">
-            <Download size={15} />
-            CSV Export
-          </Button>
-        }
-      />
+    <SectionShell
+      kicker="Anforderungen"
+      title="User Stories"
+      subtitle={`${stories.length} Stories · ${mode === 'einfach' ? 'Basis (U01–U30)' : 'Vollausbau (U01–U51)'} · gefiltert: ${filtered.length}`}
+      icon={ListChecks}
+      accent={ACCENT}
+      presentation={steps}
+      intro={
+        <Callout kind="info" title="Schema">
+          „Als <em>Persona</em> möchte ich <em>Ziel</em>, um <em>Nutzen</em>." Jede Story trägt Persona,
+          Aktivität, Priorität (MoSCoW) und Release – und testbare Akzeptanzkriterien.
+        </Callout>
+      }
+    >
+      {/* Distribution */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 mb-4" data-pres="stats">
+        <DistroBar label="Nach Release" segments={[1, 2, 3].map((r, i) => ({ label: releaseLabel[r], value: byRelease[i], color: releaseColor[r] }))} total={stories.length} />
+        <DistroBar label="Nach Priorität (MoSCoW)" segments={priorities.map((p, i) => ({ label: priorityLabel[p], value: byPriority[i], color: priorityColor[p] }))} total={stories.length} />
+      </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-2 mb-4">
-        <Select value={personaFilter} onValueChange={setPersonaFilter}>
-          <SelectTrigger className="w-40 h-9 text-sm" aria-label="Persona filtern">
-            <SelectValue placeholder="Persona" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Alle Personas</SelectItem>
-            {personas.map(p => (
-              <SelectItem key={p.id} value={p.id}>{p.name}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select value={priorityFilter} onValueChange={setPriorityFilter}>
-          <SelectTrigger className="w-36 h-9 text-sm" aria-label="Priorität filtern">
-            <SelectValue placeholder="Priorität" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Alle Prioritäten</SelectItem>
-            {priorities.map(p => (
-              <SelectItem key={p} value={p}>{priorityLabel[p]}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select value={releaseFilter} onValueChange={setReleaseFilter}>
-          <SelectTrigger className="w-36 h-9 text-sm" aria-label="Release filtern">
-            <SelectValue placeholder="Release" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Alle Releases</SelectItem>
-            <SelectItem value="1">Release 1 – MVP</SelectItem>
-            <SelectItem value="2">Release 2 – Erweiterung</SelectItem>
-            <SelectItem value="3">Release 3 – Vollausbau</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Select value={activityFilter} onValueChange={setActivityFilter}>
-          <SelectTrigger className="w-48 h-9 text-sm" aria-label="Aktivität filtern">
-            <SelectValue placeholder="Aktivität" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Alle Aktivitäten</SelectItem>
-            {activities.map(a => (
-              <SelectItem key={a} value={a}>{a}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        {(personaFilter !== 'all' || priorityFilter !== 'all' || releaseFilter !== 'all' || activityFilter !== 'all') && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => { setPersonaFilter('all'); setPriorityFilter('all'); setReleaseFilter('all'); setActivityFilter('all') }}
-            className="text-xs"
-            style={{ color: 'var(--text-secondary)' }}
-          >
+      <div className="flex flex-wrap items-center gap-2 mb-4" data-pres="filters">
+        <FilterSelect value={persona} onChange={setPersona} label="Persona" width="w-44"
+          options={[{ v: 'all', l: 'Alle Personas' }, ...personaIds.map((id) => ({ v: id, l: personaById[id]?.name ?? id }))]} />
+        <FilterSelect value={priority} onChange={setPriority} label="Priorität" width="w-36"
+          options={[{ v: 'all', l: 'Alle Prioritäten' }, ...priorities.map((p) => ({ v: p, l: priorityLabel[p] }))]} />
+        <FilterSelect value={release} onChange={setRelease} label="Release" width="w-44"
+          options={[{ v: 'all', l: 'Alle Releases' }, { v: '1', l: 'Release 1' }, { v: '2', l: 'Release 2' }, { v: '3', l: 'Release 3' }]} />
+        <FilterSelect value={activity} onChange={setActivity} label="Aktivität" width="w-52"
+          options={[{ v: 'all', l: 'Alle Aktivitäten' }, ...activities.map((a) => ({ v: a, l: a }))]} />
+        {hasFilter && (
+          <Button variant="ghost" size="sm" className="text-xs" style={{ color: 'var(--text-secondary)' }}
+            onClick={() => { setPersona('all'); setPriority('all'); setRelease('all'); setActivity('all') }}>
             Filter zurücksetzen
           </Button>
         )}
+        <Button onClick={exportCsv} variant="outline" size="sm" className="gap-2 ml-auto">
+          <Download size={15} /> CSV
+        </Button>
       </div>
 
       {/* Table */}
-      <div className="rounded-xl overflow-hidden border" style={{ borderColor: 'var(--border-color)', background: 'var(--card-bg)' }}>
+      <div className="rounded-xl overflow-hidden border" style={{ borderColor: 'var(--border-color)', background: 'var(--card-bg)' }} data-pres="table">
         <Table>
           <TableHeader>
             <TableRow style={{ borderColor: 'var(--border-color)' }}>
-              <TableHead className="w-16 text-xs font-semibold">ID</TableHead>
+              <TableHead className="w-14 text-xs font-semibold">ID</TableHead>
               <TableHead className="text-xs font-semibold">Persona</TableHead>
               <TableHead className="text-xs font-semibold hidden md:table-cell">Aktivität</TableHead>
               <TableHead className="text-xs font-semibold">Titel</TableHead>
-              <TableHead className="text-xs font-semibold">Priorität</TableHead>
-              <TableHead className="text-xs font-semibold hidden sm:table-cell">Release</TableHead>
+              <TableHead className="text-xs font-semibold">Prio</TableHead>
+              <TableHead className="text-xs font-semibold hidden sm:table-cell">Rel.</TableHead>
               <TableHead className="w-8" />
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filtered.map((story) => {
-              const persona = getPersona(story.persona)
+            {filtered.map((s) => {
+              const p = personaById[s.persona]
               return (
-                <TableRow
-                  key={story.id}
-                  className="cursor-pointer hover:bg-opacity-50 transition-colors"
-                  style={{ borderColor: 'var(--border-color)' }}
-                  onClick={() => setSelectedStory(story)}
-                >
-                  <TableCell className="font-mono text-xs font-semibold" style={{ color: '#01696f' }}>{story.id}</TableCell>
+                <TableRow key={s.id} className="cursor-pointer transition-colors hover:bg-black/[0.02] dark:hover:bg-white/[0.03]"
+                  style={{ borderColor: 'var(--border-color)' }} onClick={() => setSelected(s)}>
+                  <TableCell className="font-mono text-xs font-bold" style={{ color: ACCENT }}>{s.id}</TableCell>
                   <TableCell>
-                    {persona && (
+                    {p && (
                       <div className="flex items-center gap-1.5">
-                        <div
-                          className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
-                          style={{ background: persona.color }}
-                        >
-                          {persona.avatar}
-                        </div>
-                        <span className="text-xs hidden sm:inline" style={{ color: 'var(--text-secondary)' }}>{persona.name}</span>
+                        <div className="w-6 h-6 rounded-full flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0" style={{ background: p.color }}>{p.avatar}</div>
+                        <span className="text-xs hidden lg:inline" style={{ color: 'var(--text-secondary)' }}>{p.name.split(' ')[0]}</span>
                       </div>
                     )}
                   </TableCell>
-                  <TableCell className="text-xs hidden md:table-cell" style={{ color: 'var(--text-secondary)' }}>
-                    {story.activity}
-                  </TableCell>
-                  <TableCell className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{story.title}</TableCell>
-                  <TableCell><BadgePriority priority={story.priority} /></TableCell>
-                  <TableCell className="text-xs hidden sm:table-cell" style={{ color: 'var(--text-secondary)' }}>R{story.release}</TableCell>
-                  <TableCell>
-                    <ChevronRight size={14} style={{ color: 'var(--text-secondary)' }} />
-                  </TableCell>
+                  <TableCell className="text-xs hidden md:table-cell" style={{ color: 'var(--text-secondary)' }}>{s.activity}</TableCell>
+                  <TableCell className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>{s.title}</TableCell>
+                  <TableCell><span className="inline-block w-2.5 h-2.5 rounded-full" style={{ background: priorityColor[s.priority] }} title={priorityLabel[s.priority]} /></TableCell>
+                  <TableCell className="text-xs hidden sm:table-cell"><span className="font-semibold" style={{ color: releaseColor[s.release] }}>R{s.release}</span></TableCell>
+                  <TableCell><ChevronRight size={14} style={{ color: 'var(--text-secondary)' }} /></TableCell>
                 </TableRow>
               )
             })}
           </TableBody>
         </Table>
-
-        {filtered.length === 0 && (
-          <div className="py-12 text-center" style={{ color: 'var(--text-secondary)' }}>
-            Keine Stories gefunden
-          </div>
-        )}
+        {filtered.length === 0 && <div className="py-12 text-center" style={{ color: 'var(--text-secondary)' }}>Keine Stories gefunden</div>}
       </div>
 
-      {/* Detail Sheet */}
-      <Sheet open={!!selectedStory} onOpenChange={() => setSelectedStory(null)}>
+      <Sheet open={!!selected} onOpenChange={() => setSelected(null)}>
         <SheetContent className="w-full sm:max-w-lg overflow-y-auto" style={{ background: 'var(--card-bg)', borderColor: 'var(--border-color)' }}>
-          {selectedStory && (
-            <>
-              <SheetHeader>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="font-mono text-sm font-bold" style={{ color: '#01696f' }}>{selectedStory.id}</span>
-                  <BadgePriority priority={selectedStory.priority} />
-                  <span className="text-xs px-2 py-0.5 rounded" style={{ background: 'var(--border-color)', color: 'var(--text-secondary)' }}>
-                    Release {selectedStory.release}
-                  </span>
-                </div>
-                <SheetTitle style={{ color: 'var(--text-primary)' }}>{selectedStory.title}</SheetTitle>
-              </SheetHeader>
-
-              <div className="space-y-5 mt-5">
-                <div>
-                  <h4 className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: 'var(--text-secondary)' }}>User Story</h4>
-                  <p className="text-sm p-3 rounded-lg italic" style={{ background: 'rgba(1,105,111,0.06)', color: 'var(--text-primary)', borderLeft: '3px solid #01696f' }}>
-                    {selectedStory.story}
-                  </p>
-                </div>
-
-                <div>
-                  <h4 className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: 'var(--text-secondary)' }}>Aktivität</h4>
-                  <p className="text-sm" style={{ color: 'var(--text-primary)' }}>{selectedStory.activity}</p>
-                </div>
-
-                <div>
-                  <h4 className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: 'var(--text-secondary)' }}>Akzeptanzkriterien</h4>
-                  <ul className="space-y-2">
-                    {selectedStory.acceptanceCriteria.map((c, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm" style={{ color: 'var(--text-primary)' }}>
-                        <span
-                          className="w-5 h-5 rounded flex items-center justify-center text-white text-xs flex-shrink-0 font-bold mt-0.5"
-                          style={{ background: '#437a22' }}
-                        >
-                          {i + 1}
-                        </span>
-                        {c}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {(() => {
-                  const persona = getPersona(selectedStory.persona)
-                  return persona ? (
-                    <div>
-                      <h4 className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: 'var(--text-secondary)' }}>Persona</h4>
-                      <div className="flex items-center gap-3 p-3 rounded-lg" style={{ background: `${persona.color}10` }}>
-                        <div
-                          className="w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0"
-                          style={{ background: persona.color }}
-                        >
-                          {persona.avatar}
-                        </div>
-                        <div>
-                          <p className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>{persona.name}</p>
-                          <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>{persona.role}</p>
-                        </div>
-                      </div>
+          {selected && (() => {
+            const p = personaById[selected.persona]
+            return (
+              <>
+                <SheetHeader>
+                  <div className="flex items-center gap-2 mb-1 flex-wrap">
+                    <span className="font-mono text-sm font-bold" style={{ color: ACCENT }}>{selected.id}</span>
+                    <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{ background: `${priorityColor[selected.priority]}20`, color: priorityColor[selected.priority] }}>{priorityLabel[selected.priority]}e Priorität</span>
+                    <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{ background: `${releaseColor[selected.release]}20`, color: releaseColor[selected.release] }}>{releaseLabel[selected.release]}</span>
+                  </div>
+                  <SheetTitle style={{ color: 'var(--text-primary)' }}>{selected.title}</SheetTitle>
+                </SheetHeader>
+                <div className="space-y-5 mt-5">
+                  <div className="p-4 rounded-xl text-sm italic leading-relaxed" style={{ background: `${ACCENT}0d`, borderLeft: `3px solid ${ACCENT}`, color: 'var(--text-primary)' }}>{selected.story}</div>
+                  <div>
+                    <h4 className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: 'var(--text-secondary)' }}>Akzeptanzkriterien</h4>
+                    <ul className="space-y-2">
+                      {selected.acceptanceCriteria.map((c, i) => (
+                        <li key={i} className="flex items-start gap-2.5 text-sm" style={{ color: 'var(--text-primary)' }}>
+                          <CheckCircle2 size={16} style={{ color: '#437a22', flexShrink: 0, marginTop: 2 }} />{c}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-semibold uppercase tracking-wider mb-2" style={{ color: 'var(--text-secondary)' }}>Aktivität</h4>
+                    <p className="text-sm" style={{ color: 'var(--text-primary)' }}>{selected.activity}</p>
+                  </div>
+                  {p && (
+                    <div className="flex items-center gap-3 p-3 rounded-xl" style={{ background: `${p.color}10`, border: `1px solid ${p.color}30` }}>
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0" style={{ background: p.color }}>{p.avatar}</div>
+                      <div><p className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>{p.name}</p><p className="text-xs" style={{ color: 'var(--text-secondary)' }}>{p.role}</p></div>
                     </div>
-                  ) : null
-                })()}
-              </div>
-            </>
-          )}
+                  )}
+                </div>
+              </>
+            )
+          })()}
         </SheetContent>
       </Sheet>
-    </motion.div>
+    </SectionShell>
+  )
+}
+
+function DistroBar({ label, segments, total }: { label: string; segments: { label: string; value: number; color: string }[]; total: number }) {
+  return (
+    <div className="rounded-xl p-3.5" style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
+      <p className="text-xs font-semibold mb-2" style={{ color: 'var(--text-secondary)' }}>{label}</p>
+      <div className="h-3 rounded-full overflow-hidden flex mb-2" style={{ background: 'var(--border-color)' }}>
+        {segments.map((s) => <div key={s.label} style={{ width: `${(s.value / total) * 100}%`, background: s.color }} title={`${s.label}: ${s.value}`} />)}
+      </div>
+      <div className="flex flex-wrap gap-x-4 gap-y-1">
+        {segments.map((s) => (
+          <div key={s.label} className="flex items-center gap-1.5 text-xs" style={{ color: 'var(--text-secondary)' }}>
+            <span className="w-2 h-2 rounded-full" style={{ background: s.color }} />{s.label} <strong style={{ color: 'var(--text-primary)' }}>{s.value}</strong>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function FilterSelect({ value, onChange, label, options, width }: { value: string; onChange: (v: string) => void; label: string; options: { v: string; l: string }[]; width: string }) {
+  return (
+    <Select value={value} onValueChange={onChange}>
+      <SelectTrigger className={`${width} h-9 text-sm`} aria-label={`${label} filtern`}>
+        <SelectValue placeholder={label} />
+      </SelectTrigger>
+      <SelectContent>
+        {options.map((o) => <SelectItem key={o.v} value={o.v}>{o.l}</SelectItem>)}
+      </SelectContent>
+    </Select>
   )
 }

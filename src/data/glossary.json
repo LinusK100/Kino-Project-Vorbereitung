@@ -1,0 +1,63 @@
+{
+  "title": "Glossar",
+  "subtitle": "Einheitliche Begriffe über alle Artefakte – jeder Begriff bedeutet in jedem Abschnitt dasselbe.",
+  "categories": [
+    {
+      "id": "kern",
+      "name": "Kernbegriffe",
+      "tier": "basis",
+      "terms": [
+        { "term": "Persona", "definition": "Archetypische:r Nutzer:in mit Zielen & Frustrationen (z. B. 'Lara').", "delimitation": "≠ Rolle: Eine Persona hat eine Rolle." },
+        { "term": "Nutzerrolle", "definition": "Technische Berechtigungsrolle im System (KUNDE, KASSE, …).", "delimitation": "≠ Persona: mehrere Personas können dieselbe Rolle haben." },
+        { "term": "Aktivität", "definition": "Übergeordnetes Nutzerziel in der Story Map (z. B. 'TICKET KAUFEN').", "delimitation": "Enthält mehrere Schritte." },
+        { "term": "User Story", "definition": "Anforderung aus Nutzersicht ('Als … möchte ich … um …').", "delimitation": "Gehört zu genau einer Aktivität." },
+        { "term": "Release", "definition": "Auslieferungsstufe: 1 = MVP, 2 = Erweiterung, 3 = Vollausbau.", "delimitation": "Unabhängig vom Prototyp-Status." }
+      ]
+    },
+    {
+      "id": "verwechselt",
+      "name": "Häufig verwechselte Paare",
+      "tier": "erweitert",
+      "terms": [
+        { "term": "Sitzkategorie vs. Ticketkategorie", "definition": "Sitzkategorie (STANDARD/PREMIUM/VIP) = Lage/Komfort des Platzes; Ticketkategorie (ERWACHSEN/KIND/SENIOR/STUDENT) = Tarif/Person.", "delimitation": "Der Preis ist die Matrix aus beiden." },
+        { "term": "barrierefrei vs. Sitzkategorie", "definition": "Barrierefreiheit ist eine Eigenschaft (Sitzplatz.barrierefrei: boolean).", "delimitation": "Keine Preiskategorie." },
+        { "term": "Sitzstatus vs. Sitzkategorie", "definition": "Status (FREI/AUSGEWÄHLT/RESERVIERT/BELEGT/DEFEKT) = Verfügbarkeit je Vorstellung; Kategorie = dauerhafte Einordnung.", "delimitation": "Status ist vorstellungsabhängig, Kategorie nicht." },
+        { "term": "AUSGEWÄHLT vs. RESERVIERT", "definition": "AUSGEWÄHLT = lokale Auswahl im eigenen Client; RESERVIERT = serverseitiger Hold, der andere blockiert.", "delimitation": "Nur RESERVIERT verhindert Doppelbuchung." },
+        { "term": "Sitzplatz vs. VorstellungSitz", "definition": "Sitzplatz = physischer, dauerhafter Sitz (Kategorie, barrierefrei); VorstellungSitz = Sitz-Instanz je Vorstellung (trägt Status + Hold).", "delimitation": "Genau eine VorstellungSitz je Vorstellung × Sitzplatz." },
+        { "term": "Sprache vs. Projektionsart", "definition": "Sprache (DEUTSCH/OV/OmU) = Tonfassung; Projektionsart (2D/3D/IMAX) = Bildformat.", "delimitation": "Unabhängige Dimensionen einer Vorstellung." },
+        { "term": "Buchung vs. Ticket", "definition": "Eine Buchung enthält 1..* Tickets (je Sitzplatz ein Ticket).", "delimitation": "Buchung = Vorgang, Ticket = Eintrittskarte." },
+        { "term": "Zahlung vs. Zahlungsart", "definition": "Zahlung = ausgeführte Transaktion (Status, transaktionsId, Rückerstattung); Zahlungsart = gewählte Methode (KARTE/BAR/ONLINE/…).", "delimitation": "Entität vs. Enum." },
+        { "term": "Tarif vs. Preisaktion vs. Preisregel", "definition": "Tarif = reguläre Preismatrix; Preisaktion = zeitlich begrenzte, markenweite Rabattaktion; Preisregel = dynamische Anpassung nach Auslastung.", "delimitation": "Grundpreis vs. Aktion vs. Yield-Regel." },
+        { "term": "Gutschein vs. Bonuspunktekonto", "definition": "Gutschein = externer Code mit Geldwert (Nutzungslimit); Bonuspunkte = erworbenes Treuepunkte-Guthaben.", "delimitation": "Eingelöster Code vs. gesammeltes Guthaben." },
+        { "term": "Bewertung vs. Film.bewertung", "definition": "Bewertung = einzelne Sterne-/Kommentar-Entität (verifizierterKauf); Film.bewertung = aggregierter Durchschnitt daraus.", "delimitation": "Einzelwert vs. Aggregat." },
+        { "term": "Barrierefreiheitsprofil vs. -option", "definition": "Profil = Bedürfnisse am Nutzer; Option = Angebot an der Vorstellung (Brille/Audio); barrierefrei = boolesche Eigenschaft eines Sitzes.", "delimitation": "Bedarf vs. Angebot vs. Sitz-Attribut." },
+        { "term": "Wartungsticket vs. Ticket", "definition": "Wartungsticket = Defektmeldung im Facility-Modul; Ticket = Eintrittskarte.", "delimitation": "Gleicher Name, völlig verschiedene Domäne." }
+      ]
+    },
+    {
+      "id": "struktur",
+      "name": "Status- & Struktur-Begriffe",
+      "tier": "erweitert",
+      "terms": [
+        { "term": "Basis (tier: basis)", "definition": "MVP-Umfang: 4 Personas, 30 Stories, 7 Aktivitäten, 4 Rollen.", "delimitation": "= Einfach-Modus dieser Website." },
+        { "term": "Erweitert (tier: erweitert)", "definition": "Vollumfang als echte Obermenge der Basis: 12 Personas, 51 Stories, 10 Aktivitäten, 8 Rollen.", "delimitation": "= Erweitert-Modus dieser Website." },
+        { "term": "Dach-Persona", "definition": "Sammelpersona 'Endkunde', die im Erweitert-Set in konkrete Personas ausdifferenziert wird.", "delimitation": "Lara/Jonas/Hannelore/Sandra sind Ausprägungen." },
+        { "term": "implementedInPrototype", "definition": "UML-Flag: true = im Prototyp umgesetzt; false = Design-only (Roadmap).", "delimitation": "Modell ⊇ Prototyp." },
+        { "term": "Roadmap / Design-only", "definition": "Modelliert und in Stories beschrieben, im Hi-Fi-Prototyp (noch) nicht umgesetzt.", "delimitation": "Gegenstück zu implementiert." },
+        { "term": "Zustandsautomat", "definition": "UML-Zustandsdiagramm; beschreibt den Lebenszyklus eines Objekts über die Zeit – VorstellungSitz und Ticket.", "delimitation": "Ein Objekt über die Zeit." },
+        { "term": "Sequenzdiagramm", "definition": "UML-Interaktionsdiagramm; Reihenfolge von Nachrichten zwischen Teilnehmern im Buchungs-Flow.", "delimitation": "Mehrere Objekte im Zusammenspiel." },
+        { "term": "Hold (Reservierung)", "definition": "Zeitlich begrenzter, serverseitiger Sitz-Hold (Status RESERVIERT, 10 min), der Doppelbuchungen verhindert.", "delimitation": "Kern-Mechanik gegen Doppelbuchung." }
+      ]
+    }
+  ],
+  "roles": [
+    { "role": "KUNDE", "personas": "Endkunde, Lara, Jonas, Hannelore, Sandra", "area": "Kundschaft" },
+    { "role": "KASSE", "personas": "Monika", "area": "Betrieb" },
+    { "role": "EINLASS", "personas": "Kevin", "area": "Betrieb" },
+    { "role": "SERVICE", "personas": "Aylin", "area": "Betrieb (Gastro)" },
+    { "role": "FACILITY", "personas": "Ben", "area": "Betrieb (Haustechnik/AR)" },
+    { "role": "MANAGER", "personas": "Thomas", "area": "Management (1 Haus)" },
+    { "role": "MARKE", "personas": "Stefan", "area": "Management (Multi-Site)" },
+    { "role": "ADMIN", "personas": "Nora", "area": "IT & Sicherheit" }
+  ]
+}

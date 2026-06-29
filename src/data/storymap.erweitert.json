@@ -1,5 +1,5 @@
 {
-  "title": "Kino-Ticketsystem User Story Map",
+  "title": "Kino-Ticketsystem User Story Map (Erweitert)",
   "releases": [
     { "id": 1, "name": "Release 1 – MVP", "color": "#d4edda", "borderColor": "#437a22" },
     { "id": 2, "name": "Release 2 – Erweiterung", "color": "#fff3cd", "borderColor": "#d19900" },
@@ -13,7 +13,8 @@
       "steps": [
         { "id": "schnellkauf", "name": "Kassenverkauf", "stories": ["U01", "U02", "U03"] },
         { "id": "online-kauf", "name": "Online kaufen", "stories": ["U04", "U05", "U06"] },
-        { "id": "rabatte", "name": "Rabatte & Gruppen", "stories": ["U28", "U18"] }
+        { "id": "rabatte", "name": "Rabatte & Gutscheine", "stories": ["U28", "U51"] },
+        { "id": "familie", "name": "Familie & Kinder", "stories": ["U38"] }
       ]
     },
     {
@@ -22,7 +23,7 @@
       "icon": "search",
       "steps": [
         { "id": "suche", "name": "Film suchen", "stories": ["U22", "U24"] },
-        { "id": "empfehlung", "name": "Empfehlungen", "stories": ["U23", "U30"] }
+        { "id": "empfehlung", "name": "Empfehlungen & Merkliste", "stories": ["U23", "U30", "U48", "U49"] }
       ]
     },
     {
@@ -30,8 +31,9 @@
       "name": "SITZPLAN & KATEGORIEN",
       "icon": "layout-grid",
       "steps": [
-        { "id": "sitzwahl", "name": "Sitz auswählen", "stories": ["U07", "U09"] },
-        { "id": "sitzpraef", "name": "Präferenzen", "stories": ["U08", "U10"] }
+        { "id": "sitzwahl", "name": "Sitz auswählen", "stories": ["U07", "U09", "U47"] },
+        { "id": "sitzpraef", "name": "Präferenzen", "stories": ["U08", "U10"] },
+        { "id": "komfort", "name": "Komfort & Inklusion", "stories": ["U44", "U45"] }
       ]
     },
     {
@@ -44,12 +46,30 @@
       ]
     },
     {
+      "id": "gastro",
+      "name": "GASTRO & SERVICE",
+      "icon": "coffee",
+      "steps": [
+        { "id": "bestellung", "name": "Bestellung", "stories": ["U31", "U32"] },
+        { "id": "service-info", "name": "Info & Abrechnung", "stories": ["U33", "U34"] }
+      ]
+    },
+    {
+      "id": "facility",
+      "name": "FACILITY & WARTUNG",
+      "icon": "wrench",
+      "steps": [
+        { "id": "defekt", "name": "Defekt & Sperrung", "stories": ["U39"] },
+        { "id": "reinigung", "name": "Reinigung & Freigabe", "stories": ["U40"] }
+      ]
+    },
+    {
       "id": "verwaltung",
       "name": "VORSTELLUNG VERWALTEN",
       "icon": "calendar",
       "steps": [
         { "id": "programm-pflege", "name": "Programm pflegen", "stories": ["U11", "U12"] },
-        { "id": "reporting", "name": "Berichte & Analyse", "stories": ["U13", "U14"] }
+        { "id": "reporting", "name": "Berichte & Prognose", "stories": ["U13", "U14", "U46"] }
       ]
     },
     {
@@ -57,7 +77,7 @@
       "name": "KONTO & LOYALITÄT",
       "icon": "user-circle",
       "steps": [
-        { "id": "profil", "name": "Profil & Zahlung", "stories": ["U19", "U21"] },
+        { "id": "profil", "name": "Profil & Barrierefreiheit", "stories": ["U18", "U19", "U21", "U50"] },
         { "id": "punkte", "name": "Bonuspunkte", "stories": ["U20"] }
       ]
     },
@@ -66,8 +86,18 @@
       "name": "SYSTEM & ADMIN",
       "icon": "settings",
       "steps": [
-        { "id": "preise", "name": "Preise & Rollen", "stories": ["U25", "U26"] },
+        { "id": "preise", "name": "Preise & Tarife", "stories": ["U25", "U43"] },
+        { "id": "sicherheit", "name": "Rollen & Sicherheit", "stories": ["U26", "U41", "U42"] },
         { "id": "schicht", "name": "Kasse & Schicht", "stories": ["U27"] }
+      ]
+    },
+    {
+      "id": "marke",
+      "name": "MARKE & MULTI-SITE",
+      "icon": "building-2",
+      "steps": [
+        { "id": "marke-kpi", "name": "KPIs & Reporting", "stories": ["U35", "U37"] },
+        { "id": "marke-rollout", "name": "Markenweite Aktionen", "stories": ["U36"] }
       ]
     }
   ]

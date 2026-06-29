@@ -1,0 +1,119 @@
+{
+  "title": "Innovations-Layer",
+  "subtitle": "Recherchierte Zukunfts-Ideen (2026). Jede Idee ist im Modell und in Stories verankert und klar als umsetzbar bzw. Konzept gekennzeichnet.",
+  "legend": {
+    "feasibility": {
+      "machbar": "Im Projektrahmen umsetzbar (Standard-Tech, nur nicht im Prototyp gebaut)",
+      "teilweise": "Kern umsetzbar, voller Umfang braucht Zusatzsysteme",
+      "konzept": "Im Projektrahmen nicht umsetzbar (spezielle Hardware/ML/Daten) – als Vision gekennzeichnet"
+    },
+    "status": {
+      "roadmap": "modelliert (UML + Stories), im Prototyp noch nicht umgesetzt",
+      "konzept": "Visionär, bewusst außerhalb des Bauumfangs"
+    }
+  },
+  "innovations": [
+    {
+      "id": "yield",
+      "name": "Dynamische Preise (Yield Management)",
+      "icon": "trending-up",
+      "tier": "basis",
+      "persona": "thomas",
+      "personaLabel": "Thomas / Stefan",
+      "stories": ["U43"],
+      "umlClasses": ["Preisregel", "PreisService", "Tarif"],
+      "feasibility": "machbar",
+      "status": "roadmap",
+      "impact": 4,
+      "effort": 2,
+      "summary": "Ticketpreise passen sich regelbasiert an die Auslastung an, um Nachfragespitzen besser zu nutzen.",
+      "detail": "Eine Preisregel verändert den Grundtarif anhand der aktuellen Auslastung einer Vorstellung (z. B. +15 % ab 80 % Belegung, Frühbucher-Rabatt). Rein regelbasiert, ohne ML – daher im Projektrahmen umsetzbar; im Prototyp nur als fester Tarif abgebildet.",
+      "note": "Umsetzbar mit Backend-Regeln; im Hi-Fi-Prototyp Design-only."
+    },
+    {
+      "id": "dsgvo",
+      "name": "Sicherheit & DSGVO-Governance",
+      "icon": "shield-check",
+      "tier": "basis",
+      "persona": "admin",
+      "personaLabel": "Nora",
+      "stories": ["U26", "U41", "U42"],
+      "umlClasses": ["AuditEintrag", "AdminService", "Nutzer"],
+      "feasibility": "machbar",
+      "status": "roadmap",
+      "impact": 5,
+      "effort": 3,
+      "summary": "Least-Privilege-Rollen, lückenloses Audit-Log, erzwungene 2FA sowie DSGVO-Auskunft und -Löschung.",
+      "detail": "Jede sicherheitsrelevante Aktion landet unveränderbar im Audit-Log; Rollen folgen dem Least-Privilege-Prinzip. DSGVO-Auskunfts- und Löschanfragen werden fristgerecht bearbeitet. Standard-Sicherheitstechnik – voll im Projektrahmen umsetzbar.",
+      "note": "Governance statt Magie: realistischer, hochrelevanter Layer."
+    },
+    {
+      "id": "ki-sitz",
+      "name": "KI-Sitzplatzempfehlung",
+      "icon": "sparkles",
+      "tier": "basis",
+      "persona": "stammkunde",
+      "personaLabel": "Lara / Endkunde",
+      "stories": ["U44", "U23"],
+      "umlClasses": ["EmpfehlungsService", "Barrierefreiheitsprofil", "Merkliste"],
+      "feasibility": "konzept",
+      "status": "konzept",
+      "impact": 4,
+      "effort": 4,
+      "summary": "Die KI schlägt den besten freien Platz passend zu Präferenzen vor – kein langes Suchen im Sitzplan.",
+      "detail": "Ein Empfehlungsmodell gewichtet Lieblingsplätze, Begleitpersonen, Komfort und aktuelle Belegung. Braucht Trainingsdaten und ein ML-Modell – im Projektrahmen nicht voll umsetzbar, daher als Konzept gekennzeichnet. Eine regelbasierte Heuristik (ohne ML) wäre ein machbarer Zwischenschritt.",
+      "note": "Vision; heuristischer Vorläufer wäre machbar."
+    },
+    {
+      "id": "ar-facility",
+      "name": "AR-Facility: Defekt melden & Sitz sperren",
+      "icon": "scan-eye",
+      "tier": "erweitert",
+      "persona": "facility",
+      "personaLabel": "Ben",
+      "stories": ["U39", "U40"],
+      "umlClasses": ["Wartungsticket", "FacilityService", "VorstellungSitz"],
+      "feasibility": "konzept",
+      "status": "konzept",
+      "impact": 3,
+      "effort": 5,
+      "summary": "Haustechnik meldet einen defekten Sitz per AR-Brille mit Foto und Sprachnotiz; sofort entsteht ein Wartungsticket und der Sitz wird gesperrt.",
+      "detail": "Die AR-Brille erkennt den Sitz, der Status springt auf DEFEKT (siehe Zustandsautomat) und ein Wartungsticket wird erzeugt. Braucht AR-Hardware – im Projektrahmen nicht umsetzbar. Die zugrunde liegende Logik (defektMelden → Sitz sperren) ist jedoch vollständig modelliert und ohne AR per normalem Formular machbar.",
+      "note": "AR ist Vision; die Sperr-Logik selbst ist machbar."
+    },
+    {
+      "id": "ar-access",
+      "name": "AR-Barrierefreiheit (Untertitel / Audio)",
+      "icon": "accessibility",
+      "tier": "erweitert",
+      "persona": "rentner",
+      "personaLabel": "Hannelore",
+      "stories": ["U45"],
+      "umlClasses": ["Barrierefreiheitsprofil", "Barrierefreiheitsoption", "Vorstellung"],
+      "feasibility": "teilweise",
+      "status": "konzept",
+      "impact": 4,
+      "effort": 4,
+      "summary": "Zu einer Vorstellung lässt sich eine Untertitel- oder Audiodeskriptions-Brille dazubuchen.",
+      "detail": "Das Dazubuchen einer Barrierefreiheits-Option ist als Buchungs-Add-on voll umsetzbar; die AR-Brillen-Hardware selbst liegt außerhalb des Projektrahmens. Inklusion als first-class Feature statt Nachgedanke.",
+      "note": "Buchungslogik machbar, AR-Hardware Konzept."
+    },
+    {
+      "id": "forecast",
+      "name": "Prädiktive Auslastungsprognose",
+      "icon": "line-chart",
+      "tier": "erweitert",
+      "persona": "thomas",
+      "personaLabel": "Thomas / Stefan",
+      "stories": ["U46"],
+      "umlClasses": ["Auslastungsprognose", "AnalyseService"],
+      "feasibility": "konzept",
+      "status": "konzept",
+      "impact": 3,
+      "effort": 4,
+      "summary": "Die erwartete Auslastung kommender Vorstellungen wird prognostiziert, um Programm und Personal vorausschauend zu planen.",
+      "detail": "Ein Prognosemodell nutzt Historie, Wochentag, Film und Wetter. Braucht Datenhistorie und ein Forecast-Modell – im Projektrahmen nicht umsetzbar, als Konzept gekennzeichnet. Ein einfacher gleitender Durchschnitt wäre ein machbarer Einstieg.",
+      "note": "Vision; Durchschnitts-Heuristik wäre machbar."
+    }
+  ]
+}

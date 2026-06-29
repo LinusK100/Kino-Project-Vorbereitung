@@ -1,0 +1,184 @@
+{
+  "version": "1.0",
+  "title": "CineTicket – Sequenzdiagramme (Buchungs-Flow)",
+  "generated": "2026-06-21",
+  "notation": "UML-Sequenzdiagramm. Nachrichten in zeitlicher Reihenfolge (seq); Alternativen über kombinierte Fragmente (alt/opt/break).",
+  "legend": {
+    "participantKinds": {
+      "actor": "Mensch/Rolle (Strichmännchen)",
+      "control": "Steuernde Komponente / Service / Store",
+      "entity": "Domänen-/Wertobjekt"
+    },
+    "messageTypes": {
+      "sync": "synchroner Aufruf (durchgezogener Pfeil, gefüllte Spitze)",
+      "return": "Rückgabe (gestrichelter Pfeil, offene Spitze)",
+      "create": "Objekterzeugung («create», gestrichelter Pfeil auf neues Objekt)",
+      "self": "Selbstaufruf (Pfeil auf eigene Lebenslinie)"
+    }
+  },
+  "diagrams": [
+    {
+      "id": "online-buchung",
+      "title": "Online-Buchung (Kunde)",
+      "description": "Kunde bucht online: Vorstellung wählen → Sitzplan → Sitz reservieren (Hold) → bezahlen → Sitz belegen → Ticket. Mit Alternativpfaden für vergebenen Sitz, fehlgeschlagene Zahlung und Hold-Timeout.",
+      "stories": ["U04", "U05", "U06", "U07", "U28", "U47"],
+      "participants": [
+        { "id": "kunde",             "label": "Kunde",               "kind": "actor",   "umlClass": "Kunde" },
+        { "id": "ui",                "label": ":BuchungsAssistent",  "kind": "control", "umlClass": "BuchungsAssistent" },
+        { "id": "vorstellungService","label": ":VorstellungService", "kind": "control", "umlClass": "VorstellungService" },
+        { "id": "buchungService",    "label": ":BuchungService",     "kind": "control", "umlClass": "BuchungService" },
+        { "id": "vSitz",             "label": "vSitz:VorstellungSitz","kind": "entity", "umlClass": "VorstellungSitz" },
+        { "id": "zahlung",           "label": ":Zahlung",            "kind": "entity",  "umlClass": "Zahlung" },
+        { "id": "buchung",           "label": "buchung:Buchung",     "kind": "entity",  "umlClass": "Buchung" },
+        { "id": "ticket",            "label": "ticket:Ticket",       "kind": "entity",  "umlClass": "Ticket" }
+      ],
+      "messages": [
+        { "id": "m1",  "seq": "1",   "from": "kunde",             "to": "ui",              "type": "sync",   "label": "Vorstellung & Datum wählen", "stories": ["U05"] },
+        { "id": "m2",  "seq": "2",   "from": "ui",                "to": "vorstellungService","type": "sync", "label": "sitzplan(vorstellungId)" },
+        { "id": "m3",  "seq": "3",   "from": "vorstellungService","to": "ui",              "type": "return", "label": "Sitzplan (SitzMitStatus[])" },
+        { "id": "m4",  "seq": "4",   "from": "kunde",             "to": "ui",              "type": "sync",   "label": "Sitz antippen", "stateEffect": "VorstellungSitz: FREI→AUSGEWÄHLT (lokal)", "stories": ["U07"] },
+        { "id": "m5",  "seq": "5",   "from": "kunde",             "to": "ui",              "type": "sync",   "label": "Checkout starten" },
+        { "id": "m6",  "seq": "6",   "from": "ui",                "to": "buchungService",  "type": "sync",   "label": "reservieren(vorstellungId, sitzIds)", "stories": ["U47"] },
+        { "id": "m7",  "seq": "7",   "from": "buchungService",    "to": "vSitz",           "type": "sync",   "label": "reservieren(sessionId)" },
+        { "id": "m8",  "seq": "8a",  "from": "vSitz",             "to": "buchungService",  "type": "return", "label": "true", "stateEffect": "VorstellungSitz: FREI→RESERVIERT (reserviertBis +10 min)" },
+        { "id": "m9",  "seq": "9a",  "from": "buchungService",    "to": "ui",              "type": "return", "label": "Hold bestätigt" },
+        { "id": "m8b", "seq": "8b",  "from": "vSitz",             "to": "buchungService",  "type": "return", "label": "false – Platz bereits vergeben" },
+        { "id": "m9b", "seq": "9b",  "from": "buchungService",    "to": "ui",              "type": "return", "label": "Fehler: Platz vergeben" },
+        { "id": "m10b","seq": "10b", "from": "ui",                "to": "kunde",           "type": "return", "label": "zurück zur Sitzwahl (keine Doppelbuchung)" },
+        { "id": "m10", "seq": "10",  "from": "kunde",             "to": "ui",              "type": "sync",   "label": "Tickets & Rabatte wählen, bezahlen", "stories": ["U06", "U28"] },
+        { "id": "m11", "seq": "11",  "from": "ui",                "to": "buchungService",  "type": "sync",   "label": "anlegen(Buchungsantrag)" },
+        { "id": "m12", "seq": "12",  "from": "buchungService",    "to": "zahlung",         "type": "sync",   "label": "verarbeiten()" },
+        { "id": "m13", "seq": "13a", "from": "zahlung",           "to": "buchungService",  "type": "return", "label": "ERFOLGREICH", "stateEffect": "Zahlung: AUSSTEHEND→ERFOLGREICH" },
+        { "id": "m13b","seq": "13b", "from": "zahlung",           "to": "buchungService",  "type": "return", "label": "FEHLGESCHLAGEN", "stateEffect": "Zahlung: AUSSTEHEND→FEHLGESCHLAGEN" },
+        { "id": "m14", "seq": "14",  "from": "buchungService",    "to": "vSitz",           "type": "sync",   "label": "belegen(buchung)", "stateEffect": "VorstellungSitz: RESERVIERT→BELEGT" },
+        { "id": "m15", "seq": "15",  "from": "buchungService",    "to": "buchung",         "type": "sync",   "label": "bestätigen()", "stateEffect": "Buchung: AUSSTEHEND→BESTÄTIGT" },
+        { "id": "m16", "seq": "16",  "from": "buchungService",    "to": "ticket",          "type": "create", "label": "«create» Ticket(GÜLTIG, qrCode)", "stateEffect": "Ticket: →GÜLTIG" },
+        { "id": "m17", "seq": "17",  "from": "buchungService",    "to": "ui",              "type": "return", "label": "BuchungDetail" },
+        { "id": "m18", "seq": "18",  "from": "ui",                "to": "kunde",           "type": "return", "label": "Bestätigung + QR-Ticket", "stories": ["U04"] },
+        { "id": "m17b","seq": "17b", "from": "buchungService",    "to": "ui",              "type": "return", "label": "Fehler: Zahlung fehlgeschlagen – Hold bleibt aktiv" },
+        { "id": "mt1", "seq": "T1",  "from": "vSitz",             "to": "vSitz",           "type": "self",   "label": "istAbgelaufen() → true" },
+        { "id": "mt2", "seq": "T2",  "from": "vSitz",             "to": "vSitz",           "type": "self",   "label": "freigeben()", "stateEffect": "VorstellungSitz: RESERVIERT→FREI" }
+      ],
+      "fragments": [
+        {
+          "id": "f1", "kind": "alt", "label": "Reservierung – Sitz frei vs. bereits vergeben",
+          "operands": [
+            { "guard": "reservieren() == true (Sitz war FREI)", "messageRefs": ["m8","m9","m10","m11","m12","m13","m14","m15","m16","m17","m18"] },
+            { "guard": "reservieren() == false (bereits RESERVIERT/BELEGT)", "messageRefs": ["m8b","m9b","m10b"] }
+          ]
+        },
+        {
+          "id": "f2", "kind": "alt", "label": "Zahlung (innerhalb des erfolgreichen Holds)",
+          "operands": [
+            { "guard": "Zahlung ERFOLGREICH", "messageRefs": ["m13","m14","m15","m16","m17","m18"] },
+            { "guard": "Zahlung FEHLGESCHLAGEN", "messageRefs": ["m13b","m17b"] }
+          ]
+        },
+        {
+          "id": "f3", "kind": "break", "label": "Hold-Timeout (kein Abschluss binnen 10 min)",
+          "operands": [
+            { "guard": "reserviertBis erreicht", "messageRefs": ["mt1","mt2"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pos-verkauf",
+      "title": "Kassenverkauf / POS (Kassiererin)",
+      "description": "Schnellverkauf an der Kasse: Tickets in den Warenkorb, abschließen, bar/Karte zahlen, Ticket drucken. Überspringt den langen Reservierungs-Hold – der Sitz geht direkt von FREI auf BELEGT.",
+      "stories": ["U01", "U02"],
+      "participants": [
+        { "id": "kassiererin",    "label": "Kassiererin",     "kind": "actor",   "umlClass": "Kassierer" },
+        { "id": "warenkorb",      "label": ":Warenkorb",      "kind": "control", "umlClass": "Warenkorb" },
+        { "id": "buchungService", "label": ":BuchungService", "kind": "control", "umlClass": "BuchungService" },
+        { "id": "zahlung",        "label": ":Zahlung",        "kind": "entity",  "umlClass": "Zahlung" },
+        { "id": "buchung",        "label": "buchung:Buchung", "kind": "entity",  "umlClass": "Buchung" },
+        { "id": "ticket",         "label": "ticket:Ticket",   "kind": "entity",  "umlClass": "Ticket" }
+      ],
+      "messages": [
+        { "id": "p1", "seq": "1", "from": "kassiererin",    "to": "warenkorb",      "type": "sync",   "label": "hinzufügen(vorstellung, kategorie)", "stories": ["U01"] },
+        { "id": "p2", "seq": "2", "from": "kassiererin",    "to": "warenkorb",      "type": "sync",   "label": "abschließen()" },
+        { "id": "p3", "seq": "3", "from": "warenkorb",      "to": "buchungService", "type": "sync",   "label": "anlegen(Buchungsantrag)" },
+        { "id": "p4", "seq": "4", "from": "buchungService", "to": "zahlung",        "type": "sync",   "label": "verarbeiten() [BAR/KARTE]", "stories": ["U02"] },
+        { "id": "p5", "seq": "5", "from": "zahlung",        "to": "buchungService", "type": "return", "label": "ERFOLGREICH", "stateEffect": "Zahlung: AUSSTEHEND→ERFOLGREICH" },
+        { "id": "p6", "seq": "6", "from": "buchungService", "to": "buchung",        "type": "sync",   "label": "bestätigen()", "stateEffect": "Buchung: AUSSTEHEND→BESTÄTIGT" },
+        { "id": "p7", "seq": "7", "from": "buchungService", "to": "ticket",         "type": "create", "label": "«create» Ticket(GÜLTIG)", "stateEffect": "Ticket: →GÜLTIG · VorstellungSitz: FREI→BELEGT" },
+        { "id": "p8", "seq": "8", "from": "buchungService", "to": "warenkorb",      "type": "return", "label": "BuchungDetail" },
+        { "id": "p9", "seq": "9", "from": "warenkorb",      "to": "kassiererin",    "type": "return", "label": "Ticket + Beleg drucken" }
+      ],
+      "fragments": []
+    },
+    {
+      "id": "storno",
+      "title": "Storno & Rückerstattung",
+      "description": "Eine bestätigte Buchung wird storniert: Ticket wird ungültig, Zahlung erstattet, der Sitz wird wieder frei und damit verkaufbar.",
+      "stories": ["U03"],
+      "participants": [
+        { "id": "akteur",         "label": "Kassiererin / Kunde", "kind": "actor",   "umlClass": "Kassierer" },
+        { "id": "buchungService", "label": ":BuchungService",     "kind": "control", "umlClass": "BuchungService" },
+        { "id": "buchung",        "label": "buchung:Buchung",     "kind": "entity",  "umlClass": "Buchung" },
+        { "id": "ticket",         "label": "ticket:Ticket",       "kind": "entity",  "umlClass": "Ticket" },
+        { "id": "zahlung",        "label": ":Zahlung",            "kind": "entity",  "umlClass": "Zahlung" },
+        { "id": "vSitz",          "label": "vSitz:VorstellungSitz","kind": "entity", "umlClass": "VorstellungSitz" }
+      ],
+      "messages": [
+        { "id": "s1", "seq": "1", "from": "akteur",         "to": "buchungService", "type": "sync",   "label": "stornieren(buchungId)", "stories": ["U03"] },
+        { "id": "s2", "seq": "2", "from": "buchungService", "to": "buchung",         "type": "sync",   "label": "stornieren()", "stateEffect": "Buchung: BESTÄTIGT→STORNIERT" },
+        { "id": "s3", "seq": "3", "from": "buchungService", "to": "ticket",          "type": "sync",   "label": "status = STORNIERT", "stateEffect": "Ticket: GÜLTIG→STORNIERT" },
+        { "id": "s4", "seq": "4", "from": "buchungService", "to": "zahlung",         "type": "sync",   "label": "erstatten()", "stateEffect": "Zahlung: ERFOLGREICH→ERSTATTET" },
+        { "id": "s5", "seq": "5", "from": "buchungService", "to": "vSitz",           "type": "sync",   "label": "freigeben()", "stateEffect": "VorstellungSitz: BELEGT→FREI" },
+        { "id": "s6", "seq": "6", "from": "buchungService", "to": "akteur",          "type": "return", "label": "Storno-Quittung" }
+      ],
+      "fragments": [
+        {
+          "id": "fs", "kind": "opt", "label": "nur bei zulässigem Storno (vor Vorstellungsbeginn / Kulanz)",
+          "operands": [
+            { "guard": "Storno zulässig", "messageRefs": ["s2","s3","s4","s5","s6"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "einlass",
+      "title": "Einlass & Validierung",
+      "description": "Einlasspersonal scannt den QR-Code. Gültige Tickets werden eingelöst; bereits gescannte oder ungültige Tickets werden abgewiesen (kein Doppeleinlass).",
+      "stories": ["U15", "U17"],
+      "participants": [
+        { "id": "einlass",        "label": "Einlasskontrolleur", "kind": "actor",   "umlClass": "Einlasskontrolleur" },
+        { "id": "einlassService", "label": ":EinlassService",    "kind": "control", "umlClass": "EinlassService" },
+        { "id": "ticket",         "label": "ticket:Ticket",      "kind": "entity",  "umlClass": "Ticket" },
+        { "id": "buchung",        "label": "buchung:Buchung",    "kind": "entity",  "umlClass": "Buchung" }
+      ],
+      "messages": [
+        { "id": "e1", "seq": "1",  "from": "einlass",        "to": "einlassService", "type": "sync",   "label": "validiere(qrCode)", "stories": ["U15"] },
+        { "id": "e2", "seq": "2",  "from": "einlassService", "to": "ticket",         "type": "sync",   "label": "istGültig()" },
+        { "id": "e3", "seq": "3",  "from": "ticket",         "to": "einlassService", "type": "return", "label": "Status" },
+        { "id": "e4", "seq": "4a", "from": "einlassService", "to": "ticket",         "type": "sync",   "label": "einlösen()", "stateEffect": "Ticket: GÜLTIG→EINGELÖST" },
+        { "id": "e5", "seq": "5a", "from": "einlassService", "to": "buchung",        "type": "sync",   "label": "einchecken()", "stateEffect": "Buchung: BESTÄTIGT→EINGELÖST" },
+        { "id": "e6", "seq": "6a", "from": "einlassService", "to": "einlass",        "type": "return", "label": "gültig ✓ (grün + Ton)" },
+        { "id": "e7", "seq": "4b", "from": "einlassService", "to": "einlass",        "type": "return", "label": "bereits eingelöst ✗ (Erstscan-Zeitstempel)", "stories": ["U17"] },
+        { "id": "e8", "seq": "4c", "from": "einlassService", "to": "einlass",        "type": "return", "label": "ungültig ✗" }
+      ],
+      "fragments": [
+        {
+          "id": "fe", "kind": "alt", "label": "Validierungsergebnis",
+          "operands": [
+            { "guard": "gültig UND nicht gescannt", "messageRefs": ["e4","e5","e6"] },
+            { "guard": "bereits gescannt", "messageRefs": ["e7"] },
+            { "guard": "ungültig / unbekannt", "messageRefs": ["e8"] }
+          ]
+        }
+      ]
+    }
+  ],
+  "consistencyRefs": {
+    "umlMethods": [
+      "VorstellungService.sitzplan", "BuchungService.reservieren", "BuchungService.anlegen", "BuchungService.stornieren",
+      "VorstellungSitz.reservieren", "VorstellungSitz.belegen", "VorstellungSitz.freigeben", "VorstellungSitz.istAbgelaufen",
+      "Zahlung.verarbeiten", "Zahlung.erstatten", "Buchung.bestätigen", "Buchung.stornieren", "Buchung.einchecken",
+      "Ticket.istGültig", "Ticket.einlösen", "EinlassService.validiere", "Warenkorb.hinzufügen", "Warenkorb.abschließen"
+    ],
+    "stories": ["U01", "U02", "U03", "U04", "U05", "U06", "U07", "U15", "U17", "U28", "U47"],
+    "zustandsautomat": ["vorstellungSitz", "ticket"]
+  }
+}

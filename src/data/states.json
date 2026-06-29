@@ -1,0 +1,279 @@
+{
+  "version": "1.0",
+  "title": "CineTicket – Zustandsautomaten",
+  "generated": "2026-06-21",
+  "subtitle": "Lebenszyklus eines Sitzplatzes je Vorstellung (frei · reserviert · belegt · defekt) und sein Zusammenhang mit Ticket, Buchung und Nutzer.",
+  "notation": "UML-Zustandsdiagramm (State Machine). Transition-Beschriftung: event [guard] / action.",
+  "legend": {
+    "stateKinds": {
+      "initial": "Start-Pseudozustand (gefüllter Kreis)",
+      "normal": "regulärer Zustand (abgerundetes Rechteck)",
+      "final": "End-Pseudozustand (Kreis mit Ring)"
+    },
+    "actors": ["Kunde", "Kassierer", "BuchungService", "Einlasskontrolleur", "Haustechniker", "System"]
+  },
+  "machines": [
+    {
+      "id": "vorstellungSitz",
+      "title": "Sitzplatz je Vorstellung",
+      "context": "VorstellungSitz",
+      "statusEnum": "Sitzstatus",
+      "initial": "FREI",
+      "description": "Eine Instanz von VorstellungSitz existiert genau einmal je Kombination aus Vorstellung × Sitzplatz. Sie trägt den Status des Sitzes NUR für diese eine Vorstellung – derselbe physische Sitzplatz kann in einer anderen Vorstellung gleichzeitig einen anderen Status haben.",
+      "states": [
+        {
+          "id": "FREI",
+          "label": "Frei",
+          "kind": "normal",
+          "color": "#437a22",
+          "description": "Sitz ist für diese Vorstellung verkaufbar und für niemanden reserviert.",
+          "relations": {
+            "ticket": "kein Ticket",
+            "buchung": "keine Buchung",
+            "nutzer": "kein Bezug",
+            "wartung": "kein offenes Wartungsticket"
+          }
+        },
+        {
+          "id": "AUSGEWÄHLT",
+          "label": "Ausgewählt",
+          "kind": "normal",
+          "color": "#7a39bb",
+          "description": "Im Sitzplan eines Kunden angetippt – nur in dessen eigenem Client markiert. Blockiert keine anderen Nutzer (kein Server-Hold).",
+          "relations": {
+            "ticket": "kein Ticket",
+            "buchung": "keine Buchung",
+            "nutzer": "lokale Auswahl im Browser des Kunden",
+            "wartung": "—"
+          }
+        },
+        {
+          "id": "RESERVIERT",
+          "label": "Reserviert (Hold)",
+          "kind": "normal",
+          "color": "#d19900",
+          "description": "Serverseitiger, zeitlich begrenzter Hold während des Checkouts. Blockiert alle anderen Nutzer. Verhindert Doppelbuchungen.",
+          "invariants": ["reserviertVon ist gesetzt", "reserviertBis = Reservierungszeitpunkt + 10 min"],
+          "relations": {
+            "ticket": "noch kein Ticket",
+            "buchung": "Buchung im Status AUSSTEHEND (in Arbeit)",
+            "nutzer": "reserviertVon = Session-/Nutzer-Kennung des Kunden",
+            "wartung": "—"
+          }
+        },
+        {
+          "id": "BELEGT",
+          "label": "Belegt",
+          "kind": "normal",
+          "color": "#a13544",
+          "description": "Verbindlich gebucht und bezahlt. Genau ein Ticket gehört zu diesem Sitz.",
+          "invariants": ["buchungId ist gesetzt", "genau 1 Ticket existiert"],
+          "relations": {
+            "ticket": "genau 1 Ticket (GÜLTIG, später EINGELÖST)",
+            "buchung": "1 Buchung im Status BESTÄTIGT",
+            "nutzer": "Inhaber = Buchung.kundenEmail (registrierter Nutzer 0..1 oder Gast)",
+            "wartung": "—"
+          }
+        },
+        {
+          "id": "DEFEKT",
+          "label": "Defekt / Reparatur nötig",
+          "kind": "normal",
+          "color": "#64748b",
+          "description": "Von der Haustechnik als defekt gemeldet und systemweit gesperrt – nicht mehr verkaufbar, bis er repariert ist.",
+          "invariants": ["1 offenes Wartungsticket"],
+          "relations": {
+            "ticket": "regulär kein Ticket (Sonderfall: zuvor belegt → Umbuchung)",
+            "buchung": "regulär keine Buchung",
+            "nutzer": "gemeldetVon = Haustechniker",
+            "wartung": "Wartungsticket (OFFEN → IN_ARBEIT → ERLEDIGT)"
+          }
+        },
+        {
+          "id": "_ende",
+          "label": "Vorstellung beendet",
+          "kind": "final",
+          "color": "#1f2937",
+          "description": "Die Vorstellung ist beendet (Vorstellung.status = BEENDET); die Sitz-Instanz wird historisiert."
+        }
+      ],
+      "transitions": [
+        {
+          "id": "t1", "from": "FREI", "to": "AUSGEWÄHLT",
+          "event": "auswählen()", "guard": "Sitz nicht DEFEKT", "action": "lokale Markierung im eigenen Client",
+          "actor": "Kunde", "note": "rein clientseitig – kein Server-Lock",
+          "relatedClasses": ["BuchungsAssistent"]
+        },
+        {
+          "id": "t2", "from": "AUSGEWÄHLT", "to": "FREI",
+          "event": "abwählen() / Sitzplan verlassen", "guard": "", "action": "lokale Markierung entfernen",
+          "actor": "Kunde", "relatedClasses": ["BuchungsAssistent"]
+        },
+        {
+          "id": "t3", "from": "AUSGEWÄHLT", "to": "RESERVIERT",
+          "event": "reservieren(sessionId)", "guard": "serverseitig noch FREI", "action": "reserviertVon setzen; reserviertBis = jetzt + 10 min",
+          "actor": "Kunde → BuchungService", "note": "atomar – eine parallele zweite Reservierung schlägt fehl (keine Doppelbuchung)",
+          "relatedClasses": ["BuchungService", "VorstellungSitz"]
+        },
+        {
+          "id": "t3b", "from": "FREI", "to": "RESERVIERT",
+          "event": "reservieren(sessionId)", "guard": "Sitz FREI", "action": "Hold direkt setzen (POS-Schnellverkauf)",
+          "actor": "Kassierer → BuchungService", "note": "Kassenverkauf überspringt den AUSGEWÄHLT-Schritt",
+          "relatedClasses": ["BuchungService", "VorstellungSitz", "Warenkorb"]
+        },
+        {
+          "id": "t4", "from": "RESERVIERT", "to": "BELEGT",
+          "event": "belegen(buchung)", "guard": "Hold gehört dieser Session UND nicht abgelaufen UND Zahlung erfolgreich",
+          "action": "Buchung bestätigen; Zahlung verarbeiten; Ticket(GÜLTIG) erzeugen; buchungId setzen",
+          "actor": "BuchungService", "relatedClasses": ["Buchung", "Ticket", "Zahlung", "VorstellungSitz"]
+        },
+        {
+          "id": "t5", "from": "RESERVIERT", "to": "FREI",
+          "event": "freigeben() / istAbgelaufen()", "guard": "Timeout (10 min) ODER Checkout abgebrochen",
+          "action": "reserviertVon/reserviertBis zurücksetzen; Buchung verwerfen",
+          "actor": "System / Kunde", "note": "verhindert dauerhafte Blockade eines Platzes",
+          "relatedClasses": ["BuchungService", "VorstellungSitz"]
+        },
+        {
+          "id": "t6", "from": "BELEGT", "to": "FREI",
+          "event": "Buchung.stornieren()", "guard": "vor Vorstellungsbeginn / Kulanz",
+          "action": "Ticket → STORNIERT; Zahlung → ERSTATTET; Platz wieder verkaufbar",
+          "actor": "Kassierer / Kunde", "relatedClasses": ["Buchung", "Ticket", "Zahlung"]
+        },
+        {
+          "id": "t7", "from": "FREI", "to": "DEFEKT",
+          "event": "defektMelden(sitzId, foto, notiz)", "guard": "", "action": "Wartungsticket(OFFEN) erzeugen; Sitz systemweit sperren",
+          "actor": "Haustechniker", "note": "Meldung per AR-Brille (U39)",
+          "relatedClasses": ["Wartungsticket", "FacilityService", "Haustechniker"]
+        },
+        {
+          "id": "t8", "from": "DEFEKT", "to": "FREI",
+          "event": "Wartungsticket.erledigen()", "guard": "Reparatur abgeschlossen", "action": "Sperre aufheben; Sitz wieder verkaufbar",
+          "actor": "Haustechniker", "relatedClasses": ["Wartungsticket", "FacilityService"]
+        },
+        {
+          "id": "t9", "from": "BELEGT", "to": "DEFEKT",
+          "event": "defektMelden() an belegtem Sitz", "guard": "Ausnahmefall", "action": "betroffene Buchung umbuchen oder erstatten; danach Wartungsticket",
+          "actor": "Haustechniker", "note": "Sonderfall: Defekt wird erst nach Verkauf entdeckt",
+          "relatedClasses": ["Wartungsticket", "Buchung", "Zahlung"]
+        },
+        {
+          "id": "t10", "from": "BELEGT", "to": "_ende",
+          "event": "Vorstellung beendet", "guard": "Vorstellung.status = BEENDET",
+          "action": "Ticket ist EINGELÖST oder ABGELAUFEN; Sitz-Instanz historisieren",
+          "actor": "System", "relatedClasses": ["Vorstellung", "Ticket"]
+        },
+        {
+          "id": "t11", "from": "FREI", "to": "_ende",
+          "event": "Vorstellung beendet", "guard": "Sitz blieb unverkauft", "action": "Sitz-Instanz historisieren",
+          "actor": "System", "relatedClasses": ["Vorstellung"]
+        }
+      ]
+    },
+    {
+      "id": "ticket",
+      "title": "Ticket-Lebenszyklus",
+      "context": "Ticket",
+      "statusEnum": "Ticketstatus",
+      "initial": "GÜLTIG",
+      "description": "Ein Ticket entsteht erst, wenn der zugehörige VorstellungSitz auf BELEGT wechselt. Es ist somit immer an genau einen Sitz und eine Buchung gebunden.",
+      "states": [
+        {
+          "id": "GÜLTIG",
+          "label": "Gültig",
+          "kind": "normal",
+          "color": "#437a22",
+          "description": "Bezahltes, noch nicht eingelöstes Ticket mit QR-Code.",
+          "relations": { "sitz": "VorstellungSitz = BELEGT", "buchung": "BESTÄTIGT", "nutzer": "Inhaber = Buchung.kundenEmail" }
+        },
+        {
+          "id": "EINGELÖST",
+          "label": "Eingelöst",
+          "kind": "final",
+          "color": "#006494",
+          "description": "Beim Einlass per QR validiert – kein zweiter Einlass möglich.",
+          "relations": { "sitz": "VorstellungSitz = BELEGT", "buchung": "EINGELÖST", "nutzer": "—" }
+        },
+        {
+          "id": "STORNIERT",
+          "label": "Storniert",
+          "kind": "final",
+          "color": "#a13544",
+          "description": "Buchung wurde storniert; der Sitz wurde wieder freigegeben.",
+          "relations": { "sitz": "VorstellungSitz = FREI", "buchung": "STORNIERT", "nutzer": "—" }
+        },
+        {
+          "id": "ABGELAUFEN",
+          "label": "Abgelaufen",
+          "kind": "final",
+          "color": "#64748b",
+          "description": "Vorstellung beendet, ohne dass das Ticket eingelöst wurde.",
+          "relations": { "sitz": "VorstellungSitz historisiert", "buchung": "BESTÄTIGT (nicht eingecheckt)", "nutzer": "—" }
+        }
+      ],
+      "transitions": [
+        {
+          "id": "tt0", "from": "_initial", "to": "GÜLTIG",
+          "event": "Ticket erzeugt", "guard": "VorstellungSitz → BELEGT", "action": "QR-Code generieren",
+          "actor": "BuchungService", "relatedClasses": ["Buchung", "VorstellungSitz"]
+        },
+        {
+          "id": "tt1", "from": "GÜLTIG", "to": "EINGELÖST",
+          "event": "validiere(qrCode)", "guard": "Ticket gültig UND nicht bereits gescannt",
+          "action": "Buchung.einchecken(); Doppelnutzung sperren",
+          "actor": "Einlasskontrolleur", "relatedClasses": ["EinlassService", "Buchung"]
+        },
+        {
+          "id": "tt2", "from": "GÜLTIG", "to": "STORNIERT",
+          "event": "Buchung.stornieren()", "guard": "", "action": "Sitz freigeben; Zahlung erstatten",
+          "actor": "Kassierer / Kunde", "relatedClasses": ["Buchung", "VorstellungSitz", "Zahlung"]
+        },
+        {
+          "id": "tt3", "from": "GÜLTIG", "to": "ABGELAUFEN",
+          "event": "Vorstellung beendet", "guard": "Ticket nie eingelöst", "action": "—",
+          "actor": "System", "relatedClasses": ["Vorstellung"]
+        }
+      ]
+    }
+  ],
+  "crossLinks": [
+    {
+      "id": "x1",
+      "trigger": "vorstellungSitz: RESERVIERT → BELEGT (t4)",
+      "effect": "Buchung wechselt AUSSTEHEND → BESTÄTIGT, Zahlung wird verarbeitet, ein Ticket (GÜLTIG) entsteht, und der Nutzer/Gast wird über Buchung.kundenEmail zum Inhaber.",
+      "classes": ["Buchung", "Zahlung", "Ticket", "Nutzer"]
+    },
+    {
+      "id": "x2",
+      "trigger": "ticket: GÜLTIG → STORNIERT (tt2)  ⇔  vorstellungSitz: BELEGT → FREI (t6)",
+      "effect": "Storno koppelt beide Automaten: Ticket wird STORNIERT, Buchung STORNIERT, Zahlung ERSTATTET, und der Sitz wird wieder FREI (verkaufbar).",
+      "classes": ["Ticket", "Buchung", "Zahlung", "VorstellungSitz"]
+    },
+    {
+      "id": "x3",
+      "trigger": "ticket: GÜLTIG → EINGELÖST (tt1)",
+      "effect": "Einlass-Scan löst das Ticket ein und setzt die Buchung auf EINGELÖST. Der Sitz bleibt BELEGT bis Vorstellungsende.",
+      "classes": ["Ticket", "Buchung", "EinlassService"]
+    },
+    {
+      "id": "x4",
+      "trigger": "Nutzer-Bezug über alle Zustände",
+      "effect": "RESERVIERT hält den Nutzer per reserviertVon (Session). Ab BELEGT ist der Inhaber über Buchung.kundenEmail referenziert – ein registrierter Nutzer (0..1) oder ein Gast ohne Konto.",
+      "classes": ["Nutzer", "Kunde", "Buchung"]
+    },
+    {
+      "id": "x5",
+      "trigger": "vorstellungSitz: FREI/BELEGT → DEFEKT (t7/t9)",
+      "effect": "Defektmeldung erzeugt ein Wartungsticket und sperrt den Sitz. Ein zuvor belegter Sitz (t9) führt zur Umbuchung/Erstattung der betroffenen Buchung.",
+      "classes": ["Wartungsticket", "FacilityService", "Buchung"]
+    }
+  ],
+  "stateAnzahl": { "vorstellungSitz": 5, "ticket": 4 },
+  "consistencyRefs": {
+    "Sitzstatus": ["FREI", "AUSGEWÄHLT", "RESERVIERT", "BELEGT", "DEFEKT"],
+    "Ticketstatus": ["GÜLTIG", "EINGELÖST", "STORNIERT", "ABGELAUFEN"],
+    "Buchungsstatus": ["AUSSTEHEND", "BESTÄTIGT", "STORNIERT", "EINGELÖST"],
+    "umlClass": "VorstellungSitz",
+    "stories": ["U07", "U47", "U03", "U17", "U39", "U40"]
+  }
+}

@@ -1,0 +1,139 @@
+{
+  "version": "1.0",
+  "title": "CineTicket – Prototyp",
+  "generated": "2026-06-22",
+  "beschreibung": "Interaktiver Hi-Fi-Prototyp. Setzt den MVP-Kern (Release 1) mit vier Kernrollen um; weitere Rollen, Module und Innovationen sind im UML modelliert und hier als Roadmap (implementedInPrototype: false) geführt.",
+  "tech": {
+    "framework": "React 19",
+    "build": "Vite",
+    "styling": "Tailwind CSS v4",
+    "api": "MSW (Mock Service Worker)",
+    "accessibility": "WCAG 2.1 AA",
+    "ansicht": ["Desktop", "iPhone-Frame (Mobile-Simulation)"],
+    "theme": ["HELL", "DUNKEL", "SYSTEM"]
+  },
+  "rollen": [
+    { "id": "endkunde",    "nutzerrolle": "KUNDE",    "label": "Endkunde",            "status": "implementiert", "beschreibung": "Filmsuche → Sitzplan → Buchungs-Wizard → QR-Ticket" },
+    { "id": "kasse",       "nutzerrolle": "KASSE",    "label": "Kassiererin (POS)",   "status": "implementiert", "beschreibung": "Schnellverkauf mit Tastatur-Shortcuts" },
+    { "id": "manager",     "nutzerrolle": "MANAGER",  "label": "Kinomanager",         "status": "implementiert", "beschreibung": "KPIs, Umsatz-Charts, Saalauslastung" },
+    { "id": "einlass",     "nutzerrolle": "EINLASS",  "label": "Einlasspersonal",     "status": "implementiert", "beschreibung": "Kamera-QR-Scanner + manuelle Eingabe" },
+    { "id": "service",     "nutzerrolle": "SERVICE",  "label": "Service (Gastro)",    "status": "roadmap",       "beschreibung": "Bestellung am Sitz, Theke, Allergene" },
+    { "id": "facility",    "nutzerrolle": "FACILITY", "label": "Facility (AR)",       "status": "roadmap",       "beschreibung": "Defekt melden, Sitz sperren, Reinigungsfreigabe" },
+    { "id": "marke",       "nutzerrolle": "MARKE",    "label": "Marken-Manager",      "status": "roadmap",       "beschreibung": "Standort-KPIs, markenweite Aktionen, Wochenreport" },
+    { "id": "admin",       "nutzerrolle": "ADMIN",    "label": "Administrator/IT",    "status": "roadmap",       "beschreibung": "Rollen/Rechte, Audit-Log, DSGVO, 2FA" }
+  ],
+  "module": [
+    {
+      "id": "filmsuche", "rolle": "endkunde", "name": "Filmsuche / Startseite", "status": "implementiert",
+      "beschreibung": "Aktuelles Programm, Genre-Filter", "stories": ["U22"], "umlClasses": ["FilmService", "Film"]
+    },
+    {
+      "id": "film-detail", "rolle": "endkunde", "name": "Film-Detailseite", "status": "implementiert",
+      "beschreibung": "Beschreibung, Altersfreigabe (FSK), Trailer, Vorstellungen", "stories": ["U24", "U38"], "umlClasses": ["Film", "Ticketkategorie"]
+    },
+    {
+      "id": "buchungs-wizard", "rolle": "endkunde", "name": "Buchungs-Wizard (BuchungsAssistent)", "status": "implementiert",
+      "beschreibung": "Fünfschrittiger Buchungsablauf vom Datum bis zum QR-Ticket",
+      "stories": ["U05", "U07", "U09", "U06", "U28", "U38", "U02", "U04", "U47"],
+      "umlClasses": ["BuchungsAssistent", "Vorstellung", "Sitzplan", "SitzMitStatus", "VorstellungSitz", "Buchung", "Zahlung", "Ticket"],
+      "schritte": [
+        { "nr": 1, "name": "Vorstellung & Datum wählen", "stories": ["U05"] },
+        { "nr": 2, "name": "Sitzplan (STANDARD/PREMIUM/VIP + barrierefrei; reservierte/belegte Plätze nicht wählbar, Hold)", "stories": ["U07", "U09", "U47"] },
+        { "nr": 3, "name": "Buchungsdetails (Tickets, Rabatt-Kategorien, Gruppe bis 8)", "stories": ["U06", "U28", "U38"] },
+        { "nr": 4, "name": "Zahlung (Karte/Bar/Online) als Zahlung-Transaktion mit Zahlungsstatus", "stories": ["U02", "U04"] },
+        { "nr": 5, "name": "Bestätigung + QR-Code-Ticket", "stories": ["U04"] }
+      ]
+    },
+    {
+      "id": "meine-tickets", "rolle": "endkunde", "name": "Meine Tickets", "status": "implementiert",
+      "beschreibung": "Buchungsübersicht", "stories": [], "umlClasses": ["BuchungDetail", "Buchung"]
+    },
+    {
+      "id": "ticket-detail", "rolle": "endkunde", "name": "Ticket-Detailseite", "status": "implementiert",
+      "beschreibung": "QR-Code, Sitzplatz-Info", "stories": [], "umlClasses": ["Ticket"]
+    },
+    {
+      "id": "pos-warenkorb", "rolle": "kasse", "name": "Kassen-Flow (POS · Warenkorb)", "status": "implementiert",
+      "beschreibung": "Warenkorb mit Mengenauswahl, Tastatur-Shortcuts (F2/F4/F8), Zahlungsabschluss, Storno",
+      "stories": ["U01", "U02", "U03"], "umlClasses": ["Warenkorb", "BuchungService", "Buchung"]
+    },
+    {
+      "id": "manager-kpi", "rolle": "manager", "name": "Tages-KPIs", "status": "implementiert",
+      "beschreibung": "Umsatz, Tickets, Auslastung", "stories": ["U13"], "umlClasses": ["AnalyseService", "KennzahlenÜbersicht"]
+    },
+    {
+      "id": "manager-umsatz", "rolle": "manager", "name": "Umsatz-Liniendiagramm (7/14/30 Tage)", "status": "implementiert",
+      "beschreibung": "Umsatztrend", "stories": ["U14"], "umlClasses": ["AnalyseService", "Manager"]
+    },
+    {
+      "id": "manager-auslastung", "rolle": "manager", "name": "Saalauslastungs-Balkendiagramm", "status": "implementiert",
+      "beschreibung": "Auslastung je Saal", "stories": ["U10"], "umlClasses": ["Kinosaal", "AnalyseService"]
+    },
+    {
+      "id": "manager-vorstellung", "rolle": "manager", "name": "Vorstellung anlegen/bearbeiten", "status": "implementiert",
+      "beschreibung": "Programmpflege", "stories": ["U11", "U12"], "umlClasses": ["VorstellungService", "VorstellungAntrag", "Vorstellung"]
+    },
+    {
+      "id": "einlass-scanner", "rolle": "einlass", "name": "Kamera-QR-Scanner", "status": "implementiert",
+      "beschreibung": "QR-Validierung mit visuell/akustischem Feedback", "stories": ["U15", "U17"], "umlClasses": ["EinlassService", "Ticket", "Ticketstatus", "Einlasskontrolleur"]
+    }
+  ],
+  "roadmap": [
+    { "modul": "Gastro & Service",                "rolle": "SERVICE",  "persona": "Aylin",         "stories": ["U31", "U32", "U33", "U34"], "umlClasses": ["Bestellung", "Artikel", "Bestellposition", "BestellService"] },
+    { "modul": "Facility & Wartung (AR)",          "rolle": "FACILITY", "persona": "Ben",           "stories": ["U39", "U40"],               "umlClasses": ["Wartungsticket", "FacilityService", "Sitzstatus", "Reinigungsstatus"] },
+    { "modul": "Multi-Site",                       "rolle": "MARKE",    "persona": "Stefan",        "stories": ["U35", "U36", "U37"],        "umlClasses": ["Kette", "Preisaktion", "StandortKennzahl", "MarkeService"] },
+    { "modul": "Admin & Sicherheit",               "rolle": "ADMIN",    "persona": "Nora",          "stories": ["U26", "U41", "U42"],        "umlClasses": ["AuditEintrag", "AdminService", "Nutzer"] },
+    { "modul": "Loyalität",                        "rolle": "KUNDE",    "persona": "Lara",          "stories": ["U19", "U20"],               "umlClasses": ["Bonuspunktekonto", "Punktebuchung", "KontoService"] },
+    { "modul": "Dynamische Preise",                "rolle": "MANAGER",  "persona": "Thomas",        "stories": ["U43"],                      "umlClasses": ["Tarif", "Preisregel", "PreisService"] },
+    { "modul": "KI-Sitzplatzempfehlung",           "rolle": "KUNDE",    "persona": "Lara/Endkunde", "stories": ["U44", "U23"],               "umlClasses": ["EmpfehlungsService", "Sitzplatz"] },
+    { "modul": "AR-Barrierefreiheit",              "rolle": "KUNDE",    "persona": "Hannelore",     "stories": ["U45"],                      "umlClasses": ["Barrierefreiheitsoption", "Vorstellung"] },
+    { "modul": "Barrierefreiheits-Profil",         "rolle": "KUNDE",    "persona": "Hannelore",     "stories": ["U50"],                      "umlClasses": ["Barrierefreiheitsprofil", "Barrierefreiheitsoption"] },
+    { "modul": "Bewertungen & Reviews",            "rolle": "KUNDE",    "persona": "Lara",          "stories": ["U48"],                      "umlClasses": ["Bewertung", "Film"] },
+    { "modul": "Merkliste / Watchlist",            "rolle": "KUNDE",    "persona": "Jonas",         "stories": ["U49"],                      "umlClasses": ["Merkliste", "EmpfehlungsService"] },
+    { "modul": "Gutschein/Aktionscode",            "rolle": "KUNDE",    "persona": "Sandra",        "stories": ["U51"],                      "umlClasses": ["Gutschein", "Rabatttyp", "KontoService"] },
+    { "modul": "Prädiktive Auslastungsprognose",   "rolle": "MANAGER",  "persona": "Thomas/Stefan", "stories": ["U46"],                      "umlClasses": ["Auslastungsprognose", "AnalyseService"] },
+    { "modul": "Apple/Google Pay",                 "rolle": "KUNDE",    "persona": "Lara",          "stories": ["U21"],                      "umlClasses": ["Zahlungsart", "Buchung"] }
+  ],
+  "architektur": {
+    "wurzel": "packages/cineticket/src",
+    "features": [
+      { "pfad": "features/customer", "status": "implementiert" },
+      { "pfad": "features/pos",      "status": "implementiert" },
+      { "pfad": "features/manager",  "status": "implementiert" },
+      { "pfad": "features/entrance", "status": "implementiert" },
+      { "pfad": "features/service",  "status": "roadmap" },
+      { "pfad": "features/facility", "status": "roadmap" },
+      { "pfad": "features/brand",    "status": "roadmap" },
+      { "pfad": "features/admin",    "status": "roadmap" }
+    ],
+    "infrastruktur": ["api/ (API-Client + Services)", "mocks/ (MSW-Handler + Seed-Daten)", "shared/stores/ (Booking, POS, Rolle, Theme)", "shared/hooks/ (React Query Hooks)"]
+  },
+  "seedDaten": {
+    "filme": { "anzahl": 5, "beispiele": ["Dune 2", "Oppenheimer", "Poor Things"], "felder": ["Altersfreigabe", "Trailer-URL"] },
+    "säle": [
+      { "name": "Saal 1", "plätze": 120 },
+      { "name": "Saal 2", "plätze": 80 },
+      { "name": "Saal 3", "plätze": 60, "typ": "VIP" }
+    ],
+    "vorstellungen": "nächste 14 Tage (Sprache + Projektionsart)",
+    "sitzplan": "Sitzkategorien STANDARD/PREMIUM/VIP + gekennzeichnete barrierefreie Plätze (eigenes Attribut, keine Preiskategorie)"
+  },
+  "stores": [
+    { "name": "BuchungsAssistent", "zweck": "Buchungs-Wizard-State" },
+    { "name": "Warenkorb",         "zweck": "POS-Warenkorb" },
+    { "name": "RolleStore",        "zweck": "Rollenumschaltung" },
+    { "name": "ThemeStore",        "zweck": "Hell/Dunkel/System-Theme" }
+  ],
+  "stats": {
+    "rollenImplementiert": 4,
+    "rollenGesamt": 8,
+    "umlImplementiert": 41,
+    "umlDesignOnly": 41,
+    "storiesImplementiert": 20
+  },
+  "consistencyRefs": {
+    "note": "Implementierte Module referenzieren genau die in der Traceability-Matrix als 'implementiert' geführten Stories; Roadmap-Module die als 'roadmap' geführten.",
+    "traceabilityFeld": "prototyp",
+    "umlFlag": "implementedInPrototype"
+  }
+}

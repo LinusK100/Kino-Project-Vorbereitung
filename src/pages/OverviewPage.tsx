@@ -1,134 +1,132 @@
 import { motion } from 'motion/react'
 import { Link } from 'react-router-dom'
-import { Users, ListChecks, Map, Smartphone, ArrowRight, Layers } from 'lucide-react'
-import { PageHeader } from '@/components/shared/PageHeader'
-import { WhiteboardCard } from '@/components/shared/WhiteboardCard'
-import { pageVariants, containerVariants, cardVariants } from '@/lib/transitions'
-import personas from '@/data/personas.json'
-import userStories from '@/data/userStories.json'
-import storyMapData from '@/data/storyMap.json'
+import {
+  LayoutDashboard, Layers, Layers3, Presentation as PresentationIcon, Moon,
+  ArrowRight, Users, ListChecks, Boxes, GitCompareArrows, Film,
+} from 'lucide-react'
+import { SectionShell } from '@/components/shared/SectionShell'
+import { Callout } from '@/components/shared/Callout'
+import { NAV } from '@/components/layout/nav'
+import { cardVariants, containerVariants } from '@/lib/transitions'
+import { personas, stories, uml, sequences, stateMachines, innovation } from '@/data/content'
+import type { PresentationStep } from '@/types'
+
+const ACCENT = '#01696f'
 
 const kpis = [
-  { label: 'Personas', value: personas.length, icon: Users, color: '#01696f', path: '/personas' },
-  { label: 'User Stories', value: userStories.length, icon: ListChecks, color: '#006494', path: '/user-stories' },
-  { label: 'Releases', value: storyMapData.releases.length, icon: Layers, color: '#437a22', path: '/story-map' },
-  { label: 'Aktivitäten', value: storyMapData.activities.length, icon: Map, color: '#7a39bb', path: '/story-map' },
+  { label: 'Personas', value: `${personas.basis.length}–${personas.erweitert.length}`, icon: Users, color: '#006494' },
+  { label: 'User Stories', value: `${stories.basis.length}–${stories.erweitert.length}`, icon: ListChecks, color: '#006494' },
+  { label: 'UML-Klassen', value: uml.classes.length, icon: Boxes, color: '#7a39bb' },
+  { label: 'Sequenz-Flows', value: sequences.length, icon: GitCompareArrows, color: '#7a39bb' },
+  { label: 'Zustandsautomaten', value: `${stateMachines.machines.length}–4`, icon: Layers, color: '#7a39bb' },
+  { label: 'Innovationen', value: innovation.innovations.length, icon: PresentationIcon, color: '#437a22' },
 ]
 
-const quickLinks = [
-  { path: '/personas', label: 'Personas', icon: Users, desc: '6 Nutzerprofile' },
-  { path: '/user-stories', label: 'User Stories', icon: ListChecks, desc: '30 Anforderungen' },
-  { path: '/story-map', label: 'Story Map', icon: Map, desc: '5 Aktivitäten' },
-  { path: '/prototype', label: 'Prototyp', icon: Smartphone, desc: '5 Screens' },
+const steps: PresentationStep[] = [
+  { id: 'welcome', title: 'Willkommen', body: 'Diese Website dokumentiert das Kino-Projekt CineTicket von der Anforderung bis zum Prototyp. Diese Tour zeigt in 5 Schritten, wie alles aufgebaut ist und wie du es bedienst.', target: '[data-pres="section-header"]' },
+  { id: 'aufbau', title: '1 · Aufbau in 4 Gruppen', body: 'Links gliedert sich alles in Anforderungen, Modellierung, Synthese und Produkt. Jede Gruppe hat ein einheitliches Design – gleiche Kategorie, gleiches Aussehen.', target: '[data-pres="structure"]' },
+  { id: 'modi', title: '2 · Einfach & Erweitert', body: 'Jeder Abschnitt hat genau zwei Tiefen: Einfach (die Grundlagen, MVP) und Erweitert (die ausführliche Variante). Du schaltest oben rechts in jedem Abschnitt um.', target: '[data-pres="how-modes"]' },
+  { id: 'praesentation', title: '3 · Präsentationsmodus', body: 'Jeder Abschnitt bietet eine geführte Präsentation – genau wie diese hier. Durchklicken mit den Pfeilen oder „Auto" für automatischen Ablauf. Mit Esc beenden.', target: '[data-pres="how-present"]' },
+  { id: 'start', title: '4 · Leg los', body: 'Starte bei den Personas und folge dem roten Faden bis zum Prototyp. Jeder Abschnitt ist mit den anderen abgestimmt – nachweisbar in der Traceability.', target: '[data-pres="structure"]' },
 ]
 
 export default function OverviewPage() {
-  const releaseColors = ['#437a22', '#d19900', '#a13544']
-
   return (
-    <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
-      {/* Hero */}
-      <div className="mb-8 rounded-2xl p-8 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #01696f 0%, #006494 100%)' }}>
-        <div className="relative z-10">
-          <p className="text-sm font-medium mb-2" style={{ color: 'rgba(255,255,255,0.7)' }}>Projektdokumentation</p>
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-3" style={{ fontFamily: 'var(--font-display)' }}>
-            CineTicket System
-          </h1>
-          <p className="text-sm md:text-base max-w-xl" style={{ color: 'rgba(255,255,255,0.85)' }}>
-            Vollständige Projektdokumentation für das Kino-Ticketsystem mit Personas, User Stories, Story Map und interaktivem Prototyp.
-          </p>
+    <SectionShell
+      kicker="Start"
+      title="Dashboard"
+      subtitle="Wie diese Website aufgebaut ist – und wie du sie bedienst"
+      icon={LayoutDashboard}
+      accent={ACCENT}
+      modes={false}
+      presentation={steps}
+      intro={
+        <div className="rounded-xl p-5 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #01696f 0%, #006494 100%)' }}>
+          <div className="relative z-10 max-w-2xl">
+            <p className="text-xs font-semibold mb-1" style={{ color: 'rgba(255,255,255,0.7)' }}>Systemanalyse & Entwurf · Universitätsprojekt</p>
+            <h2 className="text-xl md:text-2xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-display)' }}>CineTicket – ein Kino-Ticketsystem entwerfen</h2>
+            <p className="text-sm" style={{ color: 'rgba(255,255,255,0.9)' }}>
+              Von den Personas über User Stories, Story Map und UML-Diagramme bis zum interaktiven Prototyp –
+              alle Aspekte sind aufeinander abgestimmt. Starte die Tour oben rechts, um die Bedienung kennenzulernen.
+            </p>
+          </div>
+          <Film size={140} color="white" className="absolute -right-4 -bottom-6 opacity-10 hidden md:block" />
         </div>
-        <div className="absolute right-8 top-1/2 -translate-y-1/2 opacity-10 hidden md:block">
-          <Smartphone size={120} color="white" />
-        </div>
+      }
+    >
+      {/* How to use */}
+      <h3 className="text-sm font-bold mb-3" style={{ color: 'var(--text-primary)' }}>So bedienst du die Website</h3>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-7">
+        <HowCard icon={Layers} title="Einfach & Erweitert" accent="#006494" pres="how-modes">
+          Jeder Abschnitt hat <strong>zwei Tiefen</strong>. <span className="inline-flex items-center gap-1"><Layers size={12} /> Einfach</span> zeigt die
+          Grundlagen (MVP), <span className="inline-flex items-center gap-1"><Layers3 size={12} /> Erweitert</span> die ausführliche Variante. Umschalten oben rechts.
+        </HowCard>
+        <HowCard icon={PresentationIcon} title="Präsentationsmodus" accent="#7a39bb" pres="how-present">
+          Jeder Abschnitt hat eine <strong>geführte Präsentation</strong>. Starte sie oben rechts und klicke dich
+          durch (← →) oder lass sie mit <strong>Auto</strong> ablaufen. Wichtige Elemente werden hervorgehoben.
+        </HowCard>
+        <HowCard icon={Moon} title="Navigation & Theme" accent="#964219">
+          Links die Abschnitte in <strong>4 Gruppen</strong>. Oben rechts wechselst du zwischen <strong>Hell und Dunkel</strong>.
+          Diagramme lassen sich zoomen und als Text anzeigen.
+        </HowCard>
       </div>
 
-      <PageHeader title="Projektübersicht" description="Dashboard mit allen wichtigen Kennzahlen" />
-
-      {/* KPI Cards */}
-      <motion.div
-        className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
-        variants={containerVariants}
-        initial="initial"
-        animate="animate"
-      >
-        {kpis.map((kpi) => {
-          const Icon = kpi.icon
+      {/* KPIs */}
+      <motion.div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-7" variants={containerVariants} initial="initial" animate="animate">
+        {kpis.map((k) => {
+          const Icon = k.icon
           return (
-            <motion.div key={kpi.label} variants={cardVariants}>
-              <Link to={kpi.path} className="block">
-                <WhiteboardCard className="hover:shadow-md transition-shadow duration-200">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div
-                      className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
-                      style={{ background: `${kpi.color}15` }}
-                    >
-                      <Icon size={18} style={{ color: kpi.color }} />
-                    </div>
-                  </div>
-                  <div className="text-3xl font-bold mb-1" style={{ color: kpi.color }}>
-                    {kpi.value}
-                  </div>
-                  <div className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
-                    {kpi.label}
-                  </div>
-                </WhiteboardCard>
-              </Link>
+            <motion.div key={k.label} variants={cardVariants} className="rounded-xl p-3.5" style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
+              <Icon size={16} style={{ color: k.color }} className="mb-2" />
+              <div className="text-xl font-bold" style={{ color: k.color }}>{k.value}</div>
+              <div className="text-xs" style={{ color: 'var(--text-secondary)' }}>{k.label}</div>
             </motion.div>
           )
         })}
       </motion.div>
 
-      {/* Release Timeline */}
-      <WhiteboardCard className="mb-8">
-        <h3 className="font-semibold mb-4" style={{ color: 'var(--text-primary)' }}>Release Timeline</h3>
-        <div className="flex gap-2 mb-3">
-          {storyMapData.releases.map((release, i) => (
-            <div key={release.id} className="flex-1">
-              <div
-                className="h-2 rounded-full mb-2"
-                style={{ background: releaseColors[i] }}
-              />
-              <div className="text-xs font-medium" style={{ color: 'var(--text-primary)' }}>
-                {release.name}
-              </div>
-              <div className="text-xs mt-1" style={{ color: 'var(--text-secondary)' }}>
-                {userStories.filter(s => s.release === release.id).length} Stories
-              </div>
+      {/* Structure */}
+      <h3 className="text-sm font-bold mb-3" style={{ color: 'var(--text-primary)' }}>Aufbau der Website</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6" data-pres="structure">
+        {NAV.filter((g) => g.title !== 'Start').map((group) => (
+          <div key={group.title} className="rounded-xl p-4" style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
+            <div className="flex items-center gap-2 mb-3">
+              <span className="w-2.5 h-2.5 rounded-full" style={{ background: group.items[0].accent }} />
+              <h4 className="text-xs font-bold uppercase tracking-wider" style={{ color: group.items[0].accent }}>{group.title}</h4>
             </div>
-          ))}
-        </div>
-        <div className="h-3 rounded-full overflow-hidden flex" style={{ background: 'var(--border-color)' }}>
-          {storyMapData.releases.map((release, i) => {
-            const count = userStories.filter(s => s.release === release.id).length
-            const pct = (count / userStories.length) * 100
-            return (
-              <div
-                key={release.id}
-                style={{ width: `${pct}%`, background: releaseColors[i] }}
-              />
-            )
-          })}
-        </div>
-      </WhiteboardCard>
-
-      {/* Quick Links */}
-      <h3 className="font-semibold mb-3" style={{ color: 'var(--text-primary)' }}>Schnellzugriff</h3>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {quickLinks.map((link) => {
-          const Icon = link.icon
-          return (
-            <Link key={link.path} to={link.path}>
-              <WhiteboardCard className="hover:shadow-md transition-all duration-200 hover:border-[#01696f] group">
-                <Icon size={22} style={{ color: '#01696f' }} className="mb-3" />
-                <div className="font-semibold text-sm mb-0.5" style={{ color: 'var(--text-primary)' }}>{link.label}</div>
-                <div className="text-xs" style={{ color: 'var(--text-secondary)' }}>{link.desc}</div>
-                <ArrowRight size={14} className="mt-3 group-hover:translate-x-1 transition-transform" style={{ color: '#01696f' }} />
-              </WhiteboardCard>
-            </Link>
-          )
-        })}
+            <div className="space-y-1.5">
+              {group.items.map((item) => {
+                const Icon = item.icon
+                return (
+                  <Link key={item.path} to={item.path} className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg group transition-colors" style={{ color: 'var(--text-primary)' }}>
+                    <Icon size={16} style={{ color: item.accent }} />
+                    <span className="text-sm font-medium flex-1">{item.label}</span>
+                    <ArrowRight size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" style={{ color: item.accent }} />
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
+        ))}
       </div>
-    </motion.div>
+
+      <Callout kind="info" title="Roter Faden">
+        Die Abschnitte bauen aufeinander auf: <strong>Personas</strong> → <strong>User Stories</strong> →
+        <strong> Story Map</strong> → <strong>UML-Diagramme</strong> → <strong>Prototyp</strong>. Das Prinzip
+        <em> Basis ⊆ Erweitert</em> und <em>Modell ⊇ Prototyp</em> hält alles konsistent – nachprüfbar in der Traceability.
+      </Callout>
+    </SectionShell>
+  )
+}
+
+function HowCard({ icon: Icon, title, accent, children, pres }: { icon: React.ElementType; title: string; accent: string; children: React.ReactNode; pres?: string }) {
+  return (
+    <div className="rounded-xl p-4" style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)' }} data-pres={pres}>
+      <div className="flex items-center gap-2 mb-2">
+        <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: `${accent}18`, color: accent }}><Icon size={16} /></div>
+        <h4 className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>{title}</h4>
+      </div>
+      <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{children}</p>
+    </div>
   )
 }

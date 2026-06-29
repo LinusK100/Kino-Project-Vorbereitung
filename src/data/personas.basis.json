@@ -1,0 +1,103 @@
+[
+  {
+    "id": "endkunde",
+    "name": "Endkunde / Nutzer",
+    "role": "Kinobesucher:in",
+    "age": 35,
+    "avatar": "EK",
+    "color": "#7a39bb",
+    "tier": "basis",
+    "group": "Kundschaft",
+    "roleEnum": "KUNDE",
+    "umbrella": true,
+    "refinedBy": ["stammkunde", "student", "rentner", "familie"],
+    "background": "Dach-Persona für alle Kinobesucher:innen. Im erweiterten Modell wird sie ausdifferenziert in Stammkundin (Lara), Student (Jonas), Seniorin (Hannelore) und Familienmutter (Sandra). Bucht online (Web/Mobile) oder an der Kasse – je nach Lebenslage und Bedürfnis.",
+    "goals": [
+      "Schnell und unkompliziert Tickets kaufen (mobil unter 60 Sekunden)",
+      "Lieblingsplätze verbindlich reservieren (kein Parallelzugriff) und Sitzplan im Voraus einsehen",
+      "Den besten freien Platz per KI-Vorschlag mit einem Tipp übernehmen",
+      "Rabatte (Senior, Student, Kind, Gruppe) ohne Hürden anwenden",
+      "Barrierefreie Plätze und Begleitperson-Optionen klar erkennen",
+      "Bonuspunkte sammeln, einsehen und einlösen"
+    ],
+    "frustrations": [
+      "Lange Ladezeiten und komplizierte Mobile-Buchung",
+      "Sitzplan ohne Komfort- oder Barrierefreiheits-Details",
+      "Bonuspunkte-Stand veraltet oder umständlich einzulösen",
+      "Gruppen-Tickets nur einzeln buchbar",
+      "Keine modernen Zahlmittel (Apple Pay / Google Pay)"
+    ],
+    "motto": "In 60 Sekunden gebucht, der Lieblingsplatz reserviert – und an der Kasse einfach Senior:in oder Student:in sein dürfen."
+  },
+  {
+    "id": "monika",
+    "name": "Monika Berger",
+    "role": "Kassiererin",
+    "age": 38,
+    "avatar": "MB",
+    "color": "#01696f",
+    "tier": "basis",
+    "group": "Betrieb",
+    "roleEnum": "KASSE",
+    "background": "Arbeitet seit 8 Jahren als Kassiererin im Kino. Ist täglich mit dem System konfrontiert und kennt jeden Handgriff.",
+    "goals": [
+      "Tickets schnell und fehlerfrei verkaufen",
+      "Warteschlangen minimieren",
+      "Einfache Stornierungen durchführen"
+    ],
+    "frustrations": [
+      "Langsame Ladezeiten im System",
+      "Komplizierte Sitzplatzbuchung unter Zeitdruck",
+      "Keine Übersicht bei ausverkauften Vorstellungen"
+    ],
+    "motto": "Schnell, korrekt, freundlich – in dieser Reihenfolge."
+  },
+  {
+    "id": "thomas",
+    "name": "Thomas Kuhn",
+    "role": "Kinomanager",
+    "age": 45,
+    "avatar": "TK",
+    "color": "#006494",
+    "tier": "basis",
+    "group": "Management & IT",
+    "roleEnum": "MANAGER",
+    "background": "Leitet das Kino seit 12 Jahren. Verantwortlich für Programm, Personal und Umsatzplanung.",
+    "goals": [
+      "Tagesberichte und Auslastung einsehen",
+      "Vorstellungen und Preise verwalten – auch dynamisch nach Nachfrage",
+      "Auslastung kommender Vorstellungen prognostizieren",
+      "Personalplanung optimieren"
+    ],
+    "frustrations": [
+      "Keine konsolidierte Umsatzansicht",
+      "Manuelle Berichte aus verschiedenen Quellen",
+      "Fehlende Echtzeitdaten zur Auslastung",
+      "Preise lassen sich nicht an Nachfragespitzen anpassen"
+    ],
+    "motto": "Was man nicht messen kann, kann man nicht verbessern."
+  },
+  {
+    "id": "kevin",
+    "name": "Kevin Mayer",
+    "role": "Einlasspersonal",
+    "age": 22,
+    "avatar": "KM",
+    "color": "#437a22",
+    "tier": "basis",
+    "group": "Betrieb",
+    "roleEnum": "EINLASS",
+    "background": "Studentenjob, arbeitet Wochenenden. Scannt Tickets und kontrolliert den Einlass bei Premieren.",
+    "goals": [
+      "Tickets schnell und eindeutig validieren",
+      "Bei technischen Problemen einfache Fallbacks",
+      "Klare Sitzinformationen auf dem Ticket"
+    ],
+    "frustrations": [
+      "Scanner-App stürzt bei großem Andrang ab",
+      "Unleserliche QR-Codes auf Handybildschirmen",
+      "Keine Offline-Funktionalität"
+    ],
+    "motto": "Einfach reinlassen – ohne Drama."
+  }
+]
