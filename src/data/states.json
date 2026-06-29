@@ -245,7 +245,7 @@
     },
     {
       "id": "x2",
-      "trigger": "ticket: GÜLTIG → STORNIERT (tt2)  ⇔  vorstellungSitz: BELEGT → FREI (t6)",
+      "trigger": "ticket: GÜLTIG → STORNIERT (tt2) ⇔ vorstellungSitz: BELEGT → FREI (t6)",
       "effect": "Storno koppelt beide Automaten: Ticket wird STORNIERT, Buchung STORNIERT, Zahlung ERSTATTET, und der Sitz wird wieder FREI (verkaufbar).",
       "classes": ["Ticket", "Buchung", "Zahlung", "VorstellungSitz"]
     },
