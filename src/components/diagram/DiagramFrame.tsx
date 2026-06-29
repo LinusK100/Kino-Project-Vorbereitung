@@ -9,13 +9,15 @@ interface DiagramFrameProps {
   minHeight?: number
   /** start zoomed to fit width (default true) */
   zoomable?: boolean
-  /** auto-shrink to fit the frame width on load (good for wide/large diagrams) */
+  /** auto-shrink to fit the frame on load (good for wide/large diagrams) */
   fitOnLoad?: boolean
+  /** 'both' fits the whole diagram into the frame; 'width' keeps text readable and scrolls vertically */
+  fitMode?: 'both' | 'width'
   /** dependency that, when changed, re-triggers the fit (e.g. active diagram id) */
   fitKey?: string | number
 }
 
-export function DiagramFrame({ children, textView, legend, minHeight = 420, zoomable = true, fitOnLoad = false, fitKey }: DiagramFrameProps) {
+export function DiagramFrame({ children, textView, legend, minHeight = 420, zoomable = true, fitOnLoad = false, fitMode = 'both', fitKey }: DiagramFrameProps) {
   const [zoom, setZoom] = useState(1)
   const [asText, setAsText] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -35,7 +37,8 @@ export function DiagramFrame({ children, textView, legend, minHeight = 420, zoom
       const ch = (svg.height?.baseVal?.value || 0) + 32
       const vw = vp.clientWidth - 8, vh = 632
       if (cw > 32 && ch > 32) {
-        setZoom(Math.max(0.42, Math.min(1, +Math.min(vw / cw, vh / ch).toFixed(2))))
+        const ratio = fitMode === 'width' ? vw / cw : Math.min(vw / cw, vh / ch)
+        setZoom(Math.max(0.42, Math.min(1, +ratio.toFixed(2))))
         return true
       }
       return false
@@ -43,7 +46,7 @@ export function DiagramFrame({ children, textView, legend, minHeight = 420, zoom
     // retry a few times because the class diagram lays out asynchronously (elk)
     const timers = [60, 250, 600, 1100].map((d) => window.setTimeout(() => { if (!done) done = measure() }, d))
     return () => timers.forEach(window.clearTimeout)
-  }, [fitOnLoad, fitKey])
+  }, [fitOnLoad, fitMode, fitKey])
 
   return (
     <div className="rounded-xl overflow-hidden" style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>

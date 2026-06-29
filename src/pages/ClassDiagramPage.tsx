@@ -75,7 +75,7 @@ export default function ClassDiagramPage() {
       </div>
 
       <div data-pres="diagram">
-        <DiagramFrame minHeight={420} legend={<ClassLegend />} fitOnLoad fitKey={`${view}-${selected ?? ''}`}>
+        <DiagramFrame minHeight={420} legend={<ClassLegend />} fitOnLoad fitMode="width" fitKey={`${view}-${selected ?? ''}`}>
           <ClassDiagram classes={visible} relationships={uml.relationships} selectedId={selected} onSelect={setSelected} />
         </DiagramFrame>
       </div>

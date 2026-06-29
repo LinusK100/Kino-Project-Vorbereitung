@@ -34,9 +34,9 @@ export default function InnovationPage() {
 
   return (
     <SectionShell
-      kicker="Synthese"
+      kicker="Ergebnis"
       title="Innovation"
-      subtitle={innovation.subtitle}
+      subtitle="Recherchierte Zukunfts-Ideen (2026)"
       icon={Sparkles}
       accent={ACCENT}
       presentation={steps}

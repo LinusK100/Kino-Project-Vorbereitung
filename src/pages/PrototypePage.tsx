@@ -951,7 +951,7 @@ export default function PrototypePage() {
 
   return (
     <SectionShell
-      kicker="Produkt"
+      kicker="Ergebnis"
       title="Prototyp"
       subtitle="Klickbarer Hi-Fi-Prototyp · Online-Buchungs-Flow"
       icon={Smartphone}
