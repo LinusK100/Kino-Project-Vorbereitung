@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Sidebar } from './Sidebar'
 import { NAV } from './nav'
@@ -13,7 +13,11 @@ interface AppShellProps { children: React.ReactNode }
 export function AppShell({ children }: AppShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const location = useLocation()
+  const mainRef = useRef<HTMLElement>(null)
   const title = titleByPath[location.pathname] ?? 'CineTicket'
+
+  // Always start a new section at the top
+  useEffect(() => { mainRef.current?.scrollTo({ top: 0 }) }, [location.pathname])
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -32,7 +36,7 @@ export function AppShell({ children }: AppShellProps) {
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <TopBar title={title} onMenuClick={() => setSidebarOpen(true)} />
-        <main className="flex-1 overflow-auto p-4 md:p-6">{children}</main>
+        <main ref={mainRef} className="flex-1 overflow-auto p-4 md:p-6">{children}</main>
       </div>
     </div>
   )

@@ -1,5 +1,5 @@
-import { NavLink } from 'react-router-dom'
-import { Film } from 'lucide-react'
+import { NavLink, Link } from 'react-router-dom'
+import { Film, X } from 'lucide-react'
 import { NAV } from './nav'
 
 interface SidebarProps { onClose?: () => void }
@@ -10,16 +10,21 @@ export function Sidebar({ onClose }: SidebarProps) {
       className="flex flex-col h-full"
       style={{ background: 'var(--sidebar-bg)', borderRight: '1px solid var(--border-color)' }}
     >
-      <div className="p-5 border-b" style={{ borderColor: 'var(--border-color)' }}>
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: '#01696f' }}>
+      <div className="p-4 border-b flex items-center justify-between gap-2" style={{ borderColor: 'var(--border-color)' }}>
+        <Link to="/" onClick={onClose} className="flex items-center gap-2.5 rounded-lg p-1 -m-1 transition-opacity hover:opacity-80" aria-label="Zum Dashboard">
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: '#01696f' }}>
             <Film size={18} color="white" />
           </div>
           <div>
-            <div className="font-bold text-sm" style={{ fontFamily: 'var(--font-display)', color: 'var(--text-primary)' }}>CineTicket</div>
+            <div className="font-bold text-sm leading-tight" style={{ fontFamily: 'var(--font-display)', color: 'var(--text-primary)' }}>CineTicket</div>
             <div className="text-[11px]" style={{ color: 'var(--text-secondary)' }}>Systemanalyse & Entwurf</div>
           </div>
-        </div>
+        </Link>
+        {onClose && (
+          <button onClick={onClose} aria-label="Menü schließen" className="md:hidden p-2 rounded-lg" style={{ color: 'var(--text-secondary)' }}>
+            <X size={18} />
+          </button>
+        )}
       </div>
 
       <nav className="flex-1 overflow-y-auto p-3 space-y-4">
@@ -41,6 +46,7 @@ export function Sidebar({ onClose }: SidebarProps) {
                     style={({ isActive }) => ({
                       color: isActive ? item.accent : 'var(--text-secondary)',
                       background: isActive ? `${item.accent}14` : 'transparent',
+                      boxShadow: isActive ? `inset 3px 0 0 ${item.accent}` : 'none',
                     })}
                   >
                     {({ isActive }) => (
