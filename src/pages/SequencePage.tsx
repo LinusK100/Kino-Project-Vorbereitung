@@ -78,6 +78,7 @@ function SeqLegend() {
       <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded" style={{ background: '#475569' }} /> Akteur</span>
       <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded" style={{ background: '#4f46e5' }} /> «control»</span>
       <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded" style={{ background: '#7a39bb' }} /> «entity»</span>
+      <span className="flex items-center gap-1.5"><span className="w-2 h-4 rounded-sm" style={{ border: '1px solid var(--text-secondary)' }} /> Aktivierung</span>
       <span className="flex items-center gap-1.5">「Badge」 = Statuswechsel (→ Zustandsdiagramm)</span>
     </div>
   )

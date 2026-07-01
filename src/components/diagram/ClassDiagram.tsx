@@ -35,6 +35,10 @@ function sizeOf(c: UmlClass): { w: number; h: number } {
 
 export function ClassDiagram({ classes, relationships, selectedId, onSelect }: Props) {
   const [laid, setLaid] = useState<Laid | null>(null)
+  // Render-time Reset: altes Layout sofort verwerfen, wenn die Klassenmenge wechselt,
+  // damit weder ein veraltetes SVG gerendert noch vom Fit-on-load vermessen wird.
+  const [prevClasses, setPrevClasses] = useState(classes)
+  if (classes !== prevClasses) { setPrevClasses(classes); setLaid(null) }
   const idset = useMemo(() => new Set(classes.map((c) => c.id)), [classes])
 
   // synthetic class->enum dependency edges (status attributes)
@@ -119,7 +123,10 @@ export function ClassDiagram({ classes, relationships, selectedId, onSelect }: P
 
       {/* nodes */}
       {laid.nodes.map((n) => {
-        const c = classes.find((cl) => cl.id === n.id)!
+        // Beim View-Wechsel kann das alte Layout noch Klassen enthalten, die es
+        // in der neuen Ansicht nicht gibt — bis elk fertig ist, überspringen.
+        const c = classes.find((cl) => cl.id === n.id)
+        if (!c) return null
         const color = UML_GROUP_COLOR[c.group]
         const dim = relatedToSel ? !relatedToSel.has(n.id) : false
         const sel = selectedId === n.id

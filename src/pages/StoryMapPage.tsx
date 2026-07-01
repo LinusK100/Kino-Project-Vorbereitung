@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Map, Ticket, ScanLine, Calendar, UserCircle, Settings, Search, LayoutGrid, CheckCircle2, Utensils, Wrench, Building2, CircleDot } from 'lucide-react'
+import { Map, Ticket, ScanLine, Calendar, UserCircle, Settings, Search, LayoutGrid, CheckCircle2, Coffee, Wrench, Building2, CircleDot } from 'lucide-react'
 import { SectionShell } from '@/components/shared/SectionShell'
 import { Callout } from '@/components/shared/Callout'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
@@ -11,7 +11,7 @@ import type { UserStory, ReleaseNumber, PresentationStep } from '@/types'
 const ACCENT = '#006494'
 const iconMap: Record<string, React.ElementType> = {
   ticket: Ticket, 'scan-line': ScanLine, calendar: Calendar, 'user-circle': UserCircle,
-  settings: Settings, search: Search, 'layout-grid': LayoutGrid, utensils: Utensils,
+  settings: Settings, search: Search, 'layout-grid': LayoutGrid, coffee: Coffee,
   wrench: Wrench, 'building-2': Building2,
 }
 const activityColors = ['#01696f', '#006494', '#7a39bb', '#437a22', '#a13544', '#964219', '#2d6a8c', '#9333ea', '#c2410c', '#0e7490']
@@ -164,7 +164,7 @@ export default function StoryMapPage() {
                 <SheetHeader>
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
                     <span className="font-mono text-sm font-bold" style={{ color: ACCENT }}>{selected.id}</span>
-                    <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{ background: c.bg, color: c.text, border: `1px solid ${c.border}` }}>{c.label}</span>
+                    <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{ background: isDark ? c.bgDark : c.bg, color: isDark ? c.textDark : c.text, border: `1px solid ${isDark ? c.borderDark : c.border}` }}>{c.label}</span>
                   </div>
                   <SheetTitle style={{ color: 'var(--text-primary)' }}>{selected.title}</SheetTitle>
                 </SheetHeader>

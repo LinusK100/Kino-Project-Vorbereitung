@@ -22,13 +22,16 @@ export function DiagramFrame({ children, textView, legend, minHeight = 420, zoom
   const [asText, setAsText] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
+  const userZoomed = useRef(false)
 
   // Fit on load: measure the SVG's intrinsic size (zoom-independent) and pick a
   // zoom so the whole diagram fits the frame for an immediate overview.
   useLayoutEffect(() => {
     if (!fitOnLoad) return
     let done = false
+    userZoomed.current = false
     const measure = () => {
+      if (userZoomed.current) return true // Nutzer hat manuell gezoomt — nicht überschreiben
       const vp = scrollRef.current, c = contentRef.current
       if (!vp || !c) return false
       const svg = c.querySelector('svg')
@@ -43,9 +46,12 @@ export function DiagramFrame({ children, textView, legend, minHeight = 420, zoom
       }
       return false
     }
-    // retry a few times because the class diagram lays out asynchronously (elk)
-    const timers = [60, 250, 600, 1100].map((d) => window.setTimeout(() => { if (!done) done = measure() }, d))
-    return () => timers.forEach(window.clearTimeout)
+    // elk layouts the big class diagram asynchronously (seconds) — observe the DOM
+    // and fit as soon as the SVG appears; timers only as fallback.
+    const obs = new MutationObserver(() => { if (!done) done = measure(); if (done) obs.disconnect() })
+    if (contentRef.current) obs.observe(contentRef.current, { childList: true, subtree: true })
+    const timers = [60, 400, 1500].map((d) => window.setTimeout(() => { if (!done) done = measure() }, d))
+    return () => { obs.disconnect(); timers.forEach(window.clearTimeout) }
   }, [fitOnLoad, fitMode, fitKey])
 
   return (
@@ -66,10 +72,10 @@ export function DiagramFrame({ children, textView, legend, minHeight = 420, zoom
         </div>
         {!asText && zoomable && (
           <div className="flex items-center gap-1">
-            <IconBtn onClick={() => setZoom((z) => Math.max(0.5, +(z - 0.1).toFixed(2)))} label="Verkleinern"><ZoomOut size={15} /></IconBtn>
+            <IconBtn onClick={() => { userZoomed.current = true; setZoom((z) => Math.max(0.3, +(z - 0.1).toFixed(2))) }} label="Verkleinern"><ZoomOut size={15} /></IconBtn>
             <span className="text-xs font-mono w-12 text-center" style={{ color: 'var(--text-secondary)' }}>{Math.round(zoom * 100)}%</span>
-            <IconBtn onClick={() => setZoom((z) => Math.min(2, +(z + 0.1).toFixed(2)))} label="Vergrößern"><ZoomIn size={15} /></IconBtn>
-            <IconBtn onClick={() => { setZoom(1); scrollRef.current?.scrollTo({ left: 0, top: 0 }) }} label="Zurücksetzen"><Maximize2 size={15} /></IconBtn>
+            <IconBtn onClick={() => { userZoomed.current = true; setZoom((z) => Math.min(2, +(z + 0.1).toFixed(2))) }} label="Vergrößern"><ZoomIn size={15} /></IconBtn>
+            <IconBtn onClick={() => { userZoomed.current = true; setZoom(1); scrollRef.current?.scrollTo({ left: 0, top: 0 }) }} label="Zurücksetzen"><Maximize2 size={15} /></IconBtn>
           </div>
         )}
       </div>

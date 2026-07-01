@@ -64,6 +64,15 @@
 - [x] Präsentations-Tour end-to-end getestet (inkl. Modus-Wechsel-Schritte)
 - [x] Cleanup: stray `@/`-Ordner entfernt, tote Dateien weg; Lint nur noch 2 shadcn-Hinweise
 
+## Phase 8 — Externes Review & Politur (2026-07-02)
+- [x] Automatisierte Inhalts-Validierung (0 Fehler) + Playwright-Audit; Ergebnisse in
+      [`REVIEW_REPORT.md`](./REVIEW_REPORT.md)
+- [x] UML: Initial-Pfeil im Sitz-Automaten, Aktivierungsbalken in Sequenzdiagrammen
+- [x] Fix: Crash bei Klassendiagramm-Ansichtswechsel (Enums u. a.), Fit-on-load „Alle 82"
+- [x] Inhalt: Roadmap-Module im Prototyp-Erweitert, „Hohe/Mittlere Priorität", KPI 9,
+      Smile-2-Poster (404) im Prototyp-Bundle
+- [x] Lint vollständig grün (public/ ignoriert, ui/-Ausnahme, Hook-Deps sauber)
+
 ## Changelog
 - 2026-06-29: Projektstart, Analyse, Build-Fix, Plan erstellt.
 - 2026-06-29: Phase 1 Foundation + Phase 2 Anforderungen fertig & per Screenshot verifiziert
@@ -72,3 +81,6 @@
 - 2026-06-29: Phase 4 Dashboard/Traceability/Innovation/Glossar.
 - 2026-06-29: Phase 5 Prototyp (externer Start im neuen Tab) + Konsistenz.
 - 2026-06-29: Phase 6 QA-Sweep Light/Dark, Cleanup, Lint/Build grün. ALLE PHASEN FERTIG.
+- 2026-07-02: Phase 8 Review-Pass: UML-Notation (Initial-Pfeil, Aktivierungen),
+  Klassendiagramm-Crash + Fit behoben, Prototyp-Roadmap sichtbar, Sprach-/KPI-Fixes,
+  Lint 0 Probleme. Details in REVIEW_REPORT.md.

@@ -1,4 +1,4 @@
-import { useId, useMemo } from 'react'
+import { useCallback, useId, useMemo } from 'react'
 import type { SequenceDiagram as SeqType, SeqMessage } from '@/types'
 import { stateEffectColor } from '@/lib/statusColors'
 
@@ -29,13 +29,26 @@ export function SequenceDiagram({ diagram, showFragments }: { diagram: SeqType; 
     return set
   }, [diagram, showFragments])
 
-  const messages = diagram.messages.filter((m) => !hidden.has(m.id))
-  const colX = (id: string) => {
+  const messages = useMemo(() => diagram.messages.filter((m) => !hidden.has(m.id)), [diagram, hidden])
+  const colX = useCallback((id: string) => {
     const i = diagram.participants.findIndex((p) => p.id === id)
     return LEFT + 80 + i * COL_GAP
-  }
-  const rowOf = (id: string) => messages.findIndex((m) => m.id === id)
+  }, [diagram])
+  const rowOf = useCallback((id: string) => messages.findIndex((m) => m.id === id), [messages])
   const yOf = (row: number) => HEAD_H + TOP_PAD + row * ROW_H
+
+  // Aktivierungsbalken: Ausführungsspanne je Lebenslinie (erste bis letzte Beteiligung)
+  const activations = useMemo(() => diagram.participants
+    .filter((p) => p.kind !== 'actor')
+    .map((p) => {
+      const rows = messages
+        .map((m, i) => (m.from === p.id || m.to === p.id ? i : -1))
+        .filter((i) => i >= 0)
+      if (rows.length === 0) return null
+      return { id: p.id, x: colX(p.id), top: Math.min(...rows), bottom: Math.max(...rows) }
+    })
+    .filter((a): a is { id: string; x: number; top: number; bottom: number } => !!a),
+  [diagram, messages, colX])
 
   const width = LEFT + 80 + (diagram.participants.length - 1) * COL_GAP + 200
   const height = HEAD_H + TOP_PAD + messages.length * ROW_H + 40
@@ -56,7 +69,7 @@ export function SequenceDiagram({ diagram, showFragments }: { diagram: SeqType; 
     }).filter(Boolean) as { fr: typeof diagram.fragments[0]; top: number; bottom: number; minX: number; maxX: number; operandStarts: { guard: string; row: number }[]; span: number }[]
     // nesting depth
     return f.map((a) => ({ ...a, depth: f.filter((b) => b !== a && b.top <= a.top && b.bottom >= a.bottom && b.span > a.span).length }))
-  }, [showFragments, messages]) // colX/rowOf derive from messages
+  }, [showFragments, diagram, messages, colX, rowOf])
 
   return (
     <svg viewBox={`0 0 ${width} ${height}`} width={width} height={height} role="img" aria-label={`Sequenzdiagramm ${diagram.title}`} style={{ fontFamily: 'var(--font-body)' }}>
@@ -70,6 +83,12 @@ export function SequenceDiagram({ diagram, showFragments }: { diagram: SeqType; 
         const x = colX(p.id)
         return <line key={p.id} x1={x} y1={HEAD_H} x2={x} y2={height - 24} stroke="var(--border-color)" strokeWidth={1.4} strokeDasharray="4 4" />
       })}
+
+      {/* activation bars (Ausführungsspannen) */}
+      {activations.map((a) => (
+        <rect key={a.id} x={a.x - 5} y={yOf(a.top) - 14} width={10} height={(a.bottom - a.top) * ROW_H + 28}
+          rx={2} fill="var(--card-bg)" stroke="var(--text-secondary)" strokeOpacity={0.55} strokeWidth={1.1} />
+      ))}
 
       {/* fragment frames (behind messages) */}
       {frames.map(({ fr, top, bottom, minX, maxX, operandStarts, depth }) => {

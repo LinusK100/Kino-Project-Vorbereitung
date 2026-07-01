@@ -1071,7 +1071,7 @@ export default function PrototypePage() {
                 className="text-xs font-bold px-2.5 py-1 rounded-full"
                 style={{ background: '#01696f', color: 'white' }}
               >
-                {info.step} / 5
+                {info.step} / {screens.length}
               </span>
               <h3 className="font-semibold" style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>
                 {info.title}
@@ -1161,6 +1161,26 @@ export default function PrototypePage() {
                 <div className="min-w-0">
                   <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{m.name}</p>
                   <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>{m.beschreibung}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <h4 className="text-sm font-bold mt-5 mb-1" style={{ color: 'var(--text-primary)' }}>Roadmap: modelliert, noch nicht gebaut</h4>
+          <p className="text-xs mb-3" style={{ color: 'var(--text-secondary)' }}>
+            Diese Module sind vollständig im UML und in Stories modelliert (implementedInPrototype: false) und warten auf den Ausbau.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            {prototype.roadmap.map((r) => (
+              <div key={r.modul} className="flex items-start gap-2.5 rounded-xl p-3" style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
+                <span className="mt-0.5 text-xs px-2 py-0.5 rounded-full font-semibold flex-shrink-0" style={{ background: '#d1990020', color: '#d19900' }}>
+                  Roadmap
+                </span>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{r.modul}</p>
+                  <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+                    {r.persona} · {r.stories.join(', ')} · {r.umlClasses.join(', ')}
+                  </p>
                 </div>
               </div>
             ))}

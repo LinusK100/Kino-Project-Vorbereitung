@@ -5,7 +5,8 @@ import {
 } from 'lucide-react'
 import { SectionShell } from '@/components/shared/SectionShell'
 import { NAV } from '@/components/layout/nav'
-import { personas, stories, uml, sequences } from '@/data/content'
+import { personas, stories, uml, sequences, stateMachines } from '@/data/content'
+import { extraMachines } from '@/data/statesExtra'
 import type { PresentationStep } from '@/types'
 
 const ACCENT = '#01696f'
@@ -14,13 +15,14 @@ const kpis = [
   { label: 'Personas', value: `${personas.basis.length}–${personas.erweitert.length}`, icon: Users },
   { label: 'User Stories', value: `${stories.basis.length}–${stories.erweitert.length}`, icon: ListChecks },
   { label: 'UML-Klassen', value: uml.classes.length, icon: Boxes },
-  { label: 'Diagramme', value: sequences.length + 4, icon: PresentationIcon },
+  // Klassendiagramm + Sequenzdiagramme + Zustandsautomaten (inkl. Enum-Automaten)
+  { label: 'Diagramme', value: 1 + sequences.length + stateMachines.machines.length + extraMachines.length, icon: PresentationIcon },
 ]
 
 const steps: PresentationStep[] = [
   { id: 'welcome', title: 'Willkommen', body: 'Diese Website dokumentiert das Kino-Projekt CineTicket – von den Anforderungen bis zum Prototyp. Diese kurze Tour erklärt die Bedienung.', target: '[data-pres="hero"]' },
   { id: 'aufbau', title: 'Aufbau', body: 'Links sind die Abschnitte gruppiert: Anforderungen, Modellierung und Ergebnis. Du arbeitest sie der Reihe nach durch.', target: '[data-pres="structure"]' },
-  { id: 'modi', title: 'Einfach & Erweitert', body: 'Jeder Abschnitt hat zwei Detailgrade: Einfach (MVP) und Erweitert (Vollausbau). Umschalten oben rechts.', target: '[data-pres="how-modes"]' },
+  { id: 'modi', title: 'Einfach & Erweitert', body: 'Jeder Abschnitt hat zwei Detailgrade: Einfach (MVP) und Erweitert (Vollausbau). Umschalten oben rechts in jedem Abschnitt.', target: '[data-pres="how-modes"]' },
   { id: 'praesentation', title: 'Präsentationsmodus', body: 'Jeder Abschnitt hat eine geführte Präsentation wie diese – mit den Pfeilen weiter oder „Auto". Esc beendet.', target: '[data-pres="how-present"]' },
 ]
 
@@ -50,7 +52,7 @@ export default function OverviewPage() {
       {/* How to use */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
         <HowCard icon={Layers} title="Einfach & Erweitert" accent="#006494" pres="how-modes">
-          Zwei Detailgrade je Abschnitt: <Layers3 size={12} className="inline" /> Erweitert zeigt den Vollausbau. Umschalten oben rechts.
+          Zwei Detailgrade je Abschnitt: <Layers3 size={12} className="inline" /> Erweitert zeigt den Vollausbau. Umschalten oben rechts in jedem Abschnitt.
         </HowCard>
         <HowCard icon={PresentationIcon} title="Präsentation" accent="#7a39bb" pres="how-present">
           Geführte Tour je Abschnitt – mit den Pfeilen oder „Auto" durchgehen.

@@ -112,6 +112,12 @@ export function StateDiagram({ machine }: { machine: StateMachine }) {
   const uid = useId().replace(/:/g, '')
   const L = LAYOUTS[machine.id] ?? autoLayout(machine)
 
+  // UML: der Start-Pseudozustand braucht immer eine Transition zum Initialzustand.
+  // Fehlt sie in den Daten (z. B. vorstellungSitz), wird sie hier synthetisiert.
+  const transitions: SmTransition[] = machine.transitions.some((t) => t.from === '_initial')
+    ? machine.transitions
+    : [{ id: '_t0', from: '_initial', to: machine.initial, event: '' }, ...machine.transitions]
+
   const nodeColor = (id: string) => machine.states.find((s) => s.id === id)?.color ?? '#64748b'
 
   type P = { d: string; lx: number; ly: number; dashed?: boolean }
@@ -134,7 +140,9 @@ export function StateDiagram({ machine }: { machine: StateMachine }) {
     }
     if (hint.side === 'spine') {
       const down = b.y > a.y
-      const sy = down ? a.y + HH : a.y - HH
+      // Start-Pseudozustand ist ein Kreis (r=9), kein Kasten
+      const aH = t.from === '_initial' ? 10 : HH
+      const sy = down ? a.y + aH : a.y - aH
       const ey = down ? b.y - HH : b.y + HH
       return { d: `M ${a.x} ${sy} C ${a.x} ${(sy + ey) / 2}, ${b.x} ${(sy + ey) / 2}, ${b.x} ${ey}`, lx: (a.x + b.x) / 2 + 64, ly: (sy + ey) / 2 + dy, dashed: hint.dashed }
     }
@@ -156,7 +164,7 @@ export function StateDiagram({ machine }: { machine: StateMachine }) {
       </defs>
 
       {/* edges */}
-      {machine.transitions.map((t) => {
+      {transitions.map((t) => {
         const p = path(t)
         if (!p) return null
         const label = edgeLabel(t)
@@ -164,10 +172,12 @@ export function StateDiagram({ machine }: { machine: StateMachine }) {
         return (
           <g key={t.id}>
             <path d={p.d} fill="none" stroke="var(--text-secondary)" strokeWidth={1.6} strokeDasharray={p.dashed ? '5 4' : undefined} markerEnd={`url(#arr-${uid})`} opacity={p.dashed ? 0.55 : 0.9} />
-            <g transform={`translate(${p.lx - w / 2}, ${p.ly - 9})`}>
-              <rect width={w} height={18} rx={5} fill="var(--card-bg)" stroke="var(--border-color)" strokeWidth={1} />
-              <text x={w / 2} y={13} textAnchor="middle" fontSize={10.5} fill="var(--text-primary)" style={{ fontFamily: 'var(--mono, monospace)' }}>{label}</text>
-            </g>
+            {label && (
+              <g transform={`translate(${p.lx - w / 2}, ${p.ly - 9})`}>
+                <rect width={w} height={18} rx={5} fill="var(--card-bg)" stroke="var(--border-color)" strokeWidth={1} />
+                <text x={w / 2} y={13} textAnchor="middle" fontSize={10.5} fill="var(--text-primary)" style={{ fontFamily: 'var(--mono, monospace)' }}>{label}</text>
+              </g>
+            )}
           </g>
         )
       })}

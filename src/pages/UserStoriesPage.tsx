@@ -13,6 +13,7 @@ import type { UserStory, Priority, PresentationStep } from '@/types'
 const ACCENT = '#006494'
 const priorities: Priority[] = ['high', 'medium', 'low']
 const priorityLabel: Record<Priority, string> = { high: 'Hoch', medium: 'Mittel', low: 'Niedrig' }
+const priorityLong: Record<Priority, string> = { high: 'Hohe Priorität', medium: 'Mittlere Priorität', low: 'Niedrige Priorität' }
 const priorityColor: Record<Priority, string> = { high: '#ef4444', medium: '#f59e0b', low: '#22c55e' }
 const releaseLabel: Record<number, string> = { 1: 'R1 – MVP', 2: 'R2 – Erweiterung', 3: 'R3 – Vollausbau' }
 const releaseColor: Record<number, string> = { 1: '#437a22', 2: '#d19900', 3: '#a13544' }
@@ -160,7 +161,7 @@ export default function UserStoriesPage() {
                 <SheetHeader>
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
                     <span className="font-mono text-sm font-bold" style={{ color: ACCENT }}>{selected.id}</span>
-                    <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{ background: `${priorityColor[selected.priority]}20`, color: priorityColor[selected.priority] }}>{priorityLabel[selected.priority]}e Priorität</span>
+                    <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{ background: `${priorityColor[selected.priority]}20`, color: priorityColor[selected.priority] }}>{priorityLong[selected.priority]}</span>
                     <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{ background: `${releaseColor[selected.release]}20`, color: releaseColor[selected.release] }}>{releaseLabel[selected.release]}</span>
                   </div>
                   <SheetTitle style={{ color: 'var(--text-primary)' }}>{selected.title}</SheetTitle>
