@@ -84,3 +84,6 @@
 - 2026-07-02: Phase 8 Review-Pass: UML-Notation (Initial-Pfeil, Aktivierungen),
   Klassendiagramm-Crash + Fit behoben, Prototyp-Roadmap sichtbar, Sprach-/KPI-Fixes,
   Lint 0 Probleme. Details in REVIEW_REPORT.md.
+- 2026-07-02: Prototyp-Seite verschlankt: alter In-Page-iPhone-Mockup (6 Screens,
+  hartkodiert) entfernt; die Seite führt jetzt direkt zum echten Prototyp (neuer Tab)
+  und zeigt JSON-getrieben Kennzahlen, Rollen, Wizard-Schritte, Technik und Roadmap.

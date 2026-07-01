@@ -42,8 +42,10 @@ export const innovation = innovationRaw as {
 }
 export const prototype = prototypeRaw as {
   beschreibung: string
+  tech: { framework: string; build: string; styling: string; api: string; accessibility: string; ansicht: string[]; theme: string[] }
+  rollen: { id: string; nutzerrolle: string; label: string; status: string; beschreibung: string }[]
   stats: { rollenImplementiert: number; rollenGesamt: number; umlImplementiert: number; umlDesignOnly: number; storiesImplementiert: number }
-  module: { id: string; rolle: string; name: string; status: string; beschreibung: string; stories: string[]; umlClasses: string[] }[]
+  module: { id: string; rolle: string; name: string; status: string; beschreibung: string; stories: string[]; umlClasses: string[]; schritte?: { nr: number; name: string; stories: string[] }[] }[]
   roadmap: { modul: string; rolle: string; persona: string; stories: string[]; umlClasses: string[] }[]
 }
 
