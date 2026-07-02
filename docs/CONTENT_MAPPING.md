@@ -1,5 +1,11 @@
 # Inhalts-Mapping: Doku v5.1 → Website
 
+> **Historisch (Migrationsplan).** Die Zieldateien heißen inzwischen
+> `personas.basis.json`/`personas.erweitert.json` usw. (maßgeblich:
+> `src/data/content.ts`), und **Traceability + Glossar wurden bewusst
+> entfernt** — die beiden Zeilen unten sind nur noch Migrations-Historie.
+> Die Konsistenz-Anker am Ende gelten weiterhin.
+
 Quelle: `../../CineTicket_Projektdokumentation/` (relativ zu kino-projekt).
 
 | Abschnitt | Quelldatei(en) | Ziel in src/data | Einfach | Erweitert |

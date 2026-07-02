@@ -1,9 +1,11 @@
 # CineTicket Doku-Website — Refactoring-Plan
 
-> Lebendes Arbeitsdokument. Stand: 2026-06-29. Ziel: aus der bestehenden
-> Doku-Website ein durchgängiges, präsentierbares Kino-Projekt machen.
-> Status-Tracking siehe [`PROGRESS.md`](./PROGRESS.md), Architektur siehe
-> [`ARCHITECTURE.md`](./ARCHITECTURE.md), Inhalts-Mapping siehe
+> **Historisches Planungsdokument (Stand 2026-06-29), teilweise überholt:**
+> Traceability und Glossar wurden nach dem Umbau **bewusst wieder entfernt**
+> (Owner-Entscheidung — nicht wieder einführen), und der Präsentationsmodus ist
+> seit 2026-07-02 der Kino-Modus mit visuellen Folien.
+> Aktueller Stand: [`PROGRESS.md`](./PROGRESS.md), Architektur:
+> [`ARCHITECTURE.md`](./ARCHITECTURE.md), Inhalts-Mapping:
 > [`CONTENT_MAPPING.md`](./CONTENT_MAPPING.md).
 
 ## 0. Entscheidung: Verbessern statt Neubau

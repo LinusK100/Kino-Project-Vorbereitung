@@ -38,9 +38,9 @@
 
 ## Phase 4 — Synthese
 - [x] Dashboard als Onboarding/Erklärung (Aufbau + Bedienung + Modi + Präsentation)
-- [x] Traceability-Matrix (Story↔Persona↔Aktivität↔Release↔UML↔Prototyp)
+- [x] Traceability-Matrix — **später bewusst entfernt** (Owner-Entscheidung, bleibt raus)
 - [x] Innovation-Abschnitt (Machbarkeits-Flags machbar/teilweise/Konzept)
-- [x] Glossar (Suche, Kernbegriffe, verwechselte Paare, Rollen)
+- [x] Glossar — **später bewusst entfernt** (Owner-Entscheidung, bleibt raus)
 
 ## Phase 5 — Produkt
 - [x] Prototyp-Seite auf SectionShell, externer Start (neuer Tab) nur hier

@@ -80,8 +80,15 @@ Rollen, Wizard, Innovations-Matrix). `core.ts` liefert helle Farbvarianten
 so ihre eigenen, inhaltsspezifischen Folien.
 
 ### DiagramFrame
-Gemeinsamer Rahmen für alle Diagramme: Zoom (+/-/Reset/fit), Pan (Drag),
-Legende-Slot, „Als Text"-Umschalter (Barrierefreiheit), responsive Scroll.
+Gemeinsamer Rahmen für alle Diagramme: Ziehen verschiebt den Ausschnitt
+(Klicks bleiben erhalten — erst ab ~5 px Bewegung gilt die Geste als Pan),
+Strg/Cmd + Scrollen zoomt an der Cursor-Position, Toolbar mit −/+/Einpassen/100 %,
+Fit-on-load via MutationObserver, Legende-Slot, „Als Text"-Umschalter
+(Barrierefreiheit). Story Map nutzt dasselbe Drag-Muster über `useDragScroll`.
+
+### Detail-Overlays
+Objekt-Details (UML-Klasse, User Story) öffnen als **zentrierter Dialog** über
+dem Inhalt (`ui/dialog`, Overlay 40 % + Blur) — nicht als Sheet am Seitenrand.
 
 ## Daten-Layer
 `src/data/` enthält die JSON aus Doku v5.1. `src/data/index.ts` exportiert
