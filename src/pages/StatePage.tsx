@@ -7,15 +7,30 @@ import { StateDiagram } from '@/components/diagram/StateDiagram'
 import { stateMachines } from '@/data/content'
 import { extraMachines } from '@/data/statesExtra'
 import { useAppStore } from '@/store/appStore'
+import { SitzHappyPath, SitzRueckwege, TicketZyklus } from '@/components/presentation/visuals/flow'
+import { EnumAbgleich } from '@/components/presentation/visuals/uml'
 import type { StateMachine, PresentationStep } from '@/types'
 
 const ACCENT = '#7a39bb'
 
 const steps: PresentationStep[] = [
-  { id: 'intro', title: 'Zustandsdiagramme', body: 'Ein Zustandsautomat beschreibt den Lebenszyklus genau eines Objekts: welche Zustände es annimmt und welche Ereignisse mit welchen Guards die Übergänge auslösen.' },
-  { id: 'sitz', title: 'Der Sitz je Vorstellung', body: 'FREI → AUSGEWÄHLT → RESERVIERT → BELEGT: Der serverseitige RESERVIERT-Hold blockiert parallele Käufer und verhindert Doppelbuchungen. DEFEKT sperrt den Sitz systemweit.' },
-  { id: 'tabs', title: 'Gekoppelte Automaten', body: 'Sitz und Ticket hängen zusammen – ein Ticket entsteht erst, wenn der Sitz BELEGT wird. Ein Storno wirkt überall zugleich: Ticket → STORNIERT, Zahlung → ERSTATTET, Sitz → wieder FREI.' },
-  { id: 'enums', title: 'Exakt wie im Klassendiagramm', body: 'Jeder Automat entspricht einem Status-Enum des Klassendiagramms – wertgleich mit Sitzstatus und Ticketstatus. Der Erweitert-Modus ergänzt Buchung und Zahlung als eigene Automaten.' },
+  { id: 'intro', title: 'Ein Objekt, sein Lebenszyklus', body: 'Ein Zustandsautomat beschreibt genau ein Objekt über die Zeit: welche Zustände es annimmt und welche Ereignisse mit welchen Guards die Übergänge auslösen. Die nächsten Folien zeigen die zwei wichtigsten Automaten.' },
+  {
+    id: 'sitz', title: 'Der Weg zum belegten Sitz', visual: <SitzHappyPath />,
+    body: 'Der Sitz je Vorstellung: auswählen ist nur lokal, reservieren() setzt den serverseitigen Hold, und erst belegen() nach erfolgreicher Zahlung macht den Platz endgültig zu.',
+  },
+  {
+    id: 'rueckwege', title: 'Jeder Hold endet – garantiert', visual: <SitzRueckwege />,
+    body: 'Läuft der 10-Minuten-Hold ab oder bricht der Kunde ab, wird der Sitz automatisch wieder FREI; ein Storno gibt auch belegte Plätze zurück. Kein Sitz bleibt für immer blockiert – und DEFEKT sperrt ihn bei Bedarf systemweit.',
+  },
+  {
+    id: 'ticket', title: 'Ein Anfang, drei Enden', visual: <TicketZyklus />,
+    body: 'Das Ticket entsteht erst, wenn der Sitz BELEGT wird – hier koppeln sich die Automaten. Danach gibt es genau drei Ausgänge: eingelöst am Einlass, storniert mit Erstattung oder abgelaufen nach der Vorstellung.',
+  },
+  {
+    id: 'enums', title: 'Exakt wie im Klassendiagramm', visual: <EnumAbgleich />,
+    body: 'Jeder Automat ist wertgleich mit seinem Status-Enum aus dem Klassendiagramm – Modellierung und Struktur widersprechen sich nie. Der Erweitert-Modus ergänzt Buchung und Zahlung als eigene Automaten.',
+  },
 ]
 
 export default function StatePage() {

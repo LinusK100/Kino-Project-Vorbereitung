@@ -6,6 +6,7 @@ import { SectionShell } from '@/components/shared/SectionShell'
 import { NAV } from '@/components/layout/nav'
 import { personas, stories, uml, sequences, stateMachines } from '@/data/content'
 import { extraMachines } from '@/data/statesExtra'
+import { DreiStationen, JsonZuSvg, KennzahlenStrip, TeilmengeModi } from '@/components/presentation/visuals/product'
 import type { PresentationStep } from '@/types'
 
 const ACCENT = '#01696f'
@@ -21,18 +22,26 @@ const heroStats = [
 ]
 
 const steps: PresentationStep[] = [
-  { id: 'welcome', title: 'CineTicket', body: 'Die Dokumentation eines Kino-Ticketsystems für „Systemanalyse und Entwurf" – von der Anforderungsanalyse über die UML-Modellierung bis zum klickbaren Prototyp.' },
   {
-    id: 'aufbau', title: 'Drei Stationen', body: 'Die Website folgt dem Weg der Systementwicklung:',
-    points: [
-      'Anforderungen – Personas, User Stories und Story Map',
-      'Modellierung – Klassen-, Sequenz- und Zustandsdiagramme',
-      'Ergebnis – klickbarer Prototyp und Innovations-Ideen',
-    ],
+    id: 'welcome', title: 'CineTicket', visual: <KennzahlenStrip />,
+    body: 'Die Dokumentation eines Kino-Ticketsystems für „Systemanalyse und Entwurf" – von der Anforderungsanalyse über die UML-Modellierung bis zum klickbaren Prototyp.',
   },
-  { id: 'modi', title: 'Einfach & Erweitert', body: 'Jeder Abschnitt hat zwei Detailgrade: Einfach zeigt den MVP-Kern, Erweitert den Vollausbau. Die Basis ist dabei immer eine echte Teilmenge des Vollausbaus.' },
-  { id: 'json', title: 'Inhalte als JSON', body: 'Alle Inhalte – von den Personas bis zu den Zustandsautomaten – liegen als strukturierte JSON-Daten vor. Die Diagramme werden daraus direkt auf der Website als SVG gerendert: konsistent, interaktiv und prüfbar.' },
-  { id: 'praes', title: 'Präsentationsmodus', body: 'Jeder Abschnitt erklärt seine wichtigsten Inhalte in einer solchen Kino-Tour – manuell mit den Pfeiltasten oder automatisch mit einstellbarem Tempo. Esc beendet.' },
+  {
+    id: 'aufbau', title: 'Drei Stationen', visual: <DreiStationen />,
+    body: 'Die Website folgt dem Weg der Systementwicklung: Aus den Anforderungen entstehen die Modelle, aus den Modellen der Prototyp – jede Station baut auf der vorigen auf.',
+  },
+  {
+    id: 'json', title: 'Alle Inhalte sind JSON-Daten', visual: <JsonZuSvg />,
+    body: 'Von den Personas bis zu den Zustandsautomaten liegt jeder Inhalt als strukturierte JSON-Datei vor. Die Diagramme werden daraus live als SVG gerendert – konsistent, interaktiv und jederzeit prüfbar.',
+  },
+  {
+    id: 'modi', title: 'Einfach ⊂ Erweitert', visual: <TeilmengeModi />,
+    body: 'Jeder Abschnitt hat zwei Detailgrade: Einfach zeigt den MVP-Kern, Erweitert den Vollausbau. Die Basis ist immer eine echte Teilmenge – nichts widerspricht sich.',
+  },
+  {
+    id: 'praes', title: 'Präsentationsmodus',
+    body: 'Jeder Abschnitt erklärt seine wichtigsten Inhalte in einer solchen Kino-Tour – mit echten Ausschnitten aus den Diagrammen. Weiter per Pfeiltasten, automatisch mit einstellbarem Tempo, Esc beendet.',
+  },
 ]
 
 export default function OverviewPage() {

@@ -6,24 +6,29 @@ import { DiagramFrame } from '@/components/diagram/DiagramFrame'
 import { SequenceDiagram } from '@/components/diagram/SequenceDiagram'
 import { sequences } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
+import { FlowUebersicht, SeqAusschnitt } from '@/components/presentation/visuals/flow'
 import type { SequenceDiagram as SeqType, PresentationStep } from '@/types'
 
 const ACCENT = '#7a39bb'
 
 const steps: PresentationStep[] = [
-  { id: 'intro', title: 'Sequenzdiagramme', body: 'Der Buchungsprozess als Interaktion über die Zeit: Wer schickt wann welche Nachricht an wen? Die Zeit läuft von oben nach unten – vier fokussierte Flows statt eines überladenen Diagramms.' },
   {
-    id: 'tabs', title: 'Vier Flows', body: 'Jedes Diagramm zeigt einen abgeschlossenen Ablauf:',
-    points: [
-      'Online-Buchung – vom Sitzplan bis zum QR-Ticket',
-      'Kassenverkauf – der schnelle POS-Weg ohne langen Hold',
-      'Storno & Rückerstattung – Ticket, Zahlung und Sitz zurück',
-      'Einlass & Validierung – kein Doppeleinlass',
-    ],
+    id: 'intro', title: 'Vier Flows statt eines Monsters', visual: <FlowUebersicht />,
+    body: 'Der Buchungsprozess als Interaktion über die Zeit: Wer schickt wann welche Nachricht an wen? Vier fokussierte Diagramme statt eines überladenen – die nächsten Folien zoomen in die Online-Buchung.',
   },
-  { id: 'lifelines', title: 'Notation', body: 'Oben die Teilnehmer (Akteur, «control»-Services, «entity»-Objekte), darunter ihre Lebenslinien mit Aktivierungsbalken. Durchgezogene Pfeile sind Aufrufe, gestrichelte Rückgaben.' },
-  { id: 'badges', title: 'Der Hold im Zentrum', body: 'reservieren() setzt den Sitz auf RESERVIERT, erst die erfolgreiche Zahlung macht ihn BELEGT. Die farbigen Statuswechsel-Badges schlagen die Brücke zu den Zustandsdiagrammen.' },
-  { id: 'fragments', title: 'Erweitert: Fehlerpfade', body: 'alt-, opt- und break-Fragmente zeigen die Alternativen mit ihren Bedingungen: Sitz bereits vergeben, Zahlung fehlgeschlagen, Hold-Timeout nach zehn Minuten.' },
+  {
+    id: 'hold', title: 'Der Hold: 10 Minuten verbindlich', visual: <SeqAusschnitt flow="online-buchung" msgSeqs={['6', '7', '8a', '9a']} />,
+    body: 'Beim Checkout ruft der BuchungService reservieren() am VorstellungSitz auf – der Sitz wird serverseitig RESERVIERT und ist für parallele Käufer blockiert. Das Badge zeigt den Statuswechsel.',
+  },
+  {
+    id: 'zahlung', title: 'Die Zahlung entscheidet', visual: <SeqAusschnitt flow="online-buchung" msgSeqs={['12', '13a', '14', '15', '16']} />,
+    body: 'Erst wenn die Zahlung ERFOLGREICH ist, wird der Sitz BELEGT, die Buchung BESTÄTIGT und das QR-Ticket erzeugt – vier Statuswechsel in genau dieser Reihenfolge.',
+  },
+  {
+    id: 'fehler', title: 'Und wenn der Platz weg ist?', visual: <SeqAusschnitt flow="online-buchung" msgSeqs={['8b', '9b', '10b']} frame={{ label: 'alt', guard: '[Platz bereits vergeben]' }} />,
+    body: 'Kommt reservieren() zu spät, antwortet der Sitz mit false – der Kunde landet zurück in der Sitzwahl statt in einer Doppelbuchung. Der Erweitert-Modus zeigt alle alt-/break-Fragmente, auch Zahlungsfehler und Hold-Timeout.',
+  },
+  { id: 'lifelines', title: 'Lesehilfe für die Diagramme', body: 'Oben die Teilnehmer: Akteur, «control»-Services, «entity»-Objekte. Die Zeit läuft an den Lebenslinien nach unten, Aktivierungsbalken zeigen, wer gerade arbeitet. Durchgezogene Pfeile sind Aufrufe, gestrichelte Rückgaben.' },
 ]
 
 export default function SequencePage() {

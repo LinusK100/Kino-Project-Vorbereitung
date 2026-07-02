@@ -6,6 +6,8 @@ import { SectionShell } from '@/components/shared/SectionShell'
 import { Callout } from '@/components/shared/Callout'
 import { useAppStore } from '@/store/appStore'
 import { prototype } from '@/data/content'
+import { RollenGrid, WizardSchritte } from '@/components/presentation/visuals/product'
+import { ImplSplit } from '@/components/presentation/visuals/uml'
 import type { PresentationStep } from '@/types'
 
 const ACCENT = '#964219'
@@ -19,18 +21,19 @@ const roleIcon: Record<string, React.ElementType> = {
 }
 
 const protoSteps: PresentationStep[] = [
-  { id: 'intro', title: 'Der Prototyp', body: 'Der MVP-Kern (Release 1) als klickbare Hi-Fi-App: React mit gemockter API (MSW) – läuft komplett im Browser, ohne Installation. Er öffnet sich als eigene App in einem neuen Tab.' },
+  { id: 'intro', title: 'Der MVP zum Anfassen', body: 'Release 1 als klickbare Hi-Fi-App: React mit gemockter API (MSW), läuft komplett im Browser ohne Installation. Der Button auf dieser Seite öffnet den Prototyp als eigene App in einem neuen Tab.' },
   {
-    id: 'rollen', title: 'Vier Rollen, ein System', body: 'In der App sind die Rollen oben umschaltbar:',
-    points: [
-      'Endkunde – Filmsuche, Sitzplan, Buchungs-Wizard, QR-Ticket',
-      'Kasse – Schnellverkauf mit Tastatur-Shortcuts',
-      'Manager – KPIs, Umsatz-Charts, Saalauslastung',
-      'Einlass – Kamera-QR-Scanner mit Validierung',
-    ],
+    id: 'rollen', title: 'Acht Rollen, vier davon live', visual: <RollenGrid />,
+    body: 'Endkunde, Kasse, Manager und Einlass sind vollständig klickbar und in der App oben umschaltbar. Die vier Roadmap-Rollen sind bewusst nur modelliert – ehrlich ausgewiesen statt vorgetäuscht.',
   },
-  { id: 'wizard', title: 'Wizard = Sequenzdiagramm', body: 'Die fünf Schritte des Buchungs-Wizards entsprechen exakt dem Flow „Online-Buchung": Sitz-Hold (RESERVIERT), Zahlung, dann BELEGT und QR-Ticket. Modell und Prototyp erzählen dieselbe Geschichte.' },
-  { id: 'roadmap', title: 'Modell ⊇ Prototyp', body: 'Vier weitere Rollen und 14 Module sind vollständig in UML und Stories modelliert und ehrlich als Roadmap ausgewiesen – der Erweitert-Modus zeigt die komplette Liste.' },
+  {
+    id: 'wizard', title: 'Der Wizard folgt dem Sequenzdiagramm', visual: <WizardSchritte />,
+    body: 'Die fünf Schritte des Buchungs-Wizards entsprechen exakt dem Flow „Online-Buchung": Sitz-Hold beim Sitzplan, Zahlung, dann BELEGT und QR-Ticket. Modell und Prototyp erzählen dieselbe Geschichte.',
+  },
+  {
+    id: 'roadmap', title: 'Modell ⊇ Prototyp', visual: <ImplSplit extras={['4 / 8 Rollen live', '20 Stories abgedeckt']} />,
+    body: 'Der Prototyp setzt genau die Hälfte des Modells um – der Rest ist als Roadmap vollständig in UML-Klassen und Stories modelliert. Der Erweitert-Modus dieser Seite zeigt die komplette Liste.',
+  },
 ]
 
 export default function PrototypePage() {

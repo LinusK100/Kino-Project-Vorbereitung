@@ -59,14 +59,25 @@ interface SectionShellProps {
 interface PresentationStep {
   id: string
   title: string              // Folien-Überschrift
-  body: string               // Kernaussage der Folie
+  body: string               // Kernaussage (bei Visual: Bildunterschrift)
   points?: string[]          // optionale Aufzählung, gestaffelt animiert
+  visual?: ReactNode         // abschnittsspezifisches Visual (JSON-gerendert)
 }
 ```
 Engine: Vollbild-„Kino" auf Schwarz (radialer Verlauf + Akzent-Schein), animierte
 Folien (Blur/Fade/Stagger via motion, respektiert prefers-reduced-motion).
 Vor/Zurück (← →), Play/Pause (Leertaste), Tempo, klickbarer Fortschritt mit
 Auto-Füllung, Esc beendet. Folien sind selbsterklärend — kein DOM-Spotlight.
+
+Visuals (`src/components/presentation/visuals/`) rendern echte Ausschnitte aus
+den JSON-Daten, groß und gestaffelt animiert: `uml.tsx` (UML-Boxen/-Beziehungen
+aus uml.json, Gruppen, Impl-Split, Enum-Abgleich), `flow.tsx` (Sequenz- und
+Zustands-Ausschnitte aus sequences.json/states.json inkl. Statuswechsel-Badges),
+`people.tsx` (Personas, Story-Karte/-Schema/-Verteilung, Backbone, Release-
+Bänder), `product.tsx` (Kennzahlen, Stationen, JSON→SVG, Modi-Teilmenge,
+Rollen, Wizard, Innovations-Matrix). `core.ts` liefert helle Farbvarianten
+(`bright`) und Animations-Presets (`pop`/`draw`/`fadeIn`). Jede Sektion wählt
+so ihre eigenen, inhaltsspezifischen Folien.
 
 ### DiagramFrame
 Gemeinsamer Rahmen für alle Diagramme: Zoom (+/-/Reset/fit), Pan (Drag),

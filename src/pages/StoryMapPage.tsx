@@ -6,6 +6,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { useStoryMap, useStories, personaById } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
+import { BackboneChips, ReleaseBaender } from '@/components/presentation/visuals/people'
 import type { UserStory, ReleaseNumber, PresentationStep } from '@/types'
 
 const ACCENT = '#006494'
@@ -23,17 +24,16 @@ const rc: Record<number, { bg: string; bgDark: string; border: string; borderDar
 const priorityDot: Record<string, string> = { high: '#ef4444', medium: '#f59e0b', low: '#22c55e' }
 
 const steps: PresentationStep[] = [
-  { id: 'intro', title: 'Story Map', body: 'Die Story Map ordnet alle Stories zweidimensional: waagerecht die Nutzerreise (Aktivität → Schritt), senkrecht die zeitliche Auslieferung in Releases.' },
-  { id: 'backbone', title: 'Das Backbone', body: 'Die Aktivitäten bilden das Rückgrat der Nutzerreise – vom Ticketkauf über Sitzplan und Einlass bis zur Verwaltung. Einfach zeigt 7 Aktivitäten, Erweitert 10.' },
-  { id: 'releases', title: 'Release 1 = MVP', body: 'Das oberste Band ist die schmale, lauffähige Scheibe quer durch alle Aktivitäten – genau die Stories, die der Prototyp umsetzt.' },
+  { id: 'intro', title: 'Zwei Dimensionen, ein Plan', body: 'Die Story Map ordnet alle User Stories zweidimensional: waagerecht die Nutzerreise (Aktivität → Schritt), senkrecht die zeitliche Auslieferung in Releases. So sieht man auf einen Blick, was zusammen den MVP ergibt.' },
   {
-    id: 'erweitert', title: 'Ausbau nach Nutzen', body: 'Die weiteren Releases erweitern das System dort, wo es Wert stiftet:',
-    points: [
-      'Release 2 – Komfort, Gastro & Service, Facility, Sicherheit',
-      'Release 3 – Vollausbau: Empfehlungen, Reports, Multi-Site',
-      'Erweitert ergänzt drei neue Aktivitäten, ohne die Struktur zu brechen',
-    ],
+    id: 'backbone', title: 'Das Backbone: die Nutzerreise', visual: <BackboneChips />,
+    body: 'Die Aktivitäten bilden das Rückgrat – vom Ticketkauf über Sitzplan und Einlass bis zur Verwaltung. Der Erweitert-Modus ergänzt drei Aktivitäten, ohne die Struktur zu brechen.',
   },
+  {
+    id: 'releases', title: 'Waagerecht schneiden: Releases', visual: <ReleaseBaender />,
+    body: 'Release 1 ist die schmale, lauffähige Scheibe quer durch alle Aktivitäten. Die weiteren Releases erweitern das System dort, wo es Wert stiftet – nicht einfach „mehr Features".',
+  },
+  { id: 'arbeit', title: 'Arbeiten mit der Karte', body: 'Auf der Website lässt sich jedes Release-Band hervorheben; jede Karte öffnet per Klick die Story mit Persona und Akzeptanzkriterien. Waagerecht scrollen zeigt die ganze Reise.' },
 ]
 
 export default function StoryMapPage() {

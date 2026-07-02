@@ -8,6 +8,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sh
 import { uml } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
 import { UML_GROUP_COLOR } from '@/lib/statusColors'
+import { ImplSplit, UmlBuchungskette, UmlGruppen, UmlKomposition, UmlVorstellungSitz } from '@/components/presentation/visuals/uml'
 import type { UmlClass, PresentationStep } from '@/types'
 
 const ACCENT = '#7a39bb'
@@ -17,11 +18,26 @@ const CORE = ['Kette', 'Kino', 'Kinosaal', 'Sitzplatz', 'Tarif', 'Film', 'Vorste
 const groupLabel: Record<string, string> = { domain: 'Domäne', service: 'Services', store: 'Stores', dto: 'DTOs', enum: 'Enums' }
 
 const steps: PresentationStep[] = [
-  { id: 'intro', title: 'Klassendiagramm', body: 'Die statische Struktur des Systems: 82 Klassen mit Attributen, Operationen und Beziehungen – gegliedert in Domäne, API-Services, Frontend-Stores, DTOs und Enums.' },
-  { id: 'kern', title: 'Der fachliche Kern', body: 'Kette → Kino → Saal → Sitzplatz als Komposition, dazu Film → Vorstellung → Buchung → Ticket → Zahlung: das Rückgrat der Domäne. Die Kern-Ansicht zeigt es ohne Überfrachtung.' },
-  { id: 'assoc', title: 'VorstellungSitz', body: 'Die Assoziationsklasse zwischen Vorstellung und Sitzplatz trägt den Sitzstatus je Vorstellung. Ihre Operationen reservieren(), belegen() und freigeben() verhindern Doppelbuchungen.' },
-  { id: 'ops', title: 'Operationen am Objekt', body: 'Statusändernde Operationen stehen an den Domänenobjekten – Buchung.bestätigen(), Ticket.einlösen() – nicht bei den Akteuren. Enums sind separate Aufzählungen.' },
-  { id: 'all', title: 'Modell ⊇ Prototyp', body: '41 Klassen sind im Prototyp implementiert (grüner Punkt), 41 weitere bewusst Design-only. Das Modell beschreibt das ganze Produkt – im Erweitert-Modus nach Gruppen filterbar.' },
+  {
+    id: 'gruppen', title: '82 Klassen, fünf Gruppen', visual: <UmlGruppen />,
+    body: 'Die statische Struktur des Systems: Domänenklassen tragen die Fachlichkeit, API-Services die Abläufe, dazu Frontend-Stores, DTOs und Enums. Die folgenden Ausschnitte zeigen die wichtigsten Stellen.',
+  },
+  {
+    id: 'kern', title: 'Vom Konzern bis zum Sitz', visual: <UmlKomposition />,
+    body: 'Das physische Rückgrat als Kompositions-Kette (◆): Eine Kette umfasst Kinos, ein Kino besitzt Säle, ein Saal enthält Sitzplätze – der Teil existiert nicht ohne das Ganze.',
+  },
+  {
+    id: 'assoc', title: 'Der Schlüssel: VorstellungSitz', visual: <UmlVorstellungSitz />,
+    body: 'Der Sitzstatus gehört weder dem Sitz noch der Vorstellung, sondern ihrer Verbindung – der Assoziationsklasse. reservieren(), belegen() und freigeben() setzen den Hold durch und verhindern Doppelbuchungen.',
+  },
+  {
+    id: 'ops', title: 'Operationen am Objekt', visual: <UmlBuchungskette />,
+    body: 'Statusändernde Operationen stehen an den Domänenobjekten selbst – Zahlung.verarbeiten(), Buchung.bestätigen(), Ticket.einlösen() – nicht bei den Akteuren. So bleibt jede Zustandsänderung dort, wo ihr Zustand lebt.',
+  },
+  {
+    id: 'all', title: 'Modell ⊇ Prototyp', visual: <ImplSplit />,
+    body: 'Die Hälfte der Klassen ist im Prototyp implementiert (grüner Punkt im Diagramm), die andere bewusst Design-only: Das Modell beschreibt das ganze Produkt, nicht nur den MVP.',
+  },
 ]
 
 export default function ClassDiagramPage() {

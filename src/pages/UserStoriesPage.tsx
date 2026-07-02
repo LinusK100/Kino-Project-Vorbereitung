@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useStories, personaById } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
+import { StoryKarte, StorySchema, StoryVerteilung } from '@/components/presentation/visuals/people'
 import type { UserStory, Priority, PresentationStep } from '@/types'
 
 const ACCENT = '#006494'
@@ -19,18 +20,19 @@ const releaseLabel: Record<number, string> = { 1: 'R1 – MVP', 2: 'R2 – Erwei
 const releaseColor: Record<number, string> = { 1: '#437a22', 2: '#d19900', 3: '#a13544' }
 
 const steps: PresentationStep[] = [
-  { id: 'intro', title: 'User Stories', body: '„Als Persona möchte ich Ziel, um Nutzen." – 30 Stories bilden den MVP, 51 den Vollausbau. Jede beschreibt eine Anforderung aus Nutzersicht.' },
   {
-    id: 'struktur', title: 'Planbar und prüfbar', body: 'Vier Angaben machen jede Story steuerbar:',
-    points: [
-      'genau eine Persona als Quelle der Anforderung',
-      'eine Aktivität – der Schritt in der Nutzerreise',
-      'MoSCoW-Priorität und Release (1–3)',
-      'testbare Akzeptanzkriterien als Definition von „fertig"',
-    ],
+    id: 'intro', title: 'Ein Satz, drei Antworten', visual: <StorySchema />,
+    body: 'Jede User Story beschreibt eine Anforderung aus Nutzersicht – in einem Satz, der Persona, Ziel und Nutzen festhält. Dazu kommen testbare Akzeptanzkriterien als Definition von „fertig".',
   },
-  { id: 'kern', title: 'Der fachliche Kern: U47', body: 'Der Sitz-Hold: Beim Checkout wird der gewählte Platz zehn Minuten verbindlich reserviert – eine parallele Buchung desselben Platzes wird abgewiesen. Keine Doppelbuchung.' },
-  { id: 'arbeit', title: 'Arbeiten mit den Stories', body: 'Die Tabelle lässt sich nach Persona, Priorität, Release und Aktivität filtern; ein Klick auf eine Zeile öffnet die Story mit ihren Akzeptanzkriterien.' },
+  {
+    id: 'zahlen', title: '30 Stories im MVP, 51 im Vollausbau', visual: <StoryVerteilung />,
+    body: 'Jede Story trägt Release und MoSCoW-Priorität – zusammen ergibt das den Bauplan: Was kommt zuerst, was kann warten?',
+  },
+  {
+    id: 'kern', title: 'Der fachliche Kern: U47', visual: <StoryKarte id="U47" />,
+    body: 'Der Sitz-Hold ist die wichtigste Regel des Systems: keine Doppelbuchung. Genau diese Story taucht im Sequenzdiagramm und im Zustandsautomaten wieder auf.',
+  },
+  { id: 'arbeit', title: 'Arbeiten mit den Stories', body: 'Die Tabelle lässt sich nach Persona, Priorität, Release und Aktivität filtern; ein Klick auf eine Zeile öffnet die Story mit ihren Akzeptanzkriterien – Export als CSV inklusive.' },
 ]
 
 export default function UserStoriesPage() {

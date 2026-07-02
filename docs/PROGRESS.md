@@ -92,3 +92,10 @@
   optionale Aufzählungspunkte) statt DOM-Spotlight; Folien-Inhalte aller 9 Abschnitte
   neu geschrieben. Dashboard reduziert: Hero mit Kennzahlen-Chips, drei Kernkarten
   (Präsentationsmodus, Inhalte als JSON→SVG, Einfach/Erweitert), Abschnitts-Verzeichnis.
+- 2026-07-02: Kino-Modus v2 — jede Sektion mit eigenen visuellen Folien statt
+  Einheitstext: echte Diagramm-Ausschnitte (UML-Klassen mit Original-Attributen/
+  -Operationen, Sequenz-Nachrichten mit Statuswechsel-Badges, Zustandsautomaten
+  mit animierten Kanten) direkt aus den JSON-Daten gerendert; dazu Persona-Karten,
+  U47-Story-Karte, Verteilungs-Balken, Backbone/Release-Bänder, Rollen-Grid,
+  Wizard-Stepper, Impact/Aufwand-Matrix, JSON→SVG-Pipeline. 39 Folien × Playwright
+  verifiziert (0 Fehler), Build/Lint grün.

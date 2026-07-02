@@ -136,12 +136,12 @@ function CinemaMode({
             key={step.id}
             variants={slideV}
             initial="hidden" animate="show" exit="exit"
-            className="w-[min(860px,94vw)] text-center"
+            className={step.visual ? 'w-[min(1080px,96vw)] text-center' : 'w-[min(860px,94vw)] text-center'}
             style={{ willChange: 'transform, opacity, filter' }}
           >
             <motion.p
               variants={itemV}
-              className="text-[11px] md:text-xs font-bold uppercase tracking-[0.28em] mb-5"
+              className={`text-[11px] md:text-xs font-bold uppercase tracking-[0.28em] ${step.visual ? 'mb-3' : 'mb-5'}`}
               style={{ color: accent }}
             >
               {title} · {index + 1} von {total}
@@ -149,16 +149,31 @@ function CinemaMode({
 
             <motion.h2
               variants={itemV}
-              className="font-bold text-white mb-6 leading-[1.12]"
-              style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.1rem, 5.2vw, 3.6rem)', textWrap: 'balance' }}
+              className={`font-bold text-white leading-[1.12] ${step.visual ? 'mb-4' : 'mb-6'}`}
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: step.visual ? 'clamp(1.65rem, 3.4vw, 2.5rem)' : 'clamp(2.1rem, 5.2vw, 3.6rem)',
+                textWrap: 'balance',
+              }}
             >
               {step.title}
             </motion.h2>
 
+            {step.visual && (
+              <motion.div variants={itemV} className="flex justify-center my-5 md:my-6 overflow-x-auto">
+                {step.visual}
+              </motion.div>
+            )}
+
             <motion.p
               variants={itemV}
               className="mx-auto leading-relaxed"
-              style={{ color: 'rgba(255,255,255,0.72)', fontSize: 'clamp(1rem, 1.6vw, 1.22rem)', maxWidth: 640, textWrap: 'pretty' }}
+              style={{
+                color: step.visual ? 'rgba(255,255,255,0.62)' : 'rgba(255,255,255,0.72)',
+                fontSize: step.visual ? 'clamp(0.9rem, 1.25vw, 1.02rem)' : 'clamp(1rem, 1.6vw, 1.22rem)',
+                maxWidth: step.visual ? 760 : 640,
+                textWrap: 'pretty',
+              }}
             >
               {step.body}
             </motion.p>

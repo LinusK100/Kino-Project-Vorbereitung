@@ -6,6 +6,7 @@ import { SectionShell } from '@/components/shared/SectionShell'
 import { Callout } from '@/components/shared/Callout'
 import { innovation, personaById } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
+import { IdeeVerankert, InnovationsMatrix } from '@/components/presentation/visuals/product'
 import type { Innovation, PresentationStep } from '@/types'
 
 const ACCENT = '#437a22'
@@ -22,16 +23,15 @@ const feasCfg: Record<string, { label: string; color: string }> = {
 }
 
 const steps: PresentationStep[] = [
-  { id: 'intro', title: 'Innovation', body: 'Recherchierte Zukunfts-Ideen (2026) über den MVP hinaus – jede in User Stories und UML-Klassen verankert. Keine losen Visionen, sondern integrierte Erweiterungen des Modells.' },
   {
-    id: 'feas', title: 'Ehrliche Machbarkeit', body: 'Jede Idee trägt ein begründetes Flag:',
-    points: [
-      'machbar – im Projektrahmen umsetzbar (z. B. dynamische Preise, DSGVO)',
-      'teilweise – Kern machbar, voller Umfang braucht Zusatzsysteme',
-      'Konzept – bewusst als Vision markiert (AR-Hardware, ML-Modelle)',
-    ],
+    id: 'feas', title: 'Sechs Ideen, ehrlich bewertet', visual: <InnovationsMatrix />,
+    body: 'Recherchierte Zukunfts-Ideen (2026) über den MVP hinaus, eingeordnet nach Impact und Aufwand. Jede trägt ein begründetes Machbarkeits-Flag – AR-Hardware und ML-Modelle sind bewusst als Konzept markiert.',
   },
-  { id: 'cards', title: 'Verankert im Modell', body: 'KI-Sitzempfehlung, AR-Facility oder Auslastungsprognose: Jede Idee nennt Persona, Stories und die betroffenen UML-Klassen – und bleibt ehrlich, wenn die Technik den Projektrahmen sprengt.' },
+  {
+    id: 'anchor', title: 'Verankert im Modell', visual: <IdeeVerankert />,
+    body: 'Keine losen Visionen: Jede Idee nennt ihre Persona, ihre User Stories und die betroffenen UML-Klassen. Die dynamischen Preise etwa erweitern Tarif um Preisregel und PreisService.',
+  },
+  { id: 'cards', title: 'Zum Nachlesen', body: 'Jede Karte auf der Seite öffnet Details mit Modell-Bezug und einem ehrlichen Hinweis, wo die Technik den Projektrahmen sprengt. Der Einfach-Modus zeigt die drei MVP-nahen Ideen, Erweitert alle sechs.' },
 ]
 
 export default function InnovationPage() {

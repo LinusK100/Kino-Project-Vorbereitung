@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react'
+
 // ─────────────────────────────────────────────────────────────
 // Domain content types (Doku v5.1)
 // ─────────────────────────────────────────────────────────────
@@ -139,4 +141,6 @@ export interface PresentationStep {
   title: string            // Folien-Überschrift
   body: string             // Kernaussage der Folie
   points?: string[]        // optionale Aufzählung, gestaffelt animiert
+  visual?: ReactNode       // abschnittsspezifisches Visual (aus JSON gerendert),
+                           // z. B. ein Diagramm-Ausschnitt — Text wird zur Bildunterschrift
 }

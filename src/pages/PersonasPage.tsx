@@ -6,23 +6,25 @@ import { Callout } from '@/components/shared/Callout'
 import { containerVariants, cardVariants } from '@/lib/transitions'
 import { usePersonas, personaById } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
+import { PersonaBaum, PersonaKern, ZieleFrustrationen } from '@/components/presentation/visuals/people'
 import type { Persona, PresentationStep } from '@/types'
 
 const ACCENT = '#006494'
 
 const steps: PresentationStep[] = [
-  { id: 'intro', title: 'Personas', body: 'Personas machen die Nutzergruppen greifbar: Wer nutzt das System – mit welchen Zielen und Frustrationen? Jede spätere User Story gehört zu genau einer Persona.' },
+  { id: 'intro', title: 'Wer nutzt CineTicket?', body: 'Personas machen die Nutzergruppen greifbar: Wer arbeitet mit dem System – mit welchen Zielen und Frustrationen? Jede spätere User Story gehört zu genau einer Persona.' },
   {
-    id: 'einfach', title: 'Vier Kern-Personas (MVP)', body: 'Der Einfach-Modus zeigt genau die Rollen, die der Prototyp umsetzt:',
-    points: [
-      'Endkunde – bucht online oder an der Kasse (Dach-Persona)',
-      'Monika – Kassiererin, verkauft unter Zeitdruck',
-      'Thomas – Kinomanager, plant Programm und Preise',
-      'Kevin – Einlasspersonal, validiert QR-Tickets',
-    ],
+    id: 'einfach', title: 'Vier Kern-Personas im MVP', visual: <PersonaKern />,
+    body: 'Genau die Rollen, die der Prototyp klickbar umsetzt: Der Endkunde bucht, Monika verkauft an der Kasse, Thomas managt das Kino, Kevin kontrolliert den Einlass.',
   },
-  { id: 'erweitert', title: 'Zwölf Personas im Vollausbau', body: 'Im Erweitert-Modus differenziert sich der Endkunde in Stammkundin, Student, Seniorin und Familienmutter – dazu kommen Service, Facility, Marken-Manager und Admin. Eine echte Obermenge der Basis.' },
-  { id: 'anatomy', title: 'Vom Bedürfnis zur Anforderung', body: 'Jede Persona-Karte zeigt Ziele und Frustrationen. Aus genau diesem Spannungsfeld entstehen die User Stories – jede Anforderung hat damit eine nachvollziehbare Quelle.' },
+  {
+    id: 'erweitert', title: 'Ein Dach, vier Ausprägungen', visual: <PersonaBaum />,
+    body: 'Im Erweitert-Modus differenziert sich der Endkunde in vier konkrete Profile mit eigenen Bedürfnissen – zusammen mit den internen Rollen ergeben sich zwölf Personas, eine echte Obermenge der Basis.',
+  },
+  {
+    id: 'anatomy', title: 'Vom Bedürfnis zur Anforderung', visual: <ZieleFrustrationen />,
+    body: 'Jede Persona spannt Ziele gegen Frustrationen. Aus genau diesem Spannungsfeld entstehen die User Stories – jede Anforderung hat eine nachvollziehbare Quelle.',
+  },
 ]
 
 export default function PersonasPage() {
