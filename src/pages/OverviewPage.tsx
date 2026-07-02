@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom'
+import { motion } from 'motion/react'
 import {
-  LayoutDashboard, Layers, Presentation as PresentationIcon, Braces, ArrowRight, Film,
+  Layers, Presentation as PresentationIcon, Braces, ArrowRight, Film,
 } from 'lucide-react'
-import { SectionShell } from '@/components/shared/SectionShell'
+import { pageVariants } from '@/lib/transitions'
 import { NAV } from '@/components/layout/nav'
+import { Presentation } from '@/components/presentation/Presentation'
 import { personas, stories, uml, sequences, stateMachines } from '@/data/content'
 import { extraMachines } from '@/data/statesExtra'
 import { DreiStationen, JsonZuSvg, KennzahlenStrip, TeilmengeModi } from '@/components/presentation/visuals/product'
@@ -44,56 +46,59 @@ const steps: PresentationStep[] = [
   },
 ]
 
+const groupIntro: Record<string, string> = {
+  Anforderungen: 'Wer braucht was? Personas, ihre Stories und deren Ordnung nach Nutzerreise und Release.',
+  Modellierung: 'Das System als UML: Struktur (Klassen), Abläufe (Sequenzen) und Lebenszyklen (Zustände).',
+  Ergebnis: 'Der klickbare Prototyp des MVP – und recherchierte Ideen über ihn hinaus.',
+}
+
 export default function OverviewPage() {
   return (
-    <SectionShell
-      kicker="Start"
-      title="Dashboard"
-      subtitle="Aufbau und Bedienung der Website"
-      icon={LayoutDashboard}
-      accent={ACCENT}
-      modes={false}
-      presentation={steps}
-      intro={
-        <div className="rounded-xl p-5 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #01696f 0%, #006494 100%)' }}>
-          <div className="relative z-10 max-w-2xl">
-            <p className="text-xs font-semibold mb-1" style={{ color: 'rgba(255,255,255,0.7)' }}>Systemanalyse & Entwurf</p>
-            <h2 className="text-xl md:text-2xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-display)' }}>CineTicket – ein Kino-Ticketsystem</h2>
-            <p className="text-sm mb-4" style={{ color: 'rgba(255,255,255,0.9)' }}>
-              Von den Anforderungen über UML-Modelle bis zum klickbaren Prototyp – die Tour oben rechts erklärt alles Wichtige.
-            </p>
-            <div className="flex flex-wrap gap-1.5">
-              {heroStats.map((s) => (
-                <span key={s} className="text-xs px-2.5 py-1 rounded-full font-medium text-white" style={{ background: 'rgba(255,255,255,0.16)' }}>{s}</span>
-              ))}
-            </div>
+    <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
+      {/* Hero — zugleich der Kopf dieser Seite */}
+      <div className="rounded-2xl p-6 md:p-7 relative overflow-hidden mb-5" style={{ background: 'linear-gradient(135deg, #01696f 0%, #006494 100%)' }}>
+        <div className="relative z-10 max-w-2xl">
+          <p className="text-xs font-semibold mb-1.5" style={{ color: 'rgba(255,255,255,0.72)' }}>Systemanalyse & Entwurf</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-display)' }}>
+            CineTicket – ein Kino-Ticketsystem
+          </h1>
+          <p className="text-sm mb-4" style={{ color: 'rgba(255,255,255,0.88)' }}>
+            Von der Anforderungsanalyse über die UML-Modelle bis zum klickbaren Prototyp.
+          </p>
+          <div className="flex flex-wrap items-center gap-1.5">
+            {heroStats.map((s) => (
+              <span key={s} className="text-xs px-2.5 py-1 rounded-full font-medium text-white" style={{ background: 'rgba(255,255,255,0.16)' }}>{s}</span>
+            ))}
+            <span className="ml-1">
+              <Presentation steps={steps} accent={ACCENT} title="Überblick" label="Tour starten" invert />
+            </span>
           </div>
-          <Film size={130} color="white" className="absolute -right-4 -bottom-6 opacity-10 hidden md:block" />
         </div>
-      }
-    >
+        <Film size={130} color="white" className="absolute -right-4 -bottom-6 opacity-10 hidden md:block" />
+      </div>
+
       {/* So liest du diese Website */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
         <HowCard icon={PresentationIcon} title="Präsentationsmodus" accent="#7a39bb">
-          Jeder Abschnitt erklärt seine wichtigsten Inhalte als animierte Kino-Tour –
-          Start oben rechts, weiter per Pfeiltasten oder automatisch, Esc beendet.
+          Jeder Abschnitt hat eine animierte Kino-Tour mit seinen wichtigsten Inhalten –
+          weiter per Pfeiltasten oder automatisch, Esc beendet.
         </HowCard>
         <HowCard icon={Braces} title="Inhalte als JSON" accent="#006494">
-          Alle Inhalte liegen als strukturierte JSON-Daten vor; die UML-Diagramme werden
-          daraus live als SVG gerendert – konsistent, prüfbar und interaktiv (Zoom, Klick).
+          Alle Inhalte liegen als strukturierte JSON-Daten vor; die Diagramme werden daraus
+          live als SVG gerendert und bleiben so konsistent und prüfbar.
         </HowCard>
         <HowCard icon={Layers} title="Einfach & Erweitert" accent="#964219">
           Zwei Detailgrade je Abschnitt: MVP-Kern oder Vollausbau. Die Basis ist immer
-          eine Teilmenge – umschalten oben rechts in jedem Abschnitt.
+          eine echte Teilmenge – umschalten direkt im Abschnitt.
         </HowCard>
       </div>
 
-      {/* Abschnitte */}
-      <h3 className="text-sm font-bold mb-3" style={{ color: 'var(--text-primary)' }}>Abschnitte</h3>
+      {/* Abschnitte, gruppiert entlang des Entwicklungswegs */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {NAV.filter((g) => g.title !== 'Start').map((group) => (
           <div key={group.title} className="rounded-xl p-4" style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
-            <h4 className="text-xs font-bold uppercase tracking-wider mb-2.5" style={{ color: group.items[0].accent }}>{group.title}</h4>
+            <h4 className="text-xs font-bold uppercase tracking-wider mb-1.5" style={{ color: group.items[0].accent }}>{group.title}</h4>
+            <p className="text-xs leading-relaxed mb-2.5" style={{ color: 'var(--text-secondary)' }}>{groupIntro[group.title]}</p>
             <div className="space-y-0.5">
               {group.items.map((item) => {
                 const Icon = item.icon
@@ -109,7 +114,7 @@ export default function OverviewPage() {
           </div>
         ))}
       </div>
-    </SectionShell>
+    </motion.div>
   )
 }
 

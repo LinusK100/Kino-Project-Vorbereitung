@@ -24,29 +24,26 @@ export function SectionShell({
 }: SectionShellProps) {
   return (
     <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
-      {/* Header band */}
-      <div
-        className="rounded-2xl p-5 md:p-6 mb-5 relative overflow-hidden"
-        style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)' }}
-        data-pres="section-header"
-      >
-        <div className="absolute inset-y-0 left-0 w-1.5" style={{ background: accent }} />
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div className="flex items-start gap-3.5 min-w-0">
+      {/* Kompakter Kopf: eine Zeile Titel + Aktionen, darunter die Einleitung.
+          Bewusst keine Karte — der Blick soll auf den Inhalt fallen. */}
+      <header className="mb-4" data-pres="section-header">
+        <div className="flex items-center justify-between gap-x-3 gap-y-2 flex-wrap">
+          <div className="flex items-center gap-3 min-w-0">
             <div
-              className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
-              style={{ background: `${accent}18`, color: accent }}
+              className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+              style={{ background: `${accent}16`, color: accent }}
             >
-              <Icon size={24} />
+              <Icon size={18} />
             </div>
             <div className="min-w-0">
-              <p className="text-[11px] font-bold uppercase tracking-[0.14em] mb-0.5" style={{ color: accent }}>
-                {kicker}
-              </p>
-              <h1 className="text-2xl md:text-3xl font-bold leading-tight" style={{ fontFamily: 'var(--font-display)', color: 'var(--text-primary)' }}>
+              <h1 className="text-xl md:text-[22px] font-bold leading-tight truncate" style={{ fontFamily: 'var(--font-display)', color: 'var(--text-primary)' }}>
                 {title}
               </h1>
-              <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>{subtitle}</p>
+              <p className="text-[12.5px] leading-snug truncate" style={{ color: 'var(--text-secondary)' }}>
+                <span className="font-semibold" style={{ color: accent }}>{kicker}</span>
+                <span className="mx-1.5 opacity-50">·</span>
+                {subtitle}
+              </p>
             </div>
           </div>
 
@@ -56,8 +53,8 @@ export function SectionShell({
           </div>
         </div>
 
-        {intro && <div className="mt-5">{intro}</div>}
-      </div>
+        {intro && <div className="mt-3.5">{intro}</div>}
+      </header>
 
       {children}
 

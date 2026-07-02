@@ -55,7 +55,7 @@ export function SeqAusschnitt({ flow, msgSeqs, frame }: SeqProps) {
       {/* Lebenslinien */}
       {parts.map((p, i) => (
         <motion.line
-          key={p.id} {...draw(i, reduce, 0.35)}
+          key={p.id} {...draw(i, reduce, 0.2)}
           x1={colX(p.id)} y1={44} x2={colX(p.id)} y2={H - 4}
           stroke="rgba(255,255,255,0.18)" strokeWidth={1} strokeDasharray="5 6"
         />
@@ -63,7 +63,7 @@ export function SeqAusschnitt({ flow, msgSeqs, frame }: SeqProps) {
 
       {/* Fragment-Rahmen */}
       {frame && (
-        <motion.g {...fadeIn(0, reduce, 0.5, 0)}>
+        <motion.g {...fadeIn(0, reduce, 0.3, 0)}>
           <rect x={10} y={58} width={W - 20} height={H - 66} rx={6} fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth={1.2} />
           <path d="M 10 58 h 46 v 15 l -8 8 h -38 z" fill="rgba(255,255,255,0.14)" stroke="rgba(255,255,255,0.3)" strokeWidth={1} />
           <text x={21} y={74} fontSize={11} fontWeight={700} fill="rgba(255,255,255,0.85)">{frame.label}</text>
@@ -103,12 +103,12 @@ export function SeqAusschnitt({ flow, msgSeqs, frame }: SeqProps) {
         return (
           <g key={m.id}>
             <motion.line
-              {...draw(i, reduce, 0.75)}
+              {...draw(i, reduce, 0.45)}
               x1={x1} y1={y} x2={xEnd} y2={y}
               stroke="rgba(255,255,255,0.75)" strokeWidth={1.5}
               strokeDasharray={dashed ? '6 5' : undefined}
             />
-            <motion.g {...fadeIn(i, reduce, 0.75)}>
+            <motion.g {...fadeIn(i, reduce, 0.45)}>
               {dashed
                 ? <polyline points={`${x2 - 11 * sgn},${y - 5} ${x2 - 2 * sgn},${y} ${x2 - 11 * sgn},${y + 5}`} fill="none" stroke="rgba(255,255,255,0.85)" strokeWidth={1.5} />
                 : <polygon points={`${x2 - 2 * sgn},${y} ${x2 - 12 * sgn},${y - 5.5} ${x2 - 12 * sgn},${y + 5.5}`} fill="rgba(255,255,255,0.9)" />}
@@ -219,8 +219,8 @@ export function StateAusschnitt({ machineId, nodes, edges, w, h, initialTo, init
         }
         return (
           <g key={i}>
-            <motion.path {...draw(i, reduce, 0.6)} d={g.path} fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth={1.6} />
-            <motion.g {...fadeIn(i, reduce, 0.6)}>
+            <motion.path {...draw(i, reduce, 0.35)} d={g.path} fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth={1.6} />
+            <motion.g {...fadeIn(i, reduce, 0.35)}>
               {head(g.end[0], g.end[1], g.ang, 'rgba(255,255,255,0.9)')}
               <text x={g.lx} y={g.eventY} textAnchor="middle" fontSize={11.5} fontWeight={600} fill="rgba(255,255,255,0.88)" stroke="#000" strokeWidth={3.5} paintOrder="stroke">
                 {e.event}
@@ -240,7 +240,7 @@ export function StateAusschnitt({ machineId, nodes, edges, w, h, initialTo, init
         const color = s.color ?? '#64748b'
         const showLabel = !!s.label && s.label.toUpperCase() !== nd.id
         return (
-          <motion.g key={nd.id} {...fadeIn(i, reduce, 0.25, 0)}>
+          <motion.g key={nd.id} {...fadeIn(i, reduce, 0.2, 0)}>
             <rect x={nd.x - NW} y={nd.y - NH} width={NW * 2} height={NH * 2} rx={13} fill={`${color}2a`} stroke={`${bright(color)}99`} strokeWidth={1.3} />
             <text
               x={nd.x} y={nd.y + (showLabel ? 0 : 4.5)} textAnchor="middle"

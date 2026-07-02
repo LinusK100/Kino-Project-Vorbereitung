@@ -111,15 +111,15 @@ export function JsonZuSvg() {
             x1={2} y1={12} x2={82} y2={12} stroke="rgba(255,255,255,0.8)" strokeWidth={1.5}
             initial={reduce ? { opacity: 0 } : { pathLength: 0 }}
             animate={reduce ? { opacity: 1 } : { pathLength: 1 }}
-            transition={{ delay: 0.75, duration: 0.5 }}
+            transition={{ delay: 0.5, duration: 0.4 }}
           />
           <motion.polygon
             points="90,12 79,6.5 79,17.5" fill="rgba(255,255,255,0.9)"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.15 }}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.85 }}
           />
           <motion.text
             x={46} y={27} textAnchor="middle" fontSize={8.5} fontFamily="ui-monospace, monospace" fill="rgba(255,255,255,0.55)"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.15 }}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.85 }}
           >
             belegen(buchung)
           </motion.text>
@@ -289,7 +289,7 @@ export function InnovationsMatrix() {
           const clash = pts.some((p, j) => j !== i && Math.abs(p.y - y) < 13 && p.x > x && p.x - x < 200)
           const left = x > W - 190 || clash
           return (
-            <motion.g key={it.id} {...pop(i, reduce, 0.45)}>
+            <motion.g key={it.id} {...pop(i, reduce, 0.3)}>
               <circle cx={x} cy={y} r={8} fill={`${c}66`} stroke={bright(c)} strokeWidth={1.5} />
               <text
                 x={left ? x - 14 : x + 14} y={y + 4}

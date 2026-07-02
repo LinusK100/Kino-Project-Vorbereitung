@@ -47,9 +47,9 @@ export default function SequencePage() {
       presentation={steps}
       intro={
         <Callout kind="info" title="Lesart">
-          Zeit läuft <strong>von oben nach unten</strong>. Durchgezogener Pfeil = synchroner Aufruf,
-          gestrichelt = Rückgabe/«create». <strong>Einfach</strong> zeigt den Happy Path,
-          <strong> Erweitert</strong> zusätzlich die alt-/break-Fragmente.
+          Die Zeit läuft <strong>von oben nach unten</strong>. <strong>Einfach</strong> zeigt den
+          Happy Path, <strong>Erweitert</strong> zusätzlich die alt-/break-Fragmente mit den
+          Fehlerpfaden. Die Pfeil-Notation steht unter dem Diagramm.
         </Callout>
       }
     >

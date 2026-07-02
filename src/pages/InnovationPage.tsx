@@ -31,7 +31,7 @@ const steps: PresentationStep[] = [
     id: 'anchor', title: 'Verankert im Modell', visual: <IdeeVerankert />,
     body: 'Keine losen Visionen: Jede Idee nennt ihre Persona, ihre User Stories und die betroffenen UML-Klassen. Die dynamischen Preise etwa erweitern Tarif um Preisregel und PreisService.',
   },
-  { id: 'cards', title: 'Zum Nachlesen', body: 'Jede Karte auf der Seite öffnet Details mit Modell-Bezug und einem ehrlichen Hinweis, wo die Technik den Projektrahmen sprengt. Der Einfach-Modus zeigt die drei MVP-nahen Ideen, Erweitert alle sechs.' },
+  { id: 'cards', title: 'Zum Nachlesen', body: 'Jede Karte auf der Seite öffnet Details mit Modell-Bezug und dem Hinweis, wo die Technik den Projektrahmen übersteigt. Der Einfach-Modus zeigt die drei MVP-nahen Ideen, Erweitert alle sechs.' },
 ]
 
 export default function InnovationPage() {

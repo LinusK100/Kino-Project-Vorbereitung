@@ -24,7 +24,7 @@ const protoSteps: PresentationStep[] = [
   { id: 'intro', title: 'Der MVP zum Anfassen', body: 'Release 1 als klickbare Hi-Fi-App: React mit gemockter API (MSW), läuft komplett im Browser ohne Installation. Der Button auf dieser Seite öffnet den Prototyp als eigene App in einem neuen Tab.' },
   {
     id: 'rollen', title: 'Acht Rollen, vier davon live', visual: <RollenGrid />,
-    body: 'Endkunde, Kasse, Manager und Einlass sind vollständig klickbar und in der App oben umschaltbar. Die vier Roadmap-Rollen sind bewusst nur modelliert – ehrlich ausgewiesen statt vorgetäuscht.',
+    body: 'Endkunde, Kasse, Manager und Einlass sind vollständig klickbar und in der App oben umschaltbar. Die vier übrigen Rollen sind bewusst nur modelliert und als Roadmap ausgewiesen.',
   },
   {
     id: 'wizard', title: 'Der Wizard folgt dem Sequenzdiagramm', visual: <WizardSchritte />,
@@ -74,7 +74,7 @@ export default function PrototypePage() {
             <Rocket size={18} /> Prototyp starten <ExternalLink size={15} />
           </a>
           <Callout kind="info">
-            {prototype.beschreibung} Öffnet sich in einem <strong>neuen Tab</strong> – als einziger Abschnitt der Website.
+            {prototype.beschreibung}
           </Callout>
         </div>
       }

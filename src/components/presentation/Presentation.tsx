@@ -11,13 +11,15 @@ interface PresentationProps {
   accent: string
   title: string
   label?: string
+  /** weißer Knopf für farbige Flächen (z. B. Dashboard-Hero) */
+  invert?: boolean
 }
 
 const SPEEDS = [5000, 8000, 12000]
 const SPEED_LABEL: Record<number, string> = { 5000: 'schnell', 8000: 'normal', 12000: 'langsam' }
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1]
 
-export function Presentation({ steps, accent, title, label = 'Präsentation' }: PresentationProps) {
+export function Presentation({ steps, accent, title, label = 'Präsentation', invert }: PresentationProps) {
   const [active, setActive] = useState(false)
   if (steps.length === 0) return null
 
@@ -25,8 +27,10 @@ export function Presentation({ steps, accent, title, label = 'Präsentation' }: 
     <>
       <button
         onClick={() => setActive(true)}
-        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-white transition-transform hover:-translate-y-0.5"
-        style={{ background: accent, boxShadow: `0 2px 10px ${accent}55` }}
+        className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-transform hover:-translate-y-0.5 ${invert ? '' : 'text-white'}`}
+        style={invert
+          ? { background: '#fff', color: accent, boxShadow: '0 2px 12px rgba(0,0,0,0.28)' }
+          : { background: accent, boxShadow: `0 2px 10px ${accent}55` }}
       >
         <PresentationIcon size={14} />
         {label}
@@ -84,13 +88,13 @@ function CinemaMode({
   const slideV = reduce
     ? { hidden: { opacity: 0 }, show: { opacity: 1, transition: { when: 'beforeChildren' as const } }, exit: { opacity: 0 } }
     : {
-        hidden: { opacity: 0, y: 34, filter: 'blur(10px)' },
-        show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.55, ease: EASE, when: 'beforeChildren' as const, staggerChildren: 0.12, delayChildren: 0.08 } },
-        exit: { opacity: 0, y: -26, filter: 'blur(8px)', transition: { duration: 0.3, ease: 'easeIn' as const } },
+        hidden: { opacity: 0, y: 26, filter: 'blur(8px)' },
+        show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.4, ease: EASE, when: 'beforeChildren' as const, staggerChildren: 0.07, delayChildren: 0.03 } },
+        exit: { opacity: 0, y: -20, filter: 'blur(6px)', transition: { duration: 0.22, ease: 'easeIn' as const } },
       }
   const itemV = reduce
     ? { hidden: { opacity: 0 }, show: { opacity: 1 } }
-    : { hidden: { opacity: 0, y: 18 }, show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: EASE } } }
+    : { hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0, transition: { duration: 0.34, ease: EASE } } }
 
   return (
     <div

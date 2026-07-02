@@ -65,7 +65,7 @@ export function PersonaBaum() {
       <svg viewBox={`0 0 ${W} 36`} className="w-full h-auto" aria-hidden>
         {kinder.map((p, i) => (
           <motion.path
-            key={p.id} {...draw(i, reduce, 0.5)}
+            key={p.id} {...draw(i, reduce, 0.3)}
             d={`M ${W / 2} 2 C ${W / 2} 22, ${childX(i)} 14, ${childX(i)} 34`}
             fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth={1.2}
           />
@@ -254,7 +254,7 @@ export function StoryVerteilung() {
                 key={seg.key}
                 initial={reduce ? { opacity: 0 } : { width: '0%' }}
                 animate={reduce ? { opacity: 1 } : { width: `${(seg.n / alle.length) * 100}%` }}
-                transition={{ delay: 0.5 + bi * 0.25 + si * 0.12, duration: 0.7, ease: VEASE }}
+                transition={{ delay: 0.35 + bi * 0.16 + si * 0.08, duration: 0.55, ease: VEASE }}
                 className="flex items-center justify-center gap-1.5 overflow-hidden whitespace-nowrap"
                 style={{ background: `${seg.color}55`, borderRight: si < 2 ? '1px solid rgba(0,0,0,0.4)' : undefined }}
               >

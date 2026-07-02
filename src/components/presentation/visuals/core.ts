@@ -18,34 +18,35 @@ const BRIGHT: Record<string, string> = {
 export const bright = (hex: string) => BRIGHT[hex.toLowerCase()] ?? hex
 
 // Ein Element erscheint (Karten, Chips, Knoten) — i staffelt die Reihenfolge.
-export function pop(i: number, reduce: boolean | null, base = 0.35) {
+// Delays bewusst knapp: der Aufbau soll führen, nicht warten lassen.
+export function pop(i: number, reduce: boolean | null, base = 0.2) {
   return reduce
     ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { delay: 0.1 } }
     : {
-        initial: { opacity: 0, y: 14, scale: 0.96 },
+        initial: { opacity: 0, y: 12, scale: 0.97 },
         animate: { opacity: 1, y: 0, scale: 1 },
-        transition: { delay: base + i * 0.13, duration: 0.5, ease: VEASE },
+        transition: { delay: base + i * 0.07, duration: 0.38, ease: VEASE },
       }
 }
 
 // Eine SVG-Linie/-Kante zeichnet sich (Pfeile in Diagramm-Ausschnitten).
-export function draw(i: number, reduce: boolean | null, base = 0.55) {
+export function draw(i: number, reduce: boolean | null, base = 0.3) {
   return reduce
     ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { delay: 0.1 } }
     : {
         initial: { pathLength: 0, opacity: 0 },
         animate: { pathLength: 1, opacity: 1 },
-        transition: { delay: base + i * 0.2, duration: 0.45, ease: 'easeOut' as const },
+        transition: { delay: base + i * 0.11, duration: 0.32, ease: 'easeOut' as const },
       }
 }
 
 // Beschriftungen/Pfeilspitzen blenden nach der zugehörigen Kante ein.
-export function fadeIn(i: number, reduce: boolean | null, base = 0.55, extra = 0.22) {
+export function fadeIn(i: number, reduce: boolean | null, base = 0.3, extra = 0.14) {
   return reduce
     ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { delay: 0.1 } }
     : {
         initial: { opacity: 0 },
         animate: { opacity: 1 },
-        transition: { delay: base + i * 0.2 + extra, duration: 0.3 },
+        transition: { delay: base + i * 0.11 + extra, duration: 0.22 },
       }
 }

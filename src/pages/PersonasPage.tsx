@@ -50,9 +50,8 @@ export default function PersonasPage() {
       presentation={steps}
       intro={
         <Callout kind="info">
-          Jede Persona steht für eine Nutzergruppe mit Zielen und Frustrationen.
-          <strong> Einfach</strong> zeigt die 4 Kern-Personas (MVP), <strong>Erweitert</strong> alle 12.
-          Jede User Story gehört zu genau einer Persona.
+          Jede Persona steht für eine Nutzergruppe mit eigenen Zielen und Frustrationen —
+          und jede User Story gehört zu genau einer von ihnen.
         </Callout>
       }
     >

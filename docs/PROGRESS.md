@@ -99,3 +99,11 @@
   U47-Story-Karte, Verteilungs-Balken, Backbone/Release-Bänder, Rollen-Grid,
   Wizard-Stepper, Impact/Aufwand-Matrix, JSON→SVG-Pipeline. 39 Folien × Playwright
   verifiziert (0 Fehler), Build/Lint grün.
+- 2026-07-02: UI/UX-Pass — Folien-Animationen deutlich gestrafft (Inhalt nach
+  ~1,5 s statt ~2,6 s komplett); Detail-Panels (Klasse, Story) vom rechten Sheet
+  auf zentrierten Dialog über dem Inhalt umgestellt; Abschnitts-Header kompakt
+  (eine Zeile statt Karten-Band); Diagramm-Zoom mit Drag-Panning, Strg+Scroll am
+  Cursor und „Einpassen“-Knopf; Story Map per Ziehen verschiebbar; Dashboard
+  entschlackt (ein Hero mit integriertem Tour-Start statt Doppel-Kopf, Gruppen-
+  Karten mit Kurzbeschreibung); redundante Callout-Texte entfernt (Notation
+  stand doppelt in Callout und Legende).

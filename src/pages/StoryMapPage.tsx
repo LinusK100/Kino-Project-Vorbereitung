@@ -2,10 +2,11 @@ import { useState } from 'react'
 import { Map, Ticket, ScanLine, Calendar, UserCircle, Settings, Search, LayoutGrid, CheckCircle2, Coffee, Wrench, Building2, CircleDot } from 'lucide-react'
 import { SectionShell } from '@/components/shared/SectionShell'
 import { Callout } from '@/components/shared/Callout'
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { useStoryMap, useStories, personaById } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
+import { useDragScroll } from '@/lib/useDragScroll'
 import { BackboneChips, ReleaseBaender } from '@/components/presentation/visuals/people'
 import type { UserStory, ReleaseNumber, PresentationStep } from '@/types'
 
@@ -43,6 +44,7 @@ export default function StoryMapPage() {
   const isDark = theme === 'dark'
   const [selected, setSelected] = useState<UserStory | null>(null)
   const [activeRelease, setActiveRelease] = useState<ReleaseNumber | null>(null)
+  const { ref: mapRef, dragging, handlers } = useDragScroll<HTMLDivElement>()
 
   const storyById = (id: string) => stories.find((s) => s.id === id)
   const countByRelease = [1, 2, 3].map((r) => stories.filter((s) => s.release === r).length)
@@ -92,10 +94,15 @@ export default function StoryMapPage() {
             </button>
           )
         })}
-        <span className="ml-auto text-xs px-3 py-1.5 rounded-full" style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}>← horizontal scrollen · Klick für Details →</span>
+        <span className="ml-auto text-xs px-3 py-1.5 rounded-full" style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}>Ziehen verschiebt die Karte · Klick öffnet die Story</span>
       </div>
 
-      <div className="overflow-x-auto pb-4 rounded-xl" style={{ border: '1px solid var(--border-color)' }} data-pres="map">
+      <div
+        ref={mapRef} {...handlers}
+        className="overflow-x-auto pb-4 rounded-xl select-none"
+        style={{ border: '1px solid var(--border-color)', cursor: dragging ? 'grabbing' : 'grab' }}
+        data-pres="map"
+      >
         <TooltipProvider>
           <div className="inline-flex min-w-max">
             {/* sticky release labels */}
@@ -162,19 +169,23 @@ export default function StoryMapPage() {
         </TooltipProvider>
       </div>
 
-      <Sheet open={!!selected} onOpenChange={() => setSelected(null)}>
-        <SheetContent className="w-full sm:max-w-lg overflow-y-auto" style={{ background: 'var(--card-bg)', borderColor: 'var(--border-color)' }}>
+      <Dialog open={!!selected} onOpenChange={() => setSelected(null)}>
+        <DialogContent
+          aria-describedby={undefined}
+          className="sm:max-w-xl max-h-[82vh] overflow-y-auto rounded-2xl"
+          style={{ background: 'var(--card-bg)', borderColor: 'var(--border-color)', color: 'var(--text-primary)' }}
+        >
           {selected && (() => {
             const p = personaById[selected.persona]; const c = rc[selected.release]
             return (
               <>
-                <SheetHeader>
+                <DialogHeader>
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
                     <span className="font-mono text-sm font-bold" style={{ color: ACCENT }}>{selected.id}</span>
                     <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{ background: isDark ? c.bgDark : c.bg, color: isDark ? c.textDark : c.text, border: `1px solid ${isDark ? c.borderDark : c.border}` }}>{c.label}</span>
                   </div>
-                  <SheetTitle style={{ color: 'var(--text-primary)' }}>{selected.title}</SheetTitle>
-                </SheetHeader>
+                  <DialogTitle style={{ color: 'var(--text-primary)' }}>{selected.title}</DialogTitle>
+                </DialogHeader>
                 <div className="space-y-5 mt-5">
                   <div className="p-4 rounded-xl text-sm italic leading-relaxed" style={{ background: `${ACCENT}0d`, borderLeft: `3px solid ${ACCENT}`, color: 'var(--text-primary)' }}>{selected.story}</div>
                   <div>
@@ -186,8 +197,8 @@ export default function StoryMapPage() {
               </>
             )
           })()}
-        </SheetContent>
-      </Sheet>
+        </DialogContent>
+      </Dialog>
     </SectionShell>
   )
 }

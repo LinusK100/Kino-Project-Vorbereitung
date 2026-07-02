@@ -194,7 +194,7 @@ export function ImplSplit({ extras = [] }: { extras?: string[] }) {
         <motion.div
           initial={reduce ? { opacity: 0 } : { width: '0%' }}
           animate={reduce ? { opacity: 1 } : { width: `${(impl / total) * 100}%` }}
-          transition={{ delay: 0.45, duration: 0.8, ease: VEASE }}
+          transition={{ delay: 0.3, duration: 0.6, ease: VEASE }}
           className="flex items-center justify-center gap-2 overflow-hidden"
           style={{ background: '#437a22a8' }}
         >

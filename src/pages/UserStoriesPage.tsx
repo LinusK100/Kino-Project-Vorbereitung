@@ -3,7 +3,7 @@ import { ListChecks, Download, ChevronRight, CheckCircle2 } from 'lucide-react'
 import { SectionShell } from '@/components/shared/SectionShell'
 import { Callout } from '@/components/shared/Callout'
 import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useStories, personaById } from '@/data/content'
@@ -161,20 +161,24 @@ export default function UserStoriesPage() {
         {filtered.length === 0 && <div className="py-12 text-center" style={{ color: 'var(--text-secondary)' }}>Keine Stories gefunden</div>}
       </div>
 
-      <Sheet open={!!selected} onOpenChange={() => setSelected(null)}>
-        <SheetContent className="w-full sm:max-w-lg overflow-y-auto" style={{ background: 'var(--card-bg)', borderColor: 'var(--border-color)' }}>
+      <Dialog open={!!selected} onOpenChange={() => setSelected(null)}>
+        <DialogContent
+          aria-describedby={undefined}
+          className="sm:max-w-xl max-h-[82vh] overflow-y-auto rounded-2xl"
+          style={{ background: 'var(--card-bg)', borderColor: 'var(--border-color)', color: 'var(--text-primary)' }}
+        >
           {selected && (() => {
             const p = personaById[selected.persona]
             return (
               <>
-                <SheetHeader>
+                <DialogHeader>
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
                     <span className="font-mono text-sm font-bold" style={{ color: ACCENT }}>{selected.id}</span>
                     <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{ background: `${priorityColor[selected.priority]}20`, color: priorityColor[selected.priority] }}>{priorityLong[selected.priority]}</span>
                     <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{ background: `${releaseColor[selected.release]}20`, color: releaseColor[selected.release] }}>{releaseLabel[selected.release]}</span>
                   </div>
-                  <SheetTitle style={{ color: 'var(--text-primary)' }}>{selected.title}</SheetTitle>
-                </SheetHeader>
+                  <DialogTitle style={{ color: 'var(--text-primary)' }}>{selected.title}</DialogTitle>
+                </DialogHeader>
                 <div className="space-y-5 mt-5">
                   <div className="p-4 rounded-xl text-sm italic leading-relaxed" style={{ background: `${ACCENT}0d`, borderLeft: `3px solid ${ACCENT}`, color: 'var(--text-primary)' }}>{selected.story}</div>
                   <div>
@@ -201,8 +205,8 @@ export default function UserStoriesPage() {
               </>
             )
           })()}
-        </SheetContent>
-      </Sheet>
+        </DialogContent>
+      </Dialog>
     </SectionShell>
   )
 }

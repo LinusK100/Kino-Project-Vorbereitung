@@ -4,7 +4,7 @@ import { SectionShell } from '@/components/shared/SectionShell'
 import { Callout } from '@/components/shared/Callout'
 import { DiagramFrame } from '@/components/diagram/DiagramFrame'
 import { ClassDiagram } from '@/components/diagram/ClassDiagram'
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { uml } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
 import { UML_GROUP_COLOR } from '@/lib/statusColors'
@@ -68,9 +68,9 @@ export default function ClassDiagramPage() {
       presentation={steps}
       intro={
         <div data-pres="ops-callout">
-          <Callout kind="info" title="Notation">
-            Name · Attribute · Operationen. <strong>◆</strong> Komposition · <strong>▷</strong> Vererbung · <strong>→</strong> Assoziation · <strong>⇢</strong> Abhängigkeit · grüner Punkt = implementiert.
-            Status-Operationen stehen an den <strong>Objekten</strong> (<code>VorstellungSitz.reservieren()</code>), nicht bei den Akteuren; Enums sind separate Aufzählungen.
+          <Callout kind="info" title="Lesehinweis">
+            Status-Operationen stehen an den <strong>Objekten</strong> (<code>VorstellungSitz.reservieren()</code>),
+            nicht bei den Akteuren; Enums sind separate Aufzählungen. Die Zeichen-Notation steht unter dem Diagramm.
           </Callout>
         </div>
       }
@@ -145,11 +145,15 @@ function ClassLegend() {
 function ClassDrawer({ cls, onClose }: { cls: UmlClass | null; onClose: () => void }) {
   const rels = useMemo(() => cls ? uml.relationships.filter((r) => r.from === cls.id || r.to === cls.id) : [], [cls])
   return (
-    <Sheet open={!!cls} onOpenChange={(o) => !o && onClose()}>
-      <SheetContent className="w-full sm:max-w-lg overflow-y-auto" style={{ background: 'var(--card-bg)', borderColor: 'var(--border-color)' }}>
+    <Dialog open={!!cls} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent
+        aria-describedby={undefined}
+        className="sm:max-w-xl max-h-[82vh] overflow-y-auto rounded-2xl"
+        style={{ background: 'var(--card-bg)', borderColor: 'var(--border-color)', color: 'var(--text-primary)' }}
+      >
         {cls && (
           <>
-            <SheetHeader>
+            <DialogHeader>
               <div className="flex items-center gap-2 mb-1 flex-wrap">
                 <span className="text-xs px-2 py-0.5 rounded-full font-semibold text-white" style={{ background: UML_GROUP_COLOR[cls.group] }}>{groupLabel[cls.group]}</span>
                 {cls.stereotype && <span className="text-xs font-mono" style={{ color: 'var(--text-secondary)' }}>{cls.stereotype}</span>}
@@ -157,8 +161,8 @@ function ClassDrawer({ cls, onClose }: { cls: UmlClass | null; onClose: () => vo
                   {cls.implementedInPrototype ? 'implementiert' : 'Design-only'}
                 </span>
               </div>
-              <SheetTitle style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>{cls.id}</SheetTitle>
-            </SheetHeader>
+              <DialogTitle style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-display)' }}>{cls.id}</DialogTitle>
+            </DialogHeader>
             <div className="space-y-5 mt-5">
               {cls.attributes.length > 0 && (
                 <Compartment title={cls.group === 'enum' ? 'Werte' : 'Attribute'}>
@@ -192,8 +196,8 @@ function ClassDrawer({ cls, onClose }: { cls: UmlClass | null; onClose: () => vo
             </div>
           </>
         )}
-      </SheetContent>
-    </Sheet>
+      </DialogContent>
+    </Dialog>
   )
 }
 
