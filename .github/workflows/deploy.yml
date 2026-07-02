@@ -21,10 +21,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Node 24 = aktuelles LTS und dieselbe Version wie in der lokalen Entwicklung
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
       # `npm install` (not `npm ci`) because the lockfile is generated on macOS
