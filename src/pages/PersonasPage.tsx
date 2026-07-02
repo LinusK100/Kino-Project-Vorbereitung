@@ -11,11 +11,18 @@ import type { Persona, PresentationStep } from '@/types'
 const ACCENT = '#006494'
 
 const steps: PresentationStep[] = [
-  { id: 'intro', title: 'Was sind Personas?', body: 'Personas beschreiben die Nutzergruppen des Systems mit ihren Zielen und Frustrationen. Jede spätere User Story gehört zu genau einer Persona.', target: '[data-pres="section-header"]' },
-  { id: 'einfach', title: 'Einfach: 4 Kern-Personas', body: 'Im Einfach-Modus siehst du die 4 MVP-Personas: die Dach-Persona „Endkunde" plus Kassiererin, Manager und Einlass. Genau die Rollen, die der Prototyp umsetzt.', target: '[data-pres="mode-toggle"]', mode: 'einfach' },
-  { id: 'erweitert', title: 'Erweitert: 12 Personas', body: 'Im Erweitert-Modus differenziert sich „Endkunde" in Lara, Jonas, Hannelore und Sandra – plus Service, Facility, Marke und Admin. Eine echte Obermenge der Basis.', target: '[data-pres="group-filter"]', mode: 'erweitert' },
-  { id: 'anatomy', title: 'Aufbau einer Persona', body: 'Jede Karte zeigt Ziele (was die Person erreichen will) und Frustrationen (was heute nervt). Aus genau diesem Spannungsfeld entstehen die User Stories.', target: '[data-pres="persona-first"]', mode: 'erweitert' },
-  { id: 'umbrella', title: 'Dach-Persona & Ausprägungen', body: 'Die Dach-Persona „Endkunde" bündelt konkrete Kunden-Ausprägungen. So bleibt die Basis schlank, ohne im Erweitert-Modus an Differenzierung zu verlieren.', target: '[data-pres="persona-endkunde"]', mode: 'erweitert' },
+  { id: 'intro', title: 'Personas', body: 'Personas machen die Nutzergruppen greifbar: Wer nutzt das System – mit welchen Zielen und Frustrationen? Jede spätere User Story gehört zu genau einer Persona.' },
+  {
+    id: 'einfach', title: 'Vier Kern-Personas (MVP)', body: 'Der Einfach-Modus zeigt genau die Rollen, die der Prototyp umsetzt:',
+    points: [
+      'Endkunde – bucht online oder an der Kasse (Dach-Persona)',
+      'Monika – Kassiererin, verkauft unter Zeitdruck',
+      'Thomas – Kinomanager, plant Programm und Preise',
+      'Kevin – Einlasspersonal, validiert QR-Tickets',
+    ],
+  },
+  { id: 'erweitert', title: 'Zwölf Personas im Vollausbau', body: 'Im Erweitert-Modus differenziert sich der Endkunde in Stammkundin, Student, Seniorin und Familienmutter – dazu kommen Service, Facility, Marken-Manager und Admin. Eine echte Obermenge der Basis.' },
+  { id: 'anatomy', title: 'Vom Bedürfnis zur Anforderung', body: 'Jede Persona-Karte zeigt Ziele und Frustrationen. Aus genau diesem Spannungsfeld entstehen die User Stories – jede Anforderung hat damit eine nachvollziehbare Quelle.' },
 ]
 
 export default function PersonasPage() {

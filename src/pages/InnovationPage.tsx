@@ -22,10 +22,16 @@ const feasCfg: Record<string, { label: string; color: string }> = {
 }
 
 const steps: PresentationStep[] = [
-  { id: 'intro', title: 'Innovations-Layer', body: 'Hier sammeln sich recherchierte Zukunfts-Ideen (2026). Jede ist im Modell und in Stories verankert – und ehrlich als umsetzbar oder Konzept gekennzeichnet.', target: '[data-pres="section-header"]' },
-  { id: 'feas', title: 'Machbarkeit ehrlich markiert', body: 'Grün = im Projektrahmen umsetzbar, Amber = teilweise, Violett = Vision (z. B. AR-Hardware oder ML). So bleibt klar, was realistisch ist.', target: '[data-pres="legend"]' },
-  { id: 'cards', title: 'Verankert im Modell', body: 'Jede Idee nennt Persona, User Stories und die betroffenen UML-Klassen – Innovation ist kein Selbstzweck, sondern integriert.', target: '[data-pres="first-card"]' },
-  { id: 'erweitert', title: 'Erweitert: alle Ideen', body: 'Im Erweitert-Modus erscheinen auch die visionären AR- und Prognose-Ideen, die bewusst außerhalb des Bauumfangs liegen.', target: '[data-pres="grid"]', mode: 'erweitert' },
+  { id: 'intro', title: 'Innovation', body: 'Recherchierte Zukunfts-Ideen (2026) über den MVP hinaus – jede in User Stories und UML-Klassen verankert. Keine losen Visionen, sondern integrierte Erweiterungen des Modells.' },
+  {
+    id: 'feas', title: 'Ehrliche Machbarkeit', body: 'Jede Idee trägt ein begründetes Flag:',
+    points: [
+      'machbar – im Projektrahmen umsetzbar (z. B. dynamische Preise, DSGVO)',
+      'teilweise – Kern machbar, voller Umfang braucht Zusatzsysteme',
+      'Konzept – bewusst als Vision markiert (AR-Hardware, ML-Modelle)',
+    ],
+  },
+  { id: 'cards', title: 'Verankert im Modell', body: 'KI-Sitzempfehlung, AR-Facility oder Auslastungsprognose: Jede Idee nennt Persona, Stories und die betroffenen UML-Klassen – und bleibt ehrlich, wenn die Technik den Projektrahmen sprengt.' },
 ]
 
 export default function InnovationPage() {

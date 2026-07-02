@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
 import {
-  LayoutDashboard, Layers, Layers3, Presentation as PresentationIcon, Moon,
-  ArrowRight, Users, ListChecks, Boxes, Film,
+  LayoutDashboard, Layers, Presentation as PresentationIcon, Braces, ArrowRight, Film,
 } from 'lucide-react'
 import { SectionShell } from '@/components/shared/SectionShell'
 import { NAV } from '@/components/layout/nav'
@@ -11,19 +10,29 @@ import type { PresentationStep } from '@/types'
 
 const ACCENT = '#01696f'
 
-const kpis = [
-  { label: 'Personas', value: `${personas.basis.length}–${personas.erweitert.length}`, icon: Users },
-  { label: 'User Stories', value: `${stories.basis.length}–${stories.erweitert.length}`, icon: ListChecks },
-  { label: 'UML-Klassen', value: uml.classes.length, icon: Boxes },
-  // Klassendiagramm + Sequenzdiagramme + Zustandsautomaten (inkl. Enum-Automaten)
-  { label: 'Diagramme', value: 1 + sequences.length + stateMachines.machines.length + extraMachines.length, icon: PresentationIcon },
+// Klassendiagramm + Sequenzdiagramme + Zustandsautomaten (inkl. Enum-Automaten)
+const nDiagramme = 1 + sequences.length + stateMachines.machines.length + extraMachines.length
+
+const heroStats = [
+  `${personas.basis.length}–${personas.erweitert.length} Personas`,
+  `${stories.basis.length}–${stories.erweitert.length} User Stories`,
+  `${uml.classes.length} UML-Klassen`,
+  `${nDiagramme} Diagramme`,
 ]
 
 const steps: PresentationStep[] = [
-  { id: 'welcome', title: 'Willkommen', body: 'Diese Website dokumentiert das Kino-Projekt CineTicket – von den Anforderungen bis zum Prototyp. Diese kurze Tour erklärt die Bedienung.', target: '[data-pres="hero"]' },
-  { id: 'aufbau', title: 'Aufbau', body: 'Links sind die Abschnitte gruppiert: Anforderungen, Modellierung und Ergebnis. Du arbeitest sie der Reihe nach durch.', target: '[data-pres="structure"]' },
-  { id: 'modi', title: 'Einfach & Erweitert', body: 'Jeder Abschnitt hat zwei Detailgrade: Einfach (MVP) und Erweitert (Vollausbau). Umschalten oben rechts in jedem Abschnitt.', target: '[data-pres="how-modes"]' },
-  { id: 'praesentation', title: 'Präsentationsmodus', body: 'Jeder Abschnitt hat eine geführte Präsentation wie diese – mit den Pfeilen weiter oder „Auto". Esc beendet.', target: '[data-pres="how-present"]' },
+  { id: 'welcome', title: 'CineTicket', body: 'Die Dokumentation eines Kino-Ticketsystems für „Systemanalyse und Entwurf" – von der Anforderungsanalyse über die UML-Modellierung bis zum klickbaren Prototyp.' },
+  {
+    id: 'aufbau', title: 'Drei Stationen', body: 'Die Website folgt dem Weg der Systementwicklung:',
+    points: [
+      'Anforderungen – Personas, User Stories und Story Map',
+      'Modellierung – Klassen-, Sequenz- und Zustandsdiagramme',
+      'Ergebnis – klickbarer Prototyp und Innovations-Ideen',
+    ],
+  },
+  { id: 'modi', title: 'Einfach & Erweitert', body: 'Jeder Abschnitt hat zwei Detailgrade: Einfach zeigt den MVP-Kern, Erweitert den Vollausbau. Die Basis ist dabei immer eine echte Teilmenge des Vollausbaus.' },
+  { id: 'json', title: 'Inhalte als JSON', body: 'Alle Inhalte – von den Personas bis zu den Zustandsautomaten – liegen als strukturierte JSON-Daten vor. Die Diagramme werden daraus direkt auf der Website als SVG gerendert: konsistent, interaktiv und prüfbar.' },
+  { id: 'praes', title: 'Präsentationsmodus', body: 'Jeder Abschnitt erklärt seine wichtigsten Inhalte in einer solchen Kino-Tour – manuell mit den Pfeiltasten oder automatisch mit einstellbarem Tempo. Esc beendet.' },
 ]
 
 export default function OverviewPage() {
@@ -37,48 +46,42 @@ export default function OverviewPage() {
       modes={false}
       presentation={steps}
       intro={
-        <div className="rounded-xl p-5 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #01696f 0%, #006494 100%)' }} data-pres="hero">
+        <div className="rounded-xl p-5 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #01696f 0%, #006494 100%)' }}>
           <div className="relative z-10 max-w-2xl">
             <p className="text-xs font-semibold mb-1" style={{ color: 'rgba(255,255,255,0.7)' }}>Systemanalyse & Entwurf</p>
             <h2 className="text-xl md:text-2xl font-bold text-white mb-2" style={{ fontFamily: 'var(--font-display)' }}>CineTicket – ein Kino-Ticketsystem</h2>
-            <p className="text-sm" style={{ color: 'rgba(255,255,255,0.9)' }}>
-              Personas → User Stories → Story Map → UML-Diagramme → Prototyp. Für die Bedienung die Tour oben rechts starten.
+            <p className="text-sm mb-4" style={{ color: 'rgba(255,255,255,0.9)' }}>
+              Von den Anforderungen über UML-Modelle bis zum klickbaren Prototyp – die Tour oben rechts erklärt alles Wichtige.
             </p>
+            <div className="flex flex-wrap gap-1.5">
+              {heroStats.map((s) => (
+                <span key={s} className="text-xs px-2.5 py-1 rounded-full font-medium text-white" style={{ background: 'rgba(255,255,255,0.16)' }}>{s}</span>
+              ))}
+            </div>
           </div>
           <Film size={130} color="white" className="absolute -right-4 -bottom-6 opacity-10 hidden md:block" />
         </div>
       }
     >
-      {/* How to use */}
+      {/* So liest du diese Website */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
-        <HowCard icon={Layers} title="Einfach & Erweitert" accent="#006494" pres="how-modes">
-          Zwei Detailgrade je Abschnitt: <Layers3 size={12} className="inline" /> Erweitert zeigt den Vollausbau. Umschalten oben rechts in jedem Abschnitt.
+        <HowCard icon={PresentationIcon} title="Präsentationsmodus" accent="#7a39bb">
+          Jeder Abschnitt erklärt seine wichtigsten Inhalte als animierte Kino-Tour –
+          Start oben rechts, weiter per Pfeiltasten oder automatisch, Esc beendet.
         </HowCard>
-        <HowCard icon={PresentationIcon} title="Präsentation" accent="#7a39bb" pres="how-present">
-          Geführte Tour je Abschnitt – mit den Pfeilen oder „Auto" durchgehen.
+        <HowCard icon={Braces} title="Inhalte als JSON" accent="#006494">
+          Alle Inhalte liegen als strukturierte JSON-Daten vor; die UML-Diagramme werden
+          daraus live als SVG gerendert – konsistent, prüfbar und interaktiv (Zoom, Klick).
         </HowCard>
-        <HowCard icon={Moon} title="Navigation & Theme" accent="#964219">
-          Abschnitte links, Hell/Dunkel oben rechts. Diagramme sind zoom- und klickbar.
+        <HowCard icon={Layers} title="Einfach & Erweitert" accent="#964219">
+          Zwei Detailgrade je Abschnitt: MVP-Kern oder Vollausbau. Die Basis ist immer
+          eine Teilmenge – umschalten oben rechts in jedem Abschnitt.
         </HowCard>
       </div>
 
-      {/* KPIs */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-        {kpis.map((k) => {
-          const Icon = k.icon
-          return (
-            <div key={k.label} className="rounded-xl p-3.5" style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
-              <Icon size={16} style={{ color: ACCENT }} className="mb-2" />
-              <div className="text-xl font-bold" style={{ color: ACCENT }}>{k.value}</div>
-              <div className="text-xs" style={{ color: 'var(--text-secondary)' }}>{k.label}</div>
-            </div>
-          )
-        })}
-      </div>
-
-      {/* Structure */}
+      {/* Abschnitte */}
       <h3 className="text-sm font-bold mb-3" style={{ color: 'var(--text-primary)' }}>Abschnitte</h3>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3" data-pres="structure">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {NAV.filter((g) => g.title !== 'Start').map((group) => (
           <div key={group.title} className="rounded-xl p-4" style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
             <h4 className="text-xs font-bold uppercase tracking-wider mb-2.5" style={{ color: group.items[0].accent }}>{group.title}</h4>
@@ -101,9 +104,9 @@ export default function OverviewPage() {
   )
 }
 
-function HowCard({ icon: Icon, title, accent, children, pres }: { icon: React.ElementType; title: string; accent: string; children: React.ReactNode; pres?: string }) {
+function HowCard({ icon: Icon, title, accent, children }: { icon: React.ElementType; title: string; accent: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-xl p-4" style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)' }} data-pres={pres}>
+    <div className="rounded-xl p-4" style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
       <div className="flex items-center gap-2 mb-2">
         <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: `${accent}18`, color: accent }}><Icon size={16} /></div>
         <h4 className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>{title}</h4>

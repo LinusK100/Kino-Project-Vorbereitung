@@ -11,11 +11,19 @@ import type { SequenceDiagram as SeqType, PresentationStep } from '@/types'
 const ACCENT = '#7a39bb'
 
 const steps: PresentationStep[] = [
-  { id: 'intro', title: 'Sequenzdiagramme', body: 'Sequenzdiagramme zeigen den Buchungs-Flow als Interaktion über die Zeit: wer schickt wann welche Nachricht an wen. Die Zeit läuft von oben nach unten.', target: '[data-pres="section-header"]' },
-  { id: 'tabs', title: 'Vier Flows', body: 'Der Buchungsprozess ist in vier übersichtliche Diagramme geteilt: Online-Buchung, Kassenverkauf, Storno und Einlass. So bleibt jedes einzelne klar.', target: '[data-pres="seq-tabs"]' },
-  { id: 'lifelines', title: 'Teilnehmer & Lebenslinien', body: 'Oben die Teilnehmer (Akteur, «control»-Services, «entity»-Objekte), darunter ihre gestrichelten Lebenslinien. Pfeile sind Nachrichten in seq-Reihenfolge.', target: '[data-pres="diagram"]', mode: 'einfach' },
-  { id: 'badges', title: 'Statuswechsel-Badges', body: 'Die farbigen 「…」-Badges zeigen, wie eine Nachricht den Objekt-Status ändert – die Brücke zu den Zustandsdiagrammen (z. B. FREI→RESERVIERT).', target: '[data-pres="diagram"]', mode: 'einfach' },
-  { id: 'fragments', title: 'Erweitert: Alt-/Break-Pfade', body: 'Im Erweitert-Modus erscheinen die kombinierten Fragmente (alt/opt/break) mit ihren Bedingungen – z. B. „Sitz vergeben" oder „Zahlung fehlgeschlagen".', target: '[data-pres="diagram"]', mode: 'erweitert' },
+  { id: 'intro', title: 'Sequenzdiagramme', body: 'Der Buchungsprozess als Interaktion über die Zeit: Wer schickt wann welche Nachricht an wen? Die Zeit läuft von oben nach unten – vier fokussierte Flows statt eines überladenen Diagramms.' },
+  {
+    id: 'tabs', title: 'Vier Flows', body: 'Jedes Diagramm zeigt einen abgeschlossenen Ablauf:',
+    points: [
+      'Online-Buchung – vom Sitzplan bis zum QR-Ticket',
+      'Kassenverkauf – der schnelle POS-Weg ohne langen Hold',
+      'Storno & Rückerstattung – Ticket, Zahlung und Sitz zurück',
+      'Einlass & Validierung – kein Doppeleinlass',
+    ],
+  },
+  { id: 'lifelines', title: 'Notation', body: 'Oben die Teilnehmer (Akteur, «control»-Services, «entity»-Objekte), darunter ihre Lebenslinien mit Aktivierungsbalken. Durchgezogene Pfeile sind Aufrufe, gestrichelte Rückgaben.' },
+  { id: 'badges', title: 'Der Hold im Zentrum', body: 'reservieren() setzt den Sitz auf RESERVIERT, erst die erfolgreiche Zahlung macht ihn BELEGT. Die farbigen Statuswechsel-Badges schlagen die Brücke zu den Zustandsdiagrammen.' },
+  { id: 'fragments', title: 'Erweitert: Fehlerpfade', body: 'alt-, opt- und break-Fragmente zeigen die Alternativen mit ihren Bedingungen: Sitz bereits vergeben, Zahlung fehlgeschlagen, Hold-Timeout nach zehn Minuten.' },
 ]
 
 export default function SequencePage() {

@@ -132,13 +132,11 @@ export interface Innovation {
 }
 
 // ─────────────────────────────────────────────────────────────
-// Presentation engine
+// Presentation engine (Kino-Modus: Vollbild-Folien auf Schwarz)
 // ─────────────────────────────────────────────────────────────
 export interface PresentationStep {
   id: string
-  title: string
-  body: string
-  target?: string          // CSS selector to spotlight, e.g. '[data-pres="hero"]'
-  mode?: Mode              // force a mode for this step
-  onEnter?: () => void     // optional side effect (e.g. set a local filter)
+  title: string            // Folien-Überschrift
+  body: string             // Kernaussage der Folie
+  points?: string[]        // optionale Aufzählung, gestaffelt animiert
 }

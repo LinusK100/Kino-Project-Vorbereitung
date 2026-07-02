@@ -17,11 +17,11 @@ const CORE = ['Kette', 'Kino', 'Kinosaal', 'Sitzplatz', 'Tarif', 'Film', 'Vorste
 const groupLabel: Record<string, string> = { domain: 'Domäne', service: 'Services', store: 'Stores', dto: 'DTOs', enum: 'Enums' }
 
 const steps: PresentationStep[] = [
-  { id: 'intro', title: 'Klassendiagramm', body: 'Das Klassendiagramm zeigt die Struktur des Systems: Klassen mit Attributen und Operationen sowie ihre Beziehungen. Es modelliert das ganze Produkt – der Prototyp setzt eine Teilmenge um.', target: '[data-pres="section-header"]' },
-  { id: 'kern', title: 'Der fachliche Kern', body: 'Die Kern-Ansicht zeigt das Rückgrat: vom Kino über Saal & Sitzplatz bis zu Vorstellung, Buchung, Ticket und Zahlung – ohne Überfrachtung.', target: '[data-pres="diagram"]', mode: 'einfach' },
-  { id: 'assoc', title: 'VorstellungSitz – Assoziationsklasse', body: 'VorstellungSitz trägt die Operationen reservieren/belegen/freigeben am Objekt selbst (nicht beim Nutzer) und verhindert so Doppelbuchungen.', target: '[data-pres="diagram"]', mode: 'einfach' },
-  { id: 'ops', title: 'Operationen am richtigen Ort', body: 'Status-ändernde Operationen stehen an den Domänenobjekten (Buchung.bestätigen(), Ticket.einlösen()), Enums sind separate Aufzählungen. Akteure rufen nur auf.', target: '[data-pres="ops-callout"]' },
-  { id: 'all', title: 'Erweitert: alle 82 Klassen', body: 'Im Erweitert-Modus lassen sich alle 82 Klassen in 5 Gruppen erkunden – Domäne, Services, Stores, DTOs und Enums. Über die Ansicht filterst du je Gruppe.', target: '[data-pres="view-select"]', mode: 'erweitert' },
+  { id: 'intro', title: 'Klassendiagramm', body: 'Die statische Struktur des Systems: 82 Klassen mit Attributen, Operationen und Beziehungen – gegliedert in Domäne, API-Services, Frontend-Stores, DTOs und Enums.' },
+  { id: 'kern', title: 'Der fachliche Kern', body: 'Kette → Kino → Saal → Sitzplatz als Komposition, dazu Film → Vorstellung → Buchung → Ticket → Zahlung: das Rückgrat der Domäne. Die Kern-Ansicht zeigt es ohne Überfrachtung.' },
+  { id: 'assoc', title: 'VorstellungSitz', body: 'Die Assoziationsklasse zwischen Vorstellung und Sitzplatz trägt den Sitzstatus je Vorstellung. Ihre Operationen reservieren(), belegen() und freigeben() verhindern Doppelbuchungen.' },
+  { id: 'ops', title: 'Operationen am Objekt', body: 'Statusändernde Operationen stehen an den Domänenobjekten – Buchung.bestätigen(), Ticket.einlösen() – nicht bei den Akteuren. Enums sind separate Aufzählungen.' },
+  { id: 'all', title: 'Modell ⊇ Prototyp', body: '41 Klassen sind im Prototyp implementiert (grüner Punkt), 41 weitere bewusst Design-only. Das Modell beschreibt das ganze Produkt – im Erweitert-Modus nach Gruppen filterbar.' },
 ]
 
 export default function ClassDiagramPage() {

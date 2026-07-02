@@ -87,3 +87,8 @@
 - 2026-07-02: Prototyp-Seite verschlankt: alter In-Page-iPhone-Mockup (6 Screens,
   hartkodiert) entfernt; die Seite führt jetzt direkt zum echten Prototyp (neuer Tab)
   und zeigt JSON-getrieben Kennzahlen, Rollen, Wizard-Schritte, Technik und Roadmap.
+- 2026-07-02: Präsentationsmodus als „Kino" neu gebaut: Vollbild auf Schwarz mit
+  Akzent-Projektorschein, animierte selbsterklärende Folien (Blur/Fade/Stagger,
+  optionale Aufzählungspunkte) statt DOM-Spotlight; Folien-Inhalte aller 9 Abschnitte
+  neu geschrieben. Dashboard reduziert: Hero mit Kennzahlen-Chips, drei Kernkarten
+  (Präsentationsmodus, Inhalte als JSON→SVG, Einfach/Erweitert), Abschnitts-Verzeichnis.

@@ -23,10 +23,17 @@ const rc: Record<number, { bg: string; bgDark: string; border: string; borderDar
 const priorityDot: Record<string, string> = { high: '#ef4444', medium: '#f59e0b', low: '#22c55e' }
 
 const steps: PresentationStep[] = [
-  { id: 'intro', title: 'Story Map', body: 'Die Story Map ordnet alle Stories zweidimensional: horizontal nach Aktivität & Schritt (der Nutzer-Workflow), vertikal nach Release (zeitliche Auslieferung).', target: '[data-pres="section-header"]' },
-  { id: 'backbone', title: 'Das Rückgrat oben', body: 'Die farbigen Köpfe sind die Aktivitäten – das „Backbone" der Nutzerreise. Darunter die konkreten Schritte.', target: '[data-pres="map"]' },
-  { id: 'releases', title: 'Release-Schnitte', body: 'Die waagerechten Bänder sind die Releases. Release 1 (MVP) ist die schmale, lauffähige Scheibe quer durch alle Aktivitäten.', target: '[data-pres="release-filter"]', mode: 'einfach' },
-  { id: 'erweitert', title: 'Erweitert: 10 Aktivitäten', body: 'Im Erweitert-Modus kommen Gastro, Facility, Multi-Site u. a. hinzu – die Map wächst, ohne ihre Struktur zu verlieren.', target: '[data-pres="map"]', mode: 'erweitert' },
+  { id: 'intro', title: 'Story Map', body: 'Die Story Map ordnet alle Stories zweidimensional: waagerecht die Nutzerreise (Aktivität → Schritt), senkrecht die zeitliche Auslieferung in Releases.' },
+  { id: 'backbone', title: 'Das Backbone', body: 'Die Aktivitäten bilden das Rückgrat der Nutzerreise – vom Ticketkauf über Sitzplan und Einlass bis zur Verwaltung. Einfach zeigt 7 Aktivitäten, Erweitert 10.' },
+  { id: 'releases', title: 'Release 1 = MVP', body: 'Das oberste Band ist die schmale, lauffähige Scheibe quer durch alle Aktivitäten – genau die Stories, die der Prototyp umsetzt.' },
+  {
+    id: 'erweitert', title: 'Ausbau nach Nutzen', body: 'Die weiteren Releases erweitern das System dort, wo es Wert stiftet:',
+    points: [
+      'Release 2 – Komfort, Gastro & Service, Facility, Sicherheit',
+      'Release 3 – Vollausbau: Empfehlungen, Reports, Multi-Site',
+      'Erweitert ergänzt drei neue Aktivitäten, ohne die Struktur zu brechen',
+    ],
+  },
 ]
 
 export default function StoryMapPage() {

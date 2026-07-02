@@ -54,19 +54,19 @@ interface SectionShellProps {
 }
 ```
 
-### PresentationStep
+### PresentationStep (Kino-Modus)
 ```ts
 interface PresentationStep {
   id: string
-  title: string
-  body: string               // Erklärung des Schritts
-  target?: string            // CSS-Selector/data-attr zum Hervorheben (Spotlight)
-  mode?: 'einfach' | 'erweitert'  // erzwingt Modus für diesen Schritt
-  onEnter?: () => void       // optionale Seiteneffekte (Filter setzen etc.)
+  title: string              // Folien-Überschrift
+  body: string               // Kernaussage der Folie
+  points?: string[]          // optionale Aufzählung, gestaffelt animiert
 }
 ```
-Engine: Vor/Zurück (← →), Play/Pause (Leertaste), Tempo, Fortschritt, Esc beendet.
-Spotlight dimmt Umgebung und scrollt das Target in den Blick.
+Engine: Vollbild-„Kino" auf Schwarz (radialer Verlauf + Akzent-Schein), animierte
+Folien (Blur/Fade/Stagger via motion, respektiert prefers-reduced-motion).
+Vor/Zurück (← →), Play/Pause (Leertaste), Tempo, klickbarer Fortschritt mit
+Auto-Füllung, Esc beendet. Folien sind selbsterklärend — kein DOM-Spotlight.
 
 ### DiagramFrame
 Gemeinsamer Rahmen für alle Diagramme: Zoom (+/-/Reset/fit), Pan (Drag),

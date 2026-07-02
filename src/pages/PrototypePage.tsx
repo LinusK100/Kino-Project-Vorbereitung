@@ -19,11 +19,18 @@ const roleIcon: Record<string, React.ElementType> = {
 }
 
 const protoSteps: PresentationStep[] = [
-  { id: 'intro', title: 'Prototyp', body: 'Der Prototyp setzt den MVP-Kern (Release 1) als klickbare Hi-Fi-App um. Die API ist mit MSW gemockt – es läuft alles im Browser, ohne Installation.', target: '[data-pres="section-header"]' },
-  { id: 'launch', title: 'In neuem Tab starten', body: 'Der Prototyp öffnet sich als eigene App in einem neuen Tab – als einziger Abschnitt der Website. Dort lassen sich die Rollen oben umschalten.', target: '[data-pres="launch"]' },
-  { id: 'rollen', title: 'Vier Kernrollen implementiert', body: 'Endkunde, Kasse, Manager und Einlass sind vollständig klickbar – genau die vier Rollen der Basis-Personas.', target: '[data-pres="rollen"]', mode: 'einfach' },
-  { id: 'wizard', title: 'Der Buchungs-Wizard', body: 'Der fünfschrittige Buchungsablauf – von der Vorstellung bis zum QR-Ticket – entspricht exakt dem Sequenzdiagramm „Online-Buchung" inkl. Sitz-Hold.', target: '[data-pres="wizard"]' },
-  { id: 'roadmap', title: 'Erweitert: Roadmap', body: 'Im Erweitert-Modus siehst du alle acht Rollen sowie, welche Module live sind und welche als Roadmap modelliert wurden (Modell ⊇ Prototyp).', target: '[data-pres="status"]', mode: 'erweitert' },
+  { id: 'intro', title: 'Der Prototyp', body: 'Der MVP-Kern (Release 1) als klickbare Hi-Fi-App: React mit gemockter API (MSW) – läuft komplett im Browser, ohne Installation. Er öffnet sich als eigene App in einem neuen Tab.' },
+  {
+    id: 'rollen', title: 'Vier Rollen, ein System', body: 'In der App sind die Rollen oben umschaltbar:',
+    points: [
+      'Endkunde – Filmsuche, Sitzplan, Buchungs-Wizard, QR-Ticket',
+      'Kasse – Schnellverkauf mit Tastatur-Shortcuts',
+      'Manager – KPIs, Umsatz-Charts, Saalauslastung',
+      'Einlass – Kamera-QR-Scanner mit Validierung',
+    ],
+  },
+  { id: 'wizard', title: 'Wizard = Sequenzdiagramm', body: 'Die fünf Schritte des Buchungs-Wizards entsprechen exakt dem Flow „Online-Buchung": Sitz-Hold (RESERVIERT), Zahlung, dann BELEGT und QR-Ticket. Modell und Prototyp erzählen dieselbe Geschichte.' },
+  { id: 'roadmap', title: 'Modell ⊇ Prototyp', body: 'Vier weitere Rollen und 14 Module sind vollständig in UML und Stories modelliert und ehrlich als Roadmap ausgewiesen – der Erweitert-Modus zeigt die komplette Liste.' },
 ]
 
 export default function PrototypePage() {

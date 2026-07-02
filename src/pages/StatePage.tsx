@@ -12,11 +12,10 @@ import type { StateMachine, PresentationStep } from '@/types'
 const ACCENT = '#7a39bb'
 
 const steps: PresentationStep[] = [
-  { id: 'intro', title: 'Zustandsdiagramme', body: 'Ein Zustandsautomat beschreibt den Lebenszyklus genau eines Objekts über die Zeit: welche Zustände es annimmt und welche Ereignisse Übergänge auslösen.', target: '[data-pres="section-header"]' },
-  { id: 'sitz', title: 'Sitzplatz je Vorstellung', body: 'VorstellungSitz wandert FREI → AUSGEWÄHLT → RESERVIERT → BELEGT. Der RESERVIERT-Hold blockiert andere Käufer und verhindert Doppelbuchungen.', target: '[data-pres="diagram"]', mode: 'einfach' },
-  { id: 'tabs', title: 'Mehrere Automaten', body: 'Über die Reiter wechselst du zwischen den Automaten. Sitz und Ticket sind gekoppelt – ein Ticket entsteht erst, wenn der Sitz BELEGT wird.', target: '[data-pres="machine-tabs"]' },
-  { id: 'enums', title: 'Erweitert: Enums als Automaten', body: 'Im Erweitert-Modus kommen Buchung und Zahlung hinzu. Jeder Status-Enum wird so als eigener, übersichtlicher Automat darstellbar.', target: '[data-pres="machine-tabs"]', mode: 'erweitert' },
-  { id: 'cross', title: 'Kopplung der Automaten', body: 'Die Cross-Links zeigen, wie ein Übergang in einem Automaten andere auslöst – z. B. Storno: Ticket→STORNIERT, Buchung→STORNIERT, Zahlung→ERSTATTET, Sitz→FREI.', target: '[data-pres="crosslinks"]' },
+  { id: 'intro', title: 'Zustandsdiagramme', body: 'Ein Zustandsautomat beschreibt den Lebenszyklus genau eines Objekts: welche Zustände es annimmt und welche Ereignisse mit welchen Guards die Übergänge auslösen.' },
+  { id: 'sitz', title: 'Der Sitz je Vorstellung', body: 'FREI → AUSGEWÄHLT → RESERVIERT → BELEGT: Der serverseitige RESERVIERT-Hold blockiert parallele Käufer und verhindert Doppelbuchungen. DEFEKT sperrt den Sitz systemweit.' },
+  { id: 'tabs', title: 'Gekoppelte Automaten', body: 'Sitz und Ticket hängen zusammen – ein Ticket entsteht erst, wenn der Sitz BELEGT wird. Ein Storno wirkt überall zugleich: Ticket → STORNIERT, Zahlung → ERSTATTET, Sitz → wieder FREI.' },
+  { id: 'enums', title: 'Exakt wie im Klassendiagramm', body: 'Jeder Automat entspricht einem Status-Enum des Klassendiagramms – wertgleich mit Sitzstatus und Ticketstatus. Der Erweitert-Modus ergänzt Buchung und Zahlung als eigene Automaten.' },
 ]
 
 export default function StatePage() {

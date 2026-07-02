@@ -19,11 +19,18 @@ const releaseLabel: Record<number, string> = { 1: 'R1 – MVP', 2: 'R2 – Erwei
 const releaseColor: Record<number, string> = { 1: '#437a22', 2: '#d19900', 3: '#a13544' }
 
 const steps: PresentationStep[] = [
-  { id: 'intro', title: 'User Stories', body: 'Eine User Story beschreibt eine Anforderung aus Nutzersicht: „Als … möchte ich … um …". Jede Story gehört zu genau einer Persona und einer Aktivität.', target: '[data-pres="section-header"]' },
-  { id: 'modi', title: 'Einfach vs. Erweitert', body: 'Einfach zeigt die 30 MVP-Stories (U01–U30). Erweitert zeigt alle 51 (bis U51) – inkl. Gastro, Facility, Multi-Site, Sicherheit und Innovation.', target: '[data-pres="mode-toggle"]' },
-  { id: 'verteilung', title: 'Verteilung nach Release & Priorität', body: 'Die Leiste zeigt, wie sich die Stories auf die drei Releases und die MoSCoW-Prioritäten verteilen – der MVP bündelt die High-Priority-Stories.', target: '[data-pres="stats"]' },
-  { id: 'filter', title: 'Gezielt filtern', body: 'Nach Persona, Priorität, Release oder Aktivität filtern, um Zusammenhänge zu prüfen – z. B. alle High-Stories einer Persona.', target: '[data-pres="filters"]' },
-  { id: 'detail', title: 'Akzeptanzkriterien', body: 'Klick auf eine Zeile öffnet die Story mit ihren Akzeptanzkriterien – die testbare Definition von „fertig".', target: '[data-pres="table"]' },
+  { id: 'intro', title: 'User Stories', body: '„Als Persona möchte ich Ziel, um Nutzen." – 30 Stories bilden den MVP, 51 den Vollausbau. Jede beschreibt eine Anforderung aus Nutzersicht.' },
+  {
+    id: 'struktur', title: 'Planbar und prüfbar', body: 'Vier Angaben machen jede Story steuerbar:',
+    points: [
+      'genau eine Persona als Quelle der Anforderung',
+      'eine Aktivität – der Schritt in der Nutzerreise',
+      'MoSCoW-Priorität und Release (1–3)',
+      'testbare Akzeptanzkriterien als Definition von „fertig"',
+    ],
+  },
+  { id: 'kern', title: 'Der fachliche Kern: U47', body: 'Der Sitz-Hold: Beim Checkout wird der gewählte Platz zehn Minuten verbindlich reserviert – eine parallele Buchung desselben Platzes wird abgewiesen. Keine Doppelbuchung.' },
+  { id: 'arbeit', title: 'Arbeiten mit den Stories', body: 'Die Tabelle lässt sich nach Persona, Priorität, Release und Aktivität filtern; ein Klick auf eine Zeile öffnet die Story mit ihren Akzeptanzkriterien.' },
 ]
 
 export default function UserStoriesPage() {
