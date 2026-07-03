@@ -38,7 +38,7 @@ const steps: PresentationStep[] = [
   },
   {
     id: 'modi', title: 'Einfach ⊂ Erweitert', visual: <TeilmengeModi />,
-    body: 'Jeder Abschnitt hat zwei Detailgrade: Einfach zeigt den MVP-Kern, Erweitert den Vollausbau. Die Basis ist immer eine echte Teilmenge – nichts widerspricht sich.',
+    body: 'Anforderungen und Modellierung haben zwei Detailgrade: Einfach zeigt den MVP-Kern, Erweitert den Vollausbau – die Basis ist immer eine echte Teilmenge. Prototyp und Innovation zeigen immer alles.',
   },
   {
     id: 'praes', title: 'Präsentationsmodus',
@@ -88,8 +88,8 @@ export default function OverviewPage() {
           live als SVG gerendert und bleiben so konsistent und prüfbar.
         </HowCard>
         <HowCard icon={Layers} title="Einfach & Erweitert" accent="#964219">
-          Zwei Detailgrade je Abschnitt: MVP-Kern oder Vollausbau. Die Basis ist immer
-          eine echte Teilmenge – umschalten direkt im Abschnitt.
+          Anforderungen und Modellierung haben zwei Detailgrade: MVP-Kern oder Vollausbau,
+          die Basis immer als echte Teilmenge. Prototyp und Innovation zeigen immer alles.
         </HowCard>
       </div>
 

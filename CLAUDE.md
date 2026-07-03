@@ -11,7 +11,13 @@ Die Website wird von einem Dozenten benotet — Inhaltstreue und Politur gehen v
   keine Marketing-/KI-Floskeln. Zahlen auf Folien/Karten aus den Daten berechnen, nie hartkodieren.
 - **Diagramme werden zur Laufzeit als SVG aus den JSON gerendert** — keine statischen Bilder.
 - **Einfach/Erweitert**-Umschalter und der **Kino-Präsentationsmodus** bleiben erhalten;
-  Basis ist immer echte Teilmenge des Vollausbaus.
+  Basis ist immer echte Teilmenge des Vollausbaus. **Ausnahmen (Owner, 2026-07-03):**
+  Prototyp und Innovation haben bewusst **keinen** Modus (zeigen immer alles), und der
+  Prototyp-Abschnitt hat **keine** Kino-Tour — die Präsentation ist der Prototyp selbst
+  (großer „Prototyp starten"-Button).
+- Der Prototyp-Abschnitt beschreibt die **echte App** in `public/prototyp-app/`
+  (Wizard: Sitze → Details → Extras → Zahlung → Fertig; Vorstellung/Datum davor auf der
+  Film-Detailseite; **kein Hold im Prototyp** — der 10-Minuten-Hold ist Design-only).
 - **Traceability & Glossar wurden bewusst entfernt — nicht wieder einführen**
   (ältere Docs in `docs/` erwähnen sie noch; das ist historisch).
 - **`public/prototyp-app/` nicht anfassen** (gebauter Prototyp inkl. MSW-Worker).

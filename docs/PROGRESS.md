@@ -99,6 +99,13 @@
   U47-Story-Karte, Verteilungs-Balken, Backbone/Release-Bänder, Rollen-Grid,
   Wizard-Stepper, Impact/Aufwand-Matrix, JSON→SVG-Pipeline. 39 Folien × Playwright
   verifiziert (0 Fehler), Build/Lint grün.
+- 2026-07-03: Prototyp & Innovation ohne Einfach/Erweitert (zeigen immer alles);
+  Prototyp-Abschnitt ohne Kino-Tour — stattdessen großer „Prototyp starten"-Button.
+  Prototyp-Inhalte an die echte App angeglichen: Wizard-Schritte jetzt
+  Sitze → Details → Extras → Zahlung → Fertig (Vorstellung/Datum davor auf der
+  Film-Detailseite), Zahlarten Kreditkarte/PayPal/vor Ort; klargestellt, dass der
+  10-Minuten-Hold (U47) Design-only ist (Sitzstatus der App: free/taken/selected).
+  prototype.json entsprechend aktualisiert (Owner-Entscheidung).
 - 2026-07-03: Kino-Modus v3 — Touren folgen jetzt dem Einfach/Erweitert-Modus
   (Modus-Chip im Kino-Kopf): Einfach zeigt den MVP-Kern (37 Folien gesamt),
   Erweitert vertieft mit 7 zusätzlichen Detail-Folien (44 gesamt): Vererbung

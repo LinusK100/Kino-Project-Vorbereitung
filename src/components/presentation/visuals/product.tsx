@@ -1,11 +1,8 @@
 // Folien-Visuals für Dashboard, Prototyp und Innovation.
 // Alle Zahlen/Listen werden aus den JSON-Daten berechnet.
 import { motion, useReducedMotion } from 'motion/react'
-import {
-  Boxes, Braces, Building2, Coffee, CreditCard, LineChart, ListChecks,
-  Rocket, ScanLine, ShieldCheck, User, Wrench,
-} from 'lucide-react'
-import { innovation, personas, prototype, sequences, stateMachines, stories, storyMaps, uml } from '@/data/content'
+import { Boxes, Braces, ListChecks, Rocket } from 'lucide-react'
+import { innovation, personas, sequences, stateMachines, stories, storyMaps, uml } from '@/data/content'
 import { extraMachines } from '@/data/statesExtra'
 import { bright, pop } from './core'
 
@@ -164,83 +161,6 @@ export function TeilmengeModi() {
         ))}
       </div>
     </motion.div>
-  )
-}
-
-// ── Prototyp: acht Rollen (vier live, vier Roadmap) ──
-const roleIcon: Record<string, React.ElementType> = {
-  endkunde: User, kasse: CreditCard, manager: LineChart, einlass: ScanLine,
-  service: Coffee, facility: Wrench, marke: Building2, admin: ShieldCheck,
-}
-
-export function RollenGrid({ tier = 'erweitert' }: { tier?: 'basis' | 'erweitert' }) {
-  const reduce = useReducedMotion()
-  const rollen = tier === 'basis' ? prototype.rollen.filter((r) => r.status === 'implementiert') : prototype.rollen
-  return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5" style={{ maxWidth: 760 }}>
-      {rollen.map((r, i) => {
-        const Icon = roleIcon[r.id] ?? User
-        const live = r.status === 'implementiert'
-        const c = live ? '#437a22' : '#d19900'
-        return (
-          <motion.div
-            key={r.id} {...pop(i, reduce)}
-            className="rounded-xl px-3 py-3.5 text-center"
-            style={{
-              background: live ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.025)',
-              border: live ? '1px solid rgba(255,255,255,0.18)' : '1px dashed rgba(255,255,255,0.14)',
-              opacity: live ? 1 : 0.72,
-            }}
-          >
-            <div className="w-8 h-8 mx-auto rounded-lg flex items-center justify-center mb-1.5" style={{ background: `${c}26`, color: bright(c) }}>
-              <Icon size={15} />
-            </div>
-            <div className="text-[11.5px] font-semibold" style={{ color: 'rgba(255,255,255,0.9)' }}>{r.label}</div>
-            <div className="mt-1.5 inline-block text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wide" style={{ background: `${c}26`, color: bright(c) }}>
-              {live ? 'live' : 'Roadmap'}
-            </div>
-          </motion.div>
-        )
-      })}
-    </div>
-  )
-}
-
-// ── Prototyp: die fünf Wizard-Schritte (= Sequenzdiagramm Online-Buchung) ──
-export function WizardSchritte() {
-  const reduce = useReducedMotion()
-  const schritte = prototype.module.find((m) => m.id === 'buchungs-wizard')!.schritte!
-  return (
-    <div className="flex items-start justify-center gap-0 flex-wrap" style={{ maxWidth: 900 }}>
-      {schritte.map((s, i) => (
-        <span key={s.nr} className="inline-flex items-start">
-          <motion.div {...pop(i, reduce)} className="flex flex-col items-center" style={{ width: 148 }}>
-            <div
-              className="w-10 h-10 rounded-full flex items-center justify-center text-[15px] font-bold text-white"
-              style={{ background: '#964219', boxShadow: '0 0 20px #96421988' }}
-            >
-              {s.nr}
-            </div>
-            <div className="mt-2 text-[11.5px] font-semibold leading-snug" style={{ color: 'rgba(255,255,255,0.88)' }}>
-              {s.name.split(' (')[0]}
-            </div>
-            {s.name.includes('Hold') && (
-              <div className="mt-1.5 text-[9px] px-2 py-0.5 rounded-full font-mono font-bold" style={{ background: '#d1990026', color: bright('#d19900') }}>
-                Sitz-Hold: RESERVIERT
-              </div>
-            )}
-            <div className="mt-1.5 flex gap-1 flex-wrap justify-center">
-              {s.stories.map((st) => (
-                <span key={st} className="text-[8.5px] font-mono px-1.5 py-0.5 rounded" style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.5)' }}>{st}</span>
-              ))}
-            </div>
-          </motion.div>
-          {i < schritte.length - 1 && (
-            <motion.span {...pop(i, reduce)} className="text-lg mt-2.5" style={{ color: 'rgba(255,255,255,0.3)' }}>→</motion.span>
-          )}
-        </span>
-      ))}
-    </div>
   )
 }
 

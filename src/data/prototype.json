@@ -33,15 +33,15 @@
     },
     {
       "id": "buchungs-wizard", "rolle": "endkunde", "name": "Buchungs-Wizard (BuchungsAssistent)", "status": "implementiert",
-      "beschreibung": "Fünfschrittiger Buchungsablauf vom Datum bis zum QR-Ticket",
-      "stories": ["U05", "U07", "U09", "U06", "U28", "U38", "U02", "U04", "U47"],
+      "beschreibung": "Fünfschrittiger Buchungsablauf von der Sitzwahl bis zum QR-Ticket; Vorstellung und Datum wählt man davor auf der Film-Detailseite",
+      "stories": ["U05", "U07", "U09", "U02", "U04"],
       "umlClasses": ["BuchungsAssistent", "Vorstellung", "Sitzplan", "SitzMitStatus", "VorstellungSitz", "Buchung", "Zahlung", "Ticket"],
       "schritte": [
-        { "nr": 1, "name": "Vorstellung & Datum wählen", "stories": ["U05"] },
-        { "nr": 2, "name": "Sitzplan (STANDARD/PREMIUM/VIP + barrierefrei; reservierte/belegte Plätze nicht wählbar, Hold)", "stories": ["U07", "U09", "U47"] },
-        { "nr": 3, "name": "Buchungsdetails (Tickets, Rabatt-Kategorien, Gruppe bis 8)", "stories": ["U06", "U28", "U38"] },
-        { "nr": 4, "name": "Zahlung (Karte/Bar/Online) als Zahlung-Transaktion mit Zahlungsstatus", "stories": ["U02", "U04"] },
-        { "nr": 5, "name": "Bestätigung + QR-Code-Ticket", "stories": ["U04"] }
+        { "nr": 1, "name": "Sitze – interaktiver Sitzplan (Standard/Premium/VIP, barrierefrei; belegte Plätze gesperrt)", "stories": ["U07", "U09"] },
+        { "nr": 2, "name": "Details – gewählte Sitze prüfen, Name und E-Mail angeben", "stories": ["U05"] },
+        { "nr": 3, "name": "Extras – Snacks, Getränke und Kombis zur Buchung", "stories": [] },
+        { "nr": 4, "name": "Zahlung – Kreditkarte, PayPal/Online oder vor Ort (ohne echte Transaktion)", "stories": ["U02", "U04"] },
+        { "nr": 5, "name": "Fertig – Bestätigung mit QR-Code-Ticket", "stories": ["U04"] }
       ]
     },
     {

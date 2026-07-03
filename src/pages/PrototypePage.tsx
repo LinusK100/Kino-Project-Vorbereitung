@@ -1,15 +1,10 @@
-import { useMemo } from 'react'
 import {
   Smartphone, ExternalLink, Rocket, User, CreditCard, LineChart, ScanLine,
   Coffee, Wrench, Building2, ShieldCheck, Users, Boxes, ListChecks, GitBranch,
 } from 'lucide-react'
 import { SectionShell } from '@/components/shared/SectionShell'
 import { Callout } from '@/components/shared/Callout'
-import { useAppStore } from '@/store/appStore'
 import { prototype } from '@/data/content'
-import { RollenGrid, WizardSchritte } from '@/components/presentation/visuals/product'
-import { ImplSplit } from '@/components/presentation/visuals/uml'
-import type { PresentationStep, Mode } from '@/types'
 
 const ACCENT = '#964219'
 // The full interactive Hi-Fi prototype is a separate app; this section is the
@@ -21,37 +16,10 @@ const roleIcon: Record<string, React.ElementType> = {
   service: Coffee, facility: Wrench, marke: Building2, admin: ShieldCheck,
 }
 
-// Einfach zeigt die vier klickbaren Rollen; Erweitert stellt sie den
-// Roadmap-Rollen gegenüber.
-function stepsFor(mode: Mode): PresentationStep[] {
-  return [
-    { id: 'intro', title: 'Der MVP zum Anfassen', body: 'Release 1 als klickbare Hi-Fi-App: React mit gemockter API (MSW), läuft komplett im Browser ohne Installation. Der Button auf dieser Seite öffnet den Prototyp als eigene App in einem neuen Tab.' },
-    mode === 'einfach'
-      ? {
-          id: 'rollen', title: 'Vier Rollen, alle klickbar', visual: <RollenGrid tier="basis" />,
-          body: 'Endkunde, Kasse, Manager und Einlass sind vollständig bedienbar und in der App oben umschaltbar – jede Rolle mit eigener Oberfläche.',
-        }
-      : {
-          id: 'rollen', title: 'Acht Rollen, vier davon live', visual: <RollenGrid tier="erweitert" />,
-          body: 'Endkunde, Kasse, Manager und Einlass sind vollständig klickbar und in der App oben umschaltbar. Die vier übrigen Rollen sind bewusst nur modelliert und als Roadmap ausgewiesen.',
-        },
-    {
-      id: 'wizard', title: 'Der Wizard folgt dem Sequenzdiagramm', visual: <WizardSchritte />,
-      body: 'Die fünf Schritte des Buchungs-Wizards entsprechen exakt dem Flow „Online-Buchung": Sitz-Hold beim Sitzplan, Zahlung, dann BELEGT und QR-Ticket. Modell und Prototyp erzählen dieselbe Geschichte.',
-    },
-    {
-      id: 'roadmap', title: 'Modell ⊇ Prototyp', visual: <ImplSplit extras={['4 / 8 Rollen live', '20 Stories abgedeckt']} />,
-      body: mode === 'einfach'
-        ? 'Der Prototyp setzt genau die Hälfte des Modells um – der Rest ist als Roadmap vollständig in UML-Klassen und Stories modelliert. Der Erweitert-Modus dieser Seite zeigt die komplette Liste.'
-        : 'Der Prototyp setzt genau die Hälfte des Modells um – der Rest ist als Roadmap vollständig in UML-Klassen und Stories modelliert. Unten auf der Seite: alle Module und die Roadmap im Detail.',
-    },
-  ]
-}
-
+// Kein Einfach/Erweitert und keine Kino-Tour in diesem Abschnitt:
+// Die Präsentation IST der Prototyp — die Seite führt direkt zu ihm hin
+// und zeigt immer den vollen Stand (implementiert + Roadmap).
 export default function PrototypePage() {
-  const { mode } = useAppStore()
-  const protoSteps = useMemo(() => stepsFor(mode), [mode])
-  const rollen = mode === 'erweitert' ? prototype.rollen : prototype.rollen.filter((r) => r.status === 'implementiert')
   const wizard = prototype.module.find((m) => m.id === 'buchungs-wizard')
   const { stats, tech } = prototype
 
@@ -74,17 +42,17 @@ export default function PrototypePage() {
       subtitle="Interaktiver Hi-Fi-Prototyp · startet in einem neuen Tab"
       icon={Smartphone}
       accent={ACCENT}
-      presentation={protoSteps}
+      modes={false}
       intro={
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3" data-pres="launch">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4" data-pres="launch">
           <a
             href={PROTOTYPE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-white font-semibold text-sm flex-shrink-0 transition-transform hover:-translate-y-0.5"
-            style={{ background: ACCENT, boxShadow: `0 4px 16px ${ACCENT}55` }}
+            className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl text-white font-bold text-base flex-shrink-0 transition-transform hover:-translate-y-0.5"
+            style={{ background: ACCENT, boxShadow: `0 6px 24px ${ACCENT}66` }}
           >
-            <Rocket size={18} /> Prototyp starten <ExternalLink size={15} />
+            <Rocket size={22} /> Prototyp starten <ExternalLink size={17} />
           </a>
           <Callout kind="info">
             {prototype.beschreibung}
@@ -107,16 +75,12 @@ export default function PrototypePage() {
       </div>
 
       {/* Rollen */}
-      <h3 className="text-sm font-bold mb-1" style={{ color: 'var(--text-primary)' }}>
-        {mode === 'erweitert' ? 'Alle acht Rollen' : 'Implementierte Rollen'}
-      </h3>
+      <h3 className="text-sm font-bold mb-1" style={{ color: 'var(--text-primary)' }}>Alle acht Rollen</h3>
       <p className="text-xs mb-3" style={{ color: 'var(--text-secondary)' }}>
-        {mode === 'erweitert'
-          ? 'Vier Rollen sind klickbar implementiert, vier weitere modelliert (Roadmap). In der App oben umschaltbar.'
-          : 'Diese vier Rollen sind im Prototyp vollständig klickbar – in der App oben umschaltbar.'}
+        Vier Rollen sind vollständig klickbar – in der App oben umschaltbar. Vier weitere sind modelliert und als Roadmap ausgewiesen.
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6" data-pres="rollen">
-        {rollen.map((r) => {
+        {prototype.rollen.map((r) => {
           const Icon = roleIcon[r.id] ?? User
           const live = r.status === 'implementiert'
           return (
@@ -145,7 +109,8 @@ export default function PrototypePage() {
         <div className="mb-6" data-pres="wizard">
           <h3 className="text-sm font-bold mb-1" style={{ color: 'var(--text-primary)' }}>Der Buchungs-Wizard in fünf Schritten</h3>
           <p className="text-xs mb-3" style={{ color: 'var(--text-secondary)' }}>
-            Kernstück des Prototyps – entspricht dem Sequenzdiagramm „Online-Buchung": Sitz-Hold (RESERVIERT), Zahlung, dann BELEGT + QR-Ticket.
+            Von der Sitzwahl bis zum QR-Ticket – Vorstellung und Datum wählt man davor auf der Film-Detailseite.
+            Der modellierte 10-Minuten-Hold (U47) ist bewusst Design-only: Im Prototyp sind belegte Plätze schlicht nicht wählbar.
           </p>
           <div className="rounded-xl overflow-hidden" style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
             {wizard.schritte.map((s, idx) => (
@@ -176,49 +141,47 @@ export default function PrototypePage() {
         ))}
       </div>
 
-      {/* Module status & roadmap (erweitert) */}
-      {mode === 'erweitert' && (
-        <div className="mt-7" data-pres="status">
-          <h3 className="text-sm font-bold mb-1" style={{ color: 'var(--text-primary)' }}>Module: implementiert vs. Roadmap</h3>
-          <p className="text-xs mb-3" style={{ color: 'var(--text-secondary)' }}>
-            Der Prototyp setzt {prototype.stats.rollenImplementiert}/{prototype.stats.rollenGesamt} Rollen und {prototype.stats.umlImplementiert} UML-Klassen um – {prototype.stats.umlDesignOnly} sind als Roadmap modelliert (Modell ⊇ Prototyp).
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            {prototype.module.map((m) => (
-              <div key={m.id} className="flex items-start gap-2.5 rounded-xl p-3" style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
-                <span className="mt-0.5 text-xs px-2 py-0.5 rounded-full font-semibold flex-shrink-0"
-                  style={{ background: m.status === 'implementiert' ? '#437a2220' : '#d1990020', color: m.status === 'implementiert' ? '#437a22' : '#d19900' }}>
-                  {m.status === 'implementiert' ? 'live' : 'Roadmap'}
-                </span>
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{m.name}</p>
-                  <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>{m.beschreibung}</p>
-                </div>
+      {/* Module status & roadmap */}
+      <div className="mt-7" data-pres="status">
+        <h3 className="text-sm font-bold mb-1" style={{ color: 'var(--text-primary)' }}>Module: implementiert vs. Roadmap</h3>
+        <p className="text-xs mb-3" style={{ color: 'var(--text-secondary)' }}>
+          Der Prototyp setzt {prototype.stats.rollenImplementiert}/{prototype.stats.rollenGesamt} Rollen und {prototype.stats.umlImplementiert} UML-Klassen um – {prototype.stats.umlDesignOnly} sind als Roadmap modelliert (Modell ⊇ Prototyp).
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+          {prototype.module.map((m) => (
+            <div key={m.id} className="flex items-start gap-2.5 rounded-xl p-3" style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
+              <span className="mt-0.5 text-xs px-2 py-0.5 rounded-full font-semibold flex-shrink-0"
+                style={{ background: m.status === 'implementiert' ? '#437a2220' : '#d1990020', color: m.status === 'implementiert' ? '#437a22' : '#d19900' }}>
+                {m.status === 'implementiert' ? 'live' : 'Roadmap'}
+              </span>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{m.name}</p>
+                <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>{m.beschreibung}</p>
               </div>
-            ))}
-          </div>
-
-          <h4 className="text-sm font-bold mt-5 mb-1" style={{ color: 'var(--text-primary)' }}>Roadmap: modelliert, noch nicht gebaut</h4>
-          <p className="text-xs mb-3" style={{ color: 'var(--text-secondary)' }}>
-            Diese Module sind vollständig im UML und in Stories modelliert (implementedInPrototype: false) und warten auf den Ausbau.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            {prototype.roadmap.map((r) => (
-              <div key={r.modul} className="flex items-start gap-2.5 rounded-xl p-3" style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
-                <span className="mt-0.5 text-xs px-2 py-0.5 rounded-full font-semibold flex-shrink-0" style={{ background: '#d1990020', color: '#d19900' }}>
-                  Roadmap
-                </span>
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{r.modul}</p>
-                  <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
-                    {r.persona} · {r.stories.join(', ')} · {r.umlClasses.join(', ')}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      )}
+
+        <h4 className="text-sm font-bold mt-5 mb-1" style={{ color: 'var(--text-primary)' }}>Roadmap: modelliert, noch nicht gebaut</h4>
+        <p className="text-xs mb-3" style={{ color: 'var(--text-secondary)' }}>
+          Diese Module sind vollständig im UML und in Stories modelliert (implementedInPrototype: false) und warten auf den Ausbau.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+          {prototype.roadmap.map((r) => (
+            <div key={r.modul} className="flex items-start gap-2.5 rounded-xl p-3" style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
+              <span className="mt-0.5 text-xs px-2 py-0.5 rounded-full font-semibold flex-shrink-0" style={{ background: '#d1990020', color: '#d19900' }}>
+                Roadmap
+              </span>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{r.modul}</p>
+                <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+                  {r.persona} · {r.stories.join(', ')} · {r.umlClasses.join(', ')}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </SectionShell>
   )
 }

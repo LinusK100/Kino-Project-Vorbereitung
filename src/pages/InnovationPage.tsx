@@ -1,13 +1,12 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import {
   Sparkles, TrendingUp, ShieldCheck, ScanEye, Accessibility, LineChart, ChevronDown,
 } from 'lucide-react'
 import { SectionShell } from '@/components/shared/SectionShell'
 import { Callout } from '@/components/shared/Callout'
 import { innovation, personaById } from '@/data/content'
-import { useAppStore } from '@/store/appStore'
 import { IdeeVerankert, InnovationsMatrix } from '@/components/presentation/visuals/product'
-import type { Innovation, PresentationStep, Mode } from '@/types'
+import type { Innovation, PresentationStep } from '@/types'
 
 const ACCENT = '#437a22'
 
@@ -22,43 +21,34 @@ const feasCfg: Record<string, { label: string; color: string }> = {
   konzept: { label: 'Konzept / Vision', color: '#7a39bb' },
 }
 
-// Einfach: die drei MVP-nahen Ideen; Erweitert: alle sechs in der Matrix.
-function stepsFor(mode: Mode): PresentationStep[] {
-  return [
-    mode === 'einfach'
-      ? {
-          id: 'feas', title: 'Drei Ideen, ehrlich bewertet', visual: <InnovationsMatrix tier="basis" />,
-          body: 'Recherchierte Zukunfts-Ideen (2026) über den MVP hinaus, eingeordnet nach Impact und Aufwand. Jede trägt ein begründetes Machbarkeits-Flag – die KI-Sitzplatzempfehlung ist bewusst als Konzept markiert.',
-        }
-      : {
-          id: 'feas', title: 'Sechs Ideen, ehrlich bewertet', visual: <InnovationsMatrix tier="erweitert" />,
-          body: 'Recherchierte Zukunfts-Ideen (2026) über den MVP hinaus, eingeordnet nach Impact und Aufwand. Jede trägt ein begründetes Machbarkeits-Flag – AR-Hardware und ML-Modelle sind bewusst als Konzept markiert.',
-        },
-    {
-      id: 'anchor', title: 'Verankert im Modell', visual: <IdeeVerankert />,
-      body: 'Keine losen Visionen: Jede Idee nennt ihre Persona, ihre User Stories und die betroffenen UML-Klassen. Die dynamischen Preise etwa erweitern Tarif um Preisregel und PreisService.',
-    },
-    {
-      id: 'cards', title: 'Zum Nachlesen',
-      body: mode === 'einfach'
-        ? 'Jede Karte auf der Seite öffnet Details mit Modell-Bezug und dem Hinweis, wo die Technik den Projektrahmen übersteigt. Der Erweitert-Modus ergänzt drei weitere Ideen bis hin zur AR-Vision.'
-        : 'Jede Karte auf der Seite öffnet Details mit Modell-Bezug und dem Hinweis, wo die Technik den Projektrahmen übersteigt. Impact und Aufwand stehen als Einschätzung an jeder Karte.',
-    },
-  ]
-}
+// Dieser Abschnitt kennt bewusst keinen Einfach/Erweitert-Modus:
+// alle sechs Ideen werden immer gezeigt.
+const steps: PresentationStep[] = [
+  {
+    id: 'feas', title: 'Sechs Ideen, ehrlich bewertet', visual: <InnovationsMatrix />,
+    body: 'Recherchierte Zukunfts-Ideen (2026) über den MVP hinaus, eingeordnet nach Impact und Aufwand. Jede trägt ein begründetes Machbarkeits-Flag – AR-Hardware und ML-Modelle sind bewusst als Konzept markiert.',
+  },
+  {
+    id: 'anchor', title: 'Verankert im Modell', visual: <IdeeVerankert />,
+    body: 'Keine losen Visionen: Jede Idee nennt ihre Persona, ihre User Stories und die betroffenen UML-Klassen. Die dynamischen Preise etwa erweitern Tarif um Preisregel und PreisService.',
+  },
+  {
+    id: 'cards', title: 'Zum Nachlesen',
+    body: 'Jede Karte auf der Seite öffnet Details mit Modell-Bezug und dem Hinweis, wo die Technik den Projektrahmen übersteigt. Impact und Aufwand stehen als Einschätzung an jeder Karte.',
+  },
+]
 
 export default function InnovationPage() {
-  const { mode } = useAppStore()
-  const steps = useMemo(() => stepsFor(mode), [mode])
-  const items = mode === 'einfach' ? innovation.innovations.filter((i) => i.tier === 'basis') : innovation.innovations
+  const items = innovation.innovations
 
   return (
     <SectionShell
       kicker="Ergebnis"
       title="Innovation"
-      subtitle="Recherchierte Zukunfts-Ideen (2026)"
+      subtitle={`${items.length} recherchierte Zukunfts-Ideen (2026)`}
       icon={Sparkles}
       accent={ACCENT}
+      modes={false}
       presentation={steps}
       intro={
         <div className="space-y-3">
