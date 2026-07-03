@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Map, Ticket, ScanLine, Calendar, UserCircle, Settings, Search, LayoutGrid, CheckCircle2, Coffee, Wrench, Building2, CircleDot } from 'lucide-react'
 import { SectionShell } from '@/components/shared/SectionShell'
 import { Callout } from '@/components/shared/Callout'
@@ -8,7 +8,7 @@ import { useStoryMap, useStories, personaById } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
 import { useDragScroll } from '@/lib/useDragScroll'
 import { BackboneChips, ReleaseBaender } from '@/components/presentation/visuals/people'
-import type { UserStory, ReleaseNumber, PresentationStep } from '@/types'
+import type { UserStory, ReleaseNumber, PresentationStep, Mode } from '@/types'
 
 const ACCENT = '#006494'
 const iconMap: Record<string, React.ElementType> = {
@@ -24,24 +24,31 @@ const rc: Record<number, { bg: string; bgDark: string; border: string; borderDar
 }
 const priorityDot: Record<string, string> = { high: '#ef4444', medium: '#f59e0b', low: '#22c55e' }
 
-const steps: PresentationStep[] = [
-  { id: 'intro', title: 'Zwei Dimensionen, ein Plan', body: 'Die Story Map ordnet alle User Stories zweidimensional: waagerecht die Nutzerreise (Aktivität → Schritt), senkrecht die zeitliche Auslieferung in Releases. So sieht man auf einen Blick, was zusammen den MVP ergibt.' },
-  {
-    id: 'backbone', title: 'Das Backbone: die Nutzerreise', visual: <BackboneChips />,
-    body: 'Die Aktivitäten bilden das Rückgrat – vom Ticketkauf über Sitzplan und Einlass bis zur Verwaltung. Der Erweitert-Modus ergänzt drei Aktivitäten, ohne die Struktur zu brechen.',
-  },
-  {
-    id: 'releases', title: 'Waagerecht schneiden: Releases', visual: <ReleaseBaender />,
-    body: 'Release 1 ist die schmale, lauffähige Scheibe quer durch alle Aktivitäten. Die weiteren Releases erweitern das System dort, wo es Wert stiftet – nicht einfach „mehr Features".',
-  },
-  { id: 'arbeit', title: 'Arbeiten mit der Karte', body: 'Auf der Website lässt sich jedes Release-Band hervorheben; jede Karte öffnet per Klick die Story mit Persona und Akzeptanzkriterien. Waagerecht scrollen zeigt die ganze Reise.' },
-]
+// Backbone und Release-Bänder folgen dem Modus (7 vs. 10 Aktivitäten, 30 vs. 51 Stories).
+function stepsFor(mode: Mode): PresentationStep[] {
+  const tier = mode === 'einfach' ? 'basis' as const : 'erweitert' as const
+  return [
+    { id: 'intro', title: 'Zwei Dimensionen, ein Plan', body: 'Die Story Map ordnet alle User Stories zweidimensional: waagerecht die Nutzerreise (Aktivität → Schritt), senkrecht die zeitliche Auslieferung in Releases. So sieht man auf einen Blick, was zusammen den MVP ergibt.' },
+    {
+      id: 'backbone', title: 'Das Backbone: die Nutzerreise', visual: <BackboneChips tier={tier} />,
+      body: mode === 'einfach'
+        ? 'Sieben Aktivitäten bilden das Rückgrat – vom Ticketkauf über Sitzplan und Einlass bis zur Verwaltung. Jede Story hängt an genau einem Schritt dieser Reise.'
+        : 'Die Aktivitäten bilden das Rückgrat – vom Ticketkauf über Sitzplan und Einlass bis zur Verwaltung. Der Erweitert-Modus ergänzt drei Aktivitäten, ohne die Struktur zu brechen.',
+    },
+    {
+      id: 'releases', title: 'Waagerecht schneiden: Releases', visual: <ReleaseBaender tier={tier} />,
+      body: 'Release 1 ist die schmale, lauffähige Scheibe quer durch alle Aktivitäten. Die weiteren Releases erweitern das System dort, wo es Wert stiftet – nicht einfach „mehr Features".',
+    },
+    { id: 'arbeit', title: 'Arbeiten mit der Karte', body: 'Auf der Website lässt sich jedes Release-Band hervorheben; jede Karte öffnet per Klick die Story mit Persona und Akzeptanzkriterien. Ziehen verschiebt die Karte waagerecht durch die ganze Reise.' },
+  ]
+}
 
 export default function StoryMapPage() {
   const storyMap = useStoryMap()
   const stories = useStories()
   const { theme, mode } = useAppStore()
   const isDark = theme === 'dark'
+  const steps = useMemo(() => stepsFor(mode), [mode])
   const [selected, setSelected] = useState<UserStory | null>(null)
   const [activeRelease, setActiveRelease] = useState<ReleaseNumber | null>(null)
   const { ref: mapRef, dragging, handlers } = useDragScroll<HTMLDivElement>()

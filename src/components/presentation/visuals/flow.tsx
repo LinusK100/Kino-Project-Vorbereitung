@@ -3,7 +3,10 @@
 // nur den Ausschnitt und das Layout, damit er groß und lesbar ist.
 import { motion, useReducedMotion } from 'motion/react'
 import { sequences, stateMachines } from '@/data/content'
+import { extraMachines } from '@/data/statesExtra'
 import { bright, draw, fadeIn, pop } from './core'
+
+const alleMaschinen = [...stateMachines.machines, ...extraMachines]
 
 const KIND_COLOR: Record<string, string> = { actor: '#475569', control: '#4f46e5', entity: '#7a39bb' }
 const STATE_COLOR: Record<string, string> = {
@@ -41,7 +44,7 @@ export function SeqAusschnitt({ flow, msgSeqs, frame }: SeqProps) {
   const d = sequences.find((s) => s.id === flow)!
   const msgs = msgSeqs.map((n) => d.messages.find((m) => m.seq === n)!)
   const parts = d.participants.filter((p) => msgs.some((m) => m.from === p.id || m.to === p.id))
-  const spacing = parts.length <= 3 ? 250 : parts.length === 4 ? 212 : 178
+  const spacing = parts.length <= 3 ? 250 : parts.length === 4 ? 212 : parts.length === 5 ? 178 : 156
   const W = parts.length * spacing
   const colX = (id: string) => parts.findIndex((p) => p.id === id) * spacing + spacing / 2
 
@@ -137,6 +140,7 @@ interface SEdge {
   curve?: number   // Bogen statt Gerade: negativ = oben, positiv = unten
   dim?: boolean    // Kontextkante: statisch, stark abgedunkelt
   inline?: boolean // Guard in derselben Zeile wie das Ereignis (bei engen Layouts)
+  t?: number       // Labelposition entlang der Kante (0..1, Standard Mitte)
 }
 interface StateProps {
   machineId: string
@@ -153,7 +157,7 @@ const NH = 24
 
 export function StateAusschnitt({ machineId, nodes, edges, w, h, initialTo, initialLabel }: StateProps) {
   const reduce = useReducedMotion()
-  const machine = stateMachines.machines.find((m) => m.id === machineId)!
+  const machine = alleMaschinen.find((m) => m.id === machineId)!
   const st = (id: string) => machine.states.find((s) => s.id === id)!
   const pos = Object.fromEntries(nodes.map((nd) => [nd.id, nd]))
 
@@ -179,14 +183,15 @@ export function StateAusschnitt({ machineId, nodes, edges, w, h, initialTo, init
     const sgn = b.x >= a.x ? 1 : -1
     const x1 = a.x + NW * sgn
     const x2 = b.x - (NW + 5) * sgn
-    const mid = (a.y + b.y) / 2
+    const t = e.t ?? 0.5
+    const ly = a.y + (b.y - a.y) * t
     return {
       path: `M ${x1} ${a.y} L ${x2} ${b.y}`,
       end: [x2, b.y] as const,
       ang: Math.atan2(b.y - a.y, x2 - x1),
-      lx: (x1 + x2) / 2,
-      eventY: mid - 13,
-      guardY: mid + 21,
+      lx: x1 + (x2 - x1) * t,
+      eventY: ly - 13,
+      guardY: ly + 21,
     }
   }
 
@@ -317,6 +322,50 @@ export function TicketZyklus() {
         { from: 'GÜLTIG', to: 'EINGELÖST', event: 'validiere(qrCode)', guard: 'nicht bereits gescannt', inline: true },
         { from: 'GÜLTIG', to: 'STORNIERT', event: 'Buchung.stornieren()' },
         { from: 'GÜLTIG', to: 'ABGELAUFEN', event: 'Vorstellung beendet', guard: 'nie eingelöst' },
+      ]}
+    />
+  )
+}
+
+// Buchungs-Lebenszyklus (Erweitert): Ausschnitt mit dem Hauptpfad
+export function BuchungZyklus() {
+  return (
+    <StateAusschnitt
+      machineId="buchung"
+      w={810} h={224} initialTo="AUSSTEHEND"
+      initialLabel="anlegen(antrag)"
+      nodes={[
+        { id: 'AUSSTEHEND', x: 150, y: 104 },
+        { id: 'BESTÄTIGT', x: 440, y: 44 },
+        { id: 'STORNIERT', x: 452, y: 176 },
+        { id: 'EINGELÖST', x: 724, y: 44 },
+      ]}
+      edges={[
+        { from: 'AUSSTEHEND', to: 'BESTÄTIGT', event: 'bestätigen()', guard: 'Zahlung ERFOLGREICH', t: 0.64 },
+        { from: 'AUSSTEHEND', to: 'STORNIERT', event: 'abbrechen()', guard: 'Zahlung fehlgeschlagen / Hold-Timeout', inline: true, t: 0.6 },
+        { from: 'BESTÄTIGT', to: 'EINGELÖST', event: 'einchecken()', guard: 'QR validiert' },
+      ]}
+    />
+  )
+}
+
+// Zahlungs-Lebenszyklus (Erweitert): verarbeiten → ok/abgelehnt → erstatten
+export function ZahlungZyklus() {
+  return (
+    <StateAusschnitt
+      machineId="zahlung"
+      w={810} h={224} initialTo="AUSSTEHEND"
+      initialLabel="verarbeiten()"
+      nodes={[
+        { id: 'AUSSTEHEND', x: 150, y: 104 },
+        { id: 'ERFOLGREICH', x: 440, y: 44 },
+        { id: 'FEHLGESCHLAGEN', x: 452, y: 176 },
+        { id: 'ERSTATTET', x: 724, y: 44 },
+      ]}
+      edges={[
+        { from: 'AUSSTEHEND', to: 'ERFOLGREICH', event: 'ok', guard: 'Autorisierung erteilt', t: 0.64 },
+        { from: 'AUSSTEHEND', to: 'FEHLGESCHLAGEN', event: 'abgelehnt', guard: 'Deckung/Autorisierung fehlt', inline: true, t: 0.6 },
+        { from: 'ERFOLGREICH', to: 'ERSTATTET', event: 'erstatten()', guard: 'Storno' },
       ]}
     />
   )

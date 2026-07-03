@@ -99,6 +99,14 @@
   U47-Story-Karte, Verteilungs-Balken, Backbone/Release-Bänder, Rollen-Grid,
   Wizard-Stepper, Impact/Aufwand-Matrix, JSON→SVG-Pipeline. 39 Folien × Playwright
   verifiziert (0 Fehler), Build/Lint grün.
+- 2026-07-03: Kino-Modus v3 — Touren folgen jetzt dem Einfach/Erweitert-Modus
+  (Modus-Chip im Kino-Kopf): Einfach zeigt den MVP-Kern (37 Folien gesamt),
+  Erweitert vertieft mit 7 zusätzlichen Detail-Folien (44 gesamt): Vererbung
+  (8 Rollen ▷ Nutzer), Service-Schicht (BuchungService ⇢ Domäne), alt-Fragment,
+  Storno-Flow über vier Objekte, Buchungs- und Zahlungs-Automat, Persona-Baum.
+  Visuals modusabhängig (Verteilung, Backbone, Release-Bänder, Rollen, Matrix);
+  Einfach-Tour zeigt U01 statt der erweiterten U47. Beide Modi × 9 Sektionen
+  per Playwright verifiziert (0 Fehler).
 - 2026-07-02: UI/UX-Pass — Folien-Animationen deutlich gestrafft (Inhalt nach
   ~1,5 s statt ~2,6 s komplett); Detail-Panels (Klasse, Story) vom rechten Sheet
   auf zentrierten Dialog über dem Inhalt umgestellt; Abschnitts-Header kompakt

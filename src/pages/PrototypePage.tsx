@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import {
   Smartphone, ExternalLink, Rocket, User, CreditCard, LineChart, ScanLine,
   Coffee, Wrench, Building2, ShieldCheck, Users, Boxes, ListChecks, GitBranch,
@@ -8,7 +9,7 @@ import { useAppStore } from '@/store/appStore'
 import { prototype } from '@/data/content'
 import { RollenGrid, WizardSchritte } from '@/components/presentation/visuals/product'
 import { ImplSplit } from '@/components/presentation/visuals/uml'
-import type { PresentationStep } from '@/types'
+import type { PresentationStep, Mode } from '@/types'
 
 const ACCENT = '#964219'
 // The full interactive Hi-Fi prototype is a separate app; this section is the
@@ -20,24 +21,36 @@ const roleIcon: Record<string, React.ElementType> = {
   service: Coffee, facility: Wrench, marke: Building2, admin: ShieldCheck,
 }
 
-const protoSteps: PresentationStep[] = [
-  { id: 'intro', title: 'Der MVP zum Anfassen', body: 'Release 1 als klickbare Hi-Fi-App: React mit gemockter API (MSW), läuft komplett im Browser ohne Installation. Der Button auf dieser Seite öffnet den Prototyp als eigene App in einem neuen Tab.' },
-  {
-    id: 'rollen', title: 'Acht Rollen, vier davon live', visual: <RollenGrid />,
-    body: 'Endkunde, Kasse, Manager und Einlass sind vollständig klickbar und in der App oben umschaltbar. Die vier übrigen Rollen sind bewusst nur modelliert und als Roadmap ausgewiesen.',
-  },
-  {
-    id: 'wizard', title: 'Der Wizard folgt dem Sequenzdiagramm', visual: <WizardSchritte />,
-    body: 'Die fünf Schritte des Buchungs-Wizards entsprechen exakt dem Flow „Online-Buchung": Sitz-Hold beim Sitzplan, Zahlung, dann BELEGT und QR-Ticket. Modell und Prototyp erzählen dieselbe Geschichte.',
-  },
-  {
-    id: 'roadmap', title: 'Modell ⊇ Prototyp', visual: <ImplSplit extras={['4 / 8 Rollen live', '20 Stories abgedeckt']} />,
-    body: 'Der Prototyp setzt genau die Hälfte des Modells um – der Rest ist als Roadmap vollständig in UML-Klassen und Stories modelliert. Der Erweitert-Modus dieser Seite zeigt die komplette Liste.',
-  },
-]
+// Einfach zeigt die vier klickbaren Rollen; Erweitert stellt sie den
+// Roadmap-Rollen gegenüber.
+function stepsFor(mode: Mode): PresentationStep[] {
+  return [
+    { id: 'intro', title: 'Der MVP zum Anfassen', body: 'Release 1 als klickbare Hi-Fi-App: React mit gemockter API (MSW), läuft komplett im Browser ohne Installation. Der Button auf dieser Seite öffnet den Prototyp als eigene App in einem neuen Tab.' },
+    mode === 'einfach'
+      ? {
+          id: 'rollen', title: 'Vier Rollen, alle klickbar', visual: <RollenGrid tier="basis" />,
+          body: 'Endkunde, Kasse, Manager und Einlass sind vollständig bedienbar und in der App oben umschaltbar – jede Rolle mit eigener Oberfläche.',
+        }
+      : {
+          id: 'rollen', title: 'Acht Rollen, vier davon live', visual: <RollenGrid tier="erweitert" />,
+          body: 'Endkunde, Kasse, Manager und Einlass sind vollständig klickbar und in der App oben umschaltbar. Die vier übrigen Rollen sind bewusst nur modelliert und als Roadmap ausgewiesen.',
+        },
+    {
+      id: 'wizard', title: 'Der Wizard folgt dem Sequenzdiagramm', visual: <WizardSchritte />,
+      body: 'Die fünf Schritte des Buchungs-Wizards entsprechen exakt dem Flow „Online-Buchung": Sitz-Hold beim Sitzplan, Zahlung, dann BELEGT und QR-Ticket. Modell und Prototyp erzählen dieselbe Geschichte.',
+    },
+    {
+      id: 'roadmap', title: 'Modell ⊇ Prototyp', visual: <ImplSplit extras={['4 / 8 Rollen live', '20 Stories abgedeckt']} />,
+      body: mode === 'einfach'
+        ? 'Der Prototyp setzt genau die Hälfte des Modells um – der Rest ist als Roadmap vollständig in UML-Klassen und Stories modelliert. Der Erweitert-Modus dieser Seite zeigt die komplette Liste.'
+        : 'Der Prototyp setzt genau die Hälfte des Modells um – der Rest ist als Roadmap vollständig in UML-Klassen und Stories modelliert. Unten auf der Seite: alle Module und die Roadmap im Detail.',
+    },
+  ]
+}
 
 export default function PrototypePage() {
   const { mode } = useAppStore()
+  const protoSteps = useMemo(() => stepsFor(mode), [mode])
   const rollen = mode === 'erweitert' ? prototype.rollen : prototype.rollen.filter((r) => r.status === 'implementiert')
   const wizard = prototype.module.find((m) => m.id === 'buchungs-wizard')
   const { stats, tech } = prototype

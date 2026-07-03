@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { useStories, personaById } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
 import { StoryKarte, StorySchema, StoryVerteilung } from '@/components/presentation/visuals/people'
-import type { UserStory, Priority, PresentationStep } from '@/types'
+import type { UserStory, Priority, PresentationStep, Mode } from '@/types'
 
 const ACCENT = '#006494'
 const priorities: Priority[] = ['high', 'medium', 'low']
@@ -19,25 +19,40 @@ const priorityColor: Record<Priority, string> = { high: '#ef4444', medium: '#f59
 const releaseLabel: Record<number, string> = { 1: 'R1 – MVP', 2: 'R2 – Erweiterung', 3: 'R3 – Vollausbau' }
 const releaseColor: Record<number, string> = { 1: '#437a22', 2: '#d19900', 3: '#a13544' }
 
-const steps: PresentationStep[] = [
-  {
-    id: 'intro', title: 'Ein Satz, drei Antworten', visual: <StorySchema />,
-    body: 'Jede User Story beschreibt eine Anforderung aus Nutzersicht – in einem Satz, der Persona, Ziel und Nutzen festhält. Dazu kommen testbare Akzeptanzkriterien als Definition von „fertig".',
-  },
-  {
-    id: 'zahlen', title: '30 Stories im MVP, 51 im Vollausbau', visual: <StoryVerteilung />,
-    body: 'Jede Story trägt Release und MoSCoW-Priorität – zusammen ergibt das den Bauplan: Was kommt zuerst, was kann warten?',
-  },
-  {
-    id: 'kern', title: 'Der fachliche Kern: U47', visual: <StoryKarte id="U47" />,
-    body: 'Der Sitz-Hold ist die wichtigste Regel des Systems: keine Doppelbuchung. Genau diese Story taucht im Sequenzdiagramm und im Zustandsautomaten wieder auf.',
-  },
-  { id: 'arbeit', title: 'Arbeiten mit den Stories', body: 'Die Tabelle lässt sich nach Persona, Priorität, Release und Aktivität filtern; ein Klick auf eine Zeile öffnet die Story mit ihren Akzeptanzkriterien – Export als CSV inklusive.' },
-]
+// Einfach: die 30 MVP-Stories mit einem gut lesbaren Beispiel (U01).
+// Erweitert: alle 51 — mit U47, dem fachlichen Kern (Sitz-Hold).
+function stepsFor(mode: Mode): PresentationStep[] {
+  return [
+    {
+      id: 'intro', title: 'Ein Satz, drei Antworten', visual: <StorySchema />,
+      body: 'Jede User Story beschreibt eine Anforderung aus Nutzersicht – in einem Satz, der Persona, Ziel und Nutzen festhält. Dazu kommen testbare Akzeptanzkriterien als Definition von „fertig".',
+    },
+    mode === 'einfach'
+      ? {
+          id: 'zahlen', title: '30 Stories für den MVP', visual: <StoryVerteilung tier="basis" />,
+          body: 'Jede Story trägt Release und MoSCoW-Priorität – zusammen ergibt das den Bauplan: Was kommt zuerst, was kann warten?',
+        }
+      : {
+          id: 'zahlen', title: '30 im MVP, 51 im Vollausbau', visual: <StoryVerteilung tier="erweitert" />,
+          body: 'Der Vollausbau erweitert die Basis, ohne sie zu ändern: Jede Story trägt Release und MoSCoW-Priorität – zusammen ergibt das den Bauplan.',
+        },
+    mode === 'einfach'
+      ? {
+          id: 'beispiel', title: 'So liest sich eine Story', visual: <StoryKarte id="U01" />,
+          body: 'Monikas Schnellverkauf, komplett mit messbaren Akzeptanzkriterien: sichtbar, schnell, vorausgewählt. Genau so präzise ist jede der 30 Stories formuliert.',
+        }
+      : {
+          id: 'kern', title: 'Der fachliche Kern: U47', visual: <StoryKarte id="U47" />,
+          body: 'Der Sitz-Hold ist die wichtigste Regel des Systems: keine Doppelbuchung. Genau diese Story taucht im Sequenzdiagramm und im Zustandsautomaten wieder auf.',
+        },
+    { id: 'arbeit', title: 'Arbeiten mit den Stories', body: 'Die Tabelle lässt sich nach Persona, Priorität, Release und Aktivität filtern; ein Klick auf eine Zeile öffnet die Story mit ihren Akzeptanzkriterien – Export als CSV inklusive.' },
+  ]
+}
 
 export default function UserStoriesPage() {
   const stories = useStories()
   const { mode } = useAppStore()
+  const steps = useMemo(() => stepsFor(mode), [mode])
   const [selected, setSelected] = useState<UserStory | null>(null)
   const [persona, setPersona] = useState('all')
   const [priority, setPriority] = useState('all')

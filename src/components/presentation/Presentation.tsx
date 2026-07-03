@@ -13,13 +13,15 @@ interface PresentationProps {
   label?: string
   /** weißer Knopf für farbige Flächen (z. B. Dashboard-Hero) */
   invert?: boolean
+  /** zeigt im Kino-Kopf, auf welchen Modus sich die Tour bezieht */
+  modeLabel?: string
 }
 
 const SPEEDS = [5000, 8000, 12000]
 const SPEED_LABEL: Record<number, string> = { 5000: 'schnell', 8000: 'normal', 12000: 'langsam' }
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1]
 
-export function Presentation({ steps, accent, title, label = 'Präsentation', invert }: PresentationProps) {
+export function Presentation({ steps, accent, title, label = 'Präsentation', invert, modeLabel }: PresentationProps) {
   const [active, setActive] = useState(false)
   if (steps.length === 0) return null
 
@@ -36,7 +38,7 @@ export function Presentation({ steps, accent, title, label = 'Präsentation', in
         {label}
       </button>
       {active && createPortal(
-        <CinemaMode steps={steps} accent={accent} title={title} onClose={() => setActive(false)} />,
+        <CinemaMode steps={steps} accent={accent} title={title} modeLabel={modeLabel} onClose={() => setActive(false)} />,
         document.body,
       )}
     </>
@@ -44,8 +46,8 @@ export function Presentation({ steps, accent, title, label = 'Präsentation', in
 }
 
 function CinemaMode({
-  steps, accent, title, onClose,
-}: { steps: PresentationStep[]; accent: string; title: string; onClose: () => void }) {
+  steps, accent, title, modeLabel, onClose,
+}: { steps: PresentationStep[]; accent: string; title: string; modeLabel?: string; onClose: () => void }) {
   const [index, setIndex] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [speedIdx, setSpeedIdx] = useState(1)
@@ -120,6 +122,15 @@ function CinemaMode({
           <span className="text-xs font-bold uppercase tracking-[0.18em]">Präsentation</span>
           <span className="opacity-50">·</span>
           <span className="truncate" style={{ fontFamily: 'var(--font-display)', color: 'rgba(255,255,255,0.8)' }}>{title}</span>
+          {modeLabel && (
+            <span
+              className="flex-shrink-0 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full"
+              style={{ background: `${accent}30`, color: '#fff', border: `1px solid ${accent}88` }}
+              title="Die Tour zeigt die Inhalte des gewählten Modus"
+            >
+              {modeLabel}
+            </span>
+          )}
         </div>
         <div className="flex items-center gap-3 flex-shrink-0">
           <span className="text-sm font-mono" style={{ color: 'rgba(255,255,255,0.6)' }}>{index + 1} / {total}</span>

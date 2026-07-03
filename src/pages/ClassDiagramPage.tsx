@@ -8,8 +8,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { uml } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
 import { UML_GROUP_COLOR } from '@/lib/statusColors'
-import { ImplSplit, UmlBuchungskette, UmlGruppen, UmlKomposition, UmlVorstellungSitz } from '@/components/presentation/visuals/uml'
-import type { UmlClass, PresentationStep } from '@/types'
+import { ImplSplit, UmlBuchungskette, UmlGruppen, UmlKomposition, UmlServices, UmlVererbung, UmlVorstellungSitz } from '@/components/presentation/visuals/uml'
+import type { UmlClass, PresentationStep, Mode } from '@/types'
 
 const ACCENT = '#7a39bb'
 
@@ -17,33 +17,51 @@ const CORE = ['Kette', 'Kino', 'Kinosaal', 'Sitzplatz', 'Tarif', 'Film', 'Vorste
 
 const groupLabel: Record<string, string> = { domain: 'Domäne', service: 'Services', store: 'Stores', dto: 'DTOs', enum: 'Enums' }
 
-const steps: PresentationStep[] = [
-  {
-    id: 'gruppen', title: '82 Klassen, fünf Gruppen', visual: <UmlGruppen />,
-    body: 'Die statische Struktur des Systems: Domänenklassen tragen die Fachlichkeit, API-Services die Abläufe, dazu Frontend-Stores, DTOs und Enums. Die folgenden Ausschnitte zeigen die wichtigsten Stellen.',
-  },
-  {
-    id: 'kern', title: 'Vom Konzern bis zum Sitz', visual: <UmlKomposition />,
-    body: 'Das physische Rückgrat als Kompositions-Kette (◆): Eine Kette umfasst Kinos, ein Kino besitzt Säle, ein Saal enthält Sitzplätze – der Teil existiert nicht ohne das Ganze.',
-  },
-  {
-    id: 'assoc', title: 'Der Schlüssel: VorstellungSitz', visual: <UmlVorstellungSitz />,
-    body: 'Der Sitzstatus gehört weder dem Sitz noch der Vorstellung, sondern ihrer Verbindung – der Assoziationsklasse. reservieren(), belegen() und freigeben() setzen den Hold durch und verhindern Doppelbuchungen.',
-  },
-  {
-    id: 'ops', title: 'Operationen am Objekt', visual: <UmlBuchungskette />,
-    body: 'Statusändernde Operationen stehen an den Domänenobjekten selbst – Zahlung.verarbeiten(), Buchung.bestätigen(), Ticket.einlösen() – nicht bei den Akteuren. So bleibt jede Zustandsänderung dort, wo ihr Zustand lebt.',
-  },
-  {
+// Die Tour folgt dem Modus: Einfach zeigt den fachlichen Kern,
+// Erweitert vertieft Vererbung und Service-Schicht.
+function stepsFor(mode: Mode): PresentationStep[] {
+  const kern: PresentationStep[] = [
+    {
+      id: 'gruppen', title: '82 Klassen, fünf Gruppen', visual: <UmlGruppen />,
+      body: mode === 'einfach'
+        ? 'Die statische Struktur des Systems: Domänenklassen tragen die Fachlichkeit, API-Services die Abläufe, dazu Frontend-Stores, DTOs und Enums. Der Einfach-Modus konzentriert sich auf den fachlichen Kern.'
+        : 'Die statische Struktur des Systems: Domänenklassen tragen die Fachlichkeit, API-Services die Abläufe, dazu Frontend-Stores, DTOs und Enums. Im Erweitert-Modus ist jede Gruppe einzeln filterbar.',
+    },
+    {
+      id: 'kern', title: 'Vom Konzern bis zum Sitz', visual: <UmlKomposition />,
+      body: 'Das physische Rückgrat als Kompositions-Kette (◆): Eine Kette umfasst Kinos, ein Kino besitzt Säle, ein Saal enthält Sitzplätze – der Teil existiert nicht ohne das Ganze.',
+    },
+    {
+      id: 'assoc', title: 'Der Schlüssel: VorstellungSitz', visual: <UmlVorstellungSitz />,
+      body: 'Der Sitzstatus gehört weder dem Sitz noch der Vorstellung, sondern ihrer Verbindung – der Assoziationsklasse. reservieren(), belegen() und freigeben() setzen den Hold durch und verhindern Doppelbuchungen.',
+    },
+    {
+      id: 'ops', title: 'Operationen am Objekt', visual: <UmlBuchungskette />,
+      body: 'Statusändernde Operationen stehen an den Domänenobjekten selbst – Zahlung.verarbeiten(), Buchung.bestätigen(), Ticket.einlösen() – nicht bei den Akteuren. So bleibt jede Zustandsänderung dort, wo ihr Zustand lebt.',
+    },
+  ]
+  const vertiefung: PresentationStep[] = [
+    {
+      id: 'vererbung', title: 'Acht Rollen, eine Basis', visual: <UmlVererbung />,
+      body: 'Vom Kunden bis zum Administrator erben alle Akteure von Nutzer. Was jemand darf, entscheidet nicht die Klasse, sondern das Enum Nutzerrolle – geprüft über darf(aktion).',
+    },
+    {
+      id: 'services', title: 'Services steuern die Abläufe', visual: <UmlServices />,
+      body: 'Die «control»-Schicht: Der BuchungService führt reservieren(), anlegen() und stornieren() aus und hängt nur lose (⇢ Abhängigkeit) an den Domänenobjekten – genau die Aufrufe, die in den Sequenzdiagrammen auftauchen.',
+    },
+  ]
+  const schluss: PresentationStep = {
     id: 'all', title: 'Modell ⊇ Prototyp', visual: <ImplSplit />,
     body: 'Die Hälfte der Klassen ist im Prototyp implementiert (grüner Punkt im Diagramm), die andere bewusst Design-only: Das Modell beschreibt das ganze Produkt, nicht nur den MVP.',
-  },
-]
+  }
+  return mode === 'einfach' ? [...kern, schluss] : [...kern, ...vertiefung, schluss]
+}
 
 export default function ClassDiagramPage() {
   const { mode } = useAppStore()
   const [view, setView] = useState<string>('kern')
   const [selected, setSelected] = useState<string | null>(null)
+  const steps = useMemo(() => stepsFor(mode), [mode])
 
   const views = mode === 'einfach'
     ? [{ id: 'kern', label: 'Kern' }, { id: 'enum', label: 'Enums' }]

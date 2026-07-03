@@ -173,11 +173,12 @@ const roleIcon: Record<string, React.ElementType> = {
   service: Coffee, facility: Wrench, marke: Building2, admin: ShieldCheck,
 }
 
-export function RollenGrid() {
+export function RollenGrid({ tier = 'erweitert' }: { tier?: 'basis' | 'erweitert' }) {
   const reduce = useReducedMotion()
+  const rollen = tier === 'basis' ? prototype.rollen.filter((r) => r.status === 'implementiert') : prototype.rollen
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5" style={{ maxWidth: 760 }}>
-      {prototype.rollen.map((r, i) => {
+      {rollen.map((r, i) => {
         const Icon = roleIcon[r.id] ?? User
         const live = r.status === 'implementiert'
         const c = live ? '#437a22' : '#d19900'
@@ -247,8 +248,9 @@ export function WizardSchritte() {
 const feasColor: Record<string, string> = { machbar: '#437a22', teilweise: '#d19900', konzept: '#7a39bb' }
 const feasLabel: Record<string, string> = { machbar: 'im Rahmen machbar', teilweise: 'teilweise machbar', konzept: 'Konzept / Vision' }
 
-export function InnovationsMatrix() {
+export function InnovationsMatrix({ tier = 'erweitert' }: { tier?: 'basis' | 'erweitert' }) {
   const reduce = useReducedMotion()
+  const items = tier === 'basis' ? innovation.innovations.filter((it) => it.tier === 'basis') : innovation.innovations
   const W = 680
   const H = 330
   const x0 = 64
@@ -260,7 +262,7 @@ export function InnovationsMatrix() {
 
   // Punkte mit identischen Koordinaten leicht versetzen, damit nichts verdeckt
   const seen: Record<string, number> = {}
-  const pts = innovation.innovations.map((it) => {
+  const pts = items.map((it) => {
     const key = `${it.effort}-${it.impact}`
     const jit = (seen[key] = (seen[key] ?? -1) + 1)
     return { it, x: sx(it.effort), y: sy(it.impact) + (jit === 0 ? 0 : jit % 2 === 1 ? -16 : 16) }
@@ -303,7 +305,7 @@ export function InnovationsMatrix() {
         })}
       </svg>
       <div className="flex justify-center gap-2.5 flex-wrap mt-1">
-        {Object.entries(feasLabel).map(([k, l], i) => (
+        {Object.entries(feasLabel).filter(([k]) => items.some((it) => it.feasibility === k)).map(([k, l], i) => (
           <motion.span
             key={k} {...pop(7 + i, reduce)}
             className="inline-flex items-center gap-1.5 text-[10.5px] px-2.5 py-1 rounded-full font-medium"

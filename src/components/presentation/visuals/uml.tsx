@@ -4,7 +4,7 @@
 import { motion, useReducedMotion } from 'motion/react'
 import { uml } from '@/data/content'
 import { UML_GROUP_COLOR } from '@/lib/statusColors'
-import { bright, pop, VEASE } from './core'
+import { bright, draw, fadeIn, pop, VEASE } from './core'
 
 const byId = Object.fromEntries(uml.classes.map((c) => [c.id, c]))
 
@@ -154,6 +154,91 @@ export function UmlBuchungskette() {
       <UmlBox i={4} id="Ticket" width={178} attrs={['qrCode', 'status']} methods={['istGültig', 'einlösen']} highlight={['einlösen']} />
       <UmlRel i={5} kind="association" dir="r" from="1" to="1" label="gilt für" w={84} />
       <UmlBox i={6} id="VorstellungSitz" width={158} attrs={['status']} />
+    </div>
+  )
+}
+
+// ── Folie (Erweitert): alle Rollen erben von Nutzer ──
+export function UmlVererbung() {
+  const reduce = useReducedMotion()
+  const W = 800
+  const rollen = uml.relationships
+    .filter((r) => r.type === 'inheritance' && r.to === 'Nutzer')
+    .map((r) => r.from)
+  const childX = (i: number) => (W / rollen.length) * (i + 0.5)
+
+  return (
+    <div className="w-full" style={{ maxWidth: W }}>
+      <div className="flex justify-center">
+        <UmlBox i={0} id="Nutzer" width={236} attrs={['rolle']} methods={['darf']} highlight={['rolle']} emphasized />
+      </div>
+      {/* Gemeinsamer Vererbungspfeil: hohles Dreieck zeigt auf die Oberklasse */}
+      <svg viewBox={`0 0 ${W} 44`} className="w-full h-auto" aria-hidden>
+        <motion.polygon
+          points={`${W / 2},2 ${W / 2 - 8},14 ${W / 2 + 8},14`}
+          fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth={1.4}
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.25 }}
+        />
+        {rollen.map((r, i) => (
+          <motion.path
+            key={r} {...draw(i, reduce, 0.3)}
+            d={`M ${W / 2} 14 C ${W / 2} 30, ${childX(i)} 24, ${childX(i)} 42`}
+            fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth={1.1}
+          />
+        ))}
+      </svg>
+      <div className="flex justify-center gap-1 flex-nowrap">
+        {rollen.map((r, i) => (
+          <motion.span
+            key={r} {...pop(2 + i, reduce)}
+            className="text-[10.5px] font-mono font-semibold px-2 py-1.5 rounded-lg whitespace-nowrap"
+            style={{ background: `${UML_GROUP_COLOR.domain}22`, border: `1px solid ${bright(UML_GROUP_COLOR.domain)}55`, color: 'rgba(255,255,255,0.85)' }}
+          >
+            {r}
+          </motion.span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ── Folie (Erweitert): Services steuern die Abläufe (Abhängigkeiten ⇢) ──
+export function UmlServices() {
+  const reduce = useReducedMotion()
+  const ziele = ['VorstellungSitz', 'Buchung', 'Zahlung']
+  return (
+    <div className="flex items-center justify-center flex-wrap gap-y-4">
+      <UmlBox
+        i={0} id="BuchungService" width={288}
+        methods={['reservieren', 'anlegen', 'stornieren']}
+        highlight={['reservieren']}
+      />
+      <motion.svg
+        {...pop(1, reduce)}
+        viewBox="0 0 96 240" width={96} height={240} className="flex-shrink-0" aria-hidden
+      >
+        {ziele.map((_, i) => {
+          const y2 = 40 + i * 80
+          return (
+            <g key={i}>
+              <motion.path
+                {...draw(i, reduce, 0.35)}
+                d={`M 4 120 C 40 120, 56 ${y2}, 86 ${y2}`}
+                fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth={1.3} strokeDasharray="6 5"
+              />
+              <motion.g {...fadeIn(i, reduce, 0.35)}>
+                <polyline points={`${86 - 9},${y2 - 5} ${86 + 1},${y2} ${86 - 9},${y2 + 5}`} fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth={1.3} />
+              </motion.g>
+            </g>
+          )
+        })}
+        <text x={30} y={110} fontSize={9.5} fill="rgba(255,255,255,0.45)">⇢ nutzt</text>
+      </motion.svg>
+      <div className="flex flex-col gap-2.5">
+        <UmlBox i={2} id="VorstellungSitz" width={192} attrs={['status']} />
+        <UmlBox i={3} id="Buchung" width={192} attrs={['status']} />
+        <UmlBox i={4} id="Zahlung" width={192} attrs={['status']} />
+      </div>
     </div>
   )
 }

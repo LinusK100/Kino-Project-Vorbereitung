@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { ChevronDown, Target, Frown, Quote, Users, Crown, GitBranch } from 'lucide-react'
 import { SectionShell } from '@/components/shared/SectionShell'
@@ -7,29 +7,36 @@ import { containerVariants, cardVariants } from '@/lib/transitions'
 import { usePersonas, personaById } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
 import { PersonaBaum, PersonaKern, ZieleFrustrationen } from '@/components/presentation/visuals/people'
-import type { Persona, PresentationStep } from '@/types'
+import type { Persona, PresentationStep, Mode } from '@/types'
 
 const ACCENT = '#006494'
 
-const steps: PresentationStep[] = [
-  { id: 'intro', title: 'Wer nutzt CineTicket?', body: 'Personas machen die Nutzergruppen greifbar: Wer arbeitet mit dem System – mit welchen Zielen und Frustrationen? Jede spätere User Story gehört zu genau einer Persona.' },
-  {
-    id: 'einfach', title: 'Vier Kern-Personas im MVP', visual: <PersonaKern />,
-    body: 'Genau die Rollen, die der Prototyp klickbar umsetzt: Der Endkunde bucht, Monika verkauft an der Kasse, Thomas managt das Kino, Kevin kontrolliert den Einlass.',
-  },
-  {
-    id: 'erweitert', title: 'Ein Dach, vier Ausprägungen', visual: <PersonaBaum />,
-    body: 'Im Erweitert-Modus differenziert sich der Endkunde in vier konkrete Profile mit eigenen Bedürfnissen – zusammen mit den internen Rollen ergeben sich zwölf Personas, eine echte Obermenge der Basis.',
-  },
-  {
+// Einfach: die 4 MVP-Personas. Erweitert ergänzt die Verfeinerung zum Vollausbau.
+function stepsFor(mode: Mode): PresentationStep[] {
+  const basis: PresentationStep[] = [
+    { id: 'intro', title: 'Wer nutzt CineTicket?', body: 'Personas machen die Nutzergruppen greifbar: Wer arbeitet mit dem System – mit welchen Zielen und Frustrationen? Jede spätere User Story gehört zu genau einer Persona.' },
+    {
+      id: 'kern', title: 'Vier Kern-Personas im MVP', visual: <PersonaKern />,
+      body: mode === 'einfach'
+        ? 'Genau die Rollen, die der Prototyp klickbar umsetzt: Der Endkunde bucht, Monika verkauft an der Kasse, Thomas managt das Kino, Kevin kontrolliert den Einlass.'
+        : 'Der Kern bleibt auch im Vollausbau derselbe: Der Endkunde bucht, Monika verkauft an der Kasse, Thomas managt das Kino, Kevin kontrolliert den Einlass.',
+    },
+  ]
+  const erweitert: PresentationStep = {
+    id: 'baum', title: 'Ein Dach, vier Ausprägungen', visual: <PersonaBaum />,
+    body: 'Der Endkunde differenziert sich in vier konkrete Profile mit eigenen Bedürfnissen – zusammen mit den internen Rollen ergeben sich zwölf Personas, eine echte Obermenge der Basis.',
+  }
+  const anatomy: PresentationStep = {
     id: 'anatomy', title: 'Vom Bedürfnis zur Anforderung', visual: <ZieleFrustrationen />,
     body: 'Jede Persona spannt Ziele gegen Frustrationen. Aus genau diesem Spannungsfeld entstehen die User Stories – jede Anforderung hat eine nachvollziehbare Quelle.',
-  },
-]
+  }
+  return mode === 'einfach' ? [...basis, anatomy] : [...basis, erweitert, anatomy]
+}
 
 export default function PersonasPage() {
   const personas = usePersonas()
   const { mode } = useAppStore()
+  const steps = useMemo(() => stepsFor(mode), [mode])
   const [group, setGroup] = useState<string>('all')
   const [allOpen, setAllOpen] = useState(false)
 

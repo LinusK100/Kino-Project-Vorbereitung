@@ -3,6 +3,7 @@ import type { LucideIcon } from 'lucide-react'
 import { pageVariants } from '@/lib/transitions'
 import { ModeToggle } from './ModeToggle'
 import { Presentation } from '@/components/presentation/Presentation'
+import { useAppStore } from '@/store/appStore'
 import type { PresentationStep } from '@/types'
 
 interface SectionShellProps {
@@ -22,6 +23,9 @@ export function SectionShell({
   title, subtitle, icon: Icon, accent, kicker,
   intro, presentation = [], modes = true, legend, children,
 }: SectionShellProps) {
+  const { mode } = useAppStore()
+  // Die Kino-Tour folgt dem gewählten Modus — der Chip im Kino-Kopf macht das sichtbar.
+  const modeLabel = modes ? (mode === 'einfach' ? 'Einfach · MVP' : 'Erweitert · Vollausbau') : undefined
   return (
     <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
       {/* Kompakter Kopf: eine Zeile Titel + Aktionen, darunter die Einleitung.
@@ -49,7 +53,7 @@ export function SectionShell({
 
           <div className="flex items-center gap-2 flex-shrink-0 flex-wrap">
             {modes && <ModeToggle accent={accent} />}
-            {presentation.length > 0 && <Presentation steps={presentation} accent={accent} title={title} />}
+            {presentation.length > 0 && <Presentation steps={presentation} accent={accent} title={title} modeLabel={modeLabel} />}
           </div>
         </div>
 

@@ -217,9 +217,9 @@ export function StoryKarte({ id }: { id: string }) {
 }
 
 // ── User Stories: Verteilung über Releases und Prioritäten ──
-export function StoryVerteilung() {
+export function StoryVerteilung({ tier = 'erweitert' }: { tier?: 'basis' | 'erweitert' }) {
   const reduce = useReducedMotion()
-  const alle = stories.erweitert
+  const alle = stories[tier]
   const bars = [
     {
       label: 'Nach Release',
@@ -237,13 +237,21 @@ export function StoryVerteilung() {
   return (
     <div className="w-full space-y-5" style={{ maxWidth: 620 }}>
       <motion.div {...pop(0, reduce)} className="flex justify-center gap-2">
-        <span className="text-[11.5px] px-3 py-1 rounded-full font-semibold" style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.75)' }}>
-          {stories.basis.length} Stories im Einfach-Modus
-        </span>
-        <span className="text-[11.5px] px-1 py-1" style={{ color: 'rgba(255,255,255,0.4)' }}>⊂</span>
-        <span className="text-[11.5px] px-3 py-1 rounded-full font-semibold" style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.75)' }}>
-          {alle.length} im Erweitert-Modus
-        </span>
+        {tier === 'erweitert' ? (
+          <>
+            <span className="text-[11.5px] px-3 py-1 rounded-full font-semibold" style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.75)' }}>
+              {stories.basis.length} Stories im Einfach-Modus
+            </span>
+            <span className="text-[11.5px] px-1 py-1" style={{ color: 'rgba(255,255,255,0.4)' }}>⊂</span>
+            <span className="text-[11.5px] px-3 py-1 rounded-full font-semibold" style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.75)' }}>
+              {alle.length} im Erweitert-Modus
+            </span>
+          </>
+        ) : (
+          <span className="text-[11.5px] px-3 py-1 rounded-full font-semibold" style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.75)' }}>
+            {alle.length} Stories im Einfach-Modus (MVP-Auswahl)
+          </span>
+        )}
       </motion.div>
       {bars.map((b, bi) => (
         <div key={b.label} className="text-left">
@@ -272,15 +280,15 @@ export function StoryVerteilung() {
 // ── Story Map: das Backbone (Aktivitäten in Reihenfolge der Nutzerreise) ──
 const activityColors = ['#01696f', '#006494', '#7a39bb', '#437a22', '#a13544', '#964219', '#2d6a8c', '#9333ea', '#c2410c', '#0e7490']
 
-export function BackboneChips() {
+export function BackboneChips({ tier = 'erweitert' }: { tier?: 'basis' | 'erweitert' }) {
   const reduce = useReducedMotion()
-  const alle = storyMaps.erweitert.activities
+  const alle = storyMaps[tier].activities
   const basisIds = new Set(storyMaps.basis.activities.map((a) => a.id))
   return (
     <div className="flex justify-center items-center gap-x-1.5 gap-y-2.5 flex-wrap" style={{ maxWidth: 900 }}>
       {alle.map((a, i) => {
         const c = activityColors[i % activityColors.length]
-        const erwOnly = !basisIds.has(a.id)
+        const erwOnly = tier === 'erweitert' && !basisIds.has(a.id)
         return (
           <span key={a.id} className="inline-flex items-center gap-1.5">
             <motion.span
@@ -301,17 +309,19 @@ export function BackboneChips() {
           </span>
         )
       })}
-      <motion.p {...pop(alle.length, reduce)} className="w-full text-[10.5px] mt-1" style={{ color: 'rgba(255,255,255,0.45)' }}>
-        „+" = Aktivität kommt erst im Erweitert-Modus dazu (7 → 10)
-      </motion.p>
+      {tier === 'erweitert' && (
+        <motion.p {...pop(alle.length, reduce)} className="w-full text-[10.5px] mt-1" style={{ color: 'rgba(255,255,255,0.45)' }}>
+          „+" = Aktivität kommt erst im Erweitert-Modus dazu ({storyMaps.basis.activities.length} → {alle.length})
+        </motion.p>
+      )}
     </div>
   )
 }
 
 // ── Story Map: die drei Release-Bänder (R1 = MVP hervorgehoben) ──
-export function ReleaseBaender() {
+export function ReleaseBaender({ tier = 'erweitert' }: { tier?: 'basis' | 'erweitert' }) {
   const reduce = useReducedMotion()
-  const alle = stories.erweitert
+  const alle = stories[tier]
   const cfg = [
     { r: 1, label: 'Release 1 – MVP', color: '#437a22', hl: true, note: 'die lauffähige Scheibe, die der Prototyp zeigt' },
     { r: 2, label: 'Release 2 – Erweiterung', color: '#d19900', hl: false, note: 'Komfort, Gastro & Service, Facility' },
