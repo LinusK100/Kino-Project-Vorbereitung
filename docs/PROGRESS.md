@@ -122,3 +122,61 @@
   entschlackt (ein Hero mit integriertem Tour-Start statt Doppel-Kopf, Gruppen-
   Karten mit Kurzbeschreibung); redundante Callout-Texte entfernt (Notation
   stand doppelt in Callout und Legende).
+- 2026-07-11: Präzisions- und Politur-Pass nach Gesamt-Review:
+  (1) „MVP"-Überclaim behoben — die Basis-Auswahl (30 Stories) verteilt sich auf
+  R1/R2/R3 (14/12/4), Folie hieß aber „30 Stories für den MVP"; jetzt „Die 30
+  Kern-Stories" mit Hinweis „14 bilden Release 1, den MVP". Kino-Chip
+  „Einfach · MVP" → „Einfach · Basis", ModeToggle-Hint entsprechend.
+  (2) Zahlen auf Folien/Karten nicht mehr hartkodiert, sondern aus src/data
+  berechnet (Klassen/Gruppen/Rollen/Stories/Personas/Aktivitäten/Flows/
+  Automaten/Ideen/Wizard-Schritte; neuer Helper zahlwort() in lib/utils).
+  (3) Kino-Modus: „Fertig"-Knopf auf der letzten Folie schließt jetzt (war
+  funktionslos); Fokus wird beim Öffnen ins Overlay geholt und beim Schließen
+  zurückgegeben. (4) Vererbungs-Folie: Fächerlinien enden an den gemessenen
+  Chip-Mitten (ResizeObserver) statt an einem festen Raster. (5) Buchungs-/
+  Zahlungs-Automat: orthogonale Elbow-Kanten statt Diagonalen — keine Kante
+  läuft mehr durch Guard-Texte. (6) Innovations-Matrix: Achsen mit Skalen-
+  Anker „(1 gering · 5 hoch)", überlappende Punkt-Labels weiter auseinander.
+  Alle 14 Touren (61 Folien, beide Modi) per Playwright verifiziert, 0 Fehler;
+  Build/Lint grün. Offen war noch die Ground-Truth-Frage prototype.json
+  (storiesImplementiert=20 vs. 17 in den Modul-Listen) — inhaltlich geklärt
+  und behoben im folgenden Eintrag.
+- 2026-07-11: Stories-Kennzahl inhaltlich geklärt (Befund 2). Analyse gegen
+  Traceability v1.1 (Doku, 2026-06-21) und den echten Prototyp-Quellcode:
+  Die 20 der Traceability zählte U06, U28 und U47 mit — alle drei sind im
+  Prototyp nachweislich NICHT umgesetzt: U47 (Sitz-Hold) hat keinerlei
+  Hold-/Timer-Logik (Owner-Entscheidung 2026-07-03: Design-only), U06
+  (Gruppen-Tickets) erfüllt 0/3 Akzeptanzkriterien (kein 8er-Limit, keine
+  Nachbarplatz-Präferenz, ein Sammel-QR pro Buchung statt Einzel-Tickets),
+  U28 (Seniorenrabatt) ist nur ein manuell wählbarer POS-Tarif (F3) ohne
+  Profil-/Altersverifizierung. Die kuratierten Modul-Listen (17 Stories)
+  sind der korrekte Stand. Fixes: stats.storiesImplementiert 20 → 17;
+  Callout-Text präzisiert („zentrale Release-1-Abläufe" statt „setzt den
+  MVP-Kern um", U47 als Design-only benannt); Roadmap um vier Einträge
+  ergänzt (Sitz-Hold U47, Gruppen & Rabatte U06/U18/U28, Offline-Validierung
+  U16, Preismatrix U25 — UML-Klassen aus der Traceability übernommen), damit
+  jede der 16 R1-Stories entweder implementiert (10) oder in der Roadmap (6)
+  verortet ist; PrototypePage berechnet alle KPIs jetzt aus den Listen
+  (Rollen, uml.json, Modul-Union „17 / 51") statt aus dem stats-Block.
+  Verifiziert: JSON konsistent (impl-Union = stats, keine Story doppelt,
+  R1 lückenlos), Build/Lint grün, Seite per Screenshot geprüft, 0 Fehler.
+  Hinweis: In der Abgabe-Doku (CineTicket_Projektdokumentation) melden
+  traceability/traceability.json (stats.implementiert=20, U47 als
+  „implementiert") und prototyp/prototyp.json (storiesImplementiert=20)
+  noch den alten Stand — dort ggf. nachziehen (Owner-Entscheidung).
+- 2026-07-11: Genauigkeits-Pass Prototyp-Beschreibung + Doku-Sync. Alle
+  Behauptungen über die echte App gegen deren Quellcode geprüft und korrigiert:
+  POS-Shortcuts sind F1–F4 (Tarife) + F12 Abschluss (nicht „F2/F4/F8"),
+  Umsatz-Chart zeigt 7 Tage (nicht „7/14/30"), Seed = 8 Filme (Venom,
+  Gladiator II, Vaiana 2 … statt „5 Filme, Dune 2/Oppenheimer"), 4 Säle
+  (126/176/96/60 statt „3 Säle 120/80/60"), Vorstellungen 7 Tage (nicht 14),
+  Sitzkategorien inkl. BARRIEREFREI mit eigenen Preisen je Saal, 30
+  Seed-Buchungen; stores um AnsichtStore (view-mode) ergänzt. Dieselben
+  Korrekturen in die Abgabe-Doku übernommen: prototyp/prototyp.json =
+  identische Kopie der Repo-Datei, prototyp/prototyp.md (Beschreibung,
+  Wizard-Schritte, Roadmap-Tabelle +4 R1-Einträge, Mock-Daten, Shortcuts,
+  Konsistenz-Note 20→17), traceability v1.2 (U06/U28/U47 → „○ roadmap",
+  Stats 17/34, U47-Fußnote präzisiert). REVIEW_REPORT.md mit Nachtrag,
+  README „Basis/MVP" → „Basis". Verifiziert: Traceability-implementiert-Menge
+  ≡ Modul-Union ≡ Stats (17), Doku-JSON diff-identisch zum Repo, Build/Lint
+  grün, Prototyp-Seite per Screenshot geprüft (0 Fehler).

@@ -26,7 +26,7 @@ npm run lint
 ## Bedienkonzept
 
 - **Einfach / Erweitert** – jeder Abschnitt hat genau zwei Tiefen
-  (Basis/MVP ⊆ Vollausbau). Umschalten oben rechts; global & persistent.
+  (Basis ⊆ Vollausbau). Umschalten oben rechts; global & persistent.
 - **Präsentationsmodus** – jeder Abschnitt liefert eine geführte Tour mit
   Spotlight + Erklärtext, manuell (← →) oder automatisch (Auto). Esc beendet.
 - **Dark / Light** – persistent, System-Default.

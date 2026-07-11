@@ -6,6 +6,7 @@ import { DiagramFrame } from '@/components/diagram/DiagramFrame'
 import { SequenceDiagram } from '@/components/diagram/SequenceDiagram'
 import { sequences } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
+import { zahlwort } from '@/lib/utils'
 import { FlowUebersicht, SeqAusschnitt } from '@/components/presentation/visuals/flow'
 import type { SequenceDiagram as SeqType, PresentationStep, Mode } from '@/types'
 
@@ -16,8 +17,8 @@ const ACCENT = '#7a39bb'
 function stepsFor(mode: Mode): PresentationStep[] {
   const happy: PresentationStep[] = [
     {
-      id: 'intro', title: 'Vier Flows statt eines Monsters', visual: <FlowUebersicht />,
-      body: 'Der Buchungsprozess als Interaktion über die Zeit: Wer schickt wann welche Nachricht an wen? Vier fokussierte Diagramme statt eines überladenen – die nächsten Folien zoomen in die Online-Buchung.',
+      id: 'intro', title: `${zahlwort(sequences.length, true)} Flows statt eines Monsters`, visual: <FlowUebersicht />,
+      body: `Der Buchungsprozess als Interaktion über die Zeit: Wer schickt wann welche Nachricht an wen? ${zahlwort(sequences.length, true)} fokussierte Diagramme statt eines überladenen – die nächsten Folien zoomen in die Online-Buchung.`,
     },
     {
       id: 'hold', title: 'Der Hold: 10 Minuten verbindlich', visual: <SeqAusschnitt flow="online-buchung" msgSeqs={['6', '7', '8a', '9a']} />,

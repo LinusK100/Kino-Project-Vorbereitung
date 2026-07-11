@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useStories, personaById } from '@/data/content'
+import { stories as allStories, useStories, personaById } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
 import { StoryKarte, StorySchema, StoryVerteilung } from '@/components/presentation/visuals/people'
 import type { UserStory, Priority, PresentationStep, Mode } from '@/types'
@@ -19,8 +19,12 @@ const priorityColor: Record<Priority, string> = { high: '#ef4444', medium: '#f59
 const releaseLabel: Record<number, string> = { 1: 'R1 – MVP', 2: 'R2 – Erweiterung', 3: 'R3 – Vollausbau' }
 const releaseColor: Record<number, string> = { 1: '#437a22', 2: '#d19900', 3: '#a13544' }
 
-// Einfach: die 30 MVP-Stories mit einem gut lesbaren Beispiel (U01).
+// Einfach: die 30 Basis-Stories mit einem gut lesbaren Beispiel (U01).
 // Erweitert: alle 51 — mit U47, dem fachlichen Kern (Sitz-Hold).
+const nBasis = allStories.basis.length
+const nVoll = allStories.erweitert.length
+const nBasisR1 = allStories.basis.filter((s) => s.release === 1).length
+
 function stepsFor(mode: Mode): PresentationStep[] {
   return [
     {
@@ -29,17 +33,17 @@ function stepsFor(mode: Mode): PresentationStep[] {
     },
     mode === 'einfach'
       ? {
-          id: 'zahlen', title: '30 Stories für den MVP', visual: <StoryVerteilung tier="basis" />,
-          body: 'Jede Story trägt Release und MoSCoW-Priorität – zusammen ergibt das den Bauplan: Was kommt zuerst, was kann warten?',
+          id: 'zahlen', title: `Die ${nBasis} Kern-Stories`, visual: <StoryVerteilung tier="basis" />,
+          body: `Jede Story trägt Release und MoSCoW-Priorität – ${nBasisR1} bilden Release 1, den MVP. Zusammen ergibt das den Bauplan: Was kommt zuerst, was kann warten?`,
         }
       : {
-          id: 'zahlen', title: '30 im MVP, 51 im Vollausbau', visual: <StoryVerteilung tier="erweitert" />,
+          id: 'zahlen', title: `${nBasis} in der Basis, ${nVoll} im Vollausbau`, visual: <StoryVerteilung tier="erweitert" />,
           body: 'Der Vollausbau erweitert die Basis, ohne sie zu ändern: Jede Story trägt Release und MoSCoW-Priorität – zusammen ergibt das den Bauplan.',
         },
     mode === 'einfach'
       ? {
           id: 'beispiel', title: 'So liest sich eine Story', visual: <StoryKarte id="U01" />,
-          body: 'Monikas Schnellverkauf, komplett mit messbaren Akzeptanzkriterien: sichtbar, schnell, vorausgewählt. Genau so präzise ist jede der 30 Stories formuliert.',
+          body: `Monikas Schnellverkauf, komplett mit messbaren Akzeptanzkriterien: sichtbar, schnell, vorausgewählt. Genau so präzise ist jede der ${nBasis} Stories formuliert.`,
         }
       : {
           id: 'kern', title: 'Der fachliche Kern: U47', visual: <StoryKarte id="U47" />,

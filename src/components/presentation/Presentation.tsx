@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import {
-  Play, Pause, ChevronLeft, ChevronRight, X, Presentation as PresentationIcon, Gauge,
+  Play, Pause, Check, ChevronLeft, ChevronRight, X, Presentation as PresentationIcon, Gauge,
 } from 'lucide-react'
 import type { PresentationStep } from '@/types'
 
@@ -52,6 +52,7 @@ function CinemaMode({
   const [playing, setPlaying] = useState(false)
   const [speedIdx, setSpeedIdx] = useState(1)
   const reduce = useReducedMotion()
+  const rootRef = useRef<HTMLDivElement>(null)
 
   const step = steps[index]
   const total = steps.length
@@ -63,6 +64,13 @@ function CinemaMode({
     const prev = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     return () => { document.body.style.overflow = prev }
+  }, [])
+
+  // Fokus ins Overlay holen und beim Schließen zurückgeben (Screenreader/Tastatur)
+  useEffect(() => {
+    const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null
+    rootRef.current?.focus()
+    return () => opener?.focus()
   }, [])
 
   // Automatischer Ablauf; stoppt beim Erreichen der letzten Folie
@@ -100,7 +108,8 @@ function CinemaMode({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex flex-col"
+      ref={rootRef} tabIndex={-1}
+      className="fixed inset-0 z-[100] flex flex-col outline-none"
       role="dialog" aria-modal="true" aria-label="Präsentationsmodus"
       style={{ background: 'radial-gradient(130% 100% at 50% 12%, #10101a 0%, #060608 55%, #000 100%)' }}
     >
@@ -240,11 +249,11 @@ function CinemaMode({
         <div className="flex items-center gap-2.5">
           <CtrlBtn onClick={() => { setPlaying(false); go(index - 1) }} disabled={index === 0} label="Zurück"><ChevronLeft size={19} /></CtrlBtn>
           <button
-            onClick={() => setPlaying((p) => !p)}
+            onClick={() => { if (atEnd) onClose(); else setPlaying((p) => !p) }}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-white text-sm font-semibold transition-transform hover:-translate-y-0.5"
             style={{ background: accent, boxShadow: `0 4px 18px ${accent}55` }}
           >
-            {playing && !atEnd ? <Pause size={16} /> : <Play size={16} />}
+            {atEnd ? <Check size={16} /> : playing ? <Pause size={16} /> : <Play size={16} />}
             {atEnd ? 'Fertig' : playing ? 'Pause' : 'Automatisch'}
           </button>
           <CtrlBtn onClick={() => { setPlaying(false); if (atEnd) onClose(); else go(index + 1) }} label="Weiter"><ChevronRight size={19} /></CtrlBtn>

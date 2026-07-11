@@ -3,7 +3,7 @@ import { useAppStore } from '@/store/appStore'
 import type { Mode } from '@/types'
 
 const options: { value: Mode; label: string; icon: React.ElementType; hint: string }[] = [
-  { value: 'einfach', label: 'Einfach', icon: Layers, hint: 'Grundlegende Informationen (Basis / MVP)' },
+  { value: 'einfach', label: 'Einfach', icon: Layers, hint: 'Kern-Inhalte (Basis-Auswahl)' },
   { value: 'erweitert', label: 'Erweitert', icon: Layers3, hint: 'Ausführliche Variante (Vollausbau)' },
 ]
 

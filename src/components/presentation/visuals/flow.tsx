@@ -138,6 +138,7 @@ interface SEdge {
   event: string
   guard?: string
   curve?: number   // Bogen statt Gerade: negativ = oben, positiv = unten
+  elbow?: 'up' | 'down' // orthogonal (erst senkrecht, dann waagerecht) — Label kreuzungsfrei am waagerechten Teil
   dim?: boolean    // Kontextkante: statisch, stark abgedunkelt
   inline?: boolean // Guard in derselben Zeile wie das Ereignis (bei engen Layouts)
   t?: number       // Labelposition entlang der Kante (0..1, Standard Mitte)
@@ -164,6 +165,21 @@ export function StateAusschnitt({ machineId, nodes, edges, w, h, initialTo, init
   const geom = (e: SEdge) => {
     const a = pos[e.from]
     const b = pos[e.to]
+    if (e.elbow) {
+      const s = e.elbow === 'up' ? -1 : 1
+      const sgn = b.x >= a.x ? 1 : -1
+      const y1 = a.y + NH * s
+      const x2 = b.x - (NW + 5) * sgn
+      return {
+        path: `M ${a.x} ${y1} L ${a.x} ${b.y} L ${x2} ${b.y}`,
+        end: [x2, b.y] as const,
+        ang: sgn > 0 ? 0 : Math.PI,
+        lx: a.x + 14 * sgn,
+        anchor: (sgn > 0 ? 'start' : 'end') as 'start' | 'end' | 'middle',
+        eventY: b.y - 26,
+        guardY: b.y - 11,
+      }
+    }
     if (e.curve) {
       const s = e.curve < 0 ? -1 : 1
       const y1 = a.y + NH * s
@@ -176,6 +192,7 @@ export function StateAusschnitt({ machineId, nodes, edges, w, h, initialTo, init
         end: [b.x, y2] as const,
         ang: Math.atan2(y2 - cy, b.x - cx),
         lx: cx,
+        anchor: 'middle' as const,
         eventY: e.curve < 0 ? pm - 22 : pm + 18,
         guardY: e.curve < 0 ? pm - 8 : pm + 32,
       }
@@ -190,6 +207,7 @@ export function StateAusschnitt({ machineId, nodes, edges, w, h, initialTo, init
       end: [x2, b.y] as const,
       ang: Math.atan2(b.y - a.y, x2 - x1),
       lx: x1 + (x2 - x1) * t,
+      anchor: 'middle' as const,
       eventY: ly - 13,
       guardY: ly + 21,
     }
@@ -227,12 +245,12 @@ export function StateAusschnitt({ machineId, nodes, edges, w, h, initialTo, init
             <motion.path {...draw(i, reduce, 0.35)} d={g.path} fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth={1.6} />
             <motion.g {...fadeIn(i, reduce, 0.35)}>
               {head(g.end[0], g.end[1], g.ang, 'rgba(255,255,255,0.9)')}
-              <text x={g.lx} y={g.eventY} textAnchor="middle" fontSize={11.5} fontWeight={600} fill="rgba(255,255,255,0.88)" stroke="#000" strokeWidth={3.5} paintOrder="stroke">
+              <text x={g.lx} y={g.eventY} textAnchor={g.anchor} fontSize={11.5} fontWeight={600} fill="rgba(255,255,255,0.88)" stroke="#000" strokeWidth={3.5} paintOrder="stroke">
                 {e.event}
                 {e.inline && e.guard && <tspan fontSize={10} fontWeight={400} fontFamily="ui-monospace, monospace" fill="rgba(255,255,255,0.52)">{'  '}[{e.guard}]</tspan>}
               </text>
               {!e.inline && e.guard && (
-                <text x={g.lx} y={g.guardY} textAnchor="middle" fontSize={10} fontFamily="ui-monospace, monospace" fill="rgba(255,255,255,0.52)" stroke="#000" strokeWidth={3} paintOrder="stroke">[{e.guard}]</text>
+                <text x={g.lx} y={g.guardY} textAnchor={g.anchor} fontSize={10} fontFamily="ui-monospace, monospace" fill="rgba(255,255,255,0.52)" stroke="#000" strokeWidth={3} paintOrder="stroke">[{e.guard}]</text>
               )}
             </motion.g>
           </g>
@@ -337,12 +355,12 @@ export function BuchungZyklus() {
       nodes={[
         { id: 'AUSSTEHEND', x: 150, y: 104 },
         { id: 'BESTÄTIGT', x: 440, y: 44 },
-        { id: 'STORNIERT', x: 452, y: 176 },
+        { id: 'STORNIERT', x: 500, y: 176 },
         { id: 'EINGELÖST', x: 724, y: 44 },
       ]}
       edges={[
-        { from: 'AUSSTEHEND', to: 'BESTÄTIGT', event: 'bestätigen()', guard: 'Zahlung ERFOLGREICH', t: 0.64 },
-        { from: 'AUSSTEHEND', to: 'STORNIERT', event: 'abbrechen()', guard: 'Zahlung fehlgeschlagen / Hold-Timeout', inline: true, t: 0.6 },
+        { from: 'AUSSTEHEND', to: 'BESTÄTIGT', elbow: 'up', event: 'bestätigen()', guard: 'Zahlung ERFOLGREICH' },
+        { from: 'AUSSTEHEND', to: 'STORNIERT', elbow: 'down', event: 'abbrechen()', guard: 'Zahlung fehlgeschlagen / Hold-Timeout' },
         { from: 'BESTÄTIGT', to: 'EINGELÖST', event: 'einchecken()', guard: 'QR validiert' },
       ]}
     />
@@ -359,12 +377,12 @@ export function ZahlungZyklus() {
       nodes={[
         { id: 'AUSSTEHEND', x: 150, y: 104 },
         { id: 'ERFOLGREICH', x: 440, y: 44 },
-        { id: 'FEHLGESCHLAGEN', x: 452, y: 176 },
+        { id: 'FEHLGESCHLAGEN', x: 500, y: 176 },
         { id: 'ERSTATTET', x: 724, y: 44 },
       ]}
       edges={[
-        { from: 'AUSSTEHEND', to: 'ERFOLGREICH', event: 'ok', guard: 'Autorisierung erteilt', t: 0.64 },
-        { from: 'AUSSTEHEND', to: 'FEHLGESCHLAGEN', event: 'abgelehnt', guard: 'Deckung/Autorisierung fehlt', inline: true, t: 0.6 },
+        { from: 'AUSSTEHEND', to: 'ERFOLGREICH', elbow: 'up', event: 'ok', guard: 'Autorisierung erteilt' },
+        { from: 'AUSSTEHEND', to: 'FEHLGESCHLAGEN', elbow: 'down', event: 'abgelehnt', guard: 'Deckung/Autorisierung fehlt' },
         { from: 'ERFOLGREICH', to: 'ERSTATTET', event: 'erstatten()', guard: 'Storno' },
       ]}
     />

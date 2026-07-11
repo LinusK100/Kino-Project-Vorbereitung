@@ -5,6 +5,7 @@ import {
 import { SectionShell } from '@/components/shared/SectionShell'
 import { Callout } from '@/components/shared/Callout'
 import { innovation, personaById } from '@/data/content'
+import { zahlwort } from '@/lib/utils'
 import { IdeeVerankert, InnovationsMatrix } from '@/components/presentation/visuals/product'
 import type { Innovation, PresentationStep } from '@/types'
 
@@ -25,7 +26,7 @@ const feasCfg: Record<string, { label: string; color: string }> = {
 // alle sechs Ideen werden immer gezeigt.
 const steps: PresentationStep[] = [
   {
-    id: 'feas', title: 'Sechs Ideen, ehrlich bewertet', visual: <InnovationsMatrix />,
+    id: 'feas', title: `${zahlwort(innovation.innovations.length, true)} Ideen, ehrlich bewertet`, visual: <InnovationsMatrix />,
     body: 'Recherchierte Zukunfts-Ideen (2026) über den MVP hinaus, eingeordnet nach Impact und Aufwand. Jede trägt ein begründetes Machbarkeits-Flag – AR-Hardware und ML-Modelle sind bewusst als Konzept markiert.',
   },
   {

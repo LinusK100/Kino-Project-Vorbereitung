@@ -2,7 +2,7 @@
   "version": "1.0",
   "title": "CineTicket – Prototyp",
   "generated": "2026-06-22",
-  "beschreibung": "Interaktiver Hi-Fi-Prototyp. Setzt den MVP-Kern (Release 1) mit vier Kernrollen um; weitere Rollen, Module und Innovationen sind im UML modelliert und hier als Roadmap (implementedInPrototype: false) geführt.",
+  "beschreibung": "Interaktiver Hi-Fi-Prototyp. Setzt die vier Kernrollen mit ihren zentralen Release-1-Abläufen klickbar um – Online-Buchung, Kassen-Schnellverkauf, Manager-Cockpit und Einlass-Scan. Die übrigen Stories – vom 10-Minuten-Hold (U47, bewusst Design-only) bis zu ganzen Rollen – sind im UML modelliert und hier als Roadmap (implementedInPrototype: false) geführt.",
   "tech": {
     "framework": "React 19",
     "build": "Vite",
@@ -54,7 +54,7 @@
     },
     {
       "id": "pos-warenkorb", "rolle": "kasse", "name": "Kassen-Flow (POS · Warenkorb)", "status": "implementiert",
-      "beschreibung": "Warenkorb mit Mengenauswahl, Tastatur-Shortcuts (F2/F4/F8), Zahlungsabschluss, Storno",
+      "beschreibung": "Warenkorb mit Mengenauswahl, Tastatur-Shortcuts (F1–F4 Tarife, F12 Abschluss), Zahlungsabschluss, Storno",
       "stories": ["U01", "U02", "U03"], "umlClasses": ["Warenkorb", "BuchungService", "Buchung"]
     },
     {
@@ -62,7 +62,7 @@
       "beschreibung": "Umsatz, Tickets, Auslastung", "stories": ["U13"], "umlClasses": ["AnalyseService", "KennzahlenÜbersicht"]
     },
     {
-      "id": "manager-umsatz", "rolle": "manager", "name": "Umsatz-Liniendiagramm (7/14/30 Tage)", "status": "implementiert",
+      "id": "manager-umsatz", "rolle": "manager", "name": "Umsatz-Liniendiagramm (7 Tage)", "status": "implementiert",
       "beschreibung": "Umsatztrend", "stories": ["U14"], "umlClasses": ["AnalyseService", "Manager"]
     },
     {
@@ -79,6 +79,10 @@
     }
   ],
   "roadmap": [
+    { "modul": "Sitz-Hold (10-Min-Reservierung)",  "rolle": "KUNDE",    "persona": "Lara",          "stories": ["U47"],                      "umlClasses": ["VorstellungSitz", "Sitzstatus", "BuchungService"] },
+    { "modul": "Gruppen & Rabatte im Ticketkauf",  "rolle": "KUNDE",    "persona": "Jonas/Hannelore", "stories": ["U06", "U18", "U28"],      "umlClasses": ["BuchungsAssistent", "KontoService", "Verifizierungsstatus", "Ticketkategorie"] },
+    { "modul": "Offline-Validierung am Einlass",   "rolle": "EINLASS",  "persona": "Kevin",         "stories": ["U16"],                      "umlClasses": ["EinlassService", "Ticket"] },
+    { "modul": "Preismatrix-Verwaltung",           "rolle": "MANAGER",  "persona": "Thomas",        "stories": ["U25"],                      "umlClasses": ["Tarif", "PreisService", "Sitzkategorie"] },
     { "modul": "Gastro & Service",                "rolle": "SERVICE",  "persona": "Aylin",         "stories": ["U31", "U32", "U33", "U34"], "umlClasses": ["Bestellung", "Artikel", "Bestellposition", "BestellService"] },
     { "modul": "Facility & Wartung (AR)",          "rolle": "FACILITY", "persona": "Ben",           "stories": ["U39", "U40"],               "umlClasses": ["Wartungsticket", "FacilityService", "Sitzstatus", "Reinigungsstatus"] },
     { "modul": "Multi-Site",                       "rolle": "MARKE",    "persona": "Stefan",        "stories": ["U35", "U36", "U37"],        "umlClasses": ["Kette", "Preisaktion", "StandortKennzahl", "MarkeService"] },
@@ -109,27 +113,30 @@
     "infrastruktur": ["api/ (API-Client + Services)", "mocks/ (MSW-Handler + Seed-Daten)", "shared/stores/ (Booking, POS, Rolle, Theme)", "shared/hooks/ (React Query Hooks)"]
   },
   "seedDaten": {
-    "filme": { "anzahl": 5, "beispiele": ["Dune 2", "Oppenheimer", "Poor Things"], "felder": ["Altersfreigabe", "Trailer-URL"] },
+    "filme": { "anzahl": 8, "beispiele": ["Venom: The Last Dance", "Gladiator II", "Vaiana 2"], "felder": ["Altersfreigabe (FSK)", "YouTube-Trailer"] },
     "säle": [
-      { "name": "Saal 1", "plätze": 120 },
-      { "name": "Saal 2", "plätze": 80 },
-      { "name": "Saal 3", "plätze": 60, "typ": "VIP" }
+      { "name": "Saal 1 – Premium", "plätze": 126 },
+      { "name": "Saal 2 – IMAX",    "plätze": 176 },
+      { "name": "Saal 3",           "plätze": 96 },
+      { "name": "Saal 4 – Studio",  "plätze": 60 }
     ],
-    "vorstellungen": "nächste 14 Tage (Sprache + Projektionsart)",
-    "sitzplan": "Sitzkategorien STANDARD/PREMIUM/VIP + gekennzeichnete barrierefreie Plätze (eigenes Attribut, keine Preiskategorie)"
+    "vorstellungen": "nächste 7 Tage, Fassung Deutsch/OV/OmU/3D",
+    "sitzplan": "Sitzkategorien STANDARD/PREMIUM/VIP/BARRIEREFREI mit eigenen Preisen je Saal (barrierefrei vergünstigt), Mittelgang, barrierefreie Plätze zusätzlich markiert",
+    "buchungen": "30 Beispiel-Buchungen (überwiegend bestätigt, dazu stornierte/eingelöste)"
   },
   "stores": [
     { "name": "BuchungsAssistent", "zweck": "Buchungs-Wizard-State" },
     { "name": "Warenkorb",         "zweck": "POS-Warenkorb" },
     { "name": "RolleStore",        "zweck": "Rollenumschaltung" },
-    { "name": "ThemeStore",        "zweck": "Hell/Dunkel/System-Theme" }
+    { "name": "ThemeStore",        "zweck": "Hell/Dunkel/System-Theme" },
+    { "name": "AnsichtStore",      "zweck": "Desktop/iPhone-Frame (Mobile-Simulation)" }
   ],
   "stats": {
     "rollenImplementiert": 4,
     "rollenGesamt": 8,
     "umlImplementiert": 41,
     "umlDesignOnly": 41,
-    "storiesImplementiert": 20
+    "storiesImplementiert": 17
   },
   "consistencyRefs": {
     "note": "Implementierte Module referenzieren genau die in der Traceability-Matrix als 'implementiert' geführten Stories; Roadmap-Module die als 'roadmap' geführten.",

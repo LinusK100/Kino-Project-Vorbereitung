@@ -4,7 +4,8 @@ import {
 } from 'lucide-react'
 import { SectionShell } from '@/components/shared/SectionShell'
 import { Callout } from '@/components/shared/Callout'
-import { prototype } from '@/data/content'
+import { prototype, stories, uml } from '@/data/content'
+import { zahlwort } from '@/lib/utils'
 
 const ACCENT = '#964219'
 // The full interactive Hi-Fi prototype is a separate app; this section is the
@@ -19,15 +20,26 @@ const roleIcon: Record<string, React.ElementType> = {
 // Kein Einfach/Erweitert und keine Kino-Tour in diesem Abschnitt:
 // Die Präsentation IST der Prototyp — die Seite führt direkt zu ihm hin
 // und zeigt immer den vollen Stand (implementiert + Roadmap).
+
+// Alle Kennzahlen aus den Listen berechnet (Rollen, Module, uml.json) —
+// nicht aus einem separaten stats-Block, der divergieren könnte.
+const rollenLive = prototype.rollen.filter((r) => r.status === 'implementiert').length
+const rollenGesamt = prototype.rollen.length
+const umlImpl = uml.classes.filter((c) => c.implementedInPrototype).length
+const umlDesignOnly = uml.classes.length - umlImpl
+const storiesAbgedeckt = new Set(
+  prototype.module.filter((m) => m.status === 'implementiert').flatMap((m) => m.stories),
+).size
+
 export default function PrototypePage() {
   const wizard = prototype.module.find((m) => m.id === 'buchungs-wizard')
-  const { stats, tech } = prototype
+  const { tech } = prototype
 
   const kpis = [
-    { icon: Users, value: `${stats.rollenImplementiert} / ${stats.rollenGesamt}`, label: 'Rollen implementiert' },
-    { icon: Boxes, value: stats.umlImplementiert, label: 'UML-Klassen implementiert' },
-    { icon: GitBranch, value: stats.umlDesignOnly, label: 'UML-Klassen Design-only' },
-    { icon: ListChecks, value: stats.storiesImplementiert, label: 'Stories abgedeckt' },
+    { icon: Users, value: `${rollenLive} / ${rollenGesamt}`, label: 'Rollen implementiert' },
+    { icon: Boxes, value: umlImpl, label: 'UML-Klassen implementiert' },
+    { icon: GitBranch, value: umlDesignOnly, label: 'UML-Klassen Design-only' },
+    { icon: ListChecks, value: `${storiesAbgedeckt} / ${stories.erweitert.length}`, label: 'Stories abgedeckt' },
   ]
 
   const techChips = [
@@ -75,9 +87,10 @@ export default function PrototypePage() {
       </div>
 
       {/* Rollen */}
-      <h3 className="text-sm font-bold mb-1" style={{ color: 'var(--text-primary)' }}>Alle acht Rollen</h3>
+      <h3 className="text-sm font-bold mb-1" style={{ color: 'var(--text-primary)' }}>Alle {zahlwort(rollenGesamt)} Rollen</h3>
       <p className="text-xs mb-3" style={{ color: 'var(--text-secondary)' }}>
-        Vier Rollen sind vollständig klickbar – in der App oben umschaltbar. Vier weitere sind modelliert und als Roadmap ausgewiesen.
+        {zahlwort(rollenLive, true)} Rollen sind vollständig klickbar – in der App oben umschaltbar.{' '}
+        {zahlwort(rollenGesamt - rollenLive, true)} weitere sind modelliert und als Roadmap ausgewiesen.
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6" data-pres="rollen">
         {prototype.rollen.map((r) => {
@@ -107,7 +120,7 @@ export default function PrototypePage() {
       {/* Buchungs-Wizard */}
       {wizard?.schritte && (
         <div className="mb-6" data-pres="wizard">
-          <h3 className="text-sm font-bold mb-1" style={{ color: 'var(--text-primary)' }}>Der Buchungs-Wizard in fünf Schritten</h3>
+          <h3 className="text-sm font-bold mb-1" style={{ color: 'var(--text-primary)' }}>Der Buchungs-Wizard in {zahlwort(wizard.schritte.length)} Schritten</h3>
           <p className="text-xs mb-3" style={{ color: 'var(--text-secondary)' }}>
             Von der Sitzwahl bis zum QR-Ticket – Vorstellung und Datum wählt man davor auf der Film-Detailseite.
             Der modellierte 10-Minuten-Hold (U47) ist bewusst Design-only: Im Prototyp sind belegte Plätze schlicht nicht wählbar.
@@ -145,7 +158,8 @@ export default function PrototypePage() {
       <div className="mt-7" data-pres="status">
         <h3 className="text-sm font-bold mb-1" style={{ color: 'var(--text-primary)' }}>Module: implementiert vs. Roadmap</h3>
         <p className="text-xs mb-3" style={{ color: 'var(--text-secondary)' }}>
-          Der Prototyp setzt {prototype.stats.rollenImplementiert}/{prototype.stats.rollenGesamt} Rollen und {prototype.stats.umlImplementiert} UML-Klassen um – {prototype.stats.umlDesignOnly} sind als Roadmap modelliert (Modell ⊇ Prototyp).
+          Der Prototyp setzt {rollenLive}/{rollenGesamt} Rollen, {umlImpl} UML-Klassen und {storiesAbgedeckt} von {stories.erweitert.length} Stories
+          um – der Rest ist als Roadmap modelliert (Modell ⊇ Prototyp).
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {prototype.module.map((m) => (
@@ -164,7 +178,8 @@ export default function PrototypePage() {
 
         <h4 className="text-sm font-bold mt-5 mb-1" style={{ color: 'var(--text-primary)' }}>Roadmap: modelliert, noch nicht gebaut</h4>
         <p className="text-xs mb-3" style={{ color: 'var(--text-secondary)' }}>
-          Diese Module sind vollständig im UML und in Stories modelliert (implementedInPrototype: false) und warten auf den Ausbau.
+          Diese Module sind vollständig im UML und in Stories modelliert (implementedInPrototype: false) —
+          damit ist jede Release-1-Story entweder klickbar umgesetzt oder hier verortet.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {prototype.roadmap.map((r) => (

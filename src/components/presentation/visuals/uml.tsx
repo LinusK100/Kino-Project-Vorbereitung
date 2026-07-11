@@ -1,6 +1,7 @@
 // UML-Ausschnitte für den Kino-Modus. Jede Folie zeigt echte Klassen aus
 // uml.json — reduziert auf die Attribute/Operationen, um die es gerade geht,
 // damit der Ausschnitt groß und lesbar bleibt.
+import { useLayoutEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
 import { uml } from '@/data/content'
 import { UML_GROUP_COLOR } from '@/lib/statusColors'
@@ -165,7 +166,28 @@ export function UmlVererbung() {
   const rollen = uml.relationships
     .filter((r) => r.type === 'inheritance' && r.to === 'Nutzer')
     .map((r) => r.from)
-  const childX = (i: number) => (W / rollen.length) * (i + 0.5)
+
+  // Die Chips haben natürliche Breiten — die Fächerlinien enden deshalb an den
+  // gemessenen Chip-Mitten (in viewBox-Koordinaten), nicht an einem festen Raster.
+  const rowRef = useRef<HTMLDivElement>(null)
+  const [xs, setXs] = useState<number[] | null>(null)
+  useLayoutEffect(() => {
+    const row = rowRef.current
+    if (!row) return
+    const measure = () => {
+      const rb = row.getBoundingClientRect()
+      if (rb.width === 0) return
+      setXs(Array.from(row.children, (k) => {
+        const b = (k as HTMLElement).getBoundingClientRect()
+        return ((b.left + b.width / 2 - rb.left) / rb.width) * W
+      }))
+    }
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(row)
+    return () => ro.disconnect()
+  }, [])
+  const childX = (i: number) => xs?.[i] ?? (W / rollen.length) * (i + 0.5)
 
   return (
     <div className="w-full" style={{ maxWidth: W }}>
@@ -187,7 +209,7 @@ export function UmlVererbung() {
           />
         ))}
       </svg>
-      <div className="flex justify-center gap-1 flex-nowrap">
+      <div ref={rowRef} className="flex justify-center gap-1 flex-nowrap">
         {rollen.map((r, i) => (
           <motion.span
             key={r} {...pop(2 + i, reduce)}

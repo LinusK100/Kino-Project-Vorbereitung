@@ -7,6 +7,7 @@ import { StateDiagram } from '@/components/diagram/StateDiagram'
 import { stateMachines } from '@/data/content'
 import { extraMachines } from '@/data/statesExtra'
 import { useAppStore } from '@/store/appStore'
+import { zahlwort } from '@/lib/utils'
 import { BuchungZyklus, SitzHappyPath, SitzRueckwege, TicketZyklus, ZahlungZyklus } from '@/components/presentation/visuals/flow'
 import { EnumAbgleich } from '@/components/presentation/visuals/uml'
 import type { StateMachine, PresentationStep, Mode } from '@/types'
@@ -15,13 +16,15 @@ const ACCENT = '#7a39bb'
 
 // Einfach: Sitz + Ticket (wie die Seite). Erweitert vertieft Buchung und
 // Zahlung als eigene Automaten — dieselbe Erweiterung wie auf der Seite.
+const nAutomaten = stateMachines.machines.length + extraMachines.length
+
 function stepsFor(mode: Mode): PresentationStep[] {
   const basis: PresentationStep[] = [
     {
       id: 'intro', title: 'Ein Objekt, sein Lebenszyklus',
       body: mode === 'einfach'
         ? 'Ein Zustandsautomat beschreibt genau ein Objekt über die Zeit: welche Zustände es annimmt und welche Ereignisse mit welchen Guards die Übergänge auslösen. Die nächsten Folien zeigen Sitz und Ticket.'
-        : 'Ein Zustandsautomat beschreibt genau ein Objekt über die Zeit: welche Zustände es annimmt und welche Ereignisse mit welchen Guards die Übergänge auslösen. Die nächsten Folien zeigen alle vier Automaten.',
+        : `Ein Zustandsautomat beschreibt genau ein Objekt über die Zeit: welche Zustände es annimmt und welche Ereignisse mit welchen Guards die Übergänge auslösen. Die nächsten Folien zeigen alle ${zahlwort(nAutomaten)} Automaten.`,
     },
     {
       id: 'sitz', title: 'Der Weg zum belegten Sitz', visual: <SitzHappyPath />,

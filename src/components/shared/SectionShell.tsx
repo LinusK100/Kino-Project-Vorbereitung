@@ -25,7 +25,7 @@ export function SectionShell({
 }: SectionShellProps) {
   const { mode } = useAppStore()
   // Die Kino-Tour folgt dem gewählten Modus — der Chip im Kino-Kopf macht das sichtbar.
-  const modeLabel = modes ? (mode === 'einfach' ? 'Einfach · MVP' : 'Erweitert · Vollausbau') : undefined
+  const modeLabel = modes ? (mode === 'einfach' ? 'Einfach · Basis' : 'Erweitert · Vollausbau') : undefined
   return (
     <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
       {/* Kompakter Kopf: eine Zeile Titel + Aktionen, darunter die Einleitung.

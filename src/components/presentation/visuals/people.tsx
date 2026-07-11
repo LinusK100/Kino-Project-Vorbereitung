@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from 'motion/react'
 import { CheckCircle2, Crown, Frown, Target } from 'lucide-react'
 import { personas, personaById, stories, storyMaps } from '@/data/content'
+import { zahlwort } from '@/lib/utils'
 import { bright, draw, pop, VEASE } from './core'
 
 // ── Personas: die vier Kern-Personas des MVP ──
@@ -87,7 +88,7 @@ export function PersonaBaum() {
       </div>
 
       <motion.p {...pop(7, reduce)} className="mt-3 text-[11px]" style={{ color: 'rgba(255,255,255,0.5)' }}>
-        dazu vier interne Rollen: {intern.map((p) => p.name.split(' ')[0]).join(' · ')}
+        dazu {zahlwort(intern.length)} interne Rollen: {intern.map((p) => p.name.split(' ')[0]).join(' · ')}
       </motion.p>
     </div>
   )
@@ -249,7 +250,7 @@ export function StoryVerteilung({ tier = 'erweitert' }: { tier?: 'basis' | 'erwe
           </>
         ) : (
           <span className="text-[11.5px] px-3 py-1 rounded-full font-semibold" style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.75)' }}>
-            {alle.length} Stories im Einfach-Modus (MVP-Auswahl)
+            {alle.length} Stories im Einfach-Modus (Basis-Auswahl)
           </span>
         )}
       </motion.div>

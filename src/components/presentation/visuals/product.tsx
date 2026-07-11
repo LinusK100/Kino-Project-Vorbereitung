@@ -185,7 +185,7 @@ export function InnovationsMatrix({ tier = 'erweitert' }: { tier?: 'basis' | 'er
   const pts = items.map((it) => {
     const key = `${it.effort}-${it.impact}`
     const jit = (seen[key] = (seen[key] ?? -1) + 1)
-    return { it, x: sx(it.effort), y: sy(it.impact) + (jit === 0 ? 0 : jit % 2 === 1 ? -16 : 16) }
+    return { it, x: sx(it.effort), y: sy(it.impact) + (jit === 0 ? 0 : jit % 2 === 1 ? -19 : 19) }
   })
 
   return (
@@ -201,8 +201,8 @@ export function InnovationsMatrix({ tier = 'erweitert' }: { tier?: 'basis' | 'er
         ))}
         <line x1={x0} y1={y0 + plotH} x2={x0 + plotW} y2={y0 + plotH} stroke="rgba(255,255,255,0.3)" />
         <line x1={x0} y1={y0} x2={x0} y2={y0 + plotH} stroke="rgba(255,255,255,0.3)" />
-        <text x={x0 + plotW} y={y0 + plotH + 34} textAnchor="end" fontSize={10.5} fontWeight={600} fill="rgba(255,255,255,0.6)">Aufwand →</text>
-        <text x={x0 - 40} y={y0 - 8} fontSize={10.5} fontWeight={600} fill="rgba(255,255,255,0.6)">Impact ↑</text>
+        <text x={x0 + plotW} y={y0 + plotH + 34} textAnchor="end" fontSize={10.5} fontWeight={600} fill="rgba(255,255,255,0.6)">Aufwand → <tspan fontWeight={400} fill="rgba(255,255,255,0.42)">(1 gering · 5 hoch)</tspan></text>
+        <text x={x0 - 40} y={y0 - 8} fontSize={10.5} fontWeight={600} fill="rgba(255,255,255,0.6)">Impact ↑ <tspan fontWeight={400} fill="rgba(255,255,255,0.42)">(1 gering · 5 hoch)</tspan></text>
 
         {pts.map(({ it, x, y }, i) => {
           const c = feasColor[it.feasibility]

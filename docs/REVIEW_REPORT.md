@@ -29,7 +29,8 @@ und einzelnen Sprach-/Anzeige-Details. Alle wurden behoben.
   Map-Aktivitäten); Zustands-IDs ≡ Enum-Werte des Klassendiagramms (Sitzstatus,
   Ticketstatus, Buchungsstatus, Zahlungsstatus); Sequenz-Nachrichten ↔ UML-Methoden;
   Prototyp-Statistiken (41 implementiert / 41 Design-only / 20 Stories) stimmen mit den
-  Rohdaten überein; kein Mojibake.
+  Rohdaten überein; kein Mojibake. *(Nachtrag 2026-07-11: Die Stories-Kennzahl wurde
+  nach Code-Abgleich auf 17 korrigiert — U06/U28/U47 sind Roadmap, s. PROGRESS.md.)*
 - **Ground-Truth-Abgleich:** alle JSON inhaltlich identisch mit
   `CineTicket_Projektdokumentation` v5.1 (einzige Abweichung: normalisierter
   Doppel-Leerraum in einem crossLink-Text).

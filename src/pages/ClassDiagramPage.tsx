@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { uml } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
 import { UML_GROUP_COLOR } from '@/lib/statusColors'
+import { zahlwort } from '@/lib/utils'
 import { ImplSplit, UmlBuchungskette, UmlGruppen, UmlKomposition, UmlServices, UmlVererbung, UmlVorstellungSitz } from '@/components/presentation/visuals/uml'
 import type { UmlClass, PresentationStep, Mode } from '@/types'
 
@@ -19,10 +20,14 @@ const groupLabel: Record<string, string> = { domain: 'Domäne', service: 'Servic
 
 // Die Tour folgt dem Modus: Einfach zeigt den fachlichen Kern,
 // Erweitert vertieft Vererbung und Service-Schicht.
+const nKlassen = uml.classes.length
+const nImpl = uml.classes.filter((c) => c.implementedInPrototype).length
+const nRollen = uml.relationships.filter((r) => r.type === 'inheritance' && r.to === 'Nutzer').length
+
 function stepsFor(mode: Mode): PresentationStep[] {
   const kern: PresentationStep[] = [
     {
-      id: 'gruppen', title: '82 Klassen, fünf Gruppen', visual: <UmlGruppen />,
+      id: 'gruppen', title: `${nKlassen} Klassen, ${zahlwort(uml.groups.length)} Gruppen`, visual: <UmlGruppen />,
       body: mode === 'einfach'
         ? 'Die statische Struktur des Systems: Domänenklassen tragen die Fachlichkeit, API-Services die Abläufe, dazu Frontend-Stores, DTOs und Enums. Der Einfach-Modus konzentriert sich auf den fachlichen Kern.'
         : 'Die statische Struktur des Systems: Domänenklassen tragen die Fachlichkeit, API-Services die Abläufe, dazu Frontend-Stores, DTOs und Enums. Im Erweitert-Modus ist jede Gruppe einzeln filterbar.',
@@ -42,7 +47,7 @@ function stepsFor(mode: Mode): PresentationStep[] {
   ]
   const vertiefung: PresentationStep[] = [
     {
-      id: 'vererbung', title: 'Acht Rollen, eine Basis', visual: <UmlVererbung />,
+      id: 'vererbung', title: `${zahlwort(nRollen, true)} Rollen, eine Basis`, visual: <UmlVererbung />,
       body: 'Vom Kunden bis zum Administrator erben alle Akteure von Nutzer. Was jemand darf, entscheidet nicht die Klasse, sondern das Enum Nutzerrolle – geprüft über darf(aktion).',
     },
     {
@@ -52,7 +57,7 @@ function stepsFor(mode: Mode): PresentationStep[] {
   ]
   const schluss: PresentationStep = {
     id: 'all', title: 'Modell ⊇ Prototyp', visual: <ImplSplit />,
-    body: 'Die Hälfte der Klassen ist im Prototyp implementiert (grüner Punkt im Diagramm), die andere bewusst Design-only: Das Modell beschreibt das ganze Produkt, nicht nur den MVP.',
+    body: `${nImpl} der ${nKlassen} Klassen sind im Prototyp implementiert (grüner Punkt im Diagramm), die übrigen ${nKlassen - nImpl} bewusst Design-only: Das Modell beschreibt das ganze Produkt, nicht nur den MVP.`,
   }
   return mode === 'einfach' ? [...kern, schluss] : [...kern, ...vertiefung, schluss]
 }
@@ -65,7 +70,7 @@ export default function ClassDiagramPage() {
 
   const views = mode === 'einfach'
     ? [{ id: 'kern', label: 'Kern' }, { id: 'enum', label: 'Enums' }]
-    : [{ id: 'kern', label: 'Kern' }, { id: 'domain', label: 'Domäne' }, { id: 'service', label: 'Services' }, { id: 'store', label: 'Stores' }, { id: 'dto', label: 'DTOs' }, { id: 'enum', label: 'Enums' }, { id: 'alle', label: 'Alle 82' }]
+    : [{ id: 'kern', label: 'Kern' }, { id: 'domain', label: 'Domäne' }, { id: 'service', label: 'Services' }, { id: 'store', label: 'Stores' }, { id: 'dto', label: 'DTOs' }, { id: 'enum', label: 'Enums' }, { id: 'alle', label: `Alle ${uml.classes.length}` }]
 
   const visible = useMemo<UmlClass[]>(() => {
     if (view === 'kern') return uml.classes.filter((c) => CORE.includes(c.id))
