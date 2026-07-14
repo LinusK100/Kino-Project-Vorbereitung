@@ -1,13 +1,46 @@
 # CineTicket – Projektdokumentations-Website
 
-Interaktive Dokumentations-Website für das Kino-Ticketsystem **CineTicket**
-(Systemanalyse & Entwurf). Sie führt von den Anforderungen bis zum Prototyp –
-alle Abschnitte sind aufeinander abgestimmt und einheitlich gestaltet.
+Interaktive Dokumentations-Website für das Kino-Ticketsystem **CineTicket**,
+entstanden im Kurs „Systemanalyse und Entwurf" (2026). Sie führt von der
+Anforderungsanalyse über die UML-Modelle bis zum klickbaren Prototyp – alle
+Abschnitte teilen dieselbe Datenbasis und dasselbe Designsystem.
 
-> Inhalte = JSON (Single Source of Truth aus `CineTicket_Projektdokumentation` v5.1),
-> daraus wird das Design generiert.
+**Live:** <https://linusk100.github.io/Kino-Project-Vorbereitung/>
 
-## Schnellstart
+![Dashboard der Website](docs/img/readme-dashboard.png)
+
+## Was die Website kann
+
+- **Einfach / Erweitert** – jeder Abschnitt hat genau zwei Detailgrade
+  (Basis ⊆ Vollausbau). Umschalten oben rechts; global und persistent.
+- **Präsentationsmodus („Kino")** – jeder Abschnitt erklärt seine wichtigsten
+  Inhalte in einer animierten Vollbild-Tour mit echten Ausschnitten aus den
+  Diagrammen. Weiter per Pfeiltasten oder automatisch mit einstellbarem Tempo,
+  Esc beendet. Die Tour folgt dem gewählten Modus.
+- **Diagramme nativ als SVG** – Klassen-, Sequenz- und Zustandsdiagramme werden
+  zur Laufzeit aus JSON gerendert (kein Bild-Export): Auto-Layout via `elkjs`,
+  Zoom mit Drag-Panning, „Als Text"-Alternative, Detail-Dialoge.
+- **Prototyp** – die echte Hi-Fi-App (React + MSW-Mock-API) ist unter
+  `public/prototyp-app/` eingebettet und startet in einem neuen Tab.
+- **Dark / Light** – persistent, folgt standardmäßig dem System.
+
+![Präsentationsmodus: Folie zur Assoziationsklasse VorstellungSitz](docs/img/readme-kino.png)
+
+## Abschnitte
+
+| Gruppe | Abschnitte |
+|---|---|
+| Start | Dashboard (Einstieg: Aufbau, Bedienung, Tour) |
+| Anforderungen | Personas · User Stories · Story Map |
+| Modellierung | Klassendiagramm · Sequenzdiagramme · Zustandsdiagramme |
+| Ergebnis | Prototyp (startet die echte App) · Innovation |
+
+Alle Inhalte stammen aus `src/data/*.json` (übernommen aus der
+Projektdokumentation v5.1, je Abschnitt als Basis- und Erweitert-Datensatz).
+Kennzahlen auf Folien und Karten werden aus diesen Daten berechnet, nicht
+hartkodiert – Website und Dokumentation können nicht auseinanderlaufen.
+
+## Entwicklung
 
 ```bash
 npm install
@@ -16,59 +49,35 @@ npm run build    # tsc + vite build -> dist/
 npm run lint
 ```
 
-> **Native-Binary-Hinweis:** `npm install` lässt auf manchen Macs die nativen
-> Binärdateien von `rolldown`, `lightningcss` und `@tailwindcss/oxide` weg
-> (nur `package.json` im Paket, keine `.node`-Datei). Symptom: Build bricht mit
-> `Cannot find module './…darwin-arm64.node'`. Fix: fehlende `.node` aus dem
-> Registry-Tarball (`npm view <pkg>@<ver> dist.tarball`) in den jeweiligen
-> `node_modules/<pkg>/`-Ordner kopieren.
+> **Hinweis zu nativen Binaries:** `npm install` lässt auf manchen Macs die
+> `.node`-Dateien von `rolldown`, `lightningcss` und `@tailwindcss/oxide` weg
+> (Symptom: `Cannot find module './…darwin-arm64.node'`). In dem Fall
+> `node scripts/ensure-native-binaries.mjs` ausführen – das Skript lädt die
+> fehlenden Binaries aus der npm-Registry nach.
 
-## Bedienkonzept
-
-- **Einfach / Erweitert** – jeder Abschnitt hat genau zwei Tiefen
-  (Basis ⊆ Vollausbau). Umschalten oben rechts; global & persistent.
-- **Präsentationsmodus** – jeder Abschnitt liefert eine geführte Tour mit
-  Spotlight + Erklärtext, manuell (← →) oder automatisch (Auto). Esc beendet.
-- **Dark / Light** – persistent, System-Default.
-
-## Abschnitte
-
-| Gruppe | Abschnitte |
-|---|---|
-| Start | Dashboard (Onboarding: Aufbau + Bedienung) |
-| Anforderungen | Personas · User Stories · Story Map |
-| Modellierung | Klassendiagramm · Sequenzdiagramme · Zustandsdiagramme |
-| Ergebnis | Prototyp (startet die echte App in neuem Tab) · Innovation |
-
-Der **Präsentationsmodus** ist eine eigene Vollbild-Oberfläche (eigene Kopfleiste,
-abgeblendeter Hintergrund, Spotlight auf das erklärte Element).
-
-Alle Diagramme werden **nativ als SVG** aus JSON gerendert (kein Bild-Export):
-- **Klassendiagramm** – Auto-Layout via `elkjs`, UML-Boxen mit Operationen an den
-  Objekten, Kern-/Gruppen-/Alle-Ansicht, Detail-Drawer.
-- **Sequenzdiagramme** – 4 Buchungs-Flows; Einfach = Happy Path, Erweitert = mit
-  alt/opt/break-Fragmenten und Statuswechsel-Badges.
-- **Zustandsdiagramme** – Sitz & Ticket, in Erweitert zusätzlich Buchung & Zahlung
-  (Enums als eigene Automaten) + Cross-Links.
+Deploy: Push auf `main` baut und veröffentlicht die Seite automatisch über
+GitHub Actions auf GitHub Pages (`404.html` dient als SPA-Fallback für
+Deep-Links).
 
 ## Architektur
 
 ```
 src/
-├── data/            JSON (Doku v5.1) + content.ts (typisierte, modus-abhängige Selektoren)
-├── store/appStore   theme + mode (zustand persist)
+├── data/            JSON (Doku v5.1) + content.ts (typisierte, modusabhängige Selektoren)
+├── store/appStore   Theme + Modus (zustand, persistiert)
 ├── components/
 │   ├── layout/      Sidebar (nav.ts), AppShell, TopBar
 │   ├── shared/      SectionShell, Callout, ModeToggle, ErrorBoundary
-│   ├── presentation Presentation (Spotlight-Engine)
+│   ├── presentation/  Kino-Modus (Presentation.tsx) + JSON-getriebene Folien-Visuals (visuals/)
 │   └── diagram/     DiagramFrame, ClassDiagram, SequenceDiagram, StateDiagram
-├── pages/           ein Page-Modul je Abschnitt (lazy)
-└── lib/statusColors zentrale Status-/Gruppen-Palette
+├── pages/           ein Page-Modul je Abschnitt (lazy geladen)
+└── lib/             statusColors (zentrale Palette), utils
 ```
 
-Doku & Plan: siehe [`docs/`](./docs) (REFACTORING_PLAN, ARCHITECTURE, CONTENT_MAPPING, PROGRESS).
+Arbeitsnotizen und Entscheidungen: siehe [`docs/`](./docs)
+(ARCHITECTURE, PROGRESS mit Changelog, REVIEW_REPORT).
 
 ## Tech-Stack
 
 React 19 · Vite (rolldown) · Tailwind v4 · react-router 7 · motion · zustand ·
-Radix UI · elkjs · lucide-react.
+Radix UI · elkjs · lucide-react

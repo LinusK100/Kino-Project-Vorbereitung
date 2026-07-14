@@ -180,3 +180,34 @@
   README „Basis/MVP" → „Basis". Verifiziert: Traceability-implementiert-Menge
   ≡ Modul-Union ≡ Stats (17), Doku-JSON diff-identisch zum Repo, Build/Lint
   grün, Prototyp-Seite per Screenshot geprüft (0 Fehler).
+- 2026-07-11: Dashboard einladender + README überarbeitet. Dashboard: zweiter
+  Hero-CTA „Zum Prototyp" (interner Link auf /prototyp — der Neuer-Tab-Start
+  bleibt Owner-konform nur dort), Abschnitts-Karten mit 3px-Akzentlinie in
+  Gruppenfarbe und einer datengetriebenen Kennzahl je Zeile (4–12 Personas,
+  30–51 Stories, 7–10 Aktivitäten, 82 Klassen, 4 Flows, 2–4 Automaten,
+  4 Rollen live, 6 Ideen — alles aus src/data berechnet). README: Live-URL
+  prominent, zwei Screenshots (Dashboard + Kino-Folie, docs/img/), veraltete
+  Spotlight-Beschreibung durch den Kino-Modus ersetzt, Architektur-Baum
+  aktualisiert (presentation/visuals), Binary-Hinweis verweist jetzt auf
+  scripts/ensure-native-binaries.mjs, Kurskontext ergänzt. Verifiziert:
+  Build/Lint grün, Dashboard hell/dunkel/mobil per Screenshot, 0 Fehler.
+- 2026-07-14: Dashboard-Design-Auswahl vorbereitet (lokal, nicht deployt):
+  fünf neue Varianten unter src/pages/overview/ — 1 „Kino" (dunkler Saal,
+  Leinwand, Filmstreifen), 2 „Graph" (animiertes Traceability-Netz mit
+  Datenfluss-Punkten, Hover-Nachbarschaft, klickbaren Knoten), 3 „Editorial"
+  (typografisches Inhaltsverzeichnis 01–08), 4 „Bento" (Kachel-Raster mit
+  Release-Balken und 41/82-Kachel), 5 „Aurora" (Farbverläufe hinter
+  Glas-Karten). Alle ohne Karo-Hintergrund, Zahlen aus src/data (shared.tsx),
+  Tour + Prototyp-Link überall, reduzierte Bewegung respektiert; „Bisher"
+  bleibt als Referenz. Temporärer Umschalter unten rechts auf dem Dashboard
+  (localStorage) — nach der Entscheidung wird die gewählte Variante fest
+  verdrahtet und der Rest entfernt. Build/Lint grün, alle 6 × hell/dunkel
+  per Playwright geprüft (0 Fehler), Vergleichsgalerie als Artifact.
+- 2026-07-14: Dashboard-Entscheidung umgesetzt: Variante „Kino" ist jetzt das
+  Dashboard (OverviewPage.tsx — dunkler Saal mit Projektorlicht, Leinwand-
+  Titel-Card, Sitzreihen, die drei Stationen als Filmstreifen mit Perforation;
+  bewusst immer dunkel). Temporärer Varianten-Umschalter und die übrigen
+  Entwürfe entfernt; „Graph" und „Aurora" sind mit Konzept + vollständigem
+  Quellcode in docs/DASHBOARD_VARIANTEN.md archiviert (Owner-Entscheidung).
+  README-Screenshot auf das neue Dashboard aktualisiert. Verifiziert:
+  Build/Lint grün, hell/dunkel/mobil per Playwright, Tour startet, 0 Fehler.
