@@ -4,8 +4,7 @@ import { SectionShell } from '@/components/shared/SectionShell'
 import { Callout } from '@/components/shared/Callout'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { storyMaps, useStoryMap, useStories, personaById } from '@/data/content'
-import { zahlwort } from '@/lib/utils'
+import { useStoryMap, useStories, personaById } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
 import { useDragScroll } from '@/lib/useDragScroll'
 import { BackboneChips, ReleaseBaender } from '@/components/presentation/visuals/people'
@@ -25,10 +24,7 @@ const rc: Record<number, { bg: string; bgDark: string; border: string; borderDar
 }
 const priorityDot: Record<string, string> = { high: '#ef4444', medium: '#f59e0b', low: '#22c55e' }
 
-// Backbone und Release-Bänder folgen dem Modus (Basis- vs. Vollausbau-Aktivitäten und -Stories).
-const nAktBasis = storyMaps.basis.activities.length
-const nAktVoll = storyMaps.erweitert.activities.length
-
+// Backbone und Release-Bänder folgen dem Modus (Basis- vs. Vollausbau).
 function stepsFor(mode: Mode): PresentationStep[] {
   const tier = mode === 'einfach' ? 'basis' as const : 'erweitert' as const
   return [
@@ -36,8 +32,8 @@ function stepsFor(mode: Mode): PresentationStep[] {
     {
       id: 'backbone', title: 'Das Backbone: die Nutzerreise', visual: <BackboneChips tier={tier} />,
       body: mode === 'einfach'
-        ? `${zahlwort(nAktBasis, true)} Aktivitäten bilden das Rückgrat – vom Ticketkauf über Sitzplan und Einlass bis zur Verwaltung. Jede Story hängt an genau einem Schritt dieser Reise.`
-        : `Die Aktivitäten bilden das Rückgrat – vom Ticketkauf über Sitzplan und Einlass bis zur Verwaltung. Der Erweitert-Modus ergänzt ${zahlwort(nAktVoll - nAktBasis)} Aktivitäten, ohne die Struktur zu brechen.`,
+        ? 'Die Aktivitäten bilden das Rückgrat der Nutzerreise – vom Ticketkauf über Sitzplan und Einlass bis zur Verwaltung. Jede Story hängt an genau einem Schritt dieser Reise.'
+        : 'Die Aktivitäten bilden das Rückgrat der Nutzerreise – vom Ticketkauf über Sitzplan und Einlass bis zur Verwaltung. Der Erweitert-Modus ergänzt Gastro, Facility und Multi-Site, ohne die Struktur zu brechen.',
     },
     {
       id: 'releases', title: 'Waagerecht schneiden: Releases', visual: <ReleaseBaender tier={tier} />,

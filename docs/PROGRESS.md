@@ -242,3 +242,26 @@
   Theme-Toggle (useAppStore). DASHBOARD_VARIANTEN.md entsprechend
   aktualisiert. Verifiziert: Build/Lint grün, hell/dunkel/mobil + Live-
   Toggle-Test per Playwright, Tour öffnet (6 Folien), 0 Fehler.
+- 2026-07-15: Präsentations-Inhalte auf Funktion statt Übersichtszahlen
+  umgestellt (Owner-Feedback) + Buchungsmodell-Analyse + Hintergrund neu.
+  (1) Zähler aus den Touren entfernt/entschärft: „82 Klassen, fünf Gruppen",
+  „41/41 implementiert", „17 von 51 Stories", „30 in der Basis/51",
+  „Sieben Aktivitäten", „Vier Flows", „vier Automaten", „Sechs Ideen",
+  Dashboard-KennzahlenStrip. Stattdessen erklären die Folien, wie das
+  System funktioniert. Personas: statt Zählung jetzt konkrete Spotlights
+  (Monika/Kasse, Endkunde/online) mit Zielen→Frustrationen→Funktion;
+  ZieleFrustrationen(id) parametrisiert. FlowUebersicht zeigt je Ablauf,
+  was er tut, statt Teilnehmer-/Nachrichten-Zahlen.
+  (2) Buchungsmodell analysiert und Darstellung korrigiert: Das Modell ist
+  korrekt (Buchung=Kauf, Ticket=Karte je Sitz, VorstellungSitz=Sitz-Status
+  je Vorstellung als Assoziationsklasse, Sitzplatz=physisch, BuchungService
+  =«control», hält keine Daten). Die Verwechslung „Buchung/Ticket/Sitz/
+  Buchung/Service" wird jetzt direkt aufgelöst: neue Auftakt-Folie
+  „Das Herzstück: eine Buchung" (UmlBuchungsmodell mit Klartext-Rollen je
+  Klasse), Folie „Wer macht was: Objekt vs. Service" (Buchung ≠
+  BuchungService), Vertiefung „Der BuchungService steuert nur".
+  (3) Karierter Hintergrund entfernt → dezenter, nicht wiederholender
+  Akzent-Lichtschein oben (var(--bg-glow)); Inhalt steht im Vordergrund,
+  Grund bleibt filigran (hell #fbfbfa, dunkel #161619). Verifiziert:
+  Build/Lint grün, alle 14 Touren (62 Folien) + Hintergrund hell/dunkel
+  per Playwright, 0 Fehler.

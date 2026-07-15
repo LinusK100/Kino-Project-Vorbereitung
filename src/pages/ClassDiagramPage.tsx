@@ -8,8 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { uml } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
 import { UML_GROUP_COLOR } from '@/lib/statusColors'
-import { zahlwort } from '@/lib/utils'
-import { ImplSplit, UmlBuchungskette, UmlGruppen, UmlKomposition, UmlServices, UmlVererbung, UmlVorstellungSitz } from '@/components/presentation/visuals/uml'
+import { UmlBuchungskette, UmlBuchungsmodell, UmlKomposition, UmlServices, UmlVererbung, UmlVorstellungSitz } from '@/components/presentation/visuals/uml'
 import type { UmlClass, PresentationStep, Mode } from '@/types'
 
 const ACCENT = '#7a39bb'
@@ -18,46 +17,40 @@ const CORE = ['Kette', 'Kino', 'Kinosaal', 'Sitzplatz', 'Tarif', 'Film', 'Vorste
 
 const groupLabel: Record<string, string> = { domain: 'Domäne', service: 'Services', store: 'Stores', dto: 'DTOs', enum: 'Enums' }
 
-// Die Tour folgt dem Modus: Einfach zeigt den fachlichen Kern,
-// Erweitert vertieft Vererbung und Service-Schicht.
-const nKlassen = uml.classes.length
-const nImpl = uml.classes.filter((c) => c.implementedInPrototype).length
-const nRollen = uml.relationships.filter((r) => r.type === 'inheritance' && r.to === 'Nutzer').length
-
+// Die Tour erklärt, wie das System funktioniert – nicht, wie viele Klassen es hat.
+// Sie beginnt beim Buchungsmodell, weil dort die häufigste Verständnisfrage sitzt.
 function stepsFor(mode: Mode): PresentationStep[] {
   const kern: PresentationStep[] = [
     {
-      id: 'gruppen', title: `${nKlassen} Klassen, ${zahlwort(uml.groups.length)} Gruppen`, visual: <UmlGruppen />,
-      body: mode === 'einfach'
-        ? 'Die statische Struktur des Systems: Domänenklassen tragen die Fachlichkeit, API-Services die Abläufe, dazu Frontend-Stores, DTOs und Enums. Der Einfach-Modus konzentriert sich auf den fachlichen Kern.'
-        : 'Die statische Struktur des Systems: Domänenklassen tragen die Fachlichkeit, API-Services die Abläufe, dazu Frontend-Stores, DTOs und Enums. Im Erweitert-Modus ist jede Gruppe einzeln filterbar.',
-    },
-    {
-      id: 'kern', title: 'Vom Konzern bis zum Sitz', visual: <UmlKomposition />,
-      body: 'Das physische Rückgrat als Kompositions-Kette (◆): Eine Kette umfasst Kinos, ein Kino besitzt Säle, ein Saal enthält Sitzplätze – der Teil existiert nicht ohne das Ganze.',
+      id: 'buchungsmodell', title: 'Das Herzstück: eine Buchung', visual: <UmlBuchungsmodell />,
+      body: 'Vier Klassen, vier klare Aufgaben: Eine Buchung ist der Kauf. Sie enthält für jeden Platz ein Ticket. Jedes Ticket gilt für einen VorstellungSitz – den Status eines Sitzes in genau dieser Vorstellung. Der physische Sitzplatz im Saal bleibt davon unberührt.',
     },
     {
       id: 'assoc', title: 'Der Schlüssel: VorstellungSitz', visual: <UmlVorstellungSitz />,
-      body: 'Der Sitzstatus gehört weder dem Sitz noch der Vorstellung, sondern ihrer Verbindung – der Assoziationsklasse. reservieren(), belegen() und freigeben() setzen den Hold durch und verhindern Doppelbuchungen.',
+      body: 'Deshalb braucht es die Assoziationsklasse: Ein Sitzplatz existiert dauerhaft, sein Status wechselt aber je Vorstellung. reservieren(), belegen() und freigeben() setzen den Hold durch und verhindern Doppelbuchungen – für genau diese eine Vorstellung.',
     },
     {
-      id: 'ops', title: 'Operationen am Objekt', visual: <UmlBuchungskette />,
-      body: 'Statusändernde Operationen stehen an den Domänenobjekten selbst – Zahlung.verarbeiten(), Buchung.bestätigen(), Ticket.einlösen() – nicht bei den Akteuren. So bleibt jede Zustandsänderung dort, wo ihr Zustand lebt.',
+      id: 'ops', title: 'Wer macht was: Objekt vs. Service', visual: <UmlBuchungskette />,
+      body: 'Statusändernde Operationen sitzen am Objekt, dessen Zustand sie ändern: Zahlung.verarbeiten(), Buchung.bestätigen(), Ticket.einlösen(). Der BuchungService (nächste Folie) ruft sie nur auf – er hält selbst keine Daten. Buchung ≠ BuchungService.',
+    },
+    {
+      id: 'kern', title: 'Vom Saal zum einzelnen Sitz', visual: <UmlKomposition />,
+      body: 'Woher der Sitzplatz kommt: eine Kompositions-Kette (◆). Eine Kette umfasst Kinos, ein Kino besitzt Säle, ein Saal enthält Sitzplätze – der Teil existiert nicht ohne das Ganze.',
     },
   ]
   const vertiefung: PresentationStep[] = [
     {
-      id: 'vererbung', title: `${zahlwort(nRollen, true)} Rollen, eine Basis`, visual: <UmlVererbung />,
-      body: 'Vom Kunden bis zum Administrator erben alle Akteure von Nutzer. Was jemand darf, entscheidet nicht die Klasse, sondern das Enum Nutzerrolle – geprüft über darf(aktion).',
+      id: 'services', title: 'Der BuchungService steuert nur', visual: <UmlServices />,
+      body: 'Die «control»-Schicht: Der BuchungService führt reservieren(), anlegen() und stornieren() aus und hängt nur lose (⇢ Abhängigkeit) an den Domänenobjekten. Er orchestriert die Abläufe – die Daten und ihren Zustand halten die Objekte selbst.',
     },
     {
-      id: 'services', title: 'Services steuern die Abläufe', visual: <UmlServices />,
-      body: 'Die «control»-Schicht: Der BuchungService führt reservieren(), anlegen() und stornieren() aus und hängt nur lose (⇢ Abhängigkeit) an den Domänenobjekten – genau die Aufrufe, die in den Sequenzdiagrammen auftauchen.',
+      id: 'vererbung', title: 'Rollen erben von Nutzer', visual: <UmlVererbung />,
+      body: 'Vom Kunden bis zum Administrator erben alle Akteure von Nutzer. Was jemand darf, entscheidet nicht die Klasse, sondern das Enum Nutzerrolle – geprüft über darf(aktion).',
     },
   ]
   const schluss: PresentationStep = {
-    id: 'all', title: 'Modell ⊇ Prototyp', visual: <ImplSplit />,
-    body: `${nImpl} der ${nKlassen} Klassen sind im Prototyp implementiert (grüner Punkt im Diagramm), die übrigen ${nKlassen - nImpl} bewusst Design-only: Das Modell beschreibt das ganze Produkt, nicht nur den MVP.`,
+    id: 'all', title: 'Das Modell beschreibt mehr als die App',
+    body: 'Der Prototyp setzt den Kern klickbar um – Buchung, Kasse, Manager-Cockpit, Einlass. Die übrigen Klassen (im Diagramm ohne grünen Punkt) sind bewusst als Roadmap modelliert: Das Klassendiagramm zeigt das ganze Produkt, nicht nur den MVP.',
   }
   return mode === 'einfach' ? [...kern, schluss] : [...kern, ...vertiefung, schluss]
 }

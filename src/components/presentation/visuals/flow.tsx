@@ -389,7 +389,14 @@ export function ZahlungZyklus() {
   )
 }
 
-// ── Übersicht der vier Sequenz-Flows (Intro-Folie) ──
+// ── Übersicht der Sequenz-Flows (Intro-Folie): was jeder Ablauf tut ──
+const FLOW_KURZ: Record<string, string> = {
+  'online-buchung': 'Vorstellung → Sitzplan → Hold → Zahlung → QR-Ticket',
+  'pos-verkauf': 'Tickets in den Warenkorb, an der Kasse bezahlen',
+  storno: 'Buchung stornieren: Ticket ungültig, Zahlung erstattet, Sitz frei',
+  einlass: 'QR-Code scannen, gültiges Ticket einlösen',
+}
+
 export function FlowUebersicht() {
   const reduce = useReducedMotion()
   return (
@@ -401,8 +408,8 @@ export function FlowUebersicht() {
           style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.13)' }}
         >
           <div className="text-[13px] font-bold" style={{ color: 'rgba(255,255,255,0.92)' }}>{d.title}</div>
-          <div className="text-[11px] mt-1" style={{ color: 'rgba(255,255,255,0.5)' }}>
-            {d.participants.length} Teilnehmer · {d.messages.length} Nachrichten
+          <div className="text-[11px] mt-1 leading-snug" style={{ color: 'rgba(255,255,255,0.55)' }}>
+            {FLOW_KURZ[d.id] ?? d.description}
           </div>
         </motion.div>
       ))}

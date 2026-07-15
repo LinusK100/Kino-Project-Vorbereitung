@@ -11,8 +11,7 @@ import { Presentation } from '@/components/presentation/Presentation'
 import { useAppStore } from '@/store/appStore'
 import { innovation, personas, prototype, stories, storyMaps, uml, sequences, stateMachines } from '@/data/content'
 import { extraMachines } from '@/data/statesExtra'
-import { DreiStationen, JsonZuSvg, KennzahlenStrip, TeilmengeModi } from '@/components/presentation/visuals/product'
-import { ImplSplit } from '@/components/presentation/visuals/uml'
+import { DreiStationen, JsonZuSvg, TeilmengeModi } from '@/components/presentation/visuals/product'
 import type { PresentationStep } from '@/types'
 
 const ACCENT = '#01696f'
@@ -20,9 +19,6 @@ const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1]
 
 // Kennzahl je Abschnitt (Spannen = Einfach-/Erweitert-Modus), aus den Daten berechnet
 const rollenLive = prototype.rollen.filter((r) => r.status === 'implementiert').length
-const storiesAbgedeckt = new Set(
-  prototype.module.filter((m) => m.status === 'implementiert').flatMap((m) => m.stories),
-).size
 const sectionStat: Record<string, string> = {
   '/personas': `${personas.basis.length}–${personas.erweitert.length}`,
   '/user-stories': `${stories.basis.length}–${stories.erweitert.length}`,
@@ -59,12 +55,8 @@ const HINWEISE = [
 
 const tourSteps: PresentationStep[] = [
   {
-    id: 'welcome', title: 'CineTicket', visual: <KennzahlenStrip />,
-    body: 'Die Dokumentation eines Kino-Ticketsystems für „Systemanalyse und Entwurf" – von der Anforderungsanalyse über die UML-Modellierung bis zum klickbaren Prototyp.',
-  },
-  {
-    id: 'aufbau', title: 'Drei Stationen', visual: <DreiStationen />,
-    body: 'Die Website folgt dem Weg der Systementwicklung: Aus den Anforderungen entstehen die Modelle, aus den Modellen der Prototyp – jede Station baut auf der vorigen auf.',
+    id: 'aufbau', title: 'Von der Idee zur klickbaren App', visual: <DreiStationen />,
+    body: 'CineTicket ist ein Kino-Ticketsystem für „Systemanalyse und Entwurf". Die Website folgt dem Weg der Systementwicklung: Aus den Anforderungen entstehen die Modelle, aus den Modellen der Prototyp – jede Station baut auf der vorigen auf.',
   },
   {
     id: 'json', title: 'Alle Inhalte sind JSON-Daten', visual: <JsonZuSvg />,
@@ -75,12 +67,8 @@ const tourSteps: PresentationStep[] = [
     body: 'Anforderungen und Modellierung haben zwei Detailgrade: Einfach zeigt den MVP-Kern, Erweitert den Vollausbau – die Basis ist immer eine echte Teilmenge. Prototyp und Innovation zeigen immer alles.',
   },
   {
-    id: 'ergebnis', title: 'Das Ergebnis: der klickbare Prototyp',
-    visual: <ImplSplit extras={[
-      `${rollenLive} von ${prototype.rollen.length} Rollen klickbar`,
-      `${storiesAbgedeckt} von ${stories.erweitert.length} Stories abgedeckt`,
-    ]} />,
-    body: 'Am Ende steht die echte App: Buchungs-Wizard, Kassen-Schnellverkauf, Manager-Cockpit und Einlass-Scan. Der Abschnitt „Prototyp" startet sie mit einem Klick – was noch fehlt, ist im Modell als Roadmap verortet.',
+    id: 'ergebnis', title: 'Das Ergebnis: der klickbare Prototyp', visual: <DreiStationen />,
+    body: 'Am Ende steht die echte App: Der Kunde bucht im Wizard, die Kasse verkauft im Schnellmodus, der Manager sieht Umsatz und Auslastung, das Einlasspersonal scannt QR-Codes. Der Abschnitt „Prototyp" startet sie mit einem Klick – was darüber hinausgeht, ist im Modell als Roadmap verortet.',
   },
   {
     id: 'praes', title: 'Präsentationsmodus',

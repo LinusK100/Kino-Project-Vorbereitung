@@ -94,10 +94,10 @@ export function PersonaBaum() {
   )
 }
 
-// ── Personas: Ziele gegen Frustrationen (am Beispiel Monika) ──
-export function ZieleFrustrationen() {
+// ── Personas: Ziele gegen Frustrationen (eine konkrete Person im Fokus) ──
+export function ZieleFrustrationen({ id = 'monika' }: { id?: string }) {
   const reduce = useReducedMotion()
-  const p = personaById['monika']
+  const p = personaById[id]
   return (
     <div className="w-full rounded-2xl overflow-hidden text-left" style={{ maxWidth: 660, background: 'rgba(255,255,255,0.045)', border: '1px solid rgba(255,255,255,0.13)' }}>
       <motion.div {...pop(0, reduce)} className="flex items-center gap-3 px-5 py-3.5" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>

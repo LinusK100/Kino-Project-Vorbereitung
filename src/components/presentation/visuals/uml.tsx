@@ -1,7 +1,7 @@
 // UML-Ausschnitte für den Kino-Modus. Jede Folie zeigt echte Klassen aus
 // uml.json — reduziert auf die Attribute/Operationen, um die es gerade geht,
 // damit der Ausschnitt groß und lesbar bleibt.
-import { useLayoutEffect, useRef, useState } from 'react'
+import { Fragment, useLayoutEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
 import { uml } from '@/data/content'
 import { UML_GROUP_COLOR } from '@/lib/statusColors'
@@ -108,6 +108,43 @@ export function UmlRel({ kind, label, from, to, owner = 'l', dir = 'r', w = 92, 
         {label && <text x={w / 2} y={y + 17} textAnchor="middle" fontSize={9.5} fill="rgba(255,255,255,0.5)">{label}</text>}
       </svg>
     </motion.div>
+  )
+}
+
+// ── Folie: Das Buchungsmodell — jede Klasse mit ihrer Rolle in Klartext ──
+// Beantwortet die häufige Verwechslung „Buchung / Ticket / Sitz / Buchung / Service":
+// vier verschiedene Dinge mit vier verschiedenen Aufgaben.
+const BUCHUNG_STATIONEN = [
+  { id: 'Buchung', attrs: ['status', 'kundenEmail'], methods: ['bestätigen', 'stornieren'], rolle: 'der Kauf – ein Vorgang je Kunde', rel: '1   enthält   1..*' },
+  { id: 'Ticket', attrs: ['qrCode', 'status'], methods: ['einlösen'], rolle: 'eine Eintrittskarte je Sitz', rel: 'gilt für' },
+  { id: 'VorstellungSitz', attrs: ['status', 'reserviertBis'], methods: ['reservieren', 'belegen'], emphasized: true, rolle: 'Sitz-Status für DIESE Vorstellung', rel: 'betrifft' },
+  { id: 'Sitzplatz', attrs: ['reihe', 'nummer'], methods: [], rolle: 'der physische Platz im Saal' },
+] as const
+
+export function UmlBuchungsmodell() {
+  const reduce = useReducedMotion()
+  return (
+    <div className="flex items-start justify-center gap-1 flex-wrap">
+      {BUCHUNG_STATIONEN.map((s, i) => (
+        <Fragment key={s.id}>
+          <div className="flex flex-col items-center gap-2" style={{ width: 178 }}>
+            <UmlBox
+              i={i} id={s.id} width={178}
+              attrs={[...s.attrs]} methods={[...s.methods]}
+              emphasized={'emphasized' in s ? s.emphasized : undefined}
+              highlight={'emphasized' in s ? ['status'] : []}
+            />
+            <span className="text-[10.5px] leading-snug text-center px-1" style={{ color: 'rgba(255,255,255,0.6)' }}>{s.rolle}</span>
+          </div>
+          {'rel' in s && (
+            <motion.div {...pop(i, reduce, 0.25)} className="flex flex-col items-center flex-shrink-0" style={{ paddingTop: 28 }}>
+              <span className="text-[9px] font-mono whitespace-nowrap mb-0.5" style={{ color: 'rgba(255,255,255,0.42)' }}>{s.rel}</span>
+              <span className="text-lg leading-none" style={{ color: 'rgba(255,255,255,0.45)' }}>→</span>
+            </motion.div>
+          )}
+        </Fragment>
+      ))}
+    </div>
   )
 }
 
