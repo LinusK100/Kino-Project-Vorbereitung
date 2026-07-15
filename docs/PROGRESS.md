@@ -234,3 +234,11 @@
   Stories abgedeckt", berechnet) mit Verweis auf den Start im
   Prototyp-Abschnitt. Verifiziert: alle 14 Touren (62 Folien) per
   Playwright, 0 Fehler, Build/Lint grün.
+- 2026-07-15: Dashboard theme-abhängig: Dunkel bleibt der „Kinosaal", Hell
+  zeigt jetzt die „Aurora"-Optik aus dem Varianten-Archiv (Farbflächen in
+  den Akzentfarben hinter Glas-Karten, Verlaufs-Titel) — mit identischen
+  Inhalten (Erklär-Karten, Abschnitts-Kennzahlen, Ergebnis-Folie in der
+  Tour, keine Kennzahlen-Zeile im Held). Umschaltung reagiert live auf den
+  Theme-Toggle (useAppStore). DASHBOARD_VARIANTEN.md entsprechend
+  aktualisiert. Verifiziert: Build/Lint grün, hell/dunkel/mobil + Live-
+  Toggle-Test per Playwright, Tour öffnet (6 Folien), 0 Fehler.

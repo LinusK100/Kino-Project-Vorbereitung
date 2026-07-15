@@ -5,6 +5,12 @@ Bei der Dashboard-Neugestaltung (2026-07-14) entstanden fünf Varianten;
 `src/pages/OverviewPage.tsx`). Die zwei stärksten unterlegenen Entwürfe sind
 hier vollständig gesichert und können jederzeit wiederhergestellt werden.
 
+> **Update 2026-07-15:** „Aurora" ist kein reines Archiv mehr — das Dashboard
+> ist seitdem theme-abhängig: Dunkel = „Kino", **Hell = „Aurora"-Optik**
+> (Farbflächen + Glas, in `OverviewPage.tsx` als `AuroraAnsicht` adaptiert,
+> mit den aktuellen Inhalten: Erklär-Karten, Abschnitts-Kennzahlen, ohne
+> Kennzahlen-Zeile im Held). Der Original-Entwurf unten bleibt als Referenz.
+
 Beide Varianten waren fertig gebaut und verifiziert (Build/Lint grün,
 Hell/Dunkel per Playwright, 0 Konsolenfehler). Zahlen kamen durchgehend
 berechnet aus `src/data` (keine hartkodierten Fakten), Bewegung respektierte
