@@ -4,7 +4,7 @@
 // (Design-Entscheidung 2026-07-14; unterlegene Entwürfe: docs/DASHBOARD_VARIANTEN.md)
 import { Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'motion/react'
-import { ArrowRight, Rocket } from 'lucide-react'
+import { ArrowRight, Braces, Layers, Presentation as PresentationIcon, Rocket } from 'lucide-react'
 import { pageVariants } from '@/lib/transitions'
 import { NAV } from '@/components/layout/nav'
 import { Presentation } from '@/components/presentation/Presentation'
@@ -15,16 +15,6 @@ import type { PresentationStep } from '@/types'
 
 const ACCENT = '#01696f'
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1]
-
-// Klassendiagramm + Sequenzdiagramme + Zustandsautomaten (inkl. Enum-Automaten)
-const nDiagramme = 1 + sequences.length + stateMachines.machines.length + extraMachines.length
-
-const heroStats = [
-  `${personas.basis.length}–${personas.erweitert.length} Personas`,
-  `${stories.basis.length}–${stories.erweitert.length} User Stories`,
-  `${uml.classes.length} UML-Klassen`,
-  `${nDiagramme} Diagramme`,
-]
 
 // Kennzahl je Abschnitt (Spannen = Einfach-/Erweitert-Modus), aus den Daten berechnet
 const rollenLive = prototype.rollen.filter((r) => r.status === 'implementiert').length
@@ -112,12 +102,8 @@ export default function OverviewPage() {
             >
               CineTicket
             </h1>
-            <p className="text-sm md:text-base mb-6" style={{ color: 'rgba(255,255,255,0.66)' }}>
+            <p className="text-sm md:text-base" style={{ color: 'rgba(255,255,255,0.66)' }}>
               Ein Kino-Ticketsystem – von der Anforderungsanalyse über die UML-Modelle bis zum klickbaren Prototyp.
-            </p>
-            {/* „Credits"-Zeile mit den Kennzahlen */}
-            <p className="text-[11px] uppercase tracking-[0.18em] leading-relaxed" style={{ color: 'rgba(255,255,255,0.42)' }}>
-              {heroStats.join('  ·  ')}
             </p>
           </div>
 
@@ -145,8 +131,26 @@ export default function OverviewPage() {
           </Link>
         </motion.div>
 
+        {/* So funktioniert diese Website — direkt sichtbar, nicht erst in der Tour */}
+        <motion.div {...enter(0.26)} className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-10">
+          <HinweisKarte icon={PresentationIcon} accent="#c894f5" title="Kino-Tour in jedem Abschnitt">
+            Der „Präsentation"-Knopf oben rechts startet die animierte Vollbild-Tour
+            des Abschnitts – weiter mit ← →, automatisch per Leertaste, Esc beendet.
+          </HinweisKarte>
+          <HinweisKarte icon={Braces} accent="#63c1f5" title="Alle Daten als JSON">
+            Personas, Stories, UML und Zustände liegen als strukturierte JSON-Dateien
+            vor – die Datengrundlage für die spätere Umsetzung. Die Diagramme werden
+            daraus live als SVG gerendert.
+          </HinweisKarte>
+          <HinweisKarte icon={Layers} accent="#f5a068" title="Einfach & Erweitert">
+            Anforderungen und Modellierung haben zwei Detailgrade – umschaltbar oben
+            rechts in jedem Abschnitt. Die Basis ist immer eine echte Teilmenge des
+            Vollausbaus.
+          </HinweisKarte>
+        </motion.div>
+
         {/* Filmstreifen mit den drei Stationen */}
-        <motion.div {...enter(0.28)} className="mt-10 rounded-lg overflow-hidden" style={{ background: '#101016', border: '1px solid rgba(255,255,255,0.08)' }}>
+        <motion.div {...enter(0.38)} className="mt-4 rounded-lg overflow-hidden" style={{ background: '#101016', border: '1px solid rgba(255,255,255,0.08)' }}>
           <Sprockets />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-px" style={{ background: 'rgba(255,255,255,0.08)' }}>
             {GROUPS.map((group) => (
@@ -176,12 +180,25 @@ export default function OverviewPage() {
           </div>
           <Sprockets />
         </motion.div>
-
-        <motion.p {...enter(0.4)} className="mt-7 text-center text-[11px] uppercase tracking-[0.22em]" style={{ color: 'rgba(255,255,255,0.3)' }}>
-          Einfach ⊂ Erweitert · Inhalte als JSON → SVG · Kino-Tour in jedem Abschnitt
-        </motion.p>
       </div>
     </motion.div>
+  )
+}
+
+// Erklär-Karte im Saal-Look (Bedienung & Datenhaltung auf einen Blick)
+function HinweisKarte({ icon: Icon, accent, title, children }: {
+  icon: React.ElementType; accent: string; title: string; children: React.ReactNode
+}) {
+  return (
+    <div className="rounded-xl p-4" style={{ background: '#15151d', border: '1px solid rgba(255,255,255,0.09)' }}>
+      <div className="flex items-center gap-2 mb-2">
+        <span className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: `${accent}1f`, color: accent }}>
+          <Icon size={15} />
+        </span>
+        <h4 className="text-sm font-semibold text-white/90">{title}</h4>
+      </div>
+      <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)' }}>{children}</p>
+    </div>
   )
 }
 

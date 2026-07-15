@@ -9,8 +9,10 @@
 }
 
 :root {
-  --bg-whiteboard: #f9f8f5;
-  --grid-color: rgba(0, 0, 0, 0.04);
+  /* Neutral-weißes Karo statt des früheren Cremetons — ruhiger und einheitlich
+     zu den weißen Karten (Owner-Entscheidung 2026-07-14). */
+  --bg-whiteboard: #fafafa;
+  --grid-color: rgba(0, 0, 0, 0.03);
   --grid-size: 32px;
   --font-body: 'DM Sans', sans-serif;
   --font-display: 'DM Serif Display', serif;

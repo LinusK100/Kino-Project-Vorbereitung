@@ -29,6 +29,7 @@ export function Presentation({ steps, accent, title, label = 'Präsentation', in
     <>
       <button
         onClick={() => setActive(true)}
+        title="Animierte Vollbild-Tour dieses Abschnitts – weiter mit ← →, automatisch per Leertaste, Esc beendet"
         className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-transform hover:-translate-y-0.5 ${invert ? '' : 'text-white'}`}
         style={invert
           ? { background: '#fff', color: accent, boxShadow: '0 2px 12px rgba(0,0,0,0.28)' }

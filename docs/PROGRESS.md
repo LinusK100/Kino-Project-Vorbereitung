@@ -211,3 +211,16 @@
   Quellcode in docs/DASHBOARD_VARIANTEN.md archiviert (Owner-Entscheidung).
   README-Screenshot auf das neue Dashboard aktualisiert. Verifiziert:
   Build/Lint grün, hell/dunkel/mobil per Playwright, Tour startet, 0 Fehler.
+- 2026-07-15: Dashboard-Feinschliff nach Owner-Feedback: (1) Die drei
+  Erklär-Karten sind zurück und direkt sichtbar (nicht erst in der Tour) —
+  „Kino-Tour in jedem Abschnitt" (Bedienung ← →/Leertaste/Esc), „Alle Daten
+  als JSON" (Datengrundlage für die spätere Umsetzung, live als SVG
+  gerendert), „Einfach & Erweitert" — im Saal-Look zwischen CTAs und
+  Filmstreifen. (2) Kennzahlen-Zeile unter dem Leinwand-Titel entfernt
+  (Zahlen stehen im Filmstreifen je Abschnitt). (3) „Präsentation"-Knopf
+  hat jetzt in jedem Abschnitt einen Tooltip (analog ModeToggle).
+  (4) Whiteboard-Hintergrund hell von Creme (#f9f8f5) auf Neutralweiß
+  (#fafafa, Gitter 0.03) — ruhiger, einheitlich zu den weißen Karten;
+  Dunkel unverändert. README-Screenshot erneuert. Verifiziert: Build/Lint
+  grün, Dashboard + Abschnitte per Playwright (hell/dunkel), Tour startet,
+  0 Fehler.
