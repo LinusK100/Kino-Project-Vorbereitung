@@ -224,3 +224,13 @@
   Dunkel unverändert. README-Screenshot erneuert. Verifiziert: Build/Lint
   grün, Dashboard + Abschnitte per Playwright (hell/dunkel), Tour startet,
   0 Fehler.
+- 2026-07-15: Präsentations-Audit („nur mit den Touren vor dem Dozenten
+  präsentierbar?"): alle acht Abschnitts-Touren inhaltlich geprüft — Aufbau
+  je Abschnitt: Konzept → echte Datenausschnitte → Arbeits-/Lesehilfe;
+  Zahlen berechnet, Fachkern (U47-Hold) zieht sich durch. Einzige Lücke:
+  Die Überblick-Tour endete ohne das Projektergebnis (der Prototyp hat
+  bewusst keine eigene Tour). Neue Folie 5/6 „Das Ergebnis: der klickbare
+  Prototyp" (ImplSplit + Chips „4 von 8 Rollen klickbar", „17 von 51
+  Stories abgedeckt", berechnet) mit Verweis auf den Start im
+  Prototyp-Abschnitt. Verifiziert: alle 14 Touren (62 Folien) per
+  Playwright, 0 Fehler, Build/Lint grün.

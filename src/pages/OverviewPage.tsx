@@ -11,6 +11,7 @@ import { Presentation } from '@/components/presentation/Presentation'
 import { innovation, personas, prototype, stories, storyMaps, uml, sequences, stateMachines } from '@/data/content'
 import { extraMachines } from '@/data/statesExtra'
 import { DreiStationen, JsonZuSvg, KennzahlenStrip, TeilmengeModi } from '@/components/presentation/visuals/product'
+import { ImplSplit } from '@/components/presentation/visuals/uml'
 import type { PresentationStep } from '@/types'
 
 const ACCENT = '#01696f'
@@ -18,6 +19,9 @@ const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1]
 
 // Kennzahl je Abschnitt (Spannen = Einfach-/Erweitert-Modus), aus den Daten berechnet
 const rollenLive = prototype.rollen.filter((r) => r.status === 'implementiert').length
+const storiesAbgedeckt = new Set(
+  prototype.module.filter((m) => m.status === 'implementiert').flatMap((m) => m.stories),
+).size
 const sectionStat: Record<string, string> = {
   '/personas': `${personas.basis.length}–${personas.erweitert.length}`,
   '/user-stories': `${stories.basis.length}–${stories.erweitert.length}`,
@@ -53,6 +57,14 @@ const tourSteps: PresentationStep[] = [
   {
     id: 'modi', title: 'Einfach ⊂ Erweitert', visual: <TeilmengeModi />,
     body: 'Anforderungen und Modellierung haben zwei Detailgrade: Einfach zeigt den MVP-Kern, Erweitert den Vollausbau – die Basis ist immer eine echte Teilmenge. Prototyp und Innovation zeigen immer alles.',
+  },
+  {
+    id: 'ergebnis', title: 'Das Ergebnis: der klickbare Prototyp',
+    visual: <ImplSplit extras={[
+      `${rollenLive} von ${prototype.rollen.length} Rollen klickbar`,
+      `${storiesAbgedeckt} von ${stories.erweitert.length} Stories abgedeckt`,
+    ]} />,
+    body: 'Am Ende steht die echte App: Buchungs-Wizard, Kassen-Schnellverkauf, Manager-Cockpit und Einlass-Scan. Der Abschnitt „Prototyp" startet sie mit einem Klick – was noch fehlt, ist im Modell als Roadmap verortet.',
   },
   {
     id: 'praes', title: 'Präsentationsmodus',
