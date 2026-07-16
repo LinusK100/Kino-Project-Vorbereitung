@@ -4,14 +4,16 @@
 // Archiv docs/DASHBOARD_VARIANTEN.md reaktiviert). Inhalte identisch.
 import { Link } from 'react-router-dom'
 import { motion, useReducedMotion } from 'motion/react'
-import { ArrowRight, Braces, Layers, Presentation as PresentationIcon, Rocket } from 'lucide-react'
+import { ArrowRight, Braces, Download, Layers, Presentation as PresentationIcon, Rocket } from 'lucide-react'
 import { pageVariants } from '@/lib/transitions'
 import { NAV } from '@/components/layout/nav'
 import { Presentation } from '@/components/presentation/Presentation'
 import { useAppStore } from '@/store/appStore'
 import { innovation, personas, prototype, stories, storyMaps, uml, sequences, stateMachines } from '@/data/content'
 import { extraMachines } from '@/data/statesExtra'
-import { usePresentation } from '@/components/presentation/steps'
+
+// Die fertige Präsentation als PDF — erzeugt von scripts/export-praesentation.mjs
+const PDF_URL = import.meta.env.BASE_URL + 'CineTicket_Praesentation.pdf'
 
 const ACCENT = '#01696f'
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1]
@@ -39,8 +41,8 @@ const GROUPS = NAV.filter((g) => g.title !== 'Start' && !g.meta)
 
 const HINWEISE = [
   {
-    icon: PresentationIcon, accent: '#7a39bb', accentSaal: '#c894f5', title: 'Kino-Tour in jedem Abschnitt',
-    text: 'Der „Präsentation"-Knopf oben rechts startet die animierte Vollbild-Tour des Abschnitts – weiter mit ← →, automatisch per Leertaste, Esc beendet.',
+    icon: PresentationIcon, accent: '#7a39bb', accentSaal: '#c894f5', title: 'Eine Präsentation, alle Abschnitte',
+    text: 'Der „Präsentation"-Knopf startet den gesamten Vortrag oder die Tour eines Abschnitts – weiter mit ← →, Esc beendet. Beim nächsten Start lässt sich an der gemerkten Folie fortsetzen.',
   },
   {
     icon: Braces, accent: '#006494', accentSaal: '#63c1f5', title: 'Alle Daten als JSON',
@@ -70,7 +72,6 @@ export default function OverviewPage() {
 // ── Dunkel: der Kinosaal ──
 function SaalAnsicht() {
   const enter = useEnter()
-  const tourSteps = usePresentation('overview')
   return (
     <motion.div
       variants={pageVariants} initial="initial" animate="animate" exit="exit"
@@ -124,9 +125,16 @@ function SaalAnsicht() {
           </div>
         </motion.div>
 
-        {/* CTAs */}
+        {/* CTAs: die Gesamt-Präsentation steht im Vordergrund */}
         <motion.div {...enter(0.15)} className="flex items-center justify-center gap-2.5 mt-8 flex-wrap">
-          <Presentation steps={tourSteps} accent={ACCENT} title="Überblick" label="Tour starten" />
+          <Presentation section="overview" accent={ACCENT} label="Präsentation starten" sectionLabel="Nur die Website-Tour" />
+          <a
+            href={PDF_URL} download
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-white transition-colors hover:bg-white/15"
+            style={{ border: '1px solid rgba(255,255,255,0.3)' }}
+          >
+            <Download size={14} /> Als PDF
+          </a>
           <Link
             to="/prototyp"
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-white transition-colors hover:bg-white/15"
@@ -212,7 +220,6 @@ const glas = {
 
 function AuroraAnsicht() {
   const enter = useEnter()
-  const tourSteps = usePresentation('overview')
   return (
     <motion.div
       variants={pageVariants} initial="initial" animate="animate" exit="exit"
@@ -247,9 +254,16 @@ function AuroraAnsicht() {
           </p>
         </motion.div>
 
-        {/* CTAs */}
+        {/* CTAs: die Gesamt-Präsentation steht im Vordergrund */}
         <motion.div {...enter(0.15)} className="flex items-center justify-center gap-2.5 mt-7 flex-wrap">
-          <Presentation steps={tourSteps} accent={ACCENT} title="Überblick" label="Tour starten" />
+          <Presentation section="overview" accent={ACCENT} label="Präsentation starten" sectionLabel="Nur die Website-Tour" />
+          <a
+            href={PDF_URL} download
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-transform hover:-translate-y-0.5"
+            style={{ ...glas, color: 'var(--text-primary)' }}
+          >
+            <Download size={14} style={{ color: ACCENT }} /> Als PDF
+          </a>
           <Link
             to="/prototyp"
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-transform hover:-translate-y-0.5"

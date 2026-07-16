@@ -345,3 +345,25 @@
   Wizard entfernt, Roadmap auf eine Zeile + Rollen-Chips gekürzt, aufs
   Wesentliche reduziert. Verifiziert: Build/Lint grün, 15 Touren + Vollbild +
   Hilfe-Sheet + Prototyp per Playwright, 0 Fehler.
+- 2026-07-16: Neues Präsentations-Konzept (Dozenten-Vorgabe). (1) Gesamt-
+  Präsentation über alle Abschnitte: Drehbuch src/data/presentations/
+  gesamt.json (29 Folien) referenziert Abschnitts-Folien oder definiert
+  zusammengelegte direkt; Rahmen-Folien Titel/Projekt/Agenda/Kernsätze;
+  Arbeitsweise als Projekt-Einordnung an den Anfang gezogen, Innovation als
+  Matrix + 2×3 Ideen, Zustände mit Sitz im Detail und den weiteren Automaten
+  nur erwähnt. (2) Globaler PresentationHost über den Routen: beim Folien-
+  wechsel navigiert der Hintergrund still zum passenden Abschnitt — eine
+  Präsentation, nicht neun; Abschnitts-Timeline unten mit Segmenten (nach
+  PPT-Vorlage Systemanalyse_CI_CD), Kernsatz-Banner je Folie. (3) Auto-Modus
+  entfernt (kein Play/Pause/Tempo mehr); Steuerung ← → / Weiter / Esc.
+  (4) Präsentation öffnet immer HELL (Vorgabe), Dunkel per Knopf: Palette
+  pres() + theme-abhängiges bright() in visuals/core.ts, alle Visuals von
+  Weiß-Alpha auf Token umgestellt. (5) Start-Auswahl an jedem Knopf: nur
+  Abschnitt / gesamt ab hier / gesamt von vorn / Fortsetzen an gemerkter
+  Folie (persistiert). (6) Download: Druck-Route /praesentation/druck (ohne
+  AppShell) → scripts/export-praesentation.mjs erzeugt public/CineTicket_
+  Praesentation.pdf (29 Folien, 16:9); Stale-Guard check-praesentation.mjs
+  läuft vor jedem Build. Neue Abschnitts-Tour Prototyp (2 Folien).
+  Verifiziert: Lint 0, Build grün, Playwright 25/25 (10 Touren, Gesamt-
+  Durchlauf mit URL-Wechsel an allen 9 Grenzen, Resume-Logik, Hilfe-Sheet,
+  Vollbild, PDF 200), 0 Konsolenfehler.

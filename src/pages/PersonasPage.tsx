@@ -6,7 +6,6 @@ import { Callout } from '@/components/shared/Callout'
 import { containerVariants, cardVariants } from '@/lib/transitions'
 import { usePersonas, personaById } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
-import { usePresentation } from '@/components/presentation/steps'
 import type { Persona } from '@/types'
 
 const ACCENT = '#006494'
@@ -15,7 +14,6 @@ const ACCENT = '#006494'
 export default function PersonasPage() {
   const personas = usePersonas()
   const { mode } = useAppStore()
-  const steps = usePresentation('personas')
   const [group, setGroup] = useState<string>('all')
   const [allOpen, setAllOpen] = useState(false)
 
@@ -33,7 +31,7 @@ export default function PersonasPage() {
       subtitle={`${personas.length} Nutzerprofile · ${mode === 'einfach' ? 'Basis (MVP)' : 'Vollausbau'}`}
       icon={Users}
       accent={ACCENT}
-      presentation={steps}
+      section="personas"
       help={
         <Callout kind="info">
           Jede Persona steht für eine Nutzergruppe mit eigenen Zielen und Frustrationen —

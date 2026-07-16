@@ -4,7 +4,6 @@ import {
 } from 'lucide-react'
 import { SectionShell } from '@/components/shared/SectionShell'
 import { innovation, personaById } from '@/data/content'
-import { usePresentation } from '@/components/presentation/steps'
 import type { Innovation } from '@/types'
 
 const ACCENT = '#437a22'
@@ -24,7 +23,6 @@ const feasCfg: Record<string, { label: string; color: string }> = {
 // alle Ideen werden immer gezeigt. Folien-Texte: src/data/presentations/innovation.json
 export default function InnovationPage() {
   const items = innovation.innovations
-  const steps = usePresentation('innovation')
 
   return (
     <SectionShell
@@ -34,7 +32,7 @@ export default function InnovationPage() {
       icon={Sparkles}
       accent={ACCENT}
       modes={false}
-      presentation={steps}
+      section="innovation"
       help={
         <div>
           <p className="text-sm leading-relaxed mb-3" style={{ color: 'var(--text-secondary)' }}>

@@ -7,7 +7,6 @@ import { StateDiagram } from '@/components/diagram/StateDiagram'
 import { stateMachines } from '@/data/content'
 import { extraMachines } from '@/data/statesExtra'
 import { useAppStore } from '@/store/appStore'
-import { usePresentation } from '@/components/presentation/steps'
 import type { StateMachine } from '@/types'
 
 const ACCENT = '#7a39bb'
@@ -19,7 +18,6 @@ export default function StatePage() {
     () => (mode === 'einfach' ? stateMachines.machines : [...stateMachines.machines, ...extraMachines]),
     [mode],
   )
-  const steps = usePresentation('zustandsdiagramme')
   const [activeId, setActiveId] = useState(machines[0].id)
   // derive a valid id (active machine may disappear when switching mode)
   const effId = machines.some((m) => m.id === activeId) ? activeId : machines[0].id
@@ -32,7 +30,7 @@ export default function StatePage() {
       subtitle={`${machines.length} Automaten · Lebenszyklen der zentralen Objekte`}
       icon={CircleDot}
       accent={ACCENT}
-      presentation={steps}
+      section="zustandsdiagramme"
       help={
         <Callout kind="info" title="Notation">
           UML-Zustandsdiagramm: abgerundete Rechtecke = Zustände, <strong>●</strong> = Start,

@@ -6,7 +6,6 @@ import { pageVariants } from '@/lib/transitions'
 import { ModeToggle } from './ModeToggle'
 import { Presentation } from '@/components/presentation/Presentation'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import type { PresentationStep } from '@/types'
 
 interface SectionShellProps {
   title: string
@@ -16,7 +15,7 @@ interface SectionShellProps {
   kicker: string                 // small category label above the title
   intro?: React.ReactNode        // explanatory lead block directly under the title
   help?: React.ReactNode         // Grundlagen/Notation — im „Hilfe“-Sheet statt unter dem Titel
-  presentation?: PresentationStep[]
+  section?: string               // Abschnitts-Schlüssel für den Präsentations-Knopf (steps.tsx)
   modes?: boolean                // show Einfach/Erweitert toggle (default true)
   legend?: React.ReactNode
   children: React.ReactNode
@@ -24,7 +23,7 @@ interface SectionShellProps {
 
 export function SectionShell({
   title, subtitle, icon: Icon, accent, kicker,
-  intro, help, presentation = [], modes = true, legend, children,
+  intro, help, section, modes = true, legend, children,
 }: SectionShellProps) {
   const [helpOpen, setHelpOpen] = useState(false)
   return (
@@ -63,7 +62,7 @@ export function SectionShell({
               </button>
             )}
             {modes && <ModeToggle accent={accent} />}
-            {presentation.length > 0 && <Presentation steps={presentation} accent={accent} title={title} />}
+            {section && <Presentation section={section} accent={accent} />}
           </div>
         </div>
 

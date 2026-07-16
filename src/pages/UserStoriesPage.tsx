@@ -8,7 +8,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useStories, personaById } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
-import { usePresentation } from '@/components/presentation/steps'
 import type { UserStory, Priority } from '@/types'
 
 const ACCENT = '#006494'
@@ -23,7 +22,6 @@ const releaseColor: Record<number, string> = { 1: '#437a22', 2: '#d19900', 3: '#
 export default function UserStoriesPage() {
   const stories = useStories()
   const { mode } = useAppStore()
-  const steps = usePresentation('user-stories')
   const [selected, setSelected] = useState<UserStory | null>(null)
   const [persona, setPersona] = useState('all')
   const [priority, setPriority] = useState('all')
@@ -70,7 +68,7 @@ export default function UserStoriesPage() {
       subtitle={`${stories.length} Stories · ${mode === 'einfach' ? 'Basis (U01–U30)' : 'Vollausbau (U01–U51)'} · gefiltert: ${filtered.length}`}
       icon={ListChecks}
       accent={ACCENT}
-      presentation={steps}
+      section="user-stories"
       help={
         <Callout kind="info" title="Schema">
           „Als <em>Persona</em> möchte ich <em>Ziel</em>, um <em>Nutzen</em>." Jede Story trägt Persona,

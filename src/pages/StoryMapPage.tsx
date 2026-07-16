@@ -7,7 +7,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { useStoryMap, useStories, personaById } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
 import { useDragScroll } from '@/lib/useDragScroll'
-import { usePresentation } from '@/components/presentation/steps'
 import type { UserStory, ReleaseNumber } from '@/types'
 
 const ACCENT = '#006494'
@@ -30,7 +29,6 @@ export default function StoryMapPage() {
   const stories = useStories()
   const { theme, mode } = useAppStore()
   const isDark = theme === 'dark'
-  const steps = usePresentation('story-map')
   const [selected, setSelected] = useState<UserStory | null>(null)
   const [activeRelease, setActiveRelease] = useState<ReleaseNumber | null>(null)
   const { ref: mapRef, dragging, handlers } = useDragScroll<HTMLDivElement>()
@@ -51,7 +49,7 @@ export default function StoryMapPage() {
       subtitle={`${storyMap.activities.length} Aktivitäten · ${stories.length} Stories · ${mode === 'einfach' ? 'Basis' : 'Vollausbau'}`}
       icon={Map}
       accent={ACCENT}
-      presentation={steps}
+      section="story-map"
       help={
         <Callout kind="info" title="Lesart">
           <strong>Waagerecht</strong> = Nutzer-Workflow (Aktivität → Schritt), <strong>senkrecht</strong> = Release.

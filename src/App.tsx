@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'motion/react'
 import { AppShell } from '@/components/layout/AppShell'
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary'
+import { PresentationHost } from '@/components/presentation/PresentationHost'
 import { useTheme } from '@/hooks/useTheme'
 import '@/styles/globals.css'
 
@@ -17,6 +18,7 @@ const InnovationPage = lazy(() => import('@/pages/InnovationPage'))
 const PrototypePage = lazy(() => import('@/pages/PrototypePage'))
 const MethodikPage = lazy(() => import('@/pages/MethodikPage'))
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'))
+const PraesentationDruckPage = lazy(() => import('@/pages/PraesentationDruckPage'))
 
 function Skeleton() {
   return (
@@ -60,9 +62,26 @@ function AppContent() {
   useTheme()
   return (
     <BrowserRouter basename="/Kino-Project-Vorbereitung">
-      <AppShell>
-        <AnimatedRoutes />
-      </AppShell>
+      <Routes>
+        {/* Druck-Ansicht ohne AppShell — Quelle des PDF-Exports */}
+        <Route
+          path="/praesentation/druck"
+          element={<Suspense fallback={null}><PraesentationDruckPage /></Suspense>}
+        />
+        <Route
+          path="*"
+          element={
+            <>
+              <AppShell>
+                <AnimatedRoutes />
+              </AppShell>
+              {/* Präsentation als globales Overlay: überlebt die Hintergrund-
+                  Navigation zwischen den Abschnitten (Gesamt-Präsentation). */}
+              <PresentationHost />
+            </>
+          }
+        />
+      </Routes>
     </BrowserRouter>
   )
 }

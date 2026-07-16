@@ -8,7 +8,6 @@ import {
   Sparkles, BookOpenCheck,
 } from 'lucide-react'
 import { SectionShell } from '@/components/shared/SectionShell'
-import { usePresentation } from '@/components/presentation/steps'
 
 const ACCENT = '#64748b'   // neutrales Slate, in Hell und Dunkel gut lesbar
 
@@ -45,7 +44,6 @@ const WEITERE = [
 
 // Folien-Texte der Kino-Tour: src/data/presentations/arbeitsweise.json
 export default function MethodikPage() {
-  const steps = usePresentation('arbeitsweise')
   return (
     <SectionShell
       kicker="Projekt"
@@ -54,7 +52,7 @@ export default function MethodikPage() {
       icon={GitBranch}
       accent={ACCENT}
       modes={false}
-      presentation={steps}
+      section="arbeitsweise"
     >
       {/* Einordnung: dieser Abschnitt betrifft die Website, nicht den Prototyp. */}
       <p className="text-xs mb-5" style={{ color: 'var(--text-secondary)' }}>

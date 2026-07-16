@@ -4,7 +4,7 @@ import { motion, useReducedMotion } from 'motion/react'
 import { CheckCircle2, Crown, Frown, Target } from 'lucide-react'
 import { personas, personaById, stories, storyMaps } from '@/data/content'
 import { zahlwort } from '@/lib/utils'
-import { bright, draw, pop, VEASE } from './core'
+import { bright, draw, pop, VEASE, pres } from './core'
 
 // ── Personas: die vier Kern-Personas des MVP ──
 export function PersonaKern() {
@@ -15,7 +15,7 @@ export function PersonaKern() {
         <motion.div
           key={p.id} {...pop(i, reduce)}
           className="rounded-2xl px-4 pt-5 pb-4 w-[196px]"
-          style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)' }}
+          style={{ background: pres().chip, border: `1px solid ${pres().line}` }}
         >
           <div
             className="w-12 h-12 rounded-full mx-auto flex items-center justify-center text-white font-bold text-sm"
@@ -23,8 +23,8 @@ export function PersonaKern() {
           >
             {p.avatar}
           </div>
-          <div className="mt-3 text-[13.5px] font-bold" style={{ color: 'rgba(255,255,255,0.94)' }}>{p.name}</div>
-          <div className="text-[11px] mt-0.5" style={{ color: 'rgba(255,255,255,0.55)' }}>{p.role}</div>
+          <div className="mt-3 text-[13.5px] font-bold" style={{ color: pres().fg }}>{p.name}</div>
+          <div className="text-[11px] mt-0.5" style={{ color: pres().fgFaint }}>{p.role}</div>
           {p.umbrella && (
             <div
               className="mt-2 inline-flex items-center gap-1 text-[9.5px] px-2 py-0.5 rounded-full font-semibold"
@@ -57,7 +57,7 @@ export function PersonaBaum() {
         >
           <span className="w-9 h-9 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ background: dach.color }}>{dach.avatar}</span>
           <span className="text-left">
-            <span className="block text-[13px] font-bold" style={{ color: 'rgba(255,255,255,0.94)' }}>{dach.name}</span>
+            <span className="block text-[13px] font-bold" style={{ color: pres().fg }}>{dach.name}</span>
             <span className="text-[10px] inline-flex items-center gap-1" style={{ color: bright(dach.color) }}><Crown size={9} /> Dach-Persona</span>
           </span>
         </div>
@@ -68,7 +68,7 @@ export function PersonaBaum() {
           <motion.path
             key={p.id} {...draw(i, reduce, 0.3)}
             d={`M ${W / 2} 2 C ${W / 2} 22, ${childX(i)} 14, ${childX(i)} 34`}
-            fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth={1.2}
+            fill="none" stroke={pres().lineStrong} strokeWidth={1.2}
           />
         ))}
       </svg>
@@ -78,16 +78,16 @@ export function PersonaBaum() {
           <motion.div
             key={p.id} {...pop(2 + i, reduce)}
             className="rounded-xl px-2 py-3 text-center"
-            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)' }}
+            style={{ background: pres().chip, border: `1px solid ${pres().line}` }}
           >
             <div className="w-8 h-8 rounded-full mx-auto flex items-center justify-center text-white text-[10px] font-bold" style={{ background: p.color, boxShadow: `0 0 16px ${p.color}77` }}>{p.avatar}</div>
-            <div className="mt-1.5 text-[11.5px] font-semibold" style={{ color: 'rgba(255,255,255,0.9)' }}>{p.name.split(' ')[0]}</div>
-            <div className="text-[9.5px]" style={{ color: 'rgba(255,255,255,0.5)' }}>{p.role}</div>
+            <div className="mt-1.5 text-[11.5px] font-semibold" style={{ color: pres().fg }}>{p.name.split(' ')[0]}</div>
+            <div className="text-[9.5px]" style={{ color: pres().fgFaint }}>{p.role}</div>
           </motion.div>
         ))}
       </div>
 
-      <motion.p {...pop(7, reduce)} className="mt-3 text-[11px]" style={{ color: 'rgba(255,255,255,0.5)' }}>
+      <motion.p {...pop(7, reduce)} className="mt-3 text-[11px]" style={{ color: pres().fgFaint }}>
         dazu {zahlwort(intern.length)} interne Rollen: {intern.map((p) => p.name.split(' ')[0]).join(' · ')}
       </motion.p>
     </div>
@@ -99,34 +99,34 @@ export function ZieleFrustrationen({ id = 'monika' }: { id?: string }) {
   const reduce = useReducedMotion()
   const p = personaById[id]
   return (
-    <div className="w-full rounded-2xl overflow-hidden text-left" style={{ maxWidth: 660, background: 'rgba(255,255,255,0.045)', border: '1px solid rgba(255,255,255,0.13)' }}>
-      <motion.div {...pop(0, reduce)} className="flex items-center gap-3 px-5 py-3.5" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+    <div className="w-full rounded-2xl overflow-hidden text-left" style={{ maxWidth: 660, background: pres().chip, border: `1px solid ${pres().line}` }}>
+      <motion.div {...pop(0, reduce)} className="flex items-center gap-3 px-5 py-3.5" style={{ borderBottom: `1px solid ${pres().line}` }}>
         <span className="w-10 h-10 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ background: p.color, boxShadow: `0 0 18px ${p.color}88` }}>{p.avatar}</span>
         <span>
-          <span className="block text-[14px] font-bold" style={{ color: 'rgba(255,255,255,0.94)' }}>{p.name}</span>
-          <span className="text-[11px]" style={{ color: 'rgba(255,255,255,0.5)' }}>{p.role} · {p.age} Jahre</span>
+          <span className="block text-[14px] font-bold" style={{ color: pres().fg }}>{p.name}</span>
+          <span className="text-[11px]" style={{ color: pres().fgFaint }}>{p.role} · {p.age} Jahre</span>
         </span>
-        <span className="ml-auto text-[11px] italic hidden sm:block" style={{ color: 'rgba(255,255,255,0.45)', maxWidth: 260 }}>„{p.motto}"</span>
+        <span className="ml-auto text-[11px] italic hidden sm:block" style={{ color: pres().fgFaint, maxWidth: 260 }}>„{p.motto}"</span>
       </motion.div>
       <div className="grid grid-cols-1 sm:grid-cols-2">
-        <div className="px-5 py-4 sm:border-r" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
+        <div className="px-5 py-4 sm:border-r" style={{ borderColor: pres().line }}>
           <div className="flex items-center gap-1.5 mb-2.5">
             <Target size={13} color={bright('#437a22')} />
             <span className="text-[10.5px] font-bold uppercase tracking-wider" style={{ color: bright('#437a22') }}>Ziele</span>
           </div>
           {p.goals.map((g, i) => (
-            <motion.p key={g} {...pop(1 + i, reduce)} className="text-[12px] leading-relaxed mb-1.5 flex gap-2" style={{ color: 'rgba(255,255,255,0.78)' }}>
+            <motion.p key={g} {...pop(1 + i, reduce)} className="text-[12px] leading-relaxed mb-1.5 flex gap-2" style={{ color: pres().fgSoft }}>
               <span className="mt-[0.5em] w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: bright('#437a22') }} />{g}
             </motion.p>
           ))}
         </div>
-        <div className="px-5 py-4" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="px-5 py-4" style={{ borderTop: `1px solid ${pres().line}` }}>
           <div className="flex items-center gap-1.5 mb-2.5">
             <Frown size={13} color={bright('#a13544')} />
             <span className="text-[10.5px] font-bold uppercase tracking-wider" style={{ color: bright('#a13544') }}>Frustrationen</span>
           </div>
           {p.frustrations.map((f, i) => (
-            <motion.p key={f} {...pop(4 + i, reduce)} className="text-[12px] leading-relaxed mb-1.5 flex gap-2" style={{ color: 'rgba(255,255,255,0.78)' }}>
+            <motion.p key={f} {...pop(4 + i, reduce)} className="text-[12px] leading-relaxed mb-1.5 flex gap-2" style={{ color: pres().fgSoft }}>
               <span className="mt-[0.5em] w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: bright('#a13544') }} />{f}
             </motion.p>
           ))}
@@ -152,7 +152,7 @@ export function StorySchema() {
     <div style={{ maxWidth: 760 }}>
       <div className="flex items-baseline justify-center gap-x-2.5 gap-y-3 flex-wrap" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.5rem, 3vw, 2.1rem)' }}>
         {SCHEMA.map((s, i) => s.dim
-          ? <motion.span key={i} {...pop(i, reduce)} style={{ color: 'rgba(255,255,255,0.55)' }}>{s.text}</motion.span>
+          ? <motion.span key={i} {...pop(i, reduce)} style={{ color: pres().fgFaint }}>{s.text}</motion.span>
           : (
             <motion.span
               key={i} {...pop(i, reduce)}
@@ -162,11 +162,11 @@ export function StorySchema() {
               {s.text}
             </motion.span>
           ))}
-        <motion.span {...pop(6, reduce)} style={{ color: 'rgba(255,255,255,0.55)' }}>.</motion.span>
+        <motion.span {...pop(6, reduce)} style={{ color: pres().fgFaint }}>.</motion.span>
       </div>
       <div className="flex justify-center gap-3 flex-wrap mt-5">
         {SCHEMA.filter((s) => !s.dim).map((s, i) => (
-          <motion.span key={s.text} {...pop(7 + i, reduce)} className="text-[11px] px-2.5 py-1 rounded-full" style={{ background: 'rgba(255,255,255,0.06)', color: 'rgba(255,255,255,0.6)' }}>
+          <motion.span key={s.text} {...pop(7 + i, reduce)} className="text-[11px] px-2.5 py-1 rounded-full" style={{ background: pres().chip, color: pres().fgSoft }}>
             <strong style={{ color: bright(s.color!) }}>{s.text}</strong> – {s.hint}
           </motion.span>
         ))}
@@ -190,25 +190,25 @@ export function StoryKarte({ id }: { id: string }) {
   const p = personaById[s.persona]
   const prio = prioCfg[s.priority]
   return (
-    <div className="w-full rounded-2xl overflow-hidden text-left" style={{ maxWidth: 680, background: 'rgba(255,255,255,0.045)', border: '1px solid rgba(255,255,255,0.13)' }}>
+    <div className="w-full rounded-2xl overflow-hidden text-left" style={{ maxWidth: 680, background: pres().chip, border: `1px solid ${pres().line}` }}>
       <motion.div {...pop(0, reduce)} className="flex items-center gap-2 px-5 pt-4 flex-wrap">
         <span className="font-mono text-[15px] font-bold" style={{ color: bright('#006494') }}>{s.id}</span>
         <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold" style={{ background: `${prio.color}26`, color: bright(prio.color) }}>{prio.label}</span>
         <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold" style={{ background: `${relColor[s.release]}26`, color: bright(relColor[s.release]) }}>{relLabel[s.release]}</span>
         {p && (
-          <span className="ml-auto inline-flex items-center gap-1.5 text-[11px]" style={{ color: 'rgba(255,255,255,0.6)' }}>
+          <span className="ml-auto inline-flex items-center gap-1.5 text-[11px]" style={{ color: pres().fgSoft }}>
             <span className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[8px] font-bold" style={{ background: p.color }}>{p.avatar}</span>
             {p.name.split(' ')[0]}
           </span>
         )}
       </motion.div>
-      <motion.p {...pop(1, reduce)} className="px-5 py-3 text-[13.5px] italic leading-relaxed" style={{ color: 'rgba(255,255,255,0.85)' }}>
+      <motion.p {...pop(1, reduce)} className="px-5 py-3 text-[13.5px] italic leading-relaxed" style={{ color: pres().fg }}>
         {s.story}
       </motion.p>
       <div className="px-5 pb-4">
-        <p className="text-[9.5px] font-bold uppercase tracking-wider mb-2" style={{ color: 'rgba(255,255,255,0.42)' }}>Akzeptanzkriterien</p>
+        <p className="text-[9.5px] font-bold uppercase tracking-wider mb-2" style={{ color: pres().fgFaint }}>Akzeptanzkriterien</p>
         {s.acceptanceCriteria.map((c, i) => (
-          <motion.p key={c} {...pop(2 + i, reduce)} className="flex items-start gap-2 text-[12px] leading-relaxed mb-1.5" style={{ color: 'rgba(255,255,255,0.75)' }}>
+          <motion.p key={c} {...pop(2 + i, reduce)} className="flex items-start gap-2 text-[12px] leading-relaxed mb-1.5" style={{ color: pres().fgSoft }}>
             <CheckCircle2 size={14} style={{ color: bright('#437a22'), flexShrink: 0, marginTop: 2 }} />{c}
           </motion.p>
         ))}
@@ -240,24 +240,24 @@ export function StoryVerteilung({ tier = 'erweitert' }: { tier?: 'basis' | 'erwe
       <motion.div {...pop(0, reduce)} className="flex justify-center gap-2">
         {tier === 'erweitert' ? (
           <>
-            <span className="text-[11.5px] px-3 py-1 rounded-full font-semibold" style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.75)' }}>
+            <span className="text-[11.5px] px-3 py-1 rounded-full font-semibold" style={{ background: pres().chipStrong, color: pres().fgSoft }}>
               {stories.basis.length} Stories im Einfach-Modus
             </span>
-            <span className="text-[11.5px] px-1 py-1" style={{ color: 'rgba(255,255,255,0.4)' }}>⊂</span>
-            <span className="text-[11.5px] px-3 py-1 rounded-full font-semibold" style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.75)' }}>
+            <span className="text-[11.5px] px-1 py-1" style={{ color: pres().fgFaint }}>⊂</span>
+            <span className="text-[11.5px] px-3 py-1 rounded-full font-semibold" style={{ background: pres().chipStrong, color: pres().fgSoft }}>
               {alle.length} im Erweitert-Modus
             </span>
           </>
         ) : (
-          <span className="text-[11.5px] px-3 py-1 rounded-full font-semibold" style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.75)' }}>
+          <span className="text-[11.5px] px-3 py-1 rounded-full font-semibold" style={{ background: pres().chipStrong, color: pres().fgSoft }}>
             {alle.length} Stories im Einfach-Modus (Basis-Auswahl)
           </span>
         )}
       </motion.div>
       {bars.map((b, bi) => (
         <div key={b.label} className="text-left">
-          <motion.p {...pop(1 + bi * 2, reduce)} className="text-[10.5px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgba(255,255,255,0.5)' }}>{b.label}</motion.p>
-          <div className="flex h-9 rounded-lg overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.14)' }}>
+          <motion.p {...pop(1 + bi * 2, reduce)} className="text-[10.5px] font-bold uppercase tracking-wider mb-1.5" style={{ color: pres().fgFaint }}>{b.label}</motion.p>
+          <div className="flex h-9 rounded-lg overflow-hidden" style={{ border: `1px solid ${pres().line}` }}>
             {b.segs.map((seg, si) => (
               <motion.div
                 key={seg.key}
@@ -268,7 +268,7 @@ export function StoryVerteilung({ tier = 'erweitert' }: { tier?: 'basis' | 'erwe
                 style={{ background: `${seg.color}55`, borderRight: si < 2 ? '1px solid rgba(0,0,0,0.4)' : undefined }}
               >
                 <span className="text-[13px] font-bold" style={{ color: bright(seg.color) }}>{seg.n}</span>
-                <span className="text-[10px] hidden sm:inline" style={{ color: 'rgba(255,255,255,0.7)' }}>{seg.key}</span>
+                <span className="text-[10px] hidden sm:inline" style={{ color: pres().fgSoft }}>{seg.key}</span>
               </motion.div>
             ))}
           </div>
@@ -305,13 +305,13 @@ export function BackboneChips({ tier = 'erweitert' }: { tier?: 'basis' | 'erweit
               {a.name}{erwOnly ? ' +' : ''}
             </motion.span>
             {i < alle.length - 1 && (
-              <motion.span {...pop(i, reduce)} style={{ color: 'rgba(255,255,255,0.3)' }}>→</motion.span>
+              <motion.span {...pop(i, reduce)} style={{ color: pres().fgFaint }}>→</motion.span>
             )}
           </span>
         )
       })}
       {tier === 'erweitert' && (
-        <motion.p {...pop(alle.length, reduce)} className="w-full text-[10.5px] mt-1" style={{ color: 'rgba(255,255,255,0.45)' }}>
+        <motion.p {...pop(alle.length, reduce)} className="w-full text-[10.5px] mt-1" style={{ color: pres().fgFaint }}>
           „+" = Aktivität kommt erst im Erweitert-Modus dazu ({storyMaps.basis.activities.length} → {alle.length})
         </motion.p>
       )}
@@ -330,7 +330,7 @@ export function ReleaseBaender({ tier = 'erweitert' }: { tier?: 'basis' | 'erwei
   ]
   return (
     <div className="w-full space-y-2.5" style={{ maxWidth: 640 }}>
-      <motion.p {...pop(0, reduce)} className="text-[10.5px] font-bold uppercase tracking-[0.2em]" style={{ color: 'rgba(255,255,255,0.4)' }}>
+      <motion.p {...pop(0, reduce)} className="text-[10.5px] font-bold uppercase tracking-[0.2em]" style={{ color: pres().fgFaint }}>
         alle Aktivitäten →
       </motion.p>
       {cfg.map((c, i) => {
@@ -347,8 +347,8 @@ export function ReleaseBaender({ tier = 'erweitert' }: { tier?: 'basis' | 'erwei
             }}
           >
             <span className="text-[12.5px] font-bold whitespace-nowrap" style={{ color: bright(c.color) }}>{c.label}</span>
-            <span className="text-[10.5px] hidden sm:block" style={{ color: 'rgba(255,255,255,0.55)' }}>{c.note}</span>
-            <span className="ml-auto text-[12px] font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap" style={{ background: 'rgba(0,0,0,0.35)', color: bright(c.color) }}>
+            <span className="text-[10.5px] hidden sm:block" style={{ color: pres().fgFaint }}>{c.note}</span>
+            <span className="ml-auto text-[12px] font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap" style={{ background: pres().badge, color: bright(c.color) }}>
               {n} Stories
             </span>
           </motion.div>

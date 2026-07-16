@@ -26,6 +26,7 @@ export default function PrototypePage() {
       icon={Smartphone}
       accent={ACCENT}
       modes={false}
+      section="prototyp"
     >
       {/* Eigenständiger Hero: der Start steht im Vordergrund. */}
       <div

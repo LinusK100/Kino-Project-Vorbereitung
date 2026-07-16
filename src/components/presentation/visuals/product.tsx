@@ -1,10 +1,10 @@
-// Folien-Visuals für Dashboard, Prototyp und Innovation.
+// Folien-Visuals für Dashboard, Prototyp, Innovation und den Abschluss.
 // Alle Zahlen/Listen werden aus den JSON-Daten berechnet.
 import { motion, useReducedMotion } from 'motion/react'
-import { Boxes, Braces, ListChecks, Rocket } from 'lucide-react'
-import { innovation, personas, sequences, stateMachines, stories, storyMaps, uml } from '@/data/content'
+import { Boxes, Braces, ListChecks, MonitorPlay, Rocket } from 'lucide-react'
+import { innovation, personas, prototype, sequences, stateMachines, stories, storyMaps, uml } from '@/data/content'
 import { extraMachines } from '@/data/statesExtra'
-import { bright, pop } from './core'
+import { bright, pop, pres } from './core'
 
 // ── Dashboard: Kennzahlen der Dokumentation ──
 export function KennzahlenStrip() {
@@ -22,10 +22,10 @@ export function KennzahlenStrip() {
         <motion.div
           key={it.l} {...pop(i, reduce)}
           className="rounded-2xl px-6 py-4 text-center"
-          style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.13)', minWidth: 128 }}
+          style={{ background: pres().chip, border: `1px solid ${pres().line}`, minWidth: 128 }}
         >
-          <div className="text-[32px] font-bold leading-none text-white" style={{ fontFamily: 'var(--font-display)' }}>{it.n}</div>
-          <div className="text-[11px] mt-1.5" style={{ color: 'rgba(255,255,255,0.55)' }}>{it.l}</div>
+          <div className="text-[32px] font-bold leading-none" style={{ fontFamily: 'var(--font-display)', color: pres().fg }}>{it.n}</div>
+          <div className="text-[11px] mt-1.5" style={{ color: pres().fgFaint }}>{it.l}</div>
         </motion.div>
       ))}
     </div>
@@ -56,10 +56,10 @@ export function DreiStationen() {
                 <Icon size={17} />
               </div>
               <div className="text-[14px] font-bold" style={{ color: bright(s.color) }}>{s.title}</div>
-              <div className="text-[10.5px] mt-1" style={{ color: 'rgba(255,255,255,0.55)' }}>{s.items}</div>
+              <div className="text-[10.5px] mt-1" style={{ color: pres().fgFaint }}>{s.items}</div>
             </motion.div>
             {i < STATIONEN.length - 1 && (
-              <motion.span {...pop(i * 2 + 1, reduce)} className="text-xl" style={{ color: 'rgba(255,255,255,0.35)' }}>→</motion.span>
+              <motion.span {...pop(i * 2 + 1, reduce)} className="text-xl" style={{ color: pres().fgFaint }}>→</motion.span>
             )}
           </span>
         )
@@ -81,41 +81,41 @@ export function JsonZuSvg() {
   const reduce = useReducedMotion()
   return (
     <div className="flex items-center justify-center gap-3 md:gap-5 flex-wrap">
-      <motion.div {...pop(0, reduce)} className="rounded-xl overflow-hidden text-left" style={{ border: '1px solid rgba(255,255,255,0.16)', background: 'rgba(255,255,255,0.04)' }}>
-        <div className="px-3.5 py-1.5 text-[10px] font-mono font-semibold flex items-center gap-1.5" style={{ background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.6)' }}>
+      <motion.div {...pop(0, reduce)} className="rounded-xl overflow-hidden text-left" style={{ border: `1px solid ${pres().line}`, background: pres().chip }}>
+        <div className="px-3.5 py-1.5 text-[10px] font-mono font-semibold flex items-center gap-1.5" style={{ background: pres().chipStrong, color: pres().fgSoft }}>
           <Braces size={11} /> states.json
         </div>
         <div className="px-4 py-3 font-mono text-[11.5px] leading-[1.7]">
           {SNIPPET.map(([k, v], i) => (
             <div key={i}>
-              <span style={{ color: '#63c1f5' }}>{k}</span>
-              <span style={{ color: '#94d95c' }}>{v}</span>
-              {v && i < SNIPPET.length - 2 ? <span style={{ color: 'rgba(255,255,255,0.4)' }}>,</span> : null}
+              <span style={{ color: bright('#006494') }}>{k}</span>
+              <span style={{ color: bright('#437a22') }}>{v}</span>
+              {v && i < SNIPPET.length - 2 ? <span style={{ color: pres().fgFaint }}>,</span> : null}
             </div>
           ))}
         </div>
       </motion.div>
 
       <motion.div {...pop(1, reduce)} className="flex flex-col items-center gap-1 px-1">
-        <span className="text-2xl" style={{ color: 'rgba(255,255,255,0.5)' }}>→</span>
-        <span className="text-[9.5px] uppercase tracking-wider font-semibold" style={{ color: 'rgba(255,255,255,0.45)' }}>live als SVG</span>
+        <span className="text-2xl" style={{ color: pres().fgFaint }}>→</span>
+        <span className="text-[9.5px] uppercase tracking-wider font-semibold" style={{ color: pres().fgFaint }}>live als SVG</span>
       </motion.div>
 
-      <motion.div {...pop(2, reduce)} className="flex items-center gap-2.5 rounded-xl px-5 py-6" style={{ border: '1px solid rgba(255,255,255,0.16)', background: 'rgba(255,255,255,0.04)' }}>
+      <motion.div {...pop(2, reduce)} className="flex items-center gap-2.5 rounded-xl px-5 py-6" style={{ border: `1px solid ${pres().line}`, background: pres().chip }}>
         <span className="px-3.5 py-2 rounded-xl text-[12px] font-mono font-bold" style={{ background: '#d199002a', border: `1px solid ${bright('#d19900')}99`, color: bright('#d19900') }}>RESERVIERT</span>
         <svg width={92} height={30} viewBox="0 0 92 30" aria-hidden>
           <motion.line
-            x1={2} y1={12} x2={82} y2={12} stroke="rgba(255,255,255,0.8)" strokeWidth={1.5}
+            x1={2} y1={12} x2={82} y2={12} stroke={pres().stroke} strokeWidth={1.5}
             initial={reduce ? { opacity: 0 } : { pathLength: 0 }}
             animate={reduce ? { opacity: 1 } : { pathLength: 1 }}
             transition={{ delay: 0.5, duration: 0.4 }}
           />
           <motion.polygon
-            points="90,12 79,6.5 79,17.5" fill="rgba(255,255,255,0.9)"
+            points="90,12 79,6.5 79,17.5" fill={pres().stroke}
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.85 }}
           />
           <motion.text
-            x={46} y={27} textAnchor="middle" fontSize={8.5} fontFamily="ui-monospace, monospace" fill="rgba(255,255,255,0.55)"
+            x={46} y={27} textAnchor="middle" fontSize={8.5} fontFamily="ui-monospace, monospace" fill={pres().fgFaint}
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.85 }}
           >
             belegen(buchung)
@@ -136,28 +136,28 @@ export function TeilmengeModi() {
     <motion.div
       {...pop(0, reduce)}
       className="rounded-3xl p-5 md:p-6 w-full"
-      style={{ maxWidth: 560, border: '1.5px dashed rgba(255,255,255,0.3)' }}
+      style={{ maxWidth: 560, border: `1.5px dashed ${pres().lineStrong}` }}
     >
-      <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-left mb-3" style={{ color: 'rgba(255,255,255,0.6)' }}>
+      <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-left mb-3" style={{ color: pres().fgSoft }}>
         Erweitert · Vollausbau
       </div>
       <motion.div
         {...pop(1, reduce)}
         className="rounded-2xl px-5 py-4"
-        style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.22)' }}
+        style={{ background: pres().chip, border: `1px solid ${pres().lineStrong}` }}
       >
-        <div className="text-[11px] font-bold uppercase tracking-[0.18em] mb-2.5" style={{ color: 'rgba(255,255,255,0.85)' }}>
+        <div className="text-[11px] font-bold uppercase tracking-[0.18em] mb-2.5" style={{ color: pres().fg }}>
           Einfach · MVP-Kern
         </div>
         <div className="flex justify-center gap-2 flex-wrap">
           {[`${personas.basis.length} Personas`, `${stories.basis.length} Stories`, `${nAktB} Aktivitäten`].map((t, i) => (
-            <motion.span key={t} {...pop(2 + i, reduce)} className="text-[11.5px] px-2.5 py-1 rounded-full font-medium" style={{ background: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.85)' }}>{t}</motion.span>
+            <motion.span key={t} {...pop(2 + i, reduce)} className="text-[11.5px] px-2.5 py-1 rounded-full font-medium" style={{ background: pres().chipStrong, color: pres().fg }}>{t}</motion.span>
           ))}
         </div>
       </motion.div>
       <div className="flex justify-center gap-2 flex-wrap mt-3.5">
         {[`${personas.erweitert.length} Personas`, `${stories.erweitert.length} Stories`, `${nAktE} Aktivitäten`].map((t, i) => (
-          <motion.span key={t} {...pop(5 + i, reduce)} className="text-[11.5px] px-2.5 py-1 rounded-full font-medium" style={{ background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.55)', border: '1px dashed rgba(255,255,255,0.25)' }}>{t}</motion.span>
+          <motion.span key={t} {...pop(5 + i, reduce)} className="text-[11.5px] px-2.5 py-1 rounded-full font-medium" style={{ background: pres().chip, color: pres().fgFaint, border: `1px dashed ${pres().lineStrong}` }}>{t}</motion.span>
         ))}
       </div>
     </motion.div>
@@ -193,16 +193,16 @@ export function InnovationsMatrix({ tier = 'erweitert' }: { tier?: 'basis' | 'er
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto" role="img" aria-label="Innovations-Ideen nach Impact und Aufwand">
         {[1, 2, 3, 4, 5].map((v) => (
           <g key={v}>
-            <line x1={sx(v)} y1={y0} x2={sx(v)} y2={y0 + plotH} stroke="rgba(255,255,255,0.07)" />
-            <line x1={x0} y1={sy(v)} x2={x0 + plotW} y2={sy(v)} stroke="rgba(255,255,255,0.07)" />
-            <text x={sx(v)} y={y0 + plotH + 16} textAnchor="middle" fontSize={9.5} fill="rgba(255,255,255,0.4)">{v}</text>
-            <text x={x0 - 12} y={sy(v) + 3} textAnchor="end" fontSize={9.5} fill="rgba(255,255,255,0.4)">{v}</text>
+            <line x1={sx(v)} y1={y0} x2={sx(v)} y2={y0 + plotH} stroke={pres().grid} />
+            <line x1={x0} y1={sy(v)} x2={x0 + plotW} y2={sy(v)} stroke={pres().grid} />
+            <text x={sx(v)} y={y0 + plotH + 16} textAnchor="middle" fontSize={9.5} fill={pres().fgFaint}>{v}</text>
+            <text x={x0 - 12} y={sy(v) + 3} textAnchor="end" fontSize={9.5} fill={pres().fgFaint}>{v}</text>
           </g>
         ))}
-        <line x1={x0} y1={y0 + plotH} x2={x0 + plotW} y2={y0 + plotH} stroke="rgba(255,255,255,0.3)" />
-        <line x1={x0} y1={y0} x2={x0} y2={y0 + plotH} stroke="rgba(255,255,255,0.3)" />
-        <text x={x0 + plotW} y={y0 + plotH + 34} textAnchor="end" fontSize={10.5} fontWeight={600} fill="rgba(255,255,255,0.6)">Aufwand → <tspan fontWeight={400} fill="rgba(255,255,255,0.42)">(1 gering · 5 hoch)</tspan></text>
-        <text x={x0 - 40} y={y0 - 8} fontSize={10.5} fontWeight={600} fill="rgba(255,255,255,0.6)">Impact ↑ <tspan fontWeight={400} fill="rgba(255,255,255,0.42)">(1 gering · 5 hoch)</tspan></text>
+        <line x1={x0} y1={y0 + plotH} x2={x0 + plotW} y2={y0 + plotH} stroke={pres().lineStrong} />
+        <line x1={x0} y1={y0} x2={x0} y2={y0 + plotH} stroke={pres().lineStrong} />
+        <text x={x0 + plotW} y={y0 + plotH + 34} textAnchor="end" fontSize={10.5} fontWeight={600} fill={pres().fgSoft}>Aufwand → <tspan fontWeight={400} fill={pres().fgFaint}>(1 gering · 5 hoch)</tspan></text>
+        <text x={x0 - 40} y={y0 - 8} fontSize={10.5} fontWeight={600} fill={pres().fgSoft}>Impact ↑ <tspan fontWeight={400} fill={pres().fgFaint}>(1 gering · 5 hoch)</tspan></text>
 
         {pts.map(({ it, x, y }, i) => {
           const c = feasColor[it.feasibility]
@@ -216,7 +216,7 @@ export function InnovationsMatrix({ tier = 'erweitert' }: { tier?: 'basis' | 'er
               <text
                 x={left ? x - 14 : x + 14} y={y + 4}
                 textAnchor={left ? 'end' : 'start'}
-                fontSize={11} fontWeight={600} fill="rgba(255,255,255,0.85)"
+                fontSize={11} fontWeight={600} fill={pres().stroke}
               >
                 {name}
               </text>
@@ -245,13 +245,13 @@ export function IdeeVerankert() {
   const it = innovation.innovations[0] // Dynamische Preise – tier basis, machbar
   const c = feasColor[it.feasibility]
   return (
-    <div className="w-full rounded-2xl px-6 py-5 text-left" style={{ maxWidth: 640, background: 'rgba(255,255,255,0.045)', border: '1px solid rgba(255,255,255,0.13)' }}>
+    <div className="w-full rounded-2xl px-6 py-5 text-left" style={{ maxWidth: 640, background: pres().chip, border: `1px solid ${pres().line}` }}>
       <motion.div {...pop(0, reduce)} className="flex items-center gap-2.5 flex-wrap mb-2">
-        <span className="text-[15px] font-bold" style={{ color: 'rgba(255,255,255,0.94)' }}>{it.name}</span>
+        <span className="text-[15px] font-bold" style={{ color: pres().fg }}>{it.name}</span>
         <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold" style={{ background: `${c}26`, color: bright(c) }}>{feasLabel[it.feasibility]}</span>
-        <span className="ml-auto text-[10.5px]" style={{ color: 'rgba(255,255,255,0.5)' }}>Impact {it.impact}/5 · Aufwand {it.effort}/5</span>
+        <span className="ml-auto text-[10.5px]" style={{ color: pres().fgFaint }}>Impact {it.impact}/5 · Aufwand {it.effort}/5</span>
       </motion.div>
-      <motion.p {...pop(1, reduce)} className="text-[12.5px] leading-relaxed mb-4" style={{ color: 'rgba(255,255,255,0.72)' }}>
+      <motion.p {...pop(1, reduce)} className="text-[12.5px] leading-relaxed mb-4" style={{ color: pres().fgSoft }}>
         {it.summary}
       </motion.p>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
@@ -260,16 +260,154 @@ export function IdeeVerankert() {
           { l: 'User Stories', v: it.stories },
           { l: 'UML-Klassen', v: it.umlClasses },
         ].map((g, i) => (
-          <motion.div key={g.l} {...pop(2 + i, reduce)} className="rounded-xl px-3 py-2.5" style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }}>
-            <div className="text-[9px] font-bold uppercase tracking-wider mb-1.5" style={{ color: 'rgba(255,255,255,0.42)' }}>{g.l}</div>
+          <motion.div key={g.l} {...pop(2 + i, reduce)} className="rounded-xl px-3 py-2.5" style={{ background: pres().chip, border: `1px solid ${pres().line}` }}>
+            <div className="text-[9px] font-bold uppercase tracking-wider mb-1.5" style={{ color: pres().fgFaint }}>{g.l}</div>
             <div className="flex gap-1 flex-wrap">
               {g.v.map((x) => (
-                <span key={x} className="text-[10px] font-mono px-1.5 py-0.5 rounded" style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.75)' }}>{x}</span>
+                <span key={x} className="text-[10px] font-mono px-1.5 py-0.5 rounded" style={{ background: pres().chipStrong, color: pres().fgSoft }}>{x}</span>
               ))}
             </div>
           </motion.div>
         ))}
       </div>
+    </div>
+  )
+}
+
+// ── Innovation: drei Ideen kompakt auf einer Folie (Gesamt-Präsentation) ──
+// gruppe 'nah' = machbar/teilweise, 'vision' = Konzept — deckt sich mit der Matrix.
+export function IdeenListe({ gruppe = 'nah' }: { gruppe?: 'nah' | 'vision' }) {
+  const reduce = useReducedMotion()
+  const P = pres()
+  const items = innovation.innovations.filter((it) =>
+    gruppe === 'vision' ? it.feasibility === 'konzept' : it.feasibility !== 'konzept')
+  return (
+    <div className="w-full space-y-2.5" style={{ maxWidth: 680 }}>
+      {items.map((it, i) => {
+        const c = feasColor[it.feasibility]
+        const name = it.name.split(' (')[0]
+        return (
+          <motion.div
+            key={it.id} {...pop(i, reduce)}
+            className="rounded-xl text-left"
+            style={{ background: P.chip, border: `1px solid ${P.line}`, padding: '12px 18px' }}
+          >
+            <div className="flex items-center gap-2.5 flex-wrap mb-1">
+              <span className="text-[14px] font-bold" style={{ color: P.fg }}>{name}</span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold" style={{ background: `${c}22`, color: bright(c), border: `1px solid ${c}55` }}>
+                {feasLabel[it.feasibility]}
+              </span>
+            </div>
+            <p className="text-[12px] leading-relaxed" style={{ color: P.fgSoft }}>{it.summary}</p>
+          </motion.div>
+        )
+      })}
+    </div>
+  )
+}
+
+// ── Prototyp: gebaute Rollen vs. Roadmap, Zahlen aus den Daten ──
+const PROTO_ACCENT = '#964219'
+
+export function RollenLive() {
+  const reduce = useReducedMotion()
+  const P = pres()
+  const live = prototype.rollen.filter((r) => r.status === 'implementiert')
+  const roadmap = prototype.rollen.filter((r) => r.status !== 'implementiert')
+  const umlImpl = uml.classes.filter((c) => c.implementedInPrototype).length
+  const a = bright(PROTO_ACCENT)
+  return (
+    <div className="flex flex-col items-center gap-4" style={{ maxWidth: 720 }}>
+      <div className="flex justify-center gap-2 flex-wrap">
+        {live.map((r, i) => (
+          <motion.span
+            key={r.id} {...pop(i, reduce)}
+            className="text-[13px] font-bold px-4 py-2 rounded-xl"
+            style={{ background: `${PROTO_ACCENT}1e`, color: a, border: `1px solid ${a}66` }}
+          >
+            {r.label.split(' (')[0]}
+          </motion.span>
+        ))}
+      </div>
+      <div className="flex justify-center gap-2 flex-wrap">
+        {roadmap.map((r, i) => (
+          <motion.span
+            key={r.id} {...pop(live.length + i, reduce)}
+            className="text-[11.5px] px-3 py-1.5 rounded-full font-medium"
+            style={{ background: P.chip, color: P.fgFaint, border: `1px dashed ${P.lineStrong}` }}
+          >
+            {r.label.split(' (')[0]} · Roadmap
+          </motion.span>
+        ))}
+      </div>
+      <motion.p {...pop(prototype.rollen.length, reduce)} className="text-[12.5px] font-medium" style={{ color: P.fgSoft }}>
+        {live.length} von {prototype.rollen.length} Rollen und {umlImpl} von {uml.classes.length} UML-Klassen sind gebaut.
+      </motion.p>
+    </div>
+  )
+}
+
+// ── Prototyp: Live-Demo-Moment (Badge wie in der PPT-Vorlage) ──
+const DEMO_SCHRITTE: [string, string][] = [
+  ['Endkunde', 'buchen'], ['Kasse', 'verkaufen'], ['Manager', 'steuern'], ['Einlass', 'scannen'],
+]
+
+export function LiveDemo() {
+  const reduce = useReducedMotion()
+  const P = pres()
+  const g = bright('#437a22')
+  return (
+    <div className="flex flex-col items-center gap-5">
+      <motion.span
+        {...pop(0, reduce)}
+        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-[15px] font-bold tracking-[0.14em]"
+        style={{ background: `${'#437a22'}22`, color: g, border: `1.5px solid ${g}77` }}
+      >
+        <MonitorPlay size={18} /> [ LIVE-DEMO ]
+      </motion.span>
+      <div className="flex justify-center gap-2.5 flex-wrap">
+        {DEMO_SCHRITTE.map(([rolle, verb], i) => (
+          <motion.div
+            key={rolle} {...pop(1 + i, reduce)}
+            className="rounded-xl px-4 py-3 text-center"
+            style={{ background: P.chip, border: `1px solid ${P.line}`, minWidth: 128 }}
+          >
+            <div className="text-[16px] font-bold font-mono mb-0.5" style={{ color: P.fgFaint }}>{i + 1}</div>
+            <div className="text-[13px] font-bold" style={{ color: P.fg }}>{rolle}</div>
+            <div className="text-[11px]" style={{ color: P.fgSoft }}>{verb}</div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ── Abschluss: drei Kernsätze in den Stations-Farben ──
+const KERNSAETZE = [
+  { c: '#006494', t: 'Vom Bedarf zum Modell', s: 'Jede Anforderung ist als Persona, Story und Release verortet — nichts hängt in der Luft.' },
+  { c: '#7a39bb', t: 'Ein Modell ohne Widersprüche', s: 'Klassen, Sequenzen und Zustände greifen ineinander; die Status-Enums halten sie wertgleich.' },
+  { c: '#437a22', t: 'Nicht nur beschrieben — gebaut', s: 'Der MVP läuft als klickbarer Prototyp; alles Weitere ist als Roadmap modelliert.' },
+]
+
+export function Kernsaetze() {
+  const reduce = useReducedMotion()
+  const P = pres()
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 w-full" style={{ maxWidth: 900 }}>
+      {KERNSAETZE.map((k, i) => (
+        <motion.div
+          key={k.t} {...pop(i * 2, reduce)}
+          className="rounded-2xl overflow-hidden text-left"
+          style={{ background: P.chip, border: `1px solid ${P.line}` }}
+        >
+          <div className="h-[3px]" style={{ background: bright(k.c) }} />
+          <div className="p-4">
+            <div className="text-[26px] font-bold leading-none mb-2" style={{ color: bright(k.c), fontFamily: 'var(--font-display)' }}>{i + 1}</div>
+            <div className="text-[14px] font-bold mb-1.5" style={{ color: P.fg }}>{k.t}</div>
+            <p className="text-[12px] leading-relaxed" style={{ color: P.fgSoft }}>{k.s}</p>
+          </div>
+        </motion.div>
+      ))}
     </div>
   )
 }

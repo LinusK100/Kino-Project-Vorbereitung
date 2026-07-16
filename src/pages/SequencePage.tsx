@@ -6,7 +6,6 @@ import { DiagramFrame } from '@/components/diagram/DiagramFrame'
 import { SequenceDiagram } from '@/components/diagram/SequenceDiagram'
 import { sequences } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
-import { usePresentation } from '@/components/presentation/steps'
 import type { SequenceDiagram as SeqType } from '@/types'
 
 const ACCENT = '#7a39bb'
@@ -15,7 +14,6 @@ const ACCENT = '#7a39bb'
 export default function SequencePage() {
   const { mode } = useAppStore()
   const showFragments = mode === 'erweitert'
-  const steps = usePresentation('sequenzdiagramme')
   const [activeId, setActiveId] = useState(sequences[0].id)
   const diagram = sequences.find((d) => d.id === activeId) ?? sequences[0]
 
@@ -26,7 +24,7 @@ export default function SequencePage() {
       subtitle={`Buchungs-Flow in ${sequences.length} Diagrammen · ${showFragments ? 'mit Alternativ-/Fehlerpfaden' : 'Happy Path'}`}
       icon={Workflow}
       accent={ACCENT}
-      presentation={steps}
+      section="sequenzdiagramme"
       help={
         <Callout kind="info" title="Lesart">
           Die Zeit läuft <strong>von oben nach unten</strong>. <strong>Einfach</strong> zeigt den

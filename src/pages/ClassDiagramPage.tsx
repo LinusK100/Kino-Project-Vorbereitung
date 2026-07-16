@@ -8,7 +8,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { uml } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
 import { UML_GROUP_COLOR } from '@/lib/statusColors'
-import { usePresentation } from '@/components/presentation/steps'
 import type { UmlClass } from '@/types'
 
 const ACCENT = '#7a39bb'
@@ -22,7 +21,6 @@ export default function ClassDiagramPage() {
   const { mode } = useAppStore()
   const [view, setView] = useState<string>('kern')
   const [selected, setSelected] = useState<string | null>(null)
-  const steps = usePresentation('klassendiagramm')
 
   const views = mode === 'einfach'
     ? [{ id: 'kern', label: 'Kern' }, { id: 'enum', label: 'Enums' }]
@@ -44,7 +42,7 @@ export default function ClassDiagramPage() {
       subtitle={`${uml.classes.length} Klassen · ${implemented} implementiert / ${uml.classes.length - implemented} Design-only`}
       icon={Boxes}
       accent={ACCENT}
-      presentation={steps}
+      section="klassendiagramm"
       help={
         <div data-pres="ops-callout">
           <Callout kind="info" title="Lesehinweis">

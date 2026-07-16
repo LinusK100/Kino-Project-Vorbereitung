@@ -4,7 +4,7 @@
 import { motion, useReducedMotion } from 'motion/react'
 import { sequences, stateMachines } from '@/data/content'
 import { extraMachines } from '@/data/statesExtra'
-import { bright, draw, fadeIn, pop } from './core'
+import { bright, draw, fadeIn, pop, pres } from './core'
 
 const alleMaschinen = [...stateMachines.machines, ...extraMachines]
 
@@ -60,17 +60,17 @@ export function SeqAusschnitt({ flow, msgSeqs, frame }: SeqProps) {
         <motion.line
           key={p.id} {...draw(i, reduce, 0.2)}
           x1={colX(p.id)} y1={44} x2={colX(p.id)} y2={H - 4}
-          stroke="rgba(255,255,255,0.18)" strokeWidth={1} strokeDasharray="5 6"
+          stroke={pres().line} strokeWidth={1} strokeDasharray="5 6"
         />
       ))}
 
       {/* Fragment-Rahmen */}
       {frame && (
         <motion.g {...fadeIn(0, reduce, 0.3, 0)}>
-          <rect x={10} y={58} width={W - 20} height={H - 66} rx={6} fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth={1.2} />
-          <path d="M 10 58 h 46 v 15 l -8 8 h -38 z" fill="rgba(255,255,255,0.14)" stroke="rgba(255,255,255,0.3)" strokeWidth={1} />
-          <text x={21} y={74} fontSize={11} fontWeight={700} fill="rgba(255,255,255,0.85)">{frame.label}</text>
-          <text x={66} y={74} fontSize={10.5} fontFamily="ui-monospace, monospace" fill="#ffce56">{frame.guard}</text>
+          <rect x={10} y={58} width={W - 20} height={H - 66} rx={6} fill="none" stroke={pres().lineStrong} strokeWidth={1.2} />
+          <path d="M 10 58 h 46 v 15 l -8 8 h -38 z" fill={pres().chipStrong} stroke={pres().lineStrong} strokeWidth={1} />
+          <text x={21} y={74} fontSize={11} fontWeight={700} fill={pres().fg}>{frame.label}</text>
+          <text x={66} y={74} fontSize={10.5} fontFamily="ui-monospace, monospace" fill={bright('#d19900')}>{frame.guard}</text>
         </motion.g>
       )}
 
@@ -108,14 +108,14 @@ export function SeqAusschnitt({ flow, msgSeqs, frame }: SeqProps) {
             <motion.line
               {...draw(i, reduce, 0.45)}
               x1={x1} y1={y} x2={xEnd} y2={y}
-              stroke="rgba(255,255,255,0.75)" strokeWidth={1.5}
+              stroke={pres().stroke} strokeWidth={1.5}
               strokeDasharray={dashed ? '6 5' : undefined}
             />
             <motion.g {...fadeIn(i, reduce, 0.45)}>
               {dashed
-                ? <polyline points={`${x2 - 11 * sgn},${y - 5} ${x2 - 2 * sgn},${y} ${x2 - 11 * sgn},${y + 5}`} fill="none" stroke="rgba(255,255,255,0.85)" strokeWidth={1.5} />
-                : <polygon points={`${x2 - 2 * sgn},${y} ${x2 - 12 * sgn},${y - 5.5} ${x2 - 12 * sgn},${y + 5.5}`} fill="rgba(255,255,255,0.9)" />}
-              <text x={mid} y={y - 9} textAnchor="middle" fontSize={12} fontWeight={500} fill="rgba(255,255,255,0.88)">{m.label}</text>
+                ? <polyline points={`${x2 - 11 * sgn},${y - 5} ${x2 - 2 * sgn},${y} ${x2 - 11 * sgn},${y + 5}`} fill="none" stroke={pres().stroke} strokeWidth={1.5} />
+                : <polygon points={`${x2 - 2 * sgn},${y} ${x2 - 12 * sgn},${y - 5.5} ${x2 - 12 * sgn},${y + 5.5}`} fill={pres().stroke} />}
+              <text x={mid} y={y - 9} textAnchor="middle" fontSize={12} fontWeight={500} fill={pres().fg}>{m.label}</text>
               {eff && (
                 <g>
                   <rect x={mid - bw / 2} y={y + 10} width={bw} height={20} rx={10} fill={`${eff.color}30`} stroke={`${bright(eff.color)}88`} strokeWidth={0.8} />
@@ -221,10 +221,10 @@ export function StateAusschnitt({ machineId, nodes, edges, w, h, initialTo, init
         const cx0 = t.x - NW - 46
         return (
           <motion.g {...fadeIn(0, reduce, 0.2, 0)}>
-            <circle cx={cx0} cy={t.y} r={5.5} fill="rgba(255,255,255,0.9)" />
-            <line x1={cx0 + 6} y1={t.y} x2={t.x - NW - 10} y2={t.y} stroke="rgba(255,255,255,0.8)" strokeWidth={1.5} />
-            {head(t.x - NW - 4, t.y, 0, 'rgba(255,255,255,0.9)')}
-            {initialLabel && <text x={8} y={t.y + 44} fontSize={9.5} fill="rgba(255,255,255,0.5)">{initialLabel}</text>}
+            <circle cx={cx0} cy={t.y} r={5.5} fill={pres().stroke} />
+            <line x1={cx0 + 6} y1={t.y} x2={t.x - NW - 10} y2={t.y} stroke={pres().stroke} strokeWidth={1.5} />
+            {head(t.x - NW - 4, t.y, 0, pres().stroke)}
+            {initialLabel && <text x={8} y={t.y + 44} fontSize={9.5} fill={pres().fgFaint}>{initialLabel}</text>}
           </motion.g>
         )
       })()}
@@ -235,22 +235,22 @@ export function StateAusschnitt({ machineId, nodes, edges, w, h, initialTo, init
         if (e.dim) {
           return (
             <g key={i} opacity={0.16}>
-              <path d={g.path} fill="none" stroke="#fff" strokeWidth={1.3} />
-              {head(g.end[0], g.end[1], g.ang, '#fff')}
+              <path d={g.path} fill="none" stroke={pres().stroke} strokeWidth={1.3} />
+              {head(g.end[0], g.end[1], g.ang, pres().stroke)}
             </g>
           )
         }
         return (
           <g key={i}>
-            <motion.path {...draw(i, reduce, 0.35)} d={g.path} fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth={1.6} />
+            <motion.path {...draw(i, reduce, 0.35)} d={g.path} fill="none" stroke={pres().stroke} strokeWidth={1.6} />
             <motion.g {...fadeIn(i, reduce, 0.35)}>
-              {head(g.end[0], g.end[1], g.ang, 'rgba(255,255,255,0.9)')}
-              <text x={g.lx} y={g.eventY} textAnchor={g.anchor} fontSize={11.5} fontWeight={600} fill="rgba(255,255,255,0.88)" stroke="#000" strokeWidth={3.5} paintOrder="stroke">
+              {head(g.end[0], g.end[1], g.ang, pres().stroke)}
+              <text x={g.lx} y={g.eventY} textAnchor={g.anchor} fontSize={11.5} fontWeight={600} fill={pres().fg} stroke={pres().halo} strokeWidth={3.5} paintOrder="stroke">
                 {e.event}
-                {e.inline && e.guard && <tspan fontSize={10} fontWeight={400} fontFamily="ui-monospace, monospace" fill="rgba(255,255,255,0.52)">{'  '}[{e.guard}]</tspan>}
+                {e.inline && e.guard && <tspan fontSize={10} fontWeight={400} fontFamily="ui-monospace, monospace" fill={pres().fgFaint}>{'  '}[{e.guard}]</tspan>}
               </text>
               {!e.inline && e.guard && (
-                <text x={g.lx} y={g.guardY} textAnchor={g.anchor} fontSize={10} fontFamily="ui-monospace, monospace" fill="rgba(255,255,255,0.52)" stroke="#000" strokeWidth={3} paintOrder="stroke">[{e.guard}]</text>
+                <text x={g.lx} y={g.guardY} textAnchor={g.anchor} fontSize={10} fontFamily="ui-monospace, monospace" fill={pres().fgFaint} stroke={pres().halo} strokeWidth={3} paintOrder="stroke">[{e.guard}]</text>
               )}
             </motion.g>
           </g>
@@ -271,7 +271,7 @@ export function StateAusschnitt({ machineId, nodes, edges, w, h, initialTo, init
             >
               {nd.id}
             </text>
-            {showLabel && <text x={nd.x} y={nd.y + 15} textAnchor="middle" fontSize={8.5} fill="rgba(255,255,255,0.5)">{s.label}</text>}
+            {showLabel && <text x={nd.x} y={nd.y + 15} textAnchor="middle" fontSize={8.5} fill={pres().fgFaint}>{s.label}</text>}
           </motion.g>
         )
       })}
@@ -389,6 +389,39 @@ export function ZahlungZyklus() {
   )
 }
 
+// ── Die weiteren Automaten in Kürze (Gesamt-Präsentation): erwähnt, nicht durchgekaut ──
+const AUTOMAT_KURZ: [string, string][] = [
+  ['ticket', 'Ein Anfang, drei Enden — eingelöst, storniert oder abgelaufen.'],
+  ['buchung', 'Hält alles zusammen — bestätigt erst mit erfolgreicher Zahlung.'],
+  ['zahlung', 'Entscheidet den Rest — und erst ein Storno macht daraus ERSTATTET.'],
+]
+
+export function AutomatenKurz() {
+  const reduce = useReducedMotion()
+  const P = pres()
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 w-full" style={{ maxWidth: 860 }}>
+      {AUTOMAT_KURZ.map(([id, satz], i) => {
+        const m = alleMaschinen.find((x) => x.id === id)
+        if (!m) return null
+        return (
+          <motion.div
+            key={id} {...pop(i, reduce)}
+            className="rounded-xl px-4 py-3.5 text-left"
+            style={{ background: P.chip, border: `1px solid ${P.line}` }}
+          >
+            <div className="flex items-baseline justify-between gap-2 mb-1.5">
+              <span className="text-[13.5px] font-bold" style={{ color: P.fg }}>{m.title}</span>
+              <span className="text-[10.5px] flex-shrink-0" style={{ color: P.fgFaint }}>{m.states.length} Zustände</span>
+            </div>
+            <p className="text-[11.5px] leading-snug" style={{ color: P.fgSoft }}>{satz}</p>
+          </motion.div>
+        )
+      })}
+    </div>
+  )
+}
+
 // ── Übersicht der Sequenz-Flows (Intro-Folie): was jeder Ablauf tut ──
 const FLOW_KURZ: Record<string, string> = {
   'online-buchung': 'Vorstellung → Sitzplan → Hold → Zahlung → QR-Ticket',
@@ -405,10 +438,10 @@ export function FlowUebersicht() {
         <motion.div
           key={d.id} {...pop(i, reduce)}
           className="rounded-xl px-4 py-3 text-left"
-          style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.13)' }}
+          style={{ background: pres().chip, border: `1px solid ${pres().line}` }}
         >
-          <div className="text-[13px] font-bold" style={{ color: 'rgba(255,255,255,0.92)' }}>{d.title}</div>
-          <div className="text-[11px] mt-1 leading-snug" style={{ color: 'rgba(255,255,255,0.55)' }}>
+          <div className="text-[13px] font-bold" style={{ color: pres().fg }}>{d.title}</div>
+          <div className="text-[11px] mt-1 leading-snug" style={{ color: pres().fgFaint }}>
             {FLOW_KURZ[d.id] ?? d.description}
           </div>
         </motion.div>

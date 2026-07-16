@@ -134,7 +134,7 @@ export interface Innovation {
 }
 
 // ─────────────────────────────────────────────────────────────
-// Presentation engine (Kino-Modus: Vollbild-Folien auf Schwarz)
+// Presentation engine (Vollbild-Folien; hell als Standard, dunkel umschaltbar)
 // ─────────────────────────────────────────────────────────────
 export interface PresentationStep {
   id: string
@@ -143,6 +143,8 @@ export interface PresentationStep {
   points?: string[]        // optionale Aufzählung, gestaffelt animiert
   visual?: ReactNode       // abschnittsspezifisches Visual (aus JSON gerendert),
                            // z. B. ein Diagramm-Ausschnitt — Text wird zur Bildunterschrift
+  kernsatz?: string        // hervorgehobener Merksatz im Banner unter der Folie
+  art?: 'titel'            // Sonder-Layout (Titelfolie: größer, ohne Zähler-Kicker)
 }
 
 // ── JSON-Form der Touren (Text lebt in src/data/presentations/*.json) ──
@@ -158,6 +160,8 @@ export interface RawPresentationStep {
   body: string
   points?: string[]
   visual?: PresentationVisualSpec
+  kernsatz?: string
+  art?: 'titel'
 }
 // Eine Abschnitts-Datei: modus-los (steps) ODER mit Einfach/Erweitert.
 export interface PresentationData {
@@ -165,3 +169,19 @@ export interface PresentationData {
   einfach?: RawPresentationStep[]
   erweitert?: RawPresentationStep[]
 }
+
+// ── Gesamt-Präsentation (Drehbuch src/data/presentations/gesamt.json) ──
+// Ein Eintrag referenziert entweder eine Abschnitts-Folie („ref": "personas.seiten",
+// optional mit Überschreibungen) oder definiert eine zusammengelegte Folie direkt.
+export interface GesamtEintrag {
+  abschnitt: string                // Sektions-Schlüssel: Hintergrund-Route + Timeline-Gruppe
+  ref?: string                     // "abschnitt.folienId" — übernimmt die Abschnitts-Folie
+  id?: string
+  title?: string
+  body?: string
+  points?: string[]
+  visual?: PresentationVisualSpec
+  kernsatz?: string
+  art?: 'titel'
+}
+export interface GesamtData { folien: GesamtEintrag[] }

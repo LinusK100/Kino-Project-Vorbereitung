@@ -5,7 +5,7 @@ import { Fragment, useLayoutEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
 import { uml } from '@/data/content'
 import { UML_GROUP_COLOR } from '@/lib/statusColors'
-import { bright, draw, fadeIn, pop, VEASE } from './core'
+import { bright, draw, fadeIn, pop, VEASE, pres } from './core'
 
 const byId = Object.fromEntries(uml.classes.map((c) => [c.id, c]))
 
@@ -48,13 +48,13 @@ export function UmlBox({ id, attrs = [], methods = [], highlight = [], emphasize
         width,
         borderRadius: 10,
         overflow: 'hidden',
-        border: `1px solid ${emphasized ? bright(color) : 'rgba(255,255,255,0.16)'}`,
-        background: 'rgba(255,255,255,0.045)',
-        boxShadow: emphasized ? `0 0 36px ${color}66` : '0 2px 14px rgba(0,0,0,0.5)',
+        border: `1px solid ${emphasized ? bright(color) : pres().line}`,
+        background: pres().chip,
+        boxShadow: emphasized ? `0 0 36px ${color}66` : pres().shadow,
       }}
     >
-      <div className="px-3 py-1.5 text-center" style={{ background: `${color}30`, borderBottom: '1px solid rgba(255,255,255,0.12)' }}>
-        {c.stereotype && <div className="text-[9px] font-mono leading-tight" style={{ color: 'rgba(255,255,255,0.55)' }}>{c.stereotype}</div>}
+      <div className="px-3 py-1.5 text-center" style={{ background: `${color}30`, borderBottom: `1px solid ${pres().line}` }}>
+        {c.stereotype && <div className="text-[9px] font-mono leading-tight" style={{ color: pres().fgFaint }}>{c.stereotype}</div>}
         <div className="text-[13px] font-bold leading-snug" style={{ color: bright(color) }}>{c.id}</div>
       </div>
       {attrRows.length > 0 && <Compartment rows={attrRows} color={color} />}
@@ -65,12 +65,12 @@ export function UmlBox({ id, attrs = [], methods = [], highlight = [], emphasize
 
 function Compartment({ rows, color, divider }: { rows: { key: string; label: string; hl: boolean }[]; color: string; divider?: boolean }) {
   return (
-    <div className="px-3 py-1.5" style={divider ? { borderTop: '1px solid rgba(255,255,255,0.1)' } : undefined}>
+    <div className="px-3 py-1.5" style={divider ? { borderTop: `1px solid ${pres().line}` } : undefined}>
       {rows.map((r) => (
         <div
           key={r.key}
           className="font-mono text-[10.5px] leading-[1.55] whitespace-nowrap overflow-hidden text-ellipsis"
-          style={r.hl ? { color: bright(color), fontWeight: 600 } : { color: 'rgba(255,255,255,0.68)' }}
+          style={r.hl ? { color: bright(color), fontWeight: 600 } : { color: pres().fgSoft }}
         >
           {r.label}
         </div>
@@ -96,16 +96,16 @@ export function UmlRel({ kind, label, from, to, owner = 'l', dir = 'r', w = 92, 
   return (
     <motion.div {...pop(i, reduce)} className="flex-shrink-0">
       <svg viewBox={`0 0 ${w} 60`} width={w} height={60} aria-hidden>
-        <line x1={4} y1={y} x2={w - 4} y2={y} stroke="rgba(255,255,255,0.5)" strokeWidth={1.4} />
+        <line x1={4} y1={y} x2={w - 4} y2={y} stroke={pres().strokeSoft} strokeWidth={1.4} />
         {kind === 'composition' && (owner === 'l'
-          ? <polygon points={`2,${y} 11,${y - 5} 20,${y} 11,${y + 5}`} fill="#fff" opacity={0.85} />
-          : <polygon points={`${w - 2},${y} ${w - 11},${y - 5} ${w - 20},${y} ${w - 11},${y + 5}`} fill="#fff" opacity={0.85} />)}
+          ? <polygon points={`2,${y} 11,${y - 5} 20,${y} 11,${y + 5}`} fill={pres().stroke} opacity={0.85} />
+          : <polygon points={`${w - 2},${y} ${w - 11},${y - 5} ${w - 20},${y} ${w - 11},${y + 5}`} fill={pres().stroke} opacity={0.85} />)}
         {kind === 'association' && (dir === 'r'
-          ? <polyline points={`${w - 13},${y - 5} ${w - 4},${y} ${w - 13},${y + 5}`} fill="none" stroke="rgba(255,255,255,0.85)" strokeWidth={1.4} />
-          : <polyline points={`13,${y - 5} 4,${y} 13,${y + 5}`} fill="none" stroke="rgba(255,255,255,0.85)" strokeWidth={1.4} />)}
-        {from && <text x={7} y={y - 8} fontSize={9.5} fill="rgba(255,255,255,0.55)" fontFamily="ui-monospace, monospace">{from}</text>}
-        {to && <text x={w - 7} y={y - 8} textAnchor="end" fontSize={9.5} fill="rgba(255,255,255,0.55)" fontFamily="ui-monospace, monospace">{to}</text>}
-        {label && <text x={w / 2} y={y + 17} textAnchor="middle" fontSize={9.5} fill="rgba(255,255,255,0.5)">{label}</text>}
+          ? <polyline points={`${w - 13},${y - 5} ${w - 4},${y} ${w - 13},${y + 5}`} fill="none" stroke={pres().stroke} strokeWidth={1.4} />
+          : <polyline points={`13,${y - 5} 4,${y} 13,${y + 5}`} fill="none" stroke={pres().stroke} strokeWidth={1.4} />)}
+        {from && <text x={7} y={y - 8} fontSize={9.5} fill={pres().fgFaint} fontFamily="ui-monospace, monospace">{from}</text>}
+        {to && <text x={w - 7} y={y - 8} textAnchor="end" fontSize={9.5} fill={pres().fgFaint} fontFamily="ui-monospace, monospace">{to}</text>}
+        {label && <text x={w / 2} y={y + 17} textAnchor="middle" fontSize={9.5} fill={pres().fgFaint}>{label}</text>}
       </svg>
     </motion.div>
   )
@@ -134,12 +134,12 @@ export function UmlBuchungsmodell() {
               emphasized={'emphasized' in s ? s.emphasized : undefined}
               highlight={'emphasized' in s ? ['status'] : []}
             />
-            <span className="text-[10.5px] leading-snug text-center px-1" style={{ color: 'rgba(255,255,255,0.6)' }}>{s.rolle}</span>
+            <span className="text-[10.5px] leading-snug text-center px-1" style={{ color: pres().fgSoft }}>{s.rolle}</span>
           </div>
           {'rel' in s && (
             <motion.div {...pop(i, reduce, 0.25)} className="flex flex-col items-center flex-shrink-0" style={{ paddingTop: 28 }}>
-              <span className="text-[9px] font-mono whitespace-nowrap mb-0.5" style={{ color: 'rgba(255,255,255,0.42)' }}>{s.rel}</span>
-              <span className="text-lg leading-none" style={{ color: 'rgba(255,255,255,0.45)' }}>→</span>
+              <span className="text-[9px] font-mono whitespace-nowrap mb-0.5" style={{ color: pres().fgFaint }}>{s.rel}</span>
+              <span className="text-lg leading-none" style={{ color: pres().fgFaint }}>→</span>
             </motion.div>
           )}
         </Fragment>
@@ -235,14 +235,14 @@ export function UmlVererbung() {
       <svg viewBox={`0 0 ${W} 44`} className="w-full h-auto" aria-hidden>
         <motion.polygon
           points={`${W / 2},2 ${W / 2 - 8},14 ${W / 2 + 8},14`}
-          fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth={1.4}
+          fill="none" stroke={pres().stroke} strokeWidth={1.4}
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.25 }}
         />
         {rollen.map((r, i) => (
           <motion.path
             key={r} {...draw(i, reduce, 0.3)}
             d={`M ${W / 2} 14 C ${W / 2} 30, ${childX(i)} 24, ${childX(i)} 42`}
-            fill="none" stroke="rgba(255,255,255,0.35)" strokeWidth={1.1}
+            fill="none" stroke={pres().lineStrong} strokeWidth={1.1}
           />
         ))}
       </svg>
@@ -251,7 +251,7 @@ export function UmlVererbung() {
           <motion.span
             key={r} {...pop(2 + i, reduce)}
             className="text-[10.5px] font-mono font-semibold px-2 py-1.5 rounded-lg whitespace-nowrap"
-            style={{ background: `${UML_GROUP_COLOR.domain}22`, border: `1px solid ${bright(UML_GROUP_COLOR.domain)}55`, color: 'rgba(255,255,255,0.85)' }}
+            style={{ background: `${UML_GROUP_COLOR.domain}22`, border: `1px solid ${bright(UML_GROUP_COLOR.domain)}55`, color: pres().fg }}
           >
             {r}
           </motion.span>
@@ -283,15 +283,15 @@ export function UmlServices() {
               <motion.path
                 {...draw(i, reduce, 0.35)}
                 d={`M 4 120 C 40 120, 56 ${y2}, 86 ${y2}`}
-                fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth={1.3} strokeDasharray="6 5"
+                fill="none" stroke={pres().strokeSoft} strokeWidth={1.3} strokeDasharray="6 5"
               />
               <motion.g {...fadeIn(i, reduce, 0.35)}>
-                <polyline points={`${86 - 9},${y2 - 5} ${86 + 1},${y2} ${86 - 9},${y2 + 5}`} fill="none" stroke="rgba(255,255,255,0.8)" strokeWidth={1.3} />
+                <polyline points={`${86 - 9},${y2 - 5} ${86 + 1},${y2} ${86 - 9},${y2 + 5}`} fill="none" stroke={pres().stroke} strokeWidth={1.3} />
               </motion.g>
             </g>
           )
         })}
-        <text x={30} y={110} fontSize={9.5} fill="rgba(255,255,255,0.45)">⇢ nutzt</text>
+        <text x={30} y={110} fontSize={9.5} fill={pres().fgFaint}>⇢ nutzt</text>
       </motion.svg>
       <div className="flex flex-col gap-2.5">
         <UmlBox i={2} id="VorstellungSitz" width={192} attrs={['status']} />
@@ -318,8 +318,8 @@ export function UmlGruppen() {
             style={{ background: `${color}1c`, border: `1px solid ${color}66`, minWidth: 132 }}
           >
             <div className="text-[34px] font-bold leading-none" style={{ color: bright(color), fontFamily: 'var(--font-display)' }}>{cs.length}</div>
-            <div className="text-[11px] font-semibold mt-1.5" style={{ color: 'rgba(255,255,255,0.85)' }}>{g.label}</div>
-            <div className="text-[10px] mt-0.5" style={{ color: 'rgba(255,255,255,0.45)' }}>{impl} implementiert</div>
+            <div className="text-[11px] font-semibold mt-1.5" style={{ color: pres().fg }}>{g.label}</div>
+            <div className="text-[10px] mt-0.5" style={{ color: pres().fgFaint }}>{impl} implementiert</div>
           </motion.div>
         )
       })}
@@ -334,7 +334,7 @@ export function ImplSplit({ extras = [] }: { extras?: string[] }) {
   const impl = uml.classes.filter((c) => c.implementedInPrototype).length
   return (
     <div className="w-full" style={{ maxWidth: 660 }}>
-      <div className="flex h-14 rounded-xl overflow-hidden" style={{ border: '1px solid rgba(255,255,255,0.16)' }}>
+      <div className="flex h-14 rounded-xl overflow-hidden" style={{ border: `1px solid ${pres().line}` }}>
         <motion.div
           initial={reduce ? { opacity: 0 } : { width: '0%' }}
           animate={reduce ? { opacity: 1 } : { width: `${(impl / total) * 100}%` }}
@@ -343,19 +343,19 @@ export function ImplSplit({ extras = [] }: { extras?: string[] }) {
           style={{ background: '#437a22a8' }}
         >
           <span className="text-white font-bold text-xl">{impl}</span>
-          <span className="text-xs font-medium whitespace-nowrap" style={{ color: 'rgba(255,255,255,0.8)' }}>implementiert</span>
+          <span className="text-xs font-medium whitespace-nowrap" style={{ color: 'rgba(255,255,255,0.92)' }}>implementiert</span>
         </motion.div>
-        <div className="flex-1 flex items-center justify-center gap-2" style={{ background: 'rgba(255,255,255,0.07)' }}>
-          <span className="font-bold text-xl" style={{ color: 'rgba(255,255,255,0.85)' }}>{total - impl}</span>
-          <span className="text-xs font-medium whitespace-nowrap" style={{ color: 'rgba(255,255,255,0.55)' }}>Design-only</span>
+        <div className="flex-1 flex items-center justify-center gap-2" style={{ background: pres().chipStrong }}>
+          <span className="font-bold text-xl" style={{ color: pres().fg }}>{total - impl}</span>
+          <span className="text-xs font-medium whitespace-nowrap" style={{ color: pres().fgFaint }}>Design-only</span>
         </div>
       </div>
       <motion.div {...pop(2, reduce)} className="mt-3 flex justify-center gap-2 flex-wrap">
-        <span className="text-[11px] px-2.5 py-1 rounded-full font-medium" style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.7)' }}>
+        <span className="text-[11px] px-2.5 py-1 rounded-full font-medium" style={{ background: pres().chipStrong, color: pres().fgSoft }}>
           zusammen {total} UML-Klassen
         </span>
         {extras.map((e) => (
-          <span key={e} className="text-[11px] px-2.5 py-1 rounded-full font-medium" style={{ background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.7)' }}>{e}</span>
+          <span key={e} className="text-[11px] px-2.5 py-1 rounded-full font-medium" style={{ background: pres().chipStrong, color: pres().fgSoft }}>{e}</span>
         ))}
       </motion.div>
     </div>
@@ -372,12 +372,12 @@ export function EnumAbgleich() {
   return (
     <div className="flex items-center justify-center gap-5 md:gap-8 flex-wrap">
       <div className="flex flex-col items-center gap-2">
-        <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.45)' }}>Enum im Klassendiagramm</span>
+        <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: pres().fgFaint }}>Enum im Klassendiagramm</span>
         <UmlBox i={0} id="Sitzstatus" width={200} attrs={Object.keys(SITZ_FARBEN)} />
       </div>
-      <motion.div {...pop(1, reduce)} className="text-3xl font-bold" style={{ color: 'rgba(255,255,255,0.5)' }}>≙</motion.div>
+      <motion.div {...pop(1, reduce)} className="text-3xl font-bold" style={{ color: pres().fgFaint }}>≙</motion.div>
       <div className="flex flex-col items-center gap-2">
-        <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.45)' }}>Zustände im Automaten</span>
+        <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: pres().fgFaint }}>Zustände im Automaten</span>
         <div className="flex flex-col gap-1.5">
           {Object.entries(SITZ_FARBEN).map(([s, c], i) => (
             <motion.span

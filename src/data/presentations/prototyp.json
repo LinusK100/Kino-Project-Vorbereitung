@@ -1,0 +1,17 @@
+{
+  "steps": [
+    {
+      "id": "teilmenge",
+      "title": "Vom Modell zur App",
+      "body": "Der Prototyp setzt den Kern des Modells klickbar um; die übrigen Rollen sind bewusst als Roadmap modelliert, nicht vergessen. Das Modell beschreibt das ganze Produkt — der Prototyp seinen Kern.",
+      "visual": { "id": "rollenLive" },
+      "kernsatz": "Modell ⊇ Prototyp: Was noch nicht gebaut ist, ist im Klassendiagramm bereits verortet."
+    },
+    {
+      "id": "demo",
+      "title": "Live-Demo",
+      "body": "Buchen im Sitzplan, verkaufen an der Kasse, steuern im Manager-Cockpit, scannen am Einlass — die echte App läuft direkt im Browser, mit Mock-API.",
+      "visual": { "id": "liveDemo" }
+    }
+  ]
+}
