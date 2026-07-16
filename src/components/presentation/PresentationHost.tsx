@@ -118,8 +118,17 @@ function CinemaMode() {
         />
       )}
 
-      {/* Kopfzeile */}
-      <div className="relative flex items-center justify-between px-5 py-3">
+      {/* Kopfzeile: farblich abgesetzt in der Abschnittsfarbe */}
+      <div
+        className="relative flex items-center justify-between px-5 py-2.5"
+        style={{
+          background: light
+            ? `linear-gradient(180deg, ${meta.accent}16 0%, ${meta.accent}0a 100%)`
+            : 'rgba(255,255,255,0.05)',
+          borderBottom: `1px solid ${light ? `${meta.accent}2e` : 'rgba(255,255,255,0.1)'}`,
+          transition: 'background 0.4s, border-color 0.4s',
+        }}
+      >
         <div className="flex items-center gap-2.5 min-w-0 text-sm" style={{ color: P.fgFaint }}>
           <PresentationIcon size={16} />
           <span className="text-xs font-bold uppercase tracking-[0.18em]">Präsentation</span>
@@ -149,32 +158,30 @@ function CinemaMode() {
         </div>
       </div>
 
-      {/* Folie — nutzt fast die ganze Fläche (Smart Board) */}
-      <div className="relative flex-1 min-h-0 px-6 md:px-12 pt-1 pb-2">
-        <div className="w-[min(1680px,97vw)] mx-auto h-full">
+      {/* Folie — nutzt fast die ganze Fläche (Smart Board), mit Luft zur Leiste unten */}
+      <div className="relative flex-1 min-h-0 px-8 md:px-14 pt-5 pb-7">
+        <div className="w-[min(1640px,96vw)] mx-auto h-full">
           <AnimatePresence mode="wait">
             <SlideView key={`${step.id}-${presTheme}`} step={step} />
           </AnimatePresence>
         </div>
       </div>
 
-      {/* Abschnitts-Timeline + Steuerung */}
-      <div className="relative flex flex-col items-center gap-3 pb-4 px-6">
+      {/* Untere Leiste: Zurück links, Timeline mittig, Weiter rechts */}
+      <div className="relative flex items-center gap-4 md:gap-6 px-6 md:px-10 pb-5 pt-1">
+        <CtrlBtn onClick={() => go(index - 1)} disabled={index === 0} label="Zurück" light={light}>
+          <ChevronLeft size={19} />
+        </CtrlBtn>
         <Timeline deck={deck} index={index} onJump={go} light={light} />
-
-        <div className="flex items-center gap-2.5">
-          <CtrlBtn onClick={() => go(index - 1)} disabled={index === 0} label="Zurück" light={light}>
-            <ChevronLeft size={19} />
-          </CtrlBtn>
-          <button
-            onClick={() => { if (atEnd) close(); else go(index + 1) }}
-            className="inline-flex items-center gap-2 px-5 py-2 rounded-full text-white text-sm font-semibold transition-transform hover:-translate-y-0.5"
-            style={{ background: meta.accent, boxShadow: `0 4px 18px ${meta.accent}55` }}
-          >
-            {atEnd ? <Check size={16} /> : <ChevronRight size={16} />}
-            {atEnd ? 'Fertig' : 'Weiter'}
-          </button>
-        </div>
+        <button
+          onClick={() => { if (atEnd) close(); else go(index + 1) }}
+          title={atEnd ? 'Präsentation beenden' : 'Nächste Folie (→)'}
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-white text-sm font-semibold transition-transform hover:-translate-y-0.5 flex-shrink-0"
+          style={{ background: meta.accent, boxShadow: `0 4px 16px ${meta.accent}50` }}
+        >
+          {atEnd ? <Check size={16} /> : <ChevronRight size={16} />}
+          {atEnd ? 'Fertig' : 'Weiter'}
+        </button>
       </div>
     </div>,
     document.body,
@@ -201,7 +208,7 @@ export function Timeline({ deck, index, onJump, light }: {
 
   const single = groups.length === 1
   return (
-    <div className="flex items-end gap-2.5 w-[min(1100px,95vw)]" role="tablist" aria-label="Abschnitte der Präsentation">
+    <div className="flex items-end gap-2.5 flex-1 min-w-0" role="tablist" aria-label="Abschnitte der Präsentation">
       {groups.map((g) => {
         const meta = SECTION_META[g.abschnitt] ?? SECTION_META.start
         const active = index >= g.start && index < g.start + g.count

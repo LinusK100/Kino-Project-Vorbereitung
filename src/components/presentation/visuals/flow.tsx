@@ -391,9 +391,9 @@ export function ZahlungZyklus() {
 
 // ── Die weiteren Automaten in Kürze (Gesamt-Präsentation): erwähnt, nicht durchgekaut ──
 const AUTOMAT_KURZ: [string, string][] = [
-  ['ticket', 'Ein Anfang, drei Enden — eingelöst, storniert oder abgelaufen.'],
-  ['buchung', 'Hält alles zusammen — bestätigt erst mit erfolgreicher Zahlung.'],
-  ['zahlung', 'Entscheidet den Rest — und erst ein Storno macht daraus ERSTATTET.'],
+  ['ticket', 'Ein Anfang, drei Enden: eingelöst, storniert oder abgelaufen.'],
+  ['buchung', 'Hält alles zusammen. Bestätigt erst mit erfolgreicher Zahlung.'],
+  ['zahlung', 'Entscheidet den Rest. Erst ein Storno macht daraus ERSTATTET.'],
 ]
 
 export function AutomatenKurz() {

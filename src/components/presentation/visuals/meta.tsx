@@ -35,12 +35,12 @@ export function AblaufFlow({ delayBase = 0 }: { delayBase?: number }) {
 // ── Werkzeuge als Chips ──
 const WERKZEUGE = ['Git & GitHub', 'npm · Vite · TypeScript', 'Playwright + Chrome', 'Node-Skripte', 'GitHub REST API', 'Claude Code']
 
-export function WerkzeugChips({ delayBase = 0 }: { delayBase?: number }) {
+export function WerkzeugChips({ delayBase = 0, items = WERKZEUGE }: { delayBase?: number; items?: string[] }) {
   const reduce = useReducedMotion()
   const P = pres()
   return (
     <div className="flex items-center justify-center flex-wrap gap-2" style={{ maxWidth: 680 }}>
-      {WERKZEUGE.map((w, i) => (
+      {items.map((w, i) => (
         <motion.span
           key={w}
           {...pop(delayBase + i, reduce)}
@@ -54,7 +54,9 @@ export function WerkzeugChips({ delayBase = 0 }: { delayBase?: number }) {
   )
 }
 
-// ── Ablauf + Werkzeuge auf einer Folie (Gesamt-Präsentation, Projekt-Einordnung) ──
+// ── Ablauf + Werkzeuge auf einer Folie (Gesamt-Präsentation, Projekt-Einordnung).
+// Ohne den Claude-Code-Chip: Der Vortrag steht für sich; die Werkzeug-Liste
+// mit KI-Hinweis bleibt im Arbeitsweise-Abschnitt der Website. ──
 export function ArbeitsweiseKompakt() {
   const P = pres()
   return (
@@ -63,7 +65,7 @@ export function ArbeitsweiseKompakt() {
       <div className="text-[10px] font-bold uppercase tracking-[0.22em]" style={{ color: P.fgFaint }}>
         Werkzeuge
       </div>
-      <WerkzeugChips delayBase={5} />
+      <WerkzeugChips delayBase={5} items={WERKZEUGE.filter((w) => w !== 'Claude Code')} />
     </div>
   )
 }

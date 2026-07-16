@@ -390,23 +390,22 @@ export function Fundament() {
   const P = pres()
   const live = prototype.rollen.filter((r) => r.status === 'implementiert').length
   const gesamtRollen = prototype.rollen.length
-  const umlImpl = uml.classes.filter((c) => c.implementedInPrototype).length
   const punkte = [
     {
       c: '#006494', t: 'Daten statt Dokumente',
-      s: `Alle ${personas.erweitert.length} Personas, ${stories.erweitert.length} Stories, ${uml.classes.length} Klassen und die Automaten liegen als JSON vor — dieselbe Basis kann später Datenbankschema, Seed-Daten und Testfälle der echten Implementierung speisen.`,
+      s: `${personas.erweitert.length} Personas, ${stories.erweitert.length} Stories, ${uml.classes.length} Klassen als JSON. Daraus entstehen später Schema, Seed-Daten und Testfälle.`,
     },
     {
       c: '#01696f', t: 'Ein roter Faden',
-      s: 'U47, der Sitz-Hold, führt von der User Story über das Sequenzdiagramm bis zum Sitz-Automaten. Jede Anforderung kennt Persona und Release — beim Weiterbau ist immer klar, warum es etwas gibt.',
+      s: 'U47 führt von der Story über die Sequenz bis zum Automaten. Jede Anforderung kennt Persona und Release.',
     },
     {
       c: '#7a39bb', t: 'Keine zwei Wahrheiten',
-      s: 'Status-Enums und Zustandsautomaten sind wertgleich, die Sequenzen rufen exakt die Operationen des Klassenmodells auf — die Implementierung kann dem Modell direkt folgen, ohne Interpretation.',
+      s: 'Enums und Automaten sind wertgleich. Die Implementierung kann dem Modell direkt folgen.',
     },
     {
       c: '#437a22', t: 'Bewiesen und kartiert',
-      s: `${live} von ${gesamtRollen} Rollen und ${umlImpl} von ${uml.classes.length} Klassen laufen klickbar im Prototyp. Der Rest ist kein offenes Ende: Er ist im Klassendiagramm und in den Release-Schnitten der Story Map bereits verortet.`,
+      s: `${live} von ${gesamtRollen} Rollen laufen im Prototyp. Der Rest ist im Modell bereits verortet.`,
     },
   ]
   return (

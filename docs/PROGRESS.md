@@ -389,3 +389,13 @@
   („ihren Kern zeigt der Prototyp"). PDF neu exportiert. Vortrags-Skript
   (29 Folien, Kernbotschaft + Stichpunkte + Übergänge + Faktenprüfungs-
   Anhang) liegt als MD+PDF in ~/Downloads (nicht Teil des Repos).
+- 2026-07-17 (2): Folien-Feinschliff nach Owner-Feedback. (1) PPT-nähere
+  Anatomie: farbige Subline unter dem Titel, Stichpunkte links neben dem
+  Visual (SlideView zweispaltig), kürzere Titel, Zoom-Deckel 1.22 statt 1.6
+  (gleichmäßige Größen). (2) Kopfleiste farblich abgesetzt (Abschnittsfarbe),
+  Luft zwischen Inhalt und unterer Leiste, Zurück/Weiter links/rechts neben
+  der Timeline. (3) Alle 29 Folientexte neu: kurze Sublines + Stichpunkte,
+  keine Gedankenstriche; Fazit entschlackt; KI-Werkzeug-Hinweis von der
+  Vortragsfolie genommen (bleibt im Arbeitsweise-Abschnitt der Website).
+  (4) Skript um Rückfragen-Vorbereitung je Folie erweitert (MD+PDF in
+  ~/Downloads). PDF neu exportiert. Lint 0, Playwright 25/25, 0 Fehler.

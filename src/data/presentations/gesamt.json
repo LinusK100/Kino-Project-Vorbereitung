@@ -5,192 +5,287 @@
       "art": "titel",
       "id": "titel",
       "title": "CineTicket",
-      "body": "Ein Kino-Ticketsystem — von der Anforderungsanalyse über die UML-Modelle bis zum klickbaren Prototyp."
+      "body": "Ein Kino-Ticketsystem. Von der Anforderungsanalyse über die UML-Modelle bis zum klickbaren Prototyp."
     },
     {
       "abschnitt": "start",
       "id": "projekt-quelle",
       "title": "So ist das Projekt gebaut",
-      "body": "Alle Inhalte — Personas, Stories, UML-Klassen, Zustände — liegen als strukturierte JSON-Dateien vor. Die Website rendert ihre Diagramme daraus live als SVG; Inhalt und Darstellung können nicht auseinanderlaufen.",
-      "visual": {
-        "id": "jsonZuSvg"
-      },
+      "body": "Alle Inhalte sind strukturierte Daten",
+      "points": [
+        "Personas, Stories, UML und Zustände liegen als JSON-Dateien vor",
+        "Die Diagramme werden daraus live als SVG gerendert",
+        "Inhalt und Darstellung können nicht auseinanderlaufen"
+      ],
+      "visual": { "id": "jsonZuSvg" },
       "kernsatz": "Zwei Detailgrade auf der Website: Einfach ist immer eine echte Teilmenge von Erweitert."
     },
     {
       "abschnitt": "start",
       "id": "projekt-ablauf",
       "title": "So ist es entstanden",
-      "body": "Jede Änderung folgt demselben Weg: Regeln lesen, gezielt ändern, real testen, festhalten, deployen. Umgesetzt KI-gestützt mit Claude Code — veröffentlicht wird nur, was geprüft ist.",
-      "visual": {
-        "id": "arbeitsweiseKompakt"
-      },
-      "kernsatz": "Nichts geht ungeprüft live — Lint, Build und ein echter Browser-Test sichern jeden Stand."
+      "body": "Fester Ablauf, Standard-Werkzeuge",
+      "points": [
+        "Jede Änderung: Regeln lesen, ändern, prüfen, festhalten, deployen",
+        "Playwright testet die echte Seite im Browser",
+        "Node-Skripte prüfen die Datenkonsistenz"
+      ],
+      "visual": { "id": "arbeitsweiseKompakt" },
+      "kernsatz": "Nichts geht ungeprüft live: Lint, Build und Browser-Test sichern jeden Stand."
     },
     {
       "abschnitt": "start",
       "id": "agenda",
       "title": "Der Weg: drei Stationen",
-      "body": "Aus den Anforderungen entstehen die Modelle, aus den Modellen der Prototyp — jede Station baut auf der vorigen auf. Ideen über den MVP hinaus schließen den Bogen.",
-      "visual": {
-        "id": "dreiStationen"
-      }
+      "body": "Jede Station baut auf der vorigen auf. Ideen über den MVP hinaus schließen den Bogen.",
+      "visual": { "id": "dreiStationen" }
     },
     {
       "abschnitt": "personas",
       "ref": "personas.seiten",
-      "kernsatz": "Jede User Story gehört später zu genau einer Persona."
+      "body": "Eine Rolle draußen, drei drinnen",
+      "points": [
+        "Der Endkunde bucht Tickets, mobil oder im Web",
+        "Im Betrieb: Monika an der Kasse, Thomas als Manager, Kevin am Einlass",
+        "Verschiedene Ziele ergeben verschiedene Anforderungen"
+      ],
+      "kernsatz": "Jede User Story gehört zu genau einer Persona."
     },
     {
       "abschnitt": "personas",
-      "ref": "personas.kundschaft"
+      "ref": "personas.kundschaft",
+      "body": "Schnell buchen, den Lieblingsplatz sichern",
+      "points": [
+        "Frustrationen: lange Ladezeiten, Gruppen-Tickets nur einzeln buchbar",
+        "Daraus entstehen der Buchungs-Wizard und der Sitz-Hold"
+      ]
     },
     {
       "abschnitt": "personas",
       "ref": "personas.betrieb",
-      "kernsatz": "Im Vollausbau werden aus den Rollen konkrete Profile — von der Stammkundin bis zur Familienmutter."
+      "body": "An der Kasse zählt Tempo",
+      "points": [
+        "Monika will schnell und fehlerfrei verkaufen",
+        "Frustration: langsame Systeme im Stoßbetrieb",
+        "Daraus entsteht der Schnellverkauf mit Tastatur-Shortcuts"
+      ],
+      "kernsatz": "Im Vollausbau werden aus den Rollen konkrete Profile, von der Stammkundin bis zur Familienmutter."
     },
     {
       "abschnitt": "user-stories",
-      "ref": "user-stories.intro"
+      "ref": "user-stories.intro",
+      "body": "Wer braucht was, und wozu?",
+      "points": [
+        "Als Persona möchte ich Ziel, damit Nutzen",
+        "Akzeptanzkriterien machen testbar, wann eine Story fertig ist"
+      ]
     },
     {
       "abschnitt": "user-stories",
-      "ref": "user-stories.kern"
+      "ref": "user-stories.kern",
+      "body": "U47 verhindert Doppelbuchungen",
+      "points": [
+        "Beim Checkout wird der Platz verbindlich reserviert",
+        "Priorität hoch, eingeplant für Release 1",
+        "Taucht wieder auf: im Sequenzdiagramm und im Zustandsautomaten"
+      ]
     },
     {
       "abschnitt": "user-stories",
       "ref": "user-stories.plan",
-      "kernsatz": "Jede Story kennt ihre Persona, ihre Aktivität und ihr Release — nichts hängt in der Luft."
+      "body": "Priorität und Release ergeben den Bauplan",
+      "points": [
+        "Jede Story trägt eine MoSCoW-Priorität und ein Release",
+        "Release 1 ist der MVP",
+        "Spätere Releases erweitern dort, wo es Wert stiftet"
+      ],
+      "kernsatz": "Jede Story kennt Persona, Aktivität und Release. Nichts hängt in der Luft."
     },
     {
       "abschnitt": "story-map",
       "ref": "story-map.backbone",
-      "body": "Die Story Map ordnet alle Stories zweidimensional: waagerecht die Nutzerreise, senkrecht die Auslieferung in Releases. Das Rückgrat bilden die Aktivitäten — vom Ticketkauf über Sitzplan und Einlass bis zur Verwaltung."
+      "body": "Waagerecht die Nutzerreise, senkrecht die Releases",
+      "points": [
+        "Das Rückgrat: Aktivitäten vom Ticketkauf bis zur Verwaltung",
+        "Der Vollausbau ergänzt Gastro, Facility und Multi-Site"
+      ]
     },
     {
       "abschnitt": "story-map",
       "ref": "story-map.releases",
-      "kernsatz": "Auf der Website ist die Karte interaktiv — jedes Release-Band lässt sich hervorheben, jede Karte öffnet ihre Story."
+      "body": "Release 1: die schmale, lauffähige Scheibe",
+      "points": [
+        "Kern-Aktivitäten: kaufen, Sitz wählen, einlösen, verwalten",
+        "Suche, Gastro, Facility und Marke folgen bewusst später",
+        "Erst das Nötige ganz, statt überall ein bisschen"
+      ],
+      "kernsatz": "Auf der Website ist die Karte interaktiv: Bänder hervorheben, jede Karte öffnet ihre Story."
     },
     {
       "abschnitt": "klassendiagramm",
-      "ref": "klassendiagramm.buchungsmodell"
+      "ref": "klassendiagramm.buchungsmodell",
+      "body": "Vier Klassen, vier klare Aufgaben",
+      "points": [
+        "Die Buchung ist der Kauf und enthält je Platz ein Ticket",
+        "Jedes Ticket gilt für einen VorstellungSitz",
+        "Der physische Sitzplatz im Saal bleibt unberührt"
+      ]
     },
     {
       "abschnitt": "klassendiagramm",
-      "ref": "klassendiagramm.assoc"
+      "ref": "klassendiagramm.assoc",
+      "body": "Eine Assoziationsklasse trennt Sitz und Status",
+      "points": [
+        "Ein Sitzplatz existiert dauerhaft, sein Status wechselt je Vorstellung",
+        "reservieren(), belegen() und freigeben() setzen den Hold durch",
+        "reserviertBis steuert später den Timeout"
+      ]
     },
     {
       "abschnitt": "klassendiagramm",
       "ref": "klassendiagramm.ops",
-      "body": "Statusändernde Operationen sitzen am Objekt, dessen Zustand sie ändern: Zahlung.verarbeiten(), Buchung.bestätigen(), Ticket.einlösen(). Buchung ist nicht der BuchungService.",
-      "kernsatz": "«control» steuert, «entity» weiß — der BuchungService orchestriert nur und hält selbst keine Daten."
+      "body": "Objekte wissen, der Service steuert",
+      "points": [
+        "Zahlung.verarbeiten(), Buchung.bestätigen(), Ticket.einlösen()",
+        "Der BuchungService ruft nur auf und hält keine Daten",
+        "Buchung ist nicht der BuchungService"
+      ],
+      "kernsatz": "«control» steuert, «entity» weiß."
     },
     {
       "abschnitt": "klassendiagramm",
-      "ref": "klassendiagramm.kern"
+      "ref": "klassendiagramm.kern",
+      "body": "Der Teil existiert nicht ohne das Ganze",
+      "points": [
+        "Eine Kette umfasst Kinos, ein Kino besitzt Säle, ein Saal seine Sitze",
+        "Die gefüllte Raute steht für Komposition"
+      ]
     },
     {
       "abschnitt": "klassendiagramm",
-      "ref": "klassendiagramm.vererbung"
+      "ref": "klassendiagramm.vererbung",
+      "body": "Alle Rollen erben von Nutzer",
+      "points": [
+        "Vom Kunden bis zum Administrator",
+        "Rechte entscheidet das Enum Nutzerrolle",
+        "Geprüft an einer Stelle: darf(aktion)"
+      ]
     },
     {
       "abschnitt": "sequenzdiagramme",
-      "ref": "sequenzdiagramme.intro"
+      "ref": "sequenzdiagramme.intro",
+      "body": "Fokussierte Abläufe statt eines überladenen Diagramms",
+      "points": [
+        "Online-Buchung, Kasse, Storno und Einlass",
+        "Die nächsten Folien zoomen in die Online-Buchung"
+      ]
     },
     {
       "abschnitt": "sequenzdiagramme",
       "ref": "sequenzdiagramme.hold",
-      "kernsatz": "Kommt reservieren() zu spät, antwortet der Sitz mit false — der Kunde landet in der Sitzwahl, nie in einer Doppelbuchung."
+      "body": "Beim Checkout wird der Sitz serverseitig reserviert",
+      "points": [
+        "Der BuchungService ruft reservieren() am VorstellungSitz auf",
+        "Der Status wechselt auf RESERVIERT, parallele Käufer sind blockiert",
+        "Das Badge zeigt den Statuswechsel aus den Daten"
+      ],
+      "kernsatz": "Kommt reservieren() zu spät, antwortet der Sitz mit false. Der Kunde landet in der Sitzwahl, nie in einer Doppelbuchung."
     },
     {
       "abschnitt": "sequenzdiagramme",
       "ref": "sequenzdiagramme.zahlung",
+      "body": "Erst die Zahlung macht aus dem Hold einen Kauf",
+      "points": [
+        "Zahlung erfolgreich, Sitz belegt, Buchung bestätigt, Ticket erzeugt",
+        "Vier Statuswechsel in fester Reihenfolge",
+        "Das alt-Fragment zeigt den bedingten Zweig"
+      ],
       "visual": {
         "id": "seqAusschnitt",
         "props": {
           "flow": "online-buchung",
-          "msgSeqs": [
-            "12",
-            "13a",
-            "14",
-            "15",
-            "16"
-          ],
-          "frame": {
-            "label": "alt",
-            "guard": "[Zahlung erfolgreich]"
-          }
+          "msgSeqs": ["12", "13a", "14", "15", "16"],
+          "frame": { "label": "alt", "guard": "[Zahlung erfolgreich]" }
         }
       },
-      "kernsatz": "Auch der Storno läuft als eine Kette: Buchung STORNIERT, Ticket ungültig, Zahlung ERSTATTET, Sitz wieder FREI."
+      "kernsatz": "Der Storno läuft genauso als Kette: Buchung storniert, Ticket ungültig, Zahlung erstattet, Sitz wieder frei."
     },
     {
       "abschnitt": "zustandsdiagramme",
       "ref": "zustandsdiagramme.sitz",
       "title": "Der wichtigste Automat: der Sitz",
-      "body": "Ein Zustandsautomat beschreibt genau ein Objekt über die Zeit. Der wichtigste ist der Sitz je Vorstellung: auswählen ist nur lokal, reservieren() setzt den serverseitigen Hold, und erst belegen() nach erfolgreicher Zahlung macht den Platz endgültig zu."
+      "body": "Ein Automat beschreibt genau ein Objekt über die Zeit",
+      "points": [
+        "auswählen() ist nur lokal im Browser",
+        "reservieren() setzt den serverseitigen Hold",
+        "belegen() erst nach erfolgreicher Zahlung"
+      ]
     },
     {
       "abschnitt": "zustandsdiagramme",
       "ref": "zustandsdiagramme.rueckwege",
-      "kernsatz": "Jeder Automat ist wertgleich mit seinem Status-Enum im Klassendiagramm — Struktur und Verhalten widersprechen sich nie."
+      "body": "Kein Sitz bleibt für immer blockiert",
+      "points": [
+        "Hold abgelaufen oder Kauf abgebrochen: automatisch zurück auf FREI",
+        "Ein Storno gibt auch belegte Plätze frei",
+        "DEFEKT sperrt systemweit und erzeugt ein Wartungsticket"
+      ],
+      "kernsatz": "Jeder Automat ist wertgleich mit seinem Status-Enum im Klassendiagramm."
     },
     {
       "abschnitt": "zustandsdiagramme",
       "id": "weitere-automaten",
       "title": "Die weiteren Automaten in Kürze",
-      "body": "Drei weitere Objekte haben ihren eigenen Lebenszyklus — nach demselben Muster, gekoppelt über die Buchung.",
-      "visual": {
-        "id": "automatenKurz"
-      }
+      "body": "Dasselbe Muster für Ticket, Buchung und Zahlung",
+      "visual": { "id": "automatenKurz" }
     },
     {
       "abschnitt": "prototyp",
-      "ref": "prototyp.teilmenge"
+      "ref": "prototyp.teilmenge",
+      "body": "Der Kern des Modells läuft",
+      "points": [
+        "Endkunde, Kasse, Manager und Einlass sind klickbar gebaut",
+        "Die übrigen Rollen sind als Roadmap modelliert",
+        "Das Modell beschreibt das ganze Produkt"
+      ],
+      "kernsatz": "Modell ⊇ Prototyp: Was fehlt, ist im Klassendiagramm bereits verortet."
     },
     {
       "abschnitt": "prototyp",
-      "ref": "prototyp.demo"
+      "ref": "prototyp.demo",
+      "body": "Die echte App, direkt im Browser",
+      "points": [
+        "Buchen im Sitzplan, verkaufen an der Kasse",
+        "Steuern im Manager-Cockpit, scannen am Einlass",
+        "Mock-API, keine Installation nötig"
+      ]
     },
     {
       "abschnitt": "innovation",
-      "ref": "innovation.matrix"
+      "ref": "innovation.matrix",
+      "body": "Impact gegen Aufwand, Machbarkeit als Farbe"
     },
     {
       "abschnitt": "innovation",
       "id": "ideen-nah",
       "title": "Nah am MVP",
-      "body": "Drei Ideen liegen nah am bestehenden System — im Projektrahmen umsetzbar oder in Teilen machbar.",
-      "visual": {
-        "id": "ideenListe",
-        "props": {
-          "gruppe": "nah"
-        }
-      }
+      "body": "Drei Ideen docken direkt am System an",
+      "visual": { "id": "ideenListe", "props": { "gruppe": "nah" } }
     },
     {
       "abschnitt": "innovation",
       "id": "ideen-vision",
       "title": "Drei Blicke nach vorn",
-      "body": "Drei weitere Ideen sind bewusst als Konzept gedacht — recherchiert und eingeordnet, aber noch nicht eingeplant.",
-      "visual": {
-        "id": "ideenListe",
-        "props": {
-          "gruppe": "vision"
-        }
-      }
+      "body": "Bewusst als Konzept markiert, recherchiert und eingeordnet",
+      "visual": { "id": "ideenListe", "props": { "gruppe": "vision" } }
     },
     {
       "abschnitt": "abschluss",
       "id": "fazit",
-      "title": "Was uns wichtig war: weiterbauen können",
-      "body": "Diese Analyse soll nicht mit der Abgabe enden. Vier Prinzipien haben unser Vorgehen bestimmt — sie machen aus den Artefakten den Bauplan, mit dem CineTicket zum voll funktionsfähigen System wird.",
-      "visual": {
-        "id": "fundament"
-      },
-      "kernsatz": "Vielen Dank — Fragen und Diskussion."
+      "title": "Was uns wichtig war",
+      "body": "Weiterbauen können: aus der Analyse wird der Bauplan fürs echte System",
+      "visual": { "id": "fundament" },
+      "kernsatz": "Vielen Dank. Fragen und Diskussion."
     }
   ]
 }
