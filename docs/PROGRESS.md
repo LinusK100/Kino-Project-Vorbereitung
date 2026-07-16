@@ -299,3 +299,14 @@
   als Fließzeile, angelegte Dateien als kompakte Liste). Editorial und ruhig
   statt Tech-Dashboard. Verifiziert: Build/Lint grün, hell/dunkel + Tour per
   Playwright, 0 Fehler.
+- 2026-07-16: Abschnitt „Arbeitsweise" inhaltsreicher (Owner-Feedback: zu
+  schlicht, Werkzeuge schöner, Platz neben dem Ablauf nutzen, CLAUDE.md
+  erklären, Workflow detaillierter). Zweispaltige Zeile 1: links der Ablauf
+  als nummerierte Timeline mit Stichwort-Tags je Schritt (detaillierter),
+  rechts eine erklärende CLAUDE.md-Karte (Leitplanken · Befehle & CI ·
+  Deploy) — füllt den vorher leeren Platz. Werkzeuge jetzt als Icon-Raster
+  (Icon + Name + Zweck, 3 Spalten). Weitere Projekt-Dateien als kompakte
+  Drei-Spalten-Leiste. Durchgehend ein neutraler Slate-Akzent, Theme-Farben.
+  Verifiziert: Build/Lint grün, hell/dunkel deterministisch (Element-Wait,
+  0 Fehler). Hinweis: lokale/CI-Build-Hashes unterscheiden sich (macOS vs.
+  Linux) – Inhalt wird am echten Live-Chunk gegengeprüft.
