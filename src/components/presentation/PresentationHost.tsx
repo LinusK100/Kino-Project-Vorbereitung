@@ -3,18 +3,18 @@
 // beim Folienwechsel navigiert der Hintergrund still zur passenden Seite, das
 // opake Overlay bleibt stehen: eine Präsentation, nicht neun.
 // Öffnet laut Vorgabe immer hell; dunkel per Knopf im Kopf. Kein Auto-Modus.
+// Das Folien-Layout selbst (PPT-Anmutung, volle Fläche) liegt in SlideView.
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { AnimatePresence } from 'motion/react'
 import {
   Check, ChevronLeft, ChevronRight, Moon, Sun, X, Presentation as PresentationIcon,
 } from 'lucide-react'
 import { useAppStore } from '@/store/appStore'
 import { useGesamt, usePresentation, SECTION_META, type GesamtSlide } from './steps'
 import { bright, pres } from './visuals/core'
-
-const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1]
+import { SlideView } from './SlideView'
 
 export function PresentationHost() {
   const run = useAppStore((s) => s.pres)
@@ -28,7 +28,6 @@ function CinemaMode() {
   const togglePresTheme = useAppStore((s) => s.togglePresTheme)
   const setPresIndex = useAppStore((s) => s.setPresIndex)
   const closePres = useAppStore((s) => s.closePres)
-  const reduce = useReducedMotion()
   const rootRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
   const location = useLocation()
@@ -49,7 +48,6 @@ function CinemaMode() {
   const meta = SECTION_META[step?.abschnitt ?? 'start'] ?? SECTION_META.start
   const P = pres()
   const light = presTheme === 'light'
-  const acc = bright(meta.accent)
 
   const go = useCallback(
     (n: number) => setPresIndex(Math.max(0, Math.min(total - 1, n))),
@@ -94,20 +92,6 @@ function CinemaMode() {
 
   if (!step) return null
 
-  // Folien-Animation: sanftes Aufblenden mit gestaffelten Kind-Elementen
-  const slideV = reduce
-    ? { hidden: { opacity: 0 }, show: { opacity: 1, transition: { when: 'beforeChildren' as const } }, exit: { opacity: 0 } }
-    : {
-        hidden: { opacity: 0, y: 26, filter: 'blur(8px)' },
-        show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.4, ease: EASE, when: 'beforeChildren' as const, staggerChildren: 0.07, delayChildren: 0.03 } },
-        exit: { opacity: 0, y: -20, filter: 'blur(6px)', transition: { duration: 0.22, ease: 'easeIn' as const } },
-      }
-  const itemV = reduce
-    ? { hidden: { opacity: 0 }, show: { opacity: 1 } }
-    : { hidden: { opacity: 0, y: 14 }, show: { opacity: 1, y: 0, transition: { duration: 0.34, ease: EASE } } }
-
-  const titelFolie = step.art === 'titel'
-
   return createPortal(
     <div
       ref={rootRef} tabIndex={-1}
@@ -135,7 +119,7 @@ function CinemaMode() {
       )}
 
       {/* Kopfzeile */}
-      <div className="relative flex items-center justify-between px-5 py-4">
+      <div className="relative flex items-center justify-between px-5 py-3">
         <div className="flex items-center gap-2.5 min-w-0 text-sm" style={{ color: P.fgFaint }}>
           <PresentationIcon size={16} />
           <span className="text-xs font-bold uppercase tracking-[0.18em]">Präsentation</span>
@@ -165,101 +149,17 @@ function CinemaMode() {
         </div>
       </div>
 
-      {/* Folie */}
-      <div className="relative flex-1 flex items-center justify-center px-6 overflow-hidden">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`${step.id}-${presTheme}`}
-            variants={slideV}
-            initial="hidden" animate="show" exit="exit"
-            className={step.visual ? 'w-[min(1080px,96vw)] text-center' : 'w-[min(860px,94vw)] text-center'}
-            style={{ willChange: 'transform, opacity, filter' }}
-          >
-            <motion.p
-              variants={itemV}
-              className={`text-[11px] md:text-xs font-bold uppercase tracking-[0.28em] ${step.visual ? 'mb-3' : 'mb-5'}`}
-              style={{ color: acc }}
-            >
-              {titelFolie ? 'Systemanalyse und Entwurf' : `${meta.label} · ${index + 1} von ${total}`}
-            </motion.p>
-
-            <motion.h2
-              variants={itemV}
-              className={`font-bold leading-[1.12] ${step.visual ? 'mb-4' : 'mb-6'}`}
-              style={{
-                fontFamily: 'var(--font-display)',
-                color: P.fg,
-                fontSize: titelFolie
-                  ? 'clamp(3rem, 8vw, 5.2rem)'
-                  : step.visual ? 'clamp(1.65rem, 3.4vw, 2.5rem)' : 'clamp(2.1rem, 5.2vw, 3.6rem)',
-                textWrap: 'balance',
-              }}
-            >
-              {step.title}
-            </motion.h2>
-
-            {titelFolie && (
-              <motion.div variants={itemV} className="mx-auto mb-6 rounded-full" style={{ width: 110, height: 5, background: acc }} />
-            )}
-
-            {step.visual && (
-              <motion.div variants={itemV} className="flex justify-center my-5 md:my-6 overflow-x-auto">
-                {step.visual}
-              </motion.div>
-            )}
-
-            <motion.p
-              variants={itemV}
-              className="mx-auto leading-relaxed"
-              style={{
-                color: step.visual ? P.fgSoft : P.fgSoft,
-                fontSize: titelFolie
-                  ? 'clamp(1.05rem, 1.8vw, 1.3rem)'
-                  : step.visual ? 'clamp(0.9rem, 1.25vw, 1.02rem)' : 'clamp(1rem, 1.6vw, 1.22rem)',
-                maxWidth: step.visual ? 760 : 640,
-                textWrap: 'pretty',
-              }}
-            >
-              {step.body}
-            </motion.p>
-
-            {step.points && (
-              <motion.ul variants={itemV} className="mx-auto mt-7 space-y-3 text-left" style={{ maxWidth: 560 }}>
-                {step.points.map((p) => (
-                  <motion.li
-                    key={p}
-                    variants={itemV}
-                    className="flex items-start gap-3"
-                    style={{ color: P.fg, fontSize: 'clamp(0.95rem, 1.4vw, 1.08rem)' }}
-                  >
-                    <span className="mt-[0.55em] w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: acc, boxShadow: light ? undefined : `0 0 8px ${acc}` }} />
-                    {p}
-                  </motion.li>
-                ))}
-              </motion.ul>
-            )}
-
-            {/* Kernsatz-Banner (aus der PPT-Vorlage übernommen) */}
-            {step.kernsatz && (
-              <motion.div
-                variants={itemV}
-                className="mx-auto mt-6 rounded-xl px-5 py-3 text-[13px] md:text-[13.5px] font-semibold leading-snug"
-                style={{
-                  maxWidth: 760,
-                  background: light ? `${meta.accent}0e` : `${meta.accent}26`,
-                  border: `1px solid ${acc}44`,
-                  color: P.fg,
-                }}
-              >
-                {step.kernsatz}
-              </motion.div>
-            )}
-          </motion.div>
-        </AnimatePresence>
+      {/* Folie — nutzt fast die ganze Fläche (Smart Board) */}
+      <div className="relative flex-1 min-h-0 px-6 md:px-12 pt-1 pb-2">
+        <div className="w-[min(1680px,97vw)] mx-auto h-full">
+          <AnimatePresence mode="wait">
+            <SlideView key={`${step.id}-${presTheme}`} step={step} />
+          </AnimatePresence>
+        </div>
       </div>
 
       {/* Abschnitts-Timeline + Steuerung */}
-      <div className="relative flex flex-col items-center gap-3.5 pb-6 px-6">
+      <div className="relative flex flex-col items-center gap-3 pb-4 px-6">
         <Timeline deck={deck} index={index} onJump={go} light={light} />
 
         <div className="flex items-center gap-2.5">
@@ -268,17 +168,13 @@ function CinemaMode() {
           </CtrlBtn>
           <button
             onClick={() => { if (atEnd) close(); else go(index + 1) }}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-white text-sm font-semibold transition-transform hover:-translate-y-0.5"
+            className="inline-flex items-center gap-2 px-5 py-2 rounded-full text-white text-sm font-semibold transition-transform hover:-translate-y-0.5"
             style={{ background: meta.accent, boxShadow: `0 4px 18px ${meta.accent}55` }}
           >
             {atEnd ? <Check size={16} /> : <ChevronRight size={16} />}
             {atEnd ? 'Fertig' : 'Weiter'}
           </button>
         </div>
-
-        <p className="text-[11px]" style={{ color: P.fgFaint }}>
-          ← → Folien wechseln · Esc beendet
-        </p>
       </div>
     </div>,
     document.body,
@@ -305,7 +201,7 @@ export function Timeline({ deck, index, onJump, light }: {
 
   const single = groups.length === 1
   return (
-    <div className="flex items-end gap-2.5 w-[min(980px,94vw)]" role="tablist" aria-label="Abschnitte der Präsentation">
+    <div className="flex items-end gap-2.5 w-[min(1100px,95vw)]" role="tablist" aria-label="Abschnitte der Präsentation">
       {groups.map((g) => {
         const meta = SECTION_META[g.abschnitt] ?? SECTION_META.start
         const active = index >= g.start && index < g.start + g.count
@@ -356,7 +252,7 @@ function CtrlBtn({ children, onClick, disabled, label, light }: {
   return (
     <button
       onClick={onClick} disabled={disabled} aria-label={label}
-      className="p-2.5 rounded-full transition-colors disabled:opacity-25"
+      className="p-2 rounded-full transition-colors disabled:opacity-25"
       style={{
         border: `1px solid ${light ? 'rgba(18,32,54,0.25)' : 'rgba(255,255,255,0.2)'}`,
         color: light ? '#122036' : '#fff',

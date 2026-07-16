@@ -367,3 +367,15 @@
   Verifiziert: Lint 0, Build grün, Playwright 25/25 (10 Touren, Gesamt-
   Durchlauf mit URL-Wechsel an allen 9 Grenzen, Resume-Logik, Hilfe-Sheet,
   Vollbild, PDF 200), 0 Konsolenfehler.
+- 2026-07-16 (2): Folien-Redesign nach Owner-Feedback. (1) Echtes Präsentations-
+  Layout (SlideView.tsx, von Host UND Druck-Route genutzt): Titel links oben
+  mit Akzentlinie, Lead-Satz darunter, Kernsatz-Banner volle Breite unten —
+  statt zentriertem Hero-Text. (2) Volle Flächennutzung (Smart Board):
+  FitVisual misst die Naturgröße jedes Visuals und skaliert es per zoom auf
+  die verfügbare Fläche (0.55–1.6×); Folienbereich auf min(1680px, 97 vw).
+  (3) Fazit inhaltlich neu: statt generischer „Drei Kernsätze" jetzt
+  „Was uns wichtig war: weiterbauen können" mit vier konkreten Prinzipien
+  (Daten statt Dokumente, roter Faden U47, Enum≙Automat, bewiesen & kartiert;
+  Zahlen berechnet) plus Weg-Strip Anforderungen → Modell → Prototyp →
+  Release 2–3. PDF neu exportiert. Verifiziert: Lint 0, Build grün,
+  Playwright 25/25, 0 Konsolenfehler.

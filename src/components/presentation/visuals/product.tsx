@@ -382,32 +382,72 @@ export function LiveDemo() {
   )
 }
 
-// ── Abschluss: drei Kernsätze in den Stations-Farben ──
-const KERNSAETZE = [
-  { c: '#006494', t: 'Vom Bedarf zum Modell', s: 'Jede Anforderung ist als Persona, Story und Release verortet — nichts hängt in der Luft.' },
-  { c: '#7a39bb', t: 'Ein Modell ohne Widersprüche', s: 'Klassen, Sequenzen und Zustände greifen ineinander; die Status-Enums halten sie wertgleich.' },
-  { c: '#437a22', t: 'Nicht nur beschrieben — gebaut', s: 'Der MVP läuft als klickbarer Prototyp; alles Weitere ist als Roadmap modelliert.' },
-]
-
-export function Kernsaetze() {
+// ── Abschluss: unser Fundament für die volle Umsetzung ──
+// Konkret statt Floskel: was uns wichtig war und warum man aus genau diesen
+// Artefakten das echte System weiterbauen kann. Zahlen aus den Daten.
+export function Fundament() {
   const reduce = useReducedMotion()
   const P = pres()
+  const live = prototype.rollen.filter((r) => r.status === 'implementiert').length
+  const gesamtRollen = prototype.rollen.length
+  const umlImpl = uml.classes.filter((c) => c.implementedInPrototype).length
+  const punkte = [
+    {
+      c: '#006494', t: 'Daten statt Dokumente',
+      s: `Alle ${personas.erweitert.length} Personas, ${stories.erweitert.length} Stories, ${uml.classes.length} Klassen und die Automaten liegen als JSON vor — dieselbe Basis kann später Datenbankschema, Seed-Daten und Testfälle der echten Implementierung speisen.`,
+    },
+    {
+      c: '#01696f', t: 'Ein roter Faden',
+      s: 'U47, der Sitz-Hold, führt von der User Story über das Sequenzdiagramm bis zum Sitz-Automaten. Jede Anforderung kennt Persona und Release — beim Weiterbau ist immer klar, warum es etwas gibt.',
+    },
+    {
+      c: '#7a39bb', t: 'Keine zwei Wahrheiten',
+      s: 'Status-Enums und Zustandsautomaten sind wertgleich, die Sequenzen rufen exakt die Operationen des Klassenmodells auf — die Implementierung kann dem Modell direkt folgen, ohne Interpretation.',
+    },
+    {
+      c: '#437a22', t: 'Bewiesen und kartiert',
+      s: `${live} von ${gesamtRollen} Rollen und ${umlImpl} von ${uml.classes.length} Klassen laufen klickbar im Prototyp. Der Rest ist kein offenes Ende: Er ist im Klassendiagramm und in den Release-Schnitten der Story Map bereits verortet.`,
+    },
+  ]
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 w-full" style={{ maxWidth: 900 }}>
-      {KERNSAETZE.map((k, i) => (
-        <motion.div
-          key={k.t} {...pop(i * 2, reduce)}
-          className="rounded-2xl overflow-hidden text-left"
-          style={{ background: P.chip, border: `1px solid ${P.line}` }}
+    <div className="w-full flex flex-col gap-4" style={{ maxWidth: 1240 }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3.5">
+        {punkte.map((k, i) => (
+          <motion.div
+            key={k.t} {...pop(i * 2, reduce)}
+            className="rounded-2xl overflow-hidden text-left"
+            style={{ background: P.chip, border: `1px solid ${P.line}` }}
+          >
+            <div className="h-[3px]" style={{ background: bright(k.c) }} />
+            <div className="p-4">
+              <div className="text-[15px] font-bold mb-1.5" style={{ color: bright(k.c) }}>{k.t}</div>
+              <p className="text-[12.5px] leading-relaxed" style={{ color: P.fgSoft }}>{k.s}</p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+      {/* Der Weg weiter: was schon steht, und was der nächste Schritt ist */}
+      <div className="flex items-center justify-center flex-wrap gap-x-1.5 gap-y-2">
+        {['Anforderungen', 'Modell', 'Prototyp (Release 1)'].map((s, i) => (
+          <span key={s} className="inline-flex items-center gap-1.5">
+            <motion.span
+              {...pop(8 + i, reduce)}
+              className="text-[12.5px] font-semibold px-3.5 py-1.5 rounded-full"
+              style={{ background: P.chipStrong, color: P.fg, border: `1px solid ${P.line}` }}
+            >
+              {s}
+            </motion.span>
+            <motion.span {...pop(8 + i, reduce)} style={{ color: P.fgFaint }}>→</motion.span>
+          </span>
+        ))}
+        <motion.span
+          {...pop(11, reduce)}
+          className="text-[12.5px] font-bold px-3.5 py-1.5 rounded-full"
+          style={{ background: `${'#437a22'}1e`, color: bright('#437a22'), border: `1.5px dashed ${bright('#437a22')}88` }}
         >
-          <div className="h-[3px]" style={{ background: bright(k.c) }} />
-          <div className="p-4">
-            <div className="text-[26px] font-bold leading-none mb-2" style={{ color: bright(k.c), fontFamily: 'var(--font-display)' }}>{i + 1}</div>
-            <div className="text-[14px] font-bold mb-1.5" style={{ color: P.fg }}>{k.t}</div>
-            <p className="text-[12px] leading-relaxed" style={{ color: P.fgSoft }}>{k.s}</p>
-          </div>
-        </motion.div>
-      ))}
+          Release 2–3: das volle System
+        </motion.span>
+      </div>
     </div>
   )
 }

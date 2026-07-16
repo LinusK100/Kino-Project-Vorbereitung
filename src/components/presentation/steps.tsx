@@ -16,7 +16,7 @@ import type {
 } from '@/types'
 import {
   DreiStationen, JsonZuSvg, TeilmengeModi, InnovationsMatrix, IdeeVerankert,
-  IdeenListe, RollenLive, LiveDemo, Kernsaetze,
+  IdeenListe, RollenLive, LiveDemo, Fundament,
 } from './visuals/product'
 import { PersonaKern, PersonaBaum, ZieleFrustrationen, StorySchema, StoryKarte, StoryVerteilung, BackboneChips, ReleaseBaender } from './visuals/people'
 import { FlowUebersicht, SeqAusschnitt, SitzHappyPath, SitzRueckwege, TicketZyklus, BuchungZyklus, ZahlungZyklus, AutomatenKurz } from './visuals/flow'
@@ -47,7 +47,7 @@ const VISUALS: Record<string, (p: P) => ReactNode> = {
   ideenListe: (p) => <IdeenListe gruppe={(p?.gruppe as 'nah' | 'vision') ?? 'nah'} />,
   rollenLive: () => <RollenLive />,
   liveDemo: () => <LiveDemo />,
-  kernsaetze: () => <Kernsaetze />,
+  fundament: () => <Fundament />,
   personaKern: () => <PersonaKern />,
   personaBaum: () => <PersonaBaum />,
   zieleFrustrationen: (p) => <ZieleFrustrationen id={p?.id as string} />,

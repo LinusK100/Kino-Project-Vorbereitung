@@ -12,7 +12,9 @@
       "id": "projekt-quelle",
       "title": "So ist das Projekt gebaut",
       "body": "Alle Inhalte — Personas, Stories, UML-Klassen, Zustände — liegen als strukturierte JSON-Dateien vor. Die Website rendert ihre Diagramme daraus live als SVG; Inhalt und Darstellung können nicht auseinanderlaufen.",
-      "visual": { "id": "jsonZuSvg" },
+      "visual": {
+        "id": "jsonZuSvg"
+      },
       "kernsatz": "Zwei Detailgrade auf der Website: Einfach ist immer eine echte Teilmenge von Erweitert."
     },
     {
@@ -20,7 +22,9 @@
       "id": "projekt-ablauf",
       "title": "So ist es entstanden",
       "body": "Jede Änderung folgt demselben Weg: Regeln lesen, gezielt ändern, real testen, festhalten, deployen. Umgesetzt KI-gestützt mit Claude Code — veröffentlicht wird nur, was geprüft ist.",
-      "visual": { "id": "arbeitsweiseKompakt" },
+      "visual": {
+        "id": "arbeitsweiseKompakt"
+      },
       "kernsatz": "Nichts geht ungeprüft live — Lint, Build und ein echter Browser-Test sichern jeden Stand."
     },
     {
@@ -28,21 +32,32 @@
       "id": "agenda",
       "title": "Der Weg: drei Stationen",
       "body": "Aus den Anforderungen entstehen die Modelle, aus den Modellen der Prototyp — jede Station baut auf der vorigen auf. Ideen über den MVP hinaus schließen den Bogen.",
-      "visual": { "id": "dreiStationen" }
+      "visual": {
+        "id": "dreiStationen"
+      }
     },
     {
       "abschnitt": "personas",
       "ref": "personas.seiten",
       "kernsatz": "Jede User Story gehört später zu genau einer Persona."
     },
-    { "abschnitt": "personas", "ref": "personas.kundschaft" },
+    {
+      "abschnitt": "personas",
+      "ref": "personas.kundschaft"
+    },
     {
       "abschnitt": "personas",
       "ref": "personas.betrieb",
       "kernsatz": "Im Vollausbau werden aus den Rollen konkrete Profile — von der Stammkundin bis zur Familienmutter."
     },
-    { "abschnitt": "user-stories", "ref": "user-stories.intro" },
-    { "abschnitt": "user-stories", "ref": "user-stories.kern" },
+    {
+      "abschnitt": "user-stories",
+      "ref": "user-stories.intro"
+    },
+    {
+      "abschnitt": "user-stories",
+      "ref": "user-stories.kern"
+    },
     {
       "abschnitt": "user-stories",
       "ref": "user-stories.plan",
@@ -58,17 +73,32 @@
       "ref": "story-map.releases",
       "kernsatz": "Auf der Website ist die Karte interaktiv — jedes Release-Band lässt sich hervorheben, jede Karte öffnet ihre Story."
     },
-    { "abschnitt": "klassendiagramm", "ref": "klassendiagramm.buchungsmodell" },
-    { "abschnitt": "klassendiagramm", "ref": "klassendiagramm.assoc" },
+    {
+      "abschnitt": "klassendiagramm",
+      "ref": "klassendiagramm.buchungsmodell"
+    },
+    {
+      "abschnitt": "klassendiagramm",
+      "ref": "klassendiagramm.assoc"
+    },
     {
       "abschnitt": "klassendiagramm",
       "ref": "klassendiagramm.ops",
       "body": "Statusändernde Operationen sitzen am Objekt, dessen Zustand sie ändern: Zahlung.verarbeiten(), Buchung.bestätigen(), Ticket.einlösen(). Buchung ist nicht der BuchungService.",
       "kernsatz": "«control» steuert, «entity» weiß — der BuchungService orchestriert nur und hält selbst keine Daten."
     },
-    { "abschnitt": "klassendiagramm", "ref": "klassendiagramm.kern" },
-    { "abschnitt": "klassendiagramm", "ref": "klassendiagramm.vererbung" },
-    { "abschnitt": "sequenzdiagramme", "ref": "sequenzdiagramme.intro" },
+    {
+      "abschnitt": "klassendiagramm",
+      "ref": "klassendiagramm.kern"
+    },
+    {
+      "abschnitt": "klassendiagramm",
+      "ref": "klassendiagramm.vererbung"
+    },
+    {
+      "abschnitt": "sequenzdiagramme",
+      "ref": "sequenzdiagramme.intro"
+    },
     {
       "abschnitt": "sequenzdiagramme",
       "ref": "sequenzdiagramme.hold",
@@ -81,8 +111,17 @@
         "id": "seqAusschnitt",
         "props": {
           "flow": "online-buchung",
-          "msgSeqs": ["12", "13a", "14", "15", "16"],
-          "frame": { "label": "alt", "guard": "[Zahlung erfolgreich]" }
+          "msgSeqs": [
+            "12",
+            "13a",
+            "14",
+            "15",
+            "16"
+          ],
+          "frame": {
+            "label": "alt",
+            "guard": "[Zahlung erfolgreich]"
+          }
         }
       },
       "kernsatz": "Auch der Storno läuft als eine Kette: Buchung STORNIERT, Ticket ungültig, Zahlung ERSTATTET, Sitz wieder FREI."
@@ -103,7 +142,9 @@
       "id": "weitere-automaten",
       "title": "Die weiteren Automaten in Kürze",
       "body": "Drei weitere Objekte haben ihren eigenen Lebenszyklus — nach demselben Muster, gekoppelt über die Buchung.",
-      "visual": { "id": "automatenKurz" }
+      "visual": {
+        "id": "automatenKurz"
+      }
     },
     {
       "abschnitt": "prototyp",
@@ -113,27 +154,43 @@
       "abschnitt": "prototyp",
       "ref": "prototyp.demo"
     },
-    { "abschnitt": "innovation", "ref": "innovation.matrix" },
+    {
+      "abschnitt": "innovation",
+      "ref": "innovation.matrix"
+    },
     {
       "abschnitt": "innovation",
       "id": "ideen-nah",
       "title": "Nah am MVP",
       "body": "Drei Ideen liegen nah am bestehenden System — im Projektrahmen umsetzbar oder in Teilen machbar.",
-      "visual": { "id": "ideenListe", "props": { "gruppe": "nah" } }
+      "visual": {
+        "id": "ideenListe",
+        "props": {
+          "gruppe": "nah"
+        }
+      }
     },
     {
       "abschnitt": "innovation",
       "id": "ideen-vision",
       "title": "Drei Blicke nach vorn",
       "body": "Drei weitere Ideen sind bewusst als Konzept gedacht — recherchiert und eingeordnet, aber noch nicht eingeplant.",
-      "visual": { "id": "ideenListe", "props": { "gruppe": "vision" } }
+      "visual": {
+        "id": "ideenListe",
+        "props": {
+          "gruppe": "vision"
+        }
+      }
     },
     {
       "abschnitt": "abschluss",
-      "id": "kernsaetze",
-      "title": "Drei Kernsätze",
-      "body": "Vielen Dank — Fragen und Diskussion.",
-      "visual": { "id": "kernsaetze" }
+      "id": "fazit",
+      "title": "Was uns wichtig war: weiterbauen können",
+      "body": "Diese Analyse soll nicht mit der Abgabe enden. Vier Prinzipien haben unser Vorgehen bestimmt — sie machen aus den Artefakten den Bauplan, mit dem CineTicket zum voll funktionsfähigen System wird.",
+      "visual": {
+        "id": "fundament"
+      },
+      "kernsatz": "Vielen Dank — Fragen und Diskussion."
     }
   ]
 }
