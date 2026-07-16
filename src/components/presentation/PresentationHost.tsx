@@ -14,7 +14,7 @@ import {
 import { useAppStore } from '@/store/appStore'
 import { useGesamt, usePresentation, SECTION_META, type GesamtSlide } from './steps'
 import { bright, pres } from './visuals/core'
-import { SlideView } from './SlideView'
+import { SlideCard, SlideView } from './SlideView'
 
 export function PresentationHost() {
   const run = useAppStore((s) => s.pres)
@@ -100,7 +100,7 @@ function CinemaMode() {
       data-pres-theme={presTheme}
       style={{
         background: light
-          ? `radial-gradient(120% 70% at 50% 0%, ${meta.accent}0c 0%, transparent 55%), #ffffff`
+          ? `radial-gradient(120% 80% at 50% 0%, ${meta.accent}14 0%, transparent 55%), linear-gradient(180deg, #eef1f6 0%, #e6eaf1 100%)`
           : 'radial-gradient(130% 100% at 50% 12%, #10101a 0%, #060608 55%, #000 100%)',
         transition: 'background 0.4s',
       }}
@@ -158,13 +158,13 @@ function CinemaMode() {
         </div>
       </div>
 
-      {/* Folie — nutzt fast die ganze Fläche (Smart Board), mit Luft zur Leiste unten */}
-      <div className="relative flex-1 min-h-0 px-8 md:px-14 pt-5 pb-7">
-        <div className="w-[min(1640px,96vw)] mx-auto h-full">
+      {/* Folie als Karte auf der Bühne — nutzt fast die ganze Fläche (Smart Board) */}
+      <div className="relative flex-1 min-h-0 px-5 md:px-10 pt-4 pb-3">
+        <SlideCard light={light} accent={meta.accent}>
           <AnimatePresence mode="wait">
             <SlideView key={`${step.id}-${presTheme}`} step={step} />
           </AnimatePresence>
-        </div>
+        </SlideCard>
       </div>
 
       {/* Untere Leiste: Zurück links, Timeline mittig, Weiter rechts */}

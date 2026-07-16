@@ -399,3 +399,13 @@
   Vortragsfolie genommen (bleibt im Arbeitsweise-Abschnitt der Website).
   (4) Skript um Rückfragen-Vorbereitung je Folie erweitert (MD+PDF in
   ~/Downloads). PDF neu exportiert. Lint 0, Playwright 25/25, 0 Fehler.
+- 2026-07-17 (3): Folien-Design modernisiert (Owner: „zu filigran"). Folie
+  liegt jetzt als abgerundete Karte („Slide-Card") mit Akzentkante oben und
+  Schatten auf einer ruhigen Bühne; Abschnitts-Chip statt Kicker, Titel in
+  kräftiger Sans (statt Serife), farbige Subline; Stichpunkte als gleich-
+  mäßige Info-Karten UNTER dem Visual (statt Liste daneben); Visual-Zoom bis
+  1.45. Druck-Route nutzt dieselbe Karte. PDF-Export-Fix: Viewport exakt in
+  Seitengröße (1122×631), sonst reflowt Chromiums Print-Pipeline und breite
+  Visuals brechen um (Seite 14 war beschnitten); zusätzlich FitVisual auf
+  width:max-content (nie umbrechen, immer skalieren). Lint 0, Playwright
+  25/25, 0 Konsolenfehler, PDF visuell geprüft.

@@ -40,7 +40,9 @@ if (isMain) {
     console.log('→ Druck-Route rendern …')
     const { chromium } = await import('playwright-core')
     const browser = await chromium.launch({ channel: 'chrome', headless: true })
-    const page = await browser.newPage()
+    // Viewport exakt in Seitengröße (297×167 mm bei 96 dpi): Sonst reflowt die
+    // Print-Pipeline auf die schmalere Seite und breite Visuals brechen um.
+    const page = await browser.newPage({ viewport: { width: 1122, height: 631 } })
     const errors = []
     page.on('pageerror', (e) => errors.push(String(e)))
     await page.goto(`${BASE}/praesentation/druck`, { waitUntil: 'networkidle' })

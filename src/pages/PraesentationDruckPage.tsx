@@ -7,7 +7,7 @@ import { MotionConfig } from 'motion/react'
 import { useAppStore } from '@/store/appStore'
 import { useGesamt, SECTION_META, type GesamtSlide } from '@/components/presentation/steps'
 import { Timeline } from '@/components/presentation/PresentationHost'
-import { SlideView } from '@/components/presentation/SlideView'
+import { SlideCard, SlideView } from '@/components/presentation/SlideView'
 import { pres } from '@/components/presentation/visuals/core'
 
 export default function PraesentationDruckPage() {
@@ -44,23 +44,25 @@ function DruckSeite({ step, index, deck }: { step: GesamtSlide; index: number; d
         width: '297mm', height: '167mm',
         pageBreakAfter: index < total - 1 ? 'always' : undefined,
         position: 'relative', overflow: 'hidden',
-        background: `radial-gradient(120% 70% at 50% 0%, ${meta.accent}0c 0%, transparent 55%), #ffffff`,
+        background: `radial-gradient(120% 80% at 50% 0%, ${meta.accent}14 0%, transparent 55%), linear-gradient(180deg, #eef1f6 0%, #e6eaf1 100%)`,
         display: 'flex', flexDirection: 'column',
       }}
     >
       {/* Kopf */}
-      <div className="flex items-center justify-between px-10 pt-5 pb-1 text-[11px]" style={{ color: P.fgFaint }}>
+      <div className="flex items-center justify-between px-10 pt-4 pb-2 text-[11px]" style={{ color: P.fgFaint }}>
         <span className="font-bold uppercase tracking-[0.18em]">CineTicket — Systemanalyse und Entwurf</span>
         <span className="font-mono">{index + 1} / {total}</span>
       </div>
 
-      {/* Folie — identisches Layout wie im Präsentationsmodus */}
-      <div className="flex-1 min-h-0 px-12 pb-2">
-        <SlideView step={step} />
+      {/* Folie als Karte — identisches Layout wie im Präsentationsmodus */}
+      <div className="flex-1 min-h-0 px-8 pb-2">
+        <SlideCard light accent={meta.accent}>
+          <SlideView step={step} />
+        </SlideCard>
       </div>
 
       {/* Fuß: Abschnitts-Timeline wie im Präsentationsmodus */}
-      <div className="flex justify-center pb-5 px-10">
+      <div className="flex justify-center pb-4 px-12">
         <Timeline deck={deck} index={index} onJump={() => {}} light />
       </div>
     </section>
