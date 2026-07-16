@@ -279,3 +279,13 @@
   „KI-gestützt, aber überprüft"). Slate-Akzent #475569. README-Abschnitts-
   tabelle ergänzt. Verifiziert: Build/Lint grün, Seite hell/dunkel + Tour
   per Playwright, Dashboard-Kacheln unverändert (3), 0 Fehler.
+- 2026-07-16: Abschnitt „Arbeitsweise" neu gestaltet (Owner-Feedback: moderner,
+  stärker abgegrenzt, Zusammenhänge zeigen, weniger Text). Jetzt ein
+  eigenständiges dunkles „Engineering-Panel" mit Cyan-Akzent (#4dd6f0), das
+  sich klar vom hellen Karten-Look der Inhalts-Abschnitte abhebt. Kernstück:
+  der Kreislauf jeder Änderung als Pipeline (Regeln → Ändern → Prüfen[Gate] →
+  Festhalten → Deployen) mit Verbindungspfeilen, darunter die GitHub-Actions-
+  Kette als Mono-Chips und der Gegenprüf-/Kreislauf-Hinweis. Fließtext durch
+  knappe Stichpunkte ersetzt; Werkzeuge und feste Dateien als zwei kompakte
+  Karten. DASHBOARD_VARIANTEN.md aus der Dateiliste entfernt (nicht relevant).
+  Verifiziert: Build/Lint grün, hell/dunkel + Tour per Playwright, 0 Fehler.
