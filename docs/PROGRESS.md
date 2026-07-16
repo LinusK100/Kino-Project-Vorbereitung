@@ -409,3 +409,17 @@
   Visuals brechen um (Seite 14 war beschnitten); zusätzlich FitVisual auf
   width:max-content (nie umbrechen, immer skalieren). Lint 0, Playwright
   25/25, 0 Konsolenfehler, PDF visuell geprüft.
+- 2026-07-17 (4): Farb-, Größen- und Inhalts-Feinschliff (Owner). (1) Grau/
+  Braun raus: Hell-Palette auf kühle, klare Flächen (#f3f6fb etc.),
+  Präsentations-Akzent Prototyp von Rostbraun auf modernes Orange (#c2410c).
+  (2) Sequenz-/Zustandsdiagramme deutlich größer: SVG-Visuals hatten unter
+  width:max-content ihre Naturbreite verloren (auf ~300px kollabiert) —
+  jetzt feste Naturbreite, FitVisual skaliert. (3) Gesamt-Deck auf 26 Folien
+  gestrafft: „Objekt vs. Service" (klang doppelt) und Stories-Bauplan
+  (Überschneidung Story Map) raus, Kernaussagen als Banner/Punkte verlagert;
+  Prototyp+Live-Demo auf einer Folie; echte nummerierte Agenda-Folie
+  (agendaListe-Visual). (4) Fazit neu: agentisches Weiterbauen („Daten statt
+  Dokumente", „Ein roter Faden", „Spezifikation statt Prompt", „Der Ablauf
+  sichert die Qualität"); schwache Karten gestrichen. (5) Skript auf 26
+  Folien inkl. Rückfragen zum agentischen Weg aktualisiert (MD+PDF in
+  ~/Downloads). Lint 0, Playwright 26er-Durchlauf ALLES GRÜN, PDF neu.

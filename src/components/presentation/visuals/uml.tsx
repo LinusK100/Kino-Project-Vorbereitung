@@ -227,7 +227,7 @@ export function UmlVererbung() {
   const childX = (i: number) => xs?.[i] ?? (W / rollen.length) * (i + 0.5)
 
   return (
-    <div className="w-full" style={{ maxWidth: W }}>
+    <div style={{ width: W }}>
       <div className="flex justify-center">
         <UmlBox i={0} id="Nutzer" width={236} attrs={['rolle']} methods={['darf']} highlight={['rolle']} emphasized />
       </div>
@@ -333,7 +333,7 @@ export function ImplSplit({ extras = [] }: { extras?: string[] }) {
   const total = uml.classes.length
   const impl = uml.classes.filter((c) => c.implementedInPrototype).length
   return (
-    <div className="w-full" style={{ maxWidth: 660 }}>
+    <div style={{ width: 660 }}>
       <div className="flex h-14 rounded-xl overflow-hidden" style={{ border: `1px solid ${pres().line}` }}>
         <motion.div
           initial={reduce ? { opacity: 0 } : { width: '0%' }}

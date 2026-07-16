@@ -17,7 +17,9 @@
         "Die Diagramme werden daraus live als SVG gerendert",
         "Inhalt und Darstellung können nicht auseinanderlaufen"
       ],
-      "visual": { "id": "jsonZuSvg" },
+      "visual": {
+        "id": "jsonZuSvg"
+      },
       "kernsatz": "Zwei Detailgrade auf der Website: Einfach ist immer eine echte Teilmenge von Erweitert."
     },
     {
@@ -30,15 +32,19 @@
         "Playwright testet die echte Seite im Browser",
         "Node-Skripte prüfen die Datenkonsistenz"
       ],
-      "visual": { "id": "arbeitsweiseKompakt" },
+      "visual": {
+        "id": "arbeitsweiseKompakt"
+      },
       "kernsatz": "Nichts geht ungeprüft live: Lint, Build und Browser-Test sichern jeden Stand."
     },
     {
       "abschnitt": "start",
       "id": "agenda",
-      "title": "Der Weg: drei Stationen",
-      "body": "Jede Station baut auf der vorigen auf. Ideen über den MVP hinaus schließen den Bogen.",
-      "visual": { "id": "dreiStationen" }
+      "title": "Agenda",
+      "body": "Sechs Stationen bis zur Diskussion",
+      "visual": {
+        "id": "agendaListe"
+      }
     },
     {
       "abschnitt": "personas",
@@ -77,8 +83,10 @@
       "body": "Wer braucht was, und wozu?",
       "points": [
         "Als Persona möchte ich Ziel, damit Nutzen",
-        "Akzeptanzkriterien machen testbar, wann eine Story fertig ist"
-      ]
+        "Akzeptanzkriterien machen testbar, wann eine Story fertig ist",
+        "Jede Story trägt eine MoSCoW-Priorität und ein Release"
+      ],
+      "kernsatz": "Jede Story kennt ihre Persona, ihre Aktivität und ihr Release."
     },
     {
       "abschnitt": "user-stories",
@@ -89,17 +97,6 @@
         "Priorität hoch, eingeplant für Release 1",
         "Taucht wieder auf: im Sequenzdiagramm und im Zustandsautomaten"
       ]
-    },
-    {
-      "abschnitt": "user-stories",
-      "ref": "user-stories.plan",
-      "body": "Priorität und Release ergeben den Bauplan",
-      "points": [
-        "Jede Story trägt eine MoSCoW-Priorität und ein Release",
-        "Release 1 ist der MVP",
-        "Spätere Releases erweitern dort, wo es Wert stiftet"
-      ],
-      "kernsatz": "Jede Story kennt Persona, Aktivität und Release. Nichts hängt in der Luft."
     },
     {
       "abschnitt": "story-map",
@@ -116,8 +113,7 @@
       "body": "Release 1: die schmale, lauffähige Scheibe",
       "points": [
         "Kern-Aktivitäten: kaufen, Sitz wählen, einlösen, verwalten",
-        "Suche, Gastro, Facility und Marke folgen bewusst später",
-        "Erst das Nötige ganz, statt überall ein bisschen"
+        "Suche, Gastro, Facility und Marke folgen in Release 2 und 3"
       ],
       "kernsatz": "Auf der Website ist die Karte interaktiv: Bänder hervorheben, jede Karte öffnet ihre Story."
     },
@@ -129,7 +125,8 @@
         "Die Buchung ist der Kauf und enthält je Platz ein Ticket",
         "Jedes Ticket gilt für einen VorstellungSitz",
         "Der physische Sitzplatz im Saal bleibt unberührt"
-      ]
+      ],
+      "kernsatz": "Statuswechsel sitzen am Objekt selbst. Der BuchungService steuert nur und hält keine Daten."
     },
     {
       "abschnitt": "klassendiagramm",
@@ -140,17 +137,6 @@
         "reservieren(), belegen() und freigeben() setzen den Hold durch",
         "reserviertBis steuert später den Timeout"
       ]
-    },
-    {
-      "abschnitt": "klassendiagramm",
-      "ref": "klassendiagramm.ops",
-      "body": "Objekte wissen, der Service steuert",
-      "points": [
-        "Zahlung.verarbeiten(), Buchung.bestätigen(), Ticket.einlösen()",
-        "Der BuchungService ruft nur auf und hält keine Daten",
-        "Buchung ist nicht der BuchungService"
-      ],
-      "kernsatz": "«control» steuert, «entity» weiß."
     },
     {
       "abschnitt": "klassendiagramm",
@@ -204,8 +190,17 @@
         "id": "seqAusschnitt",
         "props": {
           "flow": "online-buchung",
-          "msgSeqs": ["12", "13a", "14", "15", "16"],
-          "frame": { "label": "alt", "guard": "[Zahlung erfolgreich]" }
+          "msgSeqs": [
+            "12",
+            "13a",
+            "14",
+            "15",
+            "16"
+          ],
+          "frame": {
+            "label": "alt",
+            "guard": "[Zahlung erfolgreich]"
+          }
         }
       },
       "kernsatz": "Der Storno läuft genauso als Kette: Buchung storniert, Ticket ungültig, Zahlung erstattet, Sitz wieder frei."
@@ -237,28 +232,21 @@
       "id": "weitere-automaten",
       "title": "Die weiteren Automaten in Kürze",
       "body": "Dasselbe Muster für Ticket, Buchung und Zahlung",
-      "visual": { "id": "automatenKurz" }
+      "visual": {
+        "id": "automatenKurz"
+      }
     },
     {
       "abschnitt": "prototyp",
       "ref": "prototyp.teilmenge",
-      "body": "Der Kern des Modells läuft",
-      "points": [
-        "Endkunde, Kasse, Manager und Einlass sind klickbar gebaut",
-        "Die übrigen Rollen sind als Roadmap modelliert",
-        "Das Modell beschreibt das ganze Produkt"
-      ],
-      "kernsatz": "Modell ⊇ Prototyp: Was fehlt, ist im Klassendiagramm bereits verortet."
-    },
-    {
-      "abschnitt": "prototyp",
-      "ref": "prototyp.demo",
-      "body": "Die echte App, direkt im Browser",
+      "body": "Der Kern des Modells läuft im Browser",
       "points": [
         "Buchen im Sitzplan, verkaufen an der Kasse",
         "Steuern im Manager-Cockpit, scannen am Einlass",
-        "Mock-API, keine Installation nötig"
-      ]
+        "Vier weitere Rollen sind als Roadmap modelliert"
+      ],
+      "kernsatz": "Modell ⊇ Prototyp: Was fehlt, ist im Klassendiagramm bereits verortet.",
+      "title": "Live-Demo: der Prototyp"
     },
     {
       "abschnitt": "innovation",
@@ -270,21 +258,33 @@
       "id": "ideen-nah",
       "title": "Nah am MVP",
       "body": "Drei Ideen docken direkt am System an",
-      "visual": { "id": "ideenListe", "props": { "gruppe": "nah" } }
+      "visual": {
+        "id": "ideenListe",
+        "props": {
+          "gruppe": "nah"
+        }
+      }
     },
     {
       "abschnitt": "innovation",
       "id": "ideen-vision",
-      "title": "Drei Blicke nach vorn",
+      "title": "Drei Ideen für später",
       "body": "Bewusst als Konzept markiert, recherchiert und eingeordnet",
-      "visual": { "id": "ideenListe", "props": { "gruppe": "vision" } }
+      "visual": {
+        "id": "ideenListe",
+        "props": {
+          "gruppe": "vision"
+        }
+      }
     },
     {
       "abschnitt": "abschluss",
       "id": "fazit",
-      "title": "Was uns wichtig war",
-      "body": "Weiterbauen können: aus der Analyse wird der Bauplan fürs echte System",
-      "visual": { "id": "fundament" },
+      "title": "Fazit: der Weg zum fertigen System",
+      "body": "Mit diesen Artefakten und agentischem Coding wird aus dem Entwurf das echte System",
+      "visual": {
+        "id": "fundament"
+      },
       "kernsatz": "Vielen Dank. Fragen und Diskussion."
     }
   ]

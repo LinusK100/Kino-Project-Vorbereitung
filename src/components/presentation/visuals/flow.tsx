@@ -54,7 +54,7 @@ export function SeqAusschnitt({ flow, msgSeqs, frame }: SeqProps) {
   const H = cur - 8
 
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', maxWidth: W }} className="h-auto" role="img" aria-label={`Ausschnitt aus ${d.title}`}>
+    <svg viewBox={`0 0 ${W} ${H}`} style={{ width: W }} className="h-auto" role="img" aria-label={`Ausschnitt aus ${d.title}`}>
       {/* Lebenslinien */}
       {parts.map((p, i) => (
         <motion.line
@@ -214,7 +214,7 @@ export function StateAusschnitt({ machineId, nodes, edges, w, h, initialTo, init
   }
 
   return (
-    <svg viewBox={`0 0 ${w} ${h}`} style={{ width: '100%', maxWidth: w }} className="h-auto" role="img" aria-label={`Ausschnitt aus ${machine.title}`}>
+    <svg viewBox={`0 0 ${w} ${h}`} style={{ width: w }} className="h-auto" role="img" aria-label={`Ausschnitt aus ${machine.title}`}>
       {/* Startmarkierung */}
       {initialTo && (() => {
         const t = pos[initialTo]

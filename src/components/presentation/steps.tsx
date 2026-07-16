@@ -16,7 +16,7 @@ import type {
 } from '@/types'
 import {
   DreiStationen, JsonZuSvg, TeilmengeModi, InnovationsMatrix, IdeeVerankert,
-  IdeenListe, RollenLive, LiveDemo, Fundament,
+  IdeenListe, RollenLive, LiveDemo, Fundament, AgendaListe,
 } from './visuals/product'
 import { PersonaKern, PersonaBaum, ZieleFrustrationen, StorySchema, StoryKarte, StoryVerteilung, BackboneChips, ReleaseBaender } from './visuals/people'
 import { FlowUebersicht, SeqAusschnitt, SitzHappyPath, SitzRueckwege, TicketZyklus, BuchungZyklus, ZahlungZyklus, AutomatenKurz } from './visuals/flow'
@@ -48,6 +48,7 @@ const VISUALS: Record<string, (p: P) => ReactNode> = {
   rollenLive: () => <RollenLive />,
   liveDemo: () => <LiveDemo />,
   fundament: () => <Fundament />,
+  agendaListe: () => <AgendaListe />,
   personaKern: () => <PersonaKern />,
   personaBaum: () => <PersonaBaum />,
   zieleFrustrationen: (p) => <ZieleFrustrationen id={p?.id as string} />,
@@ -107,7 +108,7 @@ export const SECTION_META: Record<string, SectionMeta> = {
   klassendiagramm: { path: '/klassendiagramm', label: 'Klassendiagramm', kurz: 'Klassen', accent: '#7a39bb' },
   sequenzdiagramme: { path: '/sequenzdiagramme', label: 'Sequenzdiagramme', kurz: 'Sequenzen', accent: '#7a39bb' },
   zustandsdiagramme: { path: '/zustandsdiagramme', label: 'Zustandsdiagramme', kurz: 'Zustände', accent: '#7a39bb' },
-  prototyp: { path: '/prototyp', label: 'Prototyp', kurz: 'Prototyp', accent: '#964219' },
+  prototyp: { path: '/prototyp', label: 'Prototyp', kurz: 'Prototyp', accent: '#c2410c' },
   innovation: { path: '/innovation', label: 'Innovation', kurz: 'Innovation', accent: '#437a22' },
   arbeitsweise: { path: '/arbeitsweise', label: 'Arbeitsweise', kurz: 'Projekt', accent: '#64748b' },
   abschluss: { path: '/', label: 'Abschluss', kurz: 'Fazit', accent: '#01696f' },

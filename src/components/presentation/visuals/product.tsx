@@ -189,7 +189,7 @@ export function InnovationsMatrix({ tier = 'erweitert' }: { tier?: 'basis' | 'er
   })
 
   return (
-    <div className="w-full" style={{ maxWidth: W }}>
+    <div style={{ width: W }}>
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto" role="img" aria-label="Innovations-Ideen nach Impact und Aufwand">
         {[1, 2, 3, 4, 5].map((v) => (
           <g key={v}>
@@ -307,7 +307,7 @@ export function IdeenListe({ gruppe = 'nah' }: { gruppe?: 'nah' | 'vision' }) {
 }
 
 // ── Prototyp: gebaute Rollen vs. Roadmap, Zahlen aus den Daten ──
-const PROTO_ACCENT = '#964219'
+const PROTO_ACCENT = '#c2410c'
 
 export function RollenLive() {
   const reduce = useReducedMotion()
@@ -382,30 +382,62 @@ export function LiveDemo() {
   )
 }
 
-// ── Abschluss: unser Fundament für die volle Umsetzung ──
-// Konkret statt Floskel: was uns wichtig war und warum man aus genau diesen
-// Artefakten das echte System weiterbauen kann. Zahlen aus den Daten.
+// ── Agenda: nummerierte Stationen der Präsentation (nach PPT-Vorbild) ──
+const AGENDA = [
+  { c: '#01696f', t: 'Projekt & Vorgehen', s: 'Datenbasis und Arbeitsweise' },
+  { c: '#006494', t: 'Anforderungen', s: 'Personas, User Stories, Story Map' },
+  { c: '#7a39bb', t: 'Modellierung', s: 'Klassen, Sequenzen, Zustände' },
+  { c: '#c2410c', t: 'Prototyp', s: 'Live-Demo im Browser' },
+  { c: '#437a22', t: 'Innovation', s: 'Sechs Ideen nach dem MVP' },
+  { c: '#01696f', t: 'Fazit', s: 'Der Weg zum fertigen System' },
+]
+
+export function AgendaListe() {
+  const reduce = useReducedMotion()
+  const P = pres()
+  return (
+    <div className="grid grid-cols-2 xl:grid-cols-3 gap-3.5 w-full" style={{ maxWidth: 1080 }}>
+      {AGENDA.map((a, i) => (
+        <motion.div
+          key={a.t} {...pop(i, reduce)}
+          className="rounded-2xl overflow-hidden text-left"
+          style={{ background: P.chip, border: `1px solid ${P.line}` }}
+        >
+          <div className="h-[3px]" style={{ background: bright(a.c) }} />
+          <div className="px-5 py-4 flex items-start gap-3.5">
+            <span className="text-[26px] font-bold leading-none" style={{ color: bright(a.c) }}>{i + 1}</span>
+            <span className="min-w-0">
+              <span className="block text-[15px] font-bold leading-tight" style={{ color: P.fg }}>{a.t}</span>
+              <span className="block text-[12px] mt-1" style={{ color: P.fgSoft }}>{a.s}</span>
+            </span>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  )
+}
+
+// ── Fazit: mit diesen Artefakten und agentischem Coding zum fertigen System ──
+// Konkret statt Floskel; Zahlen aus den Daten.
 export function Fundament() {
   const reduce = useReducedMotion()
   const P = pres()
-  const live = prototype.rollen.filter((r) => r.status === 'implementiert').length
-  const gesamtRollen = prototype.rollen.length
   const punkte = [
     {
       c: '#006494', t: 'Daten statt Dokumente',
-      s: `${personas.erweitert.length} Personas, ${stories.erweitert.length} Stories, ${uml.classes.length} Klassen als JSON. Daraus entstehen später Schema, Seed-Daten und Testfälle.`,
+      s: `${personas.erweitert.length} Personas, ${stories.erweitert.length} Stories, ${uml.classes.length} Klassen als JSON. Ein Coding-Agent liest sie direkt: als Datenbankschema, Seed-Daten und Testfälle.`,
     },
     {
       c: '#01696f', t: 'Ein roter Faden',
-      s: 'U47 führt von der Story über die Sequenz bis zum Automaten. Jede Anforderung kennt Persona und Release.',
+      s: 'U47 führt von der Story über die Sequenz bis zum Automaten. Jede Änderung lässt sich bis zur Anforderung zurückverfolgen.',
     },
     {
-      c: '#7a39bb', t: 'Keine zwei Wahrheiten',
-      s: 'Enums und Automaten sind wertgleich. Die Implementierung kann dem Modell direkt folgen.',
+      c: '#7a39bb', t: 'Spezifikation statt Prompt',
+      s: 'Modell, Automaten und Akzeptanzkriterien sind präzise genug, dass Agenten daraus Backend und Features bauen. Aus den Enums und Sequenzen werden die Tests.',
     },
     {
-      c: '#437a22', t: 'Bewiesen und kartiert',
-      s: `${live} von ${gesamtRollen} Rollen laufen im Prototyp. Der Rest ist im Modell bereits verortet.`,
+      c: '#437a22', t: 'Der Ablauf sichert die Qualität',
+      s: 'Feste Regeln, echte Browser-Tests, Gegenprüfung vor jedem Stand. So ist diese Website entstanden, so entsteht auch das fertige System.',
     },
   ]
   return (
@@ -425,9 +457,9 @@ export function Fundament() {
           </motion.div>
         ))}
       </div>
-      {/* Der Weg weiter: was schon steht, und was der nächste Schritt ist */}
+      {/* Der Weg weiter: was schon steht, und wie es umgesetzt wird */}
       <div className="flex items-center justify-center flex-wrap gap-x-1.5 gap-y-2">
-        {['Anforderungen', 'Modell', 'Prototyp (MVP-Kern)'].map((s, i) => (
+        {['Anforderungen', 'Modell', 'Prototyp'].map((s, i) => (
           <span key={s} className="inline-flex items-center gap-1.5">
             <motion.span
               {...pop(8 + i, reduce)}
@@ -444,7 +476,7 @@ export function Fundament() {
           className="text-[12.5px] font-bold px-3.5 py-1.5 rounded-full"
           style={{ background: `${'#437a22'}1e`, color: bright('#437a22'), border: `1.5px dashed ${bright('#437a22')}88` }}
         >
-          Release 2–3: das volle System
+          agentisch umgesetzt: das volle System
         </motion.span>
       </div>
     </div>

@@ -49,7 +49,7 @@ export function PersonaBaum() {
   const childX = (i: number) => (W / kinder.length) * (i + 0.5)
 
   return (
-    <div style={{ maxWidth: W }} className="w-full">
+    <div style={{ width: W }}>
       <motion.div {...pop(0, reduce)} className="flex justify-center">
         <div
           className="inline-flex items-center gap-2.5 rounded-2xl px-5 py-3"
