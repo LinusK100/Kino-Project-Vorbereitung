@@ -40,7 +40,7 @@ export const NAV: NavGroup[] = [
     title: 'Projekt',
     meta: true,
     items: [
-      { path: '/arbeitsweise', label: 'Arbeitsweise', icon: GitBranch, accent: '#475569' },
+      { path: '/arbeitsweise', label: 'Arbeitsweise', icon: GitBranch, accent: '#64748b' },
     ],
   },
 ]

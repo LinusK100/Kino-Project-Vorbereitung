@@ -289,3 +289,13 @@
   knappe Stichpunkte ersetzt; Werkzeuge und feste Dateien als zwei kompakte
   Karten. DASHBOARD_VARIANTEN.md aus der Dateiliste entfernt (nicht relevant).
   Verifiziert: Build/Lint grün, hell/dunkel + Tour per Playwright, 0 Fehler.
+- 2026-07-16: Abschnitt „Arbeitsweise" beruhigt (Owner-Feedback: einheitliche
+  Farbe, übersichtlicher, weniger Kleinteile, weniger KI-Look). Das dunkle
+  Panel mit Cyan-Pop und Chip-Soup ist raus; die Seite läuft jetzt durchgehend
+  in den Theme-Farben (hell auf hell, dunkel auf dunkel) mit einem einzigen
+  neutralen Slate-Akzent (#64748b, in beiden Themes lesbar). Der Ablauf ist
+  eine schlichte nummerierte Timeline (01–05, ein Schritt = ein Satz) mit
+  Verbindungslinie; darunter eine einzige Karte mit zwei Spalten (Werkzeuge
+  als Fließzeile, angelegte Dateien als kompakte Liste). Editorial und ruhig
+  statt Tech-Dashboard. Verifiziert: Build/Lint grün, hell/dunkel + Tour per
+  Playwright, 0 Fehler.
