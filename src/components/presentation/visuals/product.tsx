@@ -428,7 +428,7 @@ export function Fundament() {
       </div>
       {/* Der Weg weiter: was schon steht, und was der nächste Schritt ist */}
       <div className="flex items-center justify-center flex-wrap gap-x-1.5 gap-y-2">
-        {['Anforderungen', 'Modell', 'Prototyp (Release 1)'].map((s, i) => (
+        {['Anforderungen', 'Modell', 'Prototyp (MVP-Kern)'].map((s, i) => (
           <span key={s} className="inline-flex items-center gap-1.5">
             <motion.span
               {...pop(8 + i, reduce)}

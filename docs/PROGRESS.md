@@ -379,3 +379,13 @@
   Zahlen berechnet) plus Weg-Strip Anforderungen → Modell → Prototyp →
   Release 2–3. PDF neu exportiert. Verifiziert: Lint 0, Build grün,
   Playwright 25/25, 0 Konsolenfehler.
+- 2026-07-17: Faktenprüfung fürs Vortrags-Skript (Owner-Auftrag) — drei
+  Inhaltsfehler gefunden und behoben: (1) „Release 1 quer durch alle
+  Aktivitäten" war falsch (4 von 10 Aktivitäten ohne R1-Story) → Release-
+  Folie sagt jetzt „schmale Scheibe durch die Kern-Aktivitäten, Suche/Gastro/
+  Facility/Marke folgen bewusst später". (2) Fazit-Strip „Prototyp
+  (Release 1)" → „Prototyp (MVP-Kern)" (Prototyp = 17 Stories: 10×R1, 6×R2,
+  1×R3; U47 bewusst nicht umgesetzt). (3) ReleaseBaender-Notiz präzisiert
+  („ihren Kern zeigt der Prototyp"). PDF neu exportiert. Vortrags-Skript
+  (29 Folien, Kernbotschaft + Stichpunkte + Übergänge + Faktenprüfungs-
+  Anhang) liegt als MD+PDF in ~/Downloads (nicht Teil des Repos).

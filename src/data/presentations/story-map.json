@@ -19,7 +19,7 @@
     {
       "id": "releases",
       "title": "Waagerecht schneiden: Releases",
-      "body": "Release 1 ist die schmale, lauffähige Scheibe quer durch alle Aktivitäten. Die weiteren Releases erweitern das System dort, wo es Wert stiftet, statt einfach „mehr Features“.",
+      "body": "Release 1 ist die schmale, lauffähige Scheibe durch die Kern-Aktivitäten: kaufen, Sitz wählen, einlösen, verwalten. Bewusst nicht überall — Suche, Gastro, Facility und Marke folgen später, dort, wo es dann Wert stiftet.",
       "visual": {
         "id": "releaseBaender",
         "props": {

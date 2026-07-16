@@ -324,7 +324,7 @@ export function ReleaseBaender({ tier = 'erweitert' }: { tier?: 'basis' | 'erwei
   const reduce = useReducedMotion()
   const alle = stories[tier]
   const cfg = [
-    { r: 1, label: 'Release 1 – MVP', color: '#437a22', hl: true, note: 'die lauffähige Scheibe, die der Prototyp zeigt' },
+    { r: 1, label: 'Release 1 – MVP', color: '#437a22', hl: true, note: 'die schmale, lauffähige Scheibe — ihren Kern zeigt der Prototyp' },
     { r: 2, label: 'Release 2 – Erweiterung', color: '#d19900', hl: false, note: 'Komfort, Gastro & Service, Facility' },
     { r: 3, label: 'Release 3 – Vollausbau', color: '#a13544', hl: false, note: 'Empfehlungen, Reports, Multi-Site' },
   ]
