@@ -7,14 +7,22 @@
       "visual": { "id": "jsonZuSvg" }
     },
     {
-      "id": "verify",
-      "title": "Jede Änderung wird verifiziert",
-      "body": "Vor jeder Veröffentlichung müssen Lint und Build grün sein, alle Touren werden headless mit Playwright durchgeklickt (0 Konsolenfehler) und die Daten per Node-Skript gegengeprüft."
+      "id": "ablauf",
+      "title": "So entsteht jede Änderung",
+      "body": "Regeln lesen, gezielt ändern, prüfen, dokumentieren, deployen. Nichts wird ungeprüft veröffentlicht.",
+      "visual": { "id": "ablaufFlow" }
     },
     {
-      "id": "deploy",
-      "title": "Push → GitHub Actions → Live",
-      "body": "Ein Push auf main baut und veröffentlicht die Seite automatisch auf GitHub Pages. Danach wird die Live-Seite gegengeprüft: gleicher Build-Hash, Inhalt im Bundle, HTTP 200."
+      "id": "werkzeuge",
+      "title": "Womit gearbeitet wird",
+      "body": "Standard-Werkzeuge, kein Sonderweg: Git und GitHub Actions für Versionierung und Deploy, Playwright für den echten Test der Seite, Node-Skripte für die Daten-Checks.",
+      "visual": { "id": "werkzeugChips" }
+    },
+    {
+      "id": "dateien",
+      "title": "Feste Projektdateien",
+      "body": "CLAUDE.md gibt zu Beginn jeder Sitzung die Regeln vor, PROGRESS.md hält jede Änderung mit Begründung fest.",
+      "visual": { "id": "dateiChips" }
     },
     {
       "id": "ki",

@@ -27,7 +27,7 @@ export default function SequencePage() {
       icon={Workflow}
       accent={ACCENT}
       presentation={steps}
-      intro={
+      help={
         <Callout kind="info" title="Lesart">
           Die Zeit läuft <strong>von oben nach unten</strong>. <strong>Einfach</strong> zeigt den
           Happy Path, <strong>Erweitert</strong> zusätzlich die alt-/break-Fragmente mit den

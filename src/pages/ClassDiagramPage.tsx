@@ -45,7 +45,7 @@ export default function ClassDiagramPage() {
       icon={Boxes}
       accent={ACCENT}
       presentation={steps}
-      intro={
+      help={
         <div data-pres="ops-callout">
           <Callout kind="info" title="Lesehinweis">
             Status-Operationen stehen an den <strong>Objekten</strong> (<code>VorstellungSitz.reservieren()</code>),

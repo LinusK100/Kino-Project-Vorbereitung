@@ -3,7 +3,6 @@ import {
   Sparkles, TrendingUp, ShieldCheck, ScanEye, Accessibility, LineChart, ChevronDown,
 } from 'lucide-react'
 import { SectionShell } from '@/components/shared/SectionShell'
-import { Callout } from '@/components/shared/Callout'
 import { innovation, personaById } from '@/data/content'
 import { usePresentation } from '@/components/presentation/steps'
 import type { Innovation } from '@/types'
@@ -36,12 +35,12 @@ export default function InnovationPage() {
       accent={ACCENT}
       modes={false}
       presentation={steps}
-      intro={
-        <div className="space-y-3">
-          <Callout kind="idea">
-            Ideen über den MVP hinaus – jede mit Persona, Stories und UML-Klassen verknüpft und als
-            umsetzbar bzw. Konzept gekennzeichnet.
-          </Callout>
+      help={
+        <div>
+          <p className="text-sm leading-relaxed mb-3" style={{ color: 'var(--text-secondary)' }}>
+            Ideen für die Zeit nach dem MVP. Jede ist ehrlich eingeordnet – umsetzbar, teilweise
+            umsetzbar oder als Konzept:
+          </p>
           <div className="flex flex-wrap gap-2" data-pres="legend">
             {Object.entries(feasCfg).map(([k, v]) => (
               <span key={k} className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-full font-medium" style={{ background: `${v.color}14`, color: v.color, border: `1px solid ${v.color}40` }}>

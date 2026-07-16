@@ -1,5 +1,5 @@
 {
-  "einfach": [
+  "steps": [
     {
       "id": "intro",
       "title": "Wer nutzt CineTicket?",
@@ -9,50 +9,39 @@
       "id": "seiten",
       "title": "Kundschaft und Betrieb",
       "body": "Eine Rolle draußen, drei drinnen: Der Endkunde bucht. Im Betrieb verkauft Monika an der Kasse, Thomas steuert Programm und Umsatz, Kevin kontrolliert den Einlass. Beide Seiten haben eigene Ziele, daraus entstehen verschiedene Anforderungen.",
-      "visual": { "id": "personaKern" }
+      "visual": {
+        "id": "personaKern"
+      }
     },
     {
       "id": "kundschaft",
       "title": "So tickt die Kundschaft",
       "body": "Die Kundenseite am Beispiel Endkunde: schnell mobil buchen, den Lieblingsplatz sichern. Frustrationen wie lange Ladezeiten oder umständliche Gruppenbuchung prägen den Buchungs-Wizard und den Sitz-Hold.",
-      "visual": { "id": "zieleFrustrationen", "props": { "id": "endkunde" } }
+      "visual": {
+        "id": "zieleFrustrationen",
+        "props": {
+          "id": "endkunde"
+        }
+      }
     },
     {
       "id": "betrieb",
       "title": "So tickt der Betrieb",
       "body": "Die Betriebsseite am Beispiel Monika: schnell, korrekt und freundlich verkaufen. Ihre Frustration sind langsame Systeme unter Zeitdruck, daraus entsteht der Schnellverkauf mit Tastatur-Shortcuts.",
-      "visual": { "id": "zieleFrustrationen", "props": { "id": "monika" } }
-    }
-  ],
-  "erweitert": [
-    {
-      "id": "intro",
-      "title": "Wer nutzt CineTicket?",
-      "body": "Personas machen die Nutzergruppen greifbar. CineTicket hat zwei Seiten: die Kundschaft, die Tickets bucht, und den Betrieb, der das Kino führt. Jede User Story gehört später zu genau einer Persona."
-    },
-    {
-      "id": "seiten",
-      "title": "Kundschaft und Betrieb",
-      "body": "Eine Rolle draußen, drei drinnen: Der Endkunde bucht. Im Betrieb verkauft Monika an der Kasse, Thomas steuert Programm und Umsatz, Kevin kontrolliert den Einlass. Beide Seiten haben eigene Ziele, daraus entstehen verschiedene Anforderungen.",
-      "visual": { "id": "personaKern" }
-    },
-    {
-      "id": "kundschaft",
-      "title": "So tickt die Kundschaft",
-      "body": "Die Kundenseite am Beispiel Endkunde: schnell mobil buchen, den Lieblingsplatz sichern. Frustrationen wie lange Ladezeiten oder umständliche Gruppenbuchung prägen den Buchungs-Wizard und den Sitz-Hold.",
-      "visual": { "id": "zieleFrustrationen", "props": { "id": "endkunde" } }
-    },
-    {
-      "id": "betrieb",
-      "title": "So tickt der Betrieb",
-      "body": "Die Betriebsseite am Beispiel Monika: schnell, korrekt und freundlich verkaufen. Ihre Frustration sind langsame Systeme unter Zeitdruck, daraus entsteht der Schnellverkauf mit Tastatur-Shortcuts.",
-      "visual": { "id": "zieleFrustrationen", "props": { "id": "monika" } }
+      "visual": {
+        "id": "zieleFrustrationen",
+        "props": {
+          "id": "monika"
+        }
+      }
     },
     {
       "id": "baum",
       "title": "Aus Rollen werden Profile",
       "body": "Im Vollausbau differenziert sich vor allem die Kundschaft: Der Endkunde wird zu Stammkundin, Student, Seniorin und Familienmutter, jede mit eigenen Bedürfnissen. Auch der Betrieb wächst um Service, Facility und Verwaltung.",
-      "visual": { "id": "personaBaum" }
+      "visual": {
+        "id": "personaBaum"
+      }
     }
   ]
 }

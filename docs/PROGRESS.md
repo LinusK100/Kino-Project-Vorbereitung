@@ -327,3 +327,21 @@
   jederzeit prüfbar") gestrafft, Meta-Schluss der Stories auf
   Nachvollziehbarkeit umgestellt. Verifiziert: 14 Touren (71 Folien) per
   Playwright, 0 Fehler; Build/Lint grün.
+- 2026-07-16: Größeres UX-/Inhalts-Paket (Owner). (1) Echter Vollbildmodus
+  für Diagramme: neuer „Vollbild"-Knopf öffnet ein Overlay mit eigenem
+  Zoom/Pan, auf die Fläche eingepasst, Esc/Schließen (vorher tat der
+  Maximize-Knopf nur „100 %"). (2) Notations-/Leseart-Hinweise nicht mehr
+  unter dem Titel, sondern hinter einem „Hilfe"-Button links neben dem
+  Einfach/Erweitert-Umschalter (zentrales Sheet). SectionShell: neue
+  help-Prop; 6 Seiten von intro auf help umgestellt. (3) Präsentationsmodus
+  hat jetzt EINE Quelle — unabhängig von Einfach/Erweitert (Selektor ignoriert
+  den Modus, JSON auf je ein steps-Array kollabiert, Modus-Chip im Kino-Kopf
+  entfernt). (4) Arbeitsweise: langer KI-Satz entfernt, kurze Projekt-vs-
+  Prototyp-Einordnung ergänzt; Tour schöner mit Ablauf-Fluss, Werkzeug- und
+  Datei-Visuals (visuals/meta.tsx). (5) Innovation: Tour stellt jede Idee kurz
+  vor (nur die Idee, keine Klassen/Diagramme); „Ideen über den MVP hinaus"-
+  Hinweis raus, Machbarkeits-Legende ins Hilfe-Sheet. (6) Prototyp: eigener
+  Hero (oranger Verlauf) mit „Prototyp starten" im Vordergrund; Buchungs-
+  Wizard entfernt, Roadmap auf eine Zeile + Rollen-Chips gekürzt, aufs
+  Wesentliche reduziert. Verifiziert: Build/Lint grün, 15 Touren + Vollbild +
+  Hilfe-Sheet + Prototyp per Playwright, 0 Fehler.

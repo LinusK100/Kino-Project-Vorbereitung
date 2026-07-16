@@ -52,7 +52,7 @@ export default function StoryMapPage() {
       icon={Map}
       accent={ACCENT}
       presentation={steps}
-      intro={
+      help={
         <Callout kind="info" title="Lesart">
           <strong>Waagerecht</strong> = Nutzer-Workflow (Aktivität → Schritt), <strong>senkrecht</strong> = Release.
           So sieht man, welche Stories zusammen den MVP ergeben und was später folgt.

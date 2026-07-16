@@ -1,59 +1,84 @@
 {
-  "einfach": [
+  "steps": [
     {
       "id": "intro",
       "title": "Der Buchungsablauf über die Zeit",
       "body": "Ein Sequenzdiagramm zeigt, wer wann welche Nachricht an wen schickt. Statt eines überladenen Diagramms gibt es fokussierte Abläufe: Online-Buchung, Kasse, Storno, Einlass. Die nächsten Folien zoomen in die Online-Buchung.",
-      "visual": { "id": "flowUebersicht" }
+      "visual": {
+        "id": "flowUebersicht"
+      }
     },
     {
       "id": "hold",
       "title": "Der Hold: 10 Minuten verbindlich",
       "body": "Beim Checkout ruft der BuchungService reservieren() am VorstellungSitz auf. Der Sitz wird serverseitig RESERVIERT und ist für parallele Käufer blockiert. Das Badge zeigt den Statuswechsel.",
-      "visual": { "id": "seqAusschnitt", "props": { "flow": "online-buchung", "msgSeqs": ["6", "7", "8a", "9a"] } }
+      "visual": {
+        "id": "seqAusschnitt",
+        "props": {
+          "flow": "online-buchung",
+          "msgSeqs": [
+            "6",
+            "7",
+            "8a",
+            "9a"
+          ]
+        }
+      }
     },
     {
       "id": "zahlung",
       "title": "Die Zahlung entscheidet",
       "body": "Erst wenn die Zahlung ERFOLGREICH ist, wird der Sitz BELEGT, die Buchung BESTÄTIGT und das QR-Ticket erzeugt. Vier Statuswechsel in genau dieser Reihenfolge.",
-      "visual": { "id": "seqAusschnitt", "props": { "flow": "online-buchung", "msgSeqs": ["12", "13a", "14", "15", "16"] } }
-    },
-    {
-      "id": "lifelines",
-      "title": "Lesehilfe für die Diagramme",
-      "body": "Oben die Teilnehmer: Akteur, «control»-Services, «entity»-Objekte. Die Zeit läuft an den Lebenslinien nach unten, Aktivierungsbalken zeigen, wer gerade arbeitet. Der Erweitert-Modus ergänzt die Fehlerpfade als alt-/break-Fragmente."
-    }
-  ],
-  "erweitert": [
-    {
-      "id": "intro",
-      "title": "Der Buchungsablauf über die Zeit",
-      "body": "Ein Sequenzdiagramm zeigt, wer wann welche Nachricht an wen schickt. Statt eines überladenen Diagramms gibt es fokussierte Abläufe: Online-Buchung, Kasse, Storno, Einlass. Die nächsten Folien zoomen in die Online-Buchung.",
-      "visual": { "id": "flowUebersicht" }
-    },
-    {
-      "id": "hold",
-      "title": "Der Hold: 10 Minuten verbindlich",
-      "body": "Beim Checkout ruft der BuchungService reservieren() am VorstellungSitz auf. Der Sitz wird serverseitig RESERVIERT und ist für parallele Käufer blockiert. Das Badge zeigt den Statuswechsel.",
-      "visual": { "id": "seqAusschnitt", "props": { "flow": "online-buchung", "msgSeqs": ["6", "7", "8a", "9a"] } }
-    },
-    {
-      "id": "zahlung",
-      "title": "Die Zahlung entscheidet",
-      "body": "Erst wenn die Zahlung ERFOLGREICH ist, wird der Sitz BELEGT, die Buchung BESTÄTIGT und das QR-Ticket erzeugt. Vier Statuswechsel in genau dieser Reihenfolge.",
-      "visual": { "id": "seqAusschnitt", "props": { "flow": "online-buchung", "msgSeqs": ["12", "13a", "14", "15", "16"] } }
+      "visual": {
+        "id": "seqAusschnitt",
+        "props": {
+          "flow": "online-buchung",
+          "msgSeqs": [
+            "12",
+            "13a",
+            "14",
+            "15",
+            "16"
+          ]
+        }
+      }
     },
     {
       "id": "fehler",
       "title": "Und wenn der Platz weg ist?",
       "body": "Kommt reservieren() zu spät, antwortet der Sitz mit false. Der Kunde landet zurück in der Sitzwahl statt in einer Doppelbuchung. Die alt-/break-Fragmente zeigen auch Zahlungsfehler und Hold-Timeout.",
-      "visual": { "id": "seqAusschnitt", "props": { "flow": "online-buchung", "msgSeqs": ["8b", "9b", "10b"], "frame": { "label": "alt", "guard": "[Platz bereits vergeben]" } } }
+      "visual": {
+        "id": "seqAusschnitt",
+        "props": {
+          "flow": "online-buchung",
+          "msgSeqs": [
+            "8b",
+            "9b",
+            "10b"
+          ],
+          "frame": {
+            "label": "alt",
+            "guard": "[Platz bereits vergeben]"
+          }
+        }
+      }
     },
     {
       "id": "storno",
       "title": "Ein Storno wirkt überall",
       "body": "Vier Aufrufe, vier Objekte: Die Buchung wird STORNIERT, das Ticket ungültig, die Zahlung ERSTATTET und der Sitz wieder FREI. Ein Vorgang, konsistent über alle Zustandsautomaten.",
-      "visual": { "id": "seqAusschnitt", "props": { "flow": "storno", "msgSeqs": ["2", "3", "4", "5"] } }
+      "visual": {
+        "id": "seqAusschnitt",
+        "props": {
+          "flow": "storno",
+          "msgSeqs": [
+            "2",
+            "3",
+            "4",
+            "5"
+          ]
+        }
+      }
     },
     {
       "id": "lifelines",

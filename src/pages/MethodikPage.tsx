@@ -55,14 +55,12 @@ export default function MethodikPage() {
       accent={ACCENT}
       modes={false}
       presentation={steps}
-      intro={
-        <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-          Diese Website wurde <strong style={{ color: 'var(--text-primary)' }}>KI-gestützt mit Claude Code</strong> umgesetzt –
-          nach einem festen, überprüfbaren Ablauf: eine Datenquelle, automatisierte Verifikation, ein CI/CD-Deploy.
-          Jeder Schritt ist nachvollziehbar.
-        </p>
-      }
     >
+      {/* Einordnung: dieser Abschnitt betrifft die Website, nicht den Prototyp. */}
+      <p className="text-xs mb-5" style={{ color: 'var(--text-secondary)' }}>
+        Gemeint ist die Dokumentations-Website. Der interaktive Prototyp ist eine eigene App (Abschnitt „Prototyp").
+      </p>
+
       {/* Zeile 1: links der Ablauf, rechts das Regelwerk (füllt die Breite) */}
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mb-8">
         {/* Ablauf */}

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { ZoomIn, ZoomOut, Maximize2, Scan, FileText, Image as ImageIcon } from 'lucide-react'
+import { createPortal } from 'react-dom'
+import { ZoomIn, ZoomOut, Maximize2, Scan, FileText, Image as ImageIcon, X } from 'lucide-react'
 
 interface DiagramFrameProps {
   children: React.ReactNode          // the SVG / diagram
@@ -20,6 +21,7 @@ interface DiagramFrameProps {
 export function DiagramFrame({ children, textView, legend, minHeight = 420, zoomable = true, fitOnLoad = false, fitMode = 'both', fitKey }: DiagramFrameProps) {
   const [zoom, setZoom] = useState(1)
   const [asText, setAsText] = useState(false)
+  const [fullscreen, setFullscreen] = useState(false)
   const [fitTick, setFitTick] = useState(0)   // „Einpassen“-Button stößt den Fit erneut an
   const scrollRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
@@ -158,7 +160,7 @@ export function DiagramFrame({ children, textView, legend, minHeight = 420, zoom
             <span className="text-xs font-mono w-12 text-center" style={{ color: 'var(--text-secondary)' }}>{Math.round(zoom * 100)}%</span>
             <IconBtn onClick={() => { userZoomed.current = true; zoomAt(zoom + 0.12) }} label="Vergrößern"><ZoomIn size={15} /></IconBtn>
             {fitOnLoad && <IconBtn onClick={() => setFitTick((t) => t + 1)} label="Einpassen"><Scan size={15} /></IconBtn>}
-            <IconBtn onClick={() => { userZoomed.current = true; setZoom(1); scrollRef.current?.scrollTo({ left: 0, top: 0 }) }} label="Originalgröße (100 %)"><Maximize2 size={15} /></IconBtn>
+            <IconBtn onClick={() => setFullscreen(true)} label="Vollbild"><Maximize2 size={15} /></IconBtn>
           </div>
         )}
       </div>
@@ -186,7 +188,100 @@ export function DiagramFrame({ children, textView, legend, minHeight = 420, zoom
       {legend && !asText && (
         <div className="px-4 py-3 border-t" style={{ borderColor: 'var(--border-color)' }}>{legend}</div>
       )}
+
+      {fullscreen && <DiagramFullscreen legend={legend} onClose={() => setFullscreen(false)}>{children}</DiagramFullscreen>}
     </div>
+  )
+}
+
+// Vollbild-Ansicht: das Diagramm groß über der ganzen Seite, mit eigenem
+// Zoom/Pan, auf die Fläche eingepasst. Esc oder der X-Knopf schließen.
+function DiagramFullscreen({ children, legend, onClose }: { children: React.ReactNode; legend?: React.ReactNode; onClose: () => void }) {
+  const [zoom, setZoom] = useState(1)
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+  const drag = useRef<{ x: number; y: number; sl: number; st: number; moved: boolean } | null>(null)
+  const [dragging, setDragging] = useState(false)
+
+  // Body-Scroll sperren, Esc schließt
+  useEffect(() => {
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    return () => { document.body.style.overflow = prev; window.removeEventListener('keydown', onKey) }
+  }, [onClose])
+
+  // Beim Öffnen auf die verfügbare Fläche einpassen
+  useLayoutEffect(() => {
+    const fit = () => {
+      const vp = scrollRef.current, c = contentRef.current
+      const svg = c?.querySelector('svg')
+      if (!vp || !svg) return false
+      const cw = (svg.width?.baseVal?.value || 0) + 48
+      const ch = (svg.height?.baseVal?.value || 0) + 48
+      if (cw <= 48 || ch <= 48) return false
+      const ratio = Math.min(vp.clientWidth / cw, vp.clientHeight / ch)
+      setZoom(Math.max(0.4, Math.min(2.5, +ratio.toFixed(2))))
+      return true
+    }
+    if (fit()) return
+    const t = [50, 300, 900].map((d) => window.setTimeout(fit, d))
+    return () => t.forEach(window.clearTimeout)
+  }, [])
+
+  // Strg/Cmd + Scrollen zoomt
+  useEffect(() => {
+    const vp = scrollRef.current
+    if (!vp) return
+    const onWheel = (e: WheelEvent) => {
+      if (!e.ctrlKey && !e.metaKey) return
+      e.preventDefault()
+      setZoom((z) => Math.max(0.3, Math.min(3, +(z * (e.deltaY < 0 ? 1.12 : 0.9)).toFixed(2))))
+    }
+    vp.addEventListener('wheel', onWheel, { passive: false })
+    return () => vp.removeEventListener('wheel', onWheel)
+  }, [])
+
+  const onDown = (e: React.PointerEvent) => {
+    if (e.button !== 0) return
+    const vp = scrollRef.current; if (!vp) return
+    drag.current = { x: e.clientX, y: e.clientY, sl: vp.scrollLeft, st: vp.scrollTop, moved: false }
+  }
+  const onMove = (e: React.PointerEvent) => {
+    const d = drag.current, vp = scrollRef.current
+    if (!d || !vp) return
+    const dx = e.clientX - d.x, dy = e.clientY - d.y
+    if (!d.moved && Math.hypot(dx, dy) > 5) { d.moved = true; setDragging(true); vp.setPointerCapture(e.pointerId) }
+    if (d.moved) { vp.scrollLeft = d.sl - dx; vp.scrollTop = d.st - dy }
+  }
+  const onUp = () => { drag.current = null; setDragging(false) }
+  const bump = (f: number) => setZoom((z) => Math.max(0.3, Math.min(3, +(z * f).toFixed(2))))
+
+  return createPortal(
+    <div className="fixed inset-0 z-[90] flex flex-col" style={{ background: 'var(--card-bg)' }} role="dialog" aria-modal="true" aria-label="Diagramm im Vollbild">
+      <div className="flex items-center justify-between px-4 py-2.5 border-b flex-shrink-0" style={{ borderColor: 'var(--border-color)' }}>
+        <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>Ziehen verschiebt · Strg + Scrollen zoomt</span>
+        <div className="flex items-center gap-1">
+          <IconBtn onClick={() => bump(0.85)} label="Verkleinern"><ZoomOut size={16} /></IconBtn>
+          <span className="text-xs font-mono w-12 text-center" style={{ color: 'var(--text-secondary)' }}>{Math.round(zoom * 100)}%</span>
+          <IconBtn onClick={() => bump(1.18)} label="Vergrößern"><ZoomIn size={16} /></IconBtn>
+          <button onClick={onClose} className="inline-flex items-center gap-1.5 ml-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors hover:bg-black/5 dark:hover:bg-white/10" style={{ color: 'var(--text-primary)', border: '1px solid var(--border-color)' }}>
+            <X size={15} /> Schließen
+          </button>
+        </div>
+      </div>
+      <div
+        ref={scrollRef}
+        className="flex-1 overflow-auto select-none flex items-center justify-center"
+        style={{ cursor: dragging ? 'grabbing' : 'grab' }}
+        onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
+      >
+        <div ref={contentRef} style={{ zoom, width: 'max-content', padding: 24 }}>{children}</div>
+      </div>
+      {legend && <div className="px-4 py-3 border-t flex-shrink-0" style={{ borderColor: 'var(--border-color)' }}>{legend}</div>}
+    </div>,
+    document.body,
   )
 }
 

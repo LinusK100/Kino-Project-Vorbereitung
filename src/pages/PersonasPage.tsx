@@ -34,7 +34,7 @@ export default function PersonasPage() {
       icon={Users}
       accent={ACCENT}
       presentation={steps}
-      intro={
+      help={
         <Callout kind="info">
           Jede Persona steht für eine Nutzergruppe mit eigenen Zielen und Frustrationen —
           und jede User Story gehört zu genau einer von ihnen.

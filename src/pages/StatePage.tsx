@@ -33,7 +33,7 @@ export default function StatePage() {
       icon={CircleDot}
       accent={ACCENT}
       presentation={steps}
-      intro={
+      help={
         <Callout kind="info" title="Notation">
           UML-Zustandsdiagramm: abgerundete Rechtecke = Zustände, <strong>●</strong> = Start,
           <strong> ◎</strong> = Ende. Kantenbeschriftung: <code>event [guard]</code>. Ein Objekt über die Zeit.

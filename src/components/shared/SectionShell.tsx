@@ -1,9 +1,11 @@
+import { useState } from 'react'
 import { motion } from 'motion/react'
+import { HelpCircle } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { pageVariants } from '@/lib/transitions'
 import { ModeToggle } from './ModeToggle'
 import { Presentation } from '@/components/presentation/Presentation'
-import { useAppStore } from '@/store/appStore'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import type { PresentationStep } from '@/types'
 
 interface SectionShellProps {
@@ -12,7 +14,8 @@ interface SectionShellProps {
   icon: LucideIcon
   accent: string
   kicker: string                 // small category label above the title
-  intro?: React.ReactNode        // explanatory lead block
+  intro?: React.ReactNode        // explanatory lead block directly under the title
+  help?: React.ReactNode         // Grundlagen/Notation — im „Hilfe“-Sheet statt unter dem Titel
   presentation?: PresentationStep[]
   modes?: boolean                // show Einfach/Erweitert toggle (default true)
   legend?: React.ReactNode
@@ -21,15 +24,12 @@ interface SectionShellProps {
 
 export function SectionShell({
   title, subtitle, icon: Icon, accent, kicker,
-  intro, presentation = [], modes = true, legend, children,
+  intro, help, presentation = [], modes = true, legend, children,
 }: SectionShellProps) {
-  const { mode } = useAppStore()
-  // Die Kino-Tour folgt dem gewählten Modus — der Chip im Kino-Kopf macht das sichtbar.
-  const modeLabel = modes ? (mode === 'einfach' ? 'Einfach · Basis' : 'Erweitert · Vollausbau') : undefined
+  const [helpOpen, setHelpOpen] = useState(false)
   return (
     <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit">
-      {/* Kompakter Kopf: eine Zeile Titel + Aktionen, darunter die Einleitung.
-          Bewusst keine Karte — der Blick soll auf den Inhalt fallen. */}
+      {/* Kompakter Kopf: eine Zeile Titel + Aktionen. */}
       <header className="mb-4" data-pres="section-header">
         <div className="flex items-center justify-between gap-x-3 gap-y-2 flex-wrap">
           <div className="flex items-center gap-3 min-w-0">
@@ -52,8 +52,18 @@ export function SectionShell({
           </div>
 
           <div className="flex items-center gap-2 flex-shrink-0 flex-wrap">
+            {help && (
+              <button
+                onClick={() => setHelpOpen(true)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors"
+                style={{ background: 'var(--card-bg)', color: 'var(--text-secondary)', borderColor: 'var(--border-color)' }}
+                title="Grundlagen und Notation dieses Abschnitts"
+              >
+                <HelpCircle size={14} /> Hilfe
+              </button>
+            )}
             {modes && <ModeToggle accent={accent} />}
-            {presentation.length > 0 && <Presentation steps={presentation} accent={accent} title={title} modeLabel={modeLabel} />}
+            {presentation.length > 0 && <Presentation steps={presentation} accent={accent} title={title} />}
           </div>
         </div>
 
@@ -66,6 +76,23 @@ export function SectionShell({
         <div className="mt-6 rounded-xl p-4" style={{ background: 'var(--card-bg)', border: '1px solid var(--border-color)' }}>
           {legend}
         </div>
+      )}
+
+      {help && (
+        <Dialog open={helpOpen} onOpenChange={setHelpOpen}>
+          <DialogContent
+            aria-describedby={undefined}
+            className="sm:max-w-lg max-h-[82vh] overflow-y-auto rounded-2xl"
+            style={{ background: 'var(--card-bg)', borderColor: 'var(--border-color)', color: 'var(--text-primary)' }}
+          >
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+                <HelpCircle size={17} style={{ color: accent }} /> {title} — Grundlagen
+              </DialogTitle>
+            </DialogHeader>
+            <div className="mt-3 space-y-3">{help}</div>
+          </DialogContent>
+        </Dialog>
       )}
     </motion.div>
   )

@@ -4,12 +4,12 @@
 // Kennung auf diese Registry. Berechnete Zahlen bleiben in den Visuals — im
 // JSON steht nie eine hartkodierte Zahl.
 import { useMemo, type ReactNode } from 'react'
-import { useMode } from '@/store/appStore'
 import type { PresentationStep, RawPresentationStep, PresentationVisualSpec, PresentationData } from '@/types'
 import { DreiStationen, JsonZuSvg, TeilmengeModi, InnovationsMatrix, IdeeVerankert } from './visuals/product'
 import { PersonaKern, PersonaBaum, ZieleFrustrationen, StorySchema, StoryKarte, StoryVerteilung, BackboneChips, ReleaseBaender } from './visuals/people'
 import { FlowUebersicht, SeqAusschnitt, SitzHappyPath, SitzRueckwege, TicketZyklus, BuchungZyklus, ZahlungZyklus } from './visuals/flow'
 import { UmlBuchungsmodell, UmlVorstellungSitz, UmlBuchungskette, UmlKomposition, UmlServices, UmlVererbung, EnumAbgleich } from './visuals/uml'
+import { AblaufFlow, WerkzeugChips, DateiChips } from './visuals/meta'
 
 import overview from '@/data/presentations/overview.json'
 import personas from '@/data/presentations/personas.json'
@@ -52,6 +52,9 @@ const VISUALS: Record<string, (p: P) => ReactNode> = {
   umlServices: () => <UmlServices />,
   umlVererbung: () => <UmlVererbung />,
   enumAbgleich: () => <EnumAbgleich />,
+  ablaufFlow: () => <AblaufFlow />,
+  werkzeugChips: () => <WerkzeugChips />,
+  dateiChips: () => <DateiChips />,
 }
 
 function renderVisual(spec?: PresentationVisualSpec): ReactNode {
@@ -70,13 +73,13 @@ const DATA: Record<string, PresentationData> = {
   klassendiagramm, sequenzdiagramme, zustandsdiagramme, innovation, arbeitsweise,
 }
 
-// Liefert die Folien eines Abschnitts, modusabhängig aufgelöst.
+// Liefert die Folien eines Abschnitts. Der Präsentationsmodus hat bewusst
+// EINE Quelle — unabhängig vom Einfach/Erweitert-Umschalter der Seite.
 export function usePresentation(section: keyof typeof DATA | string): PresentationStep[] {
-  const mode = useMode()
   return useMemo(() => {
     const data = DATA[section]
     if (!data) return []
-    const raw = data.steps ?? (mode === 'einfach' ? data.einfach : data.erweitert) ?? []
+    const raw = data.steps ?? data.erweitert ?? data.einfach ?? []
     return resolve(raw)
-  }, [section, mode])
+  }, [section])
 }

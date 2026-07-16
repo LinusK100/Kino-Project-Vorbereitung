@@ -1,47 +1,34 @@
 {
-  "einfach": [
+  "steps": [
     {
       "id": "intro",
       "title": "Ein Satz, drei Antworten",
       "body": "Jede User Story beschreibt eine Anforderung aus Nutzersicht, in einem Satz mit Persona, Ziel und Nutzen. Dazu kommen testbare Akzeptanzkriterien als Definition von „fertig“.",
-      "visual": { "id": "storySchema" }
-    },
-    {
-      "id": "beispiel",
-      "title": "So liest sich eine Story",
-      "body": "Monikas Schnellverkauf, mit messbaren Akzeptanzkriterien statt vager Wünsche. So präzise ist jede Story formuliert: Sie sagt selbst, wann sie fertig ist.",
-      "visual": { "id": "storyKarte", "props": { "id": "U01" } }
-    },
-    {
-      "id": "plan",
-      "title": "Priorität und Release: der Bauplan",
-      "body": "Jede Story trägt eine MoSCoW-Priorität und ein Release. Zusammen ergeben sie den Bauplan: Release 1 ist die schmale, lauffähige Scheibe, der MVP. Spätere Releases erweitern dort, wo es Wert stiftet.",
-      "visual": { "id": "storyVerteilung", "props": { "tier": "basis" } }
-    },
-    {
-      "id": "nachvollziehbar",
-      "title": "Jede Story ist nachvollziehbar",
-      "body": "Jede Story kennt ihre Persona, ihre Aktivität und ihr Release, und sie taucht später im Diagramm wieder auf. In der Tabelle lässt sich danach filtern; ein Klick öffnet die Akzeptanzkriterien."
-    }
-  ],
-  "erweitert": [
-    {
-      "id": "intro",
-      "title": "Ein Satz, drei Antworten",
-      "body": "Jede User Story beschreibt eine Anforderung aus Nutzersicht, in einem Satz mit Persona, Ziel und Nutzen. Dazu kommen testbare Akzeptanzkriterien als Definition von „fertig“.",
-      "visual": { "id": "storySchema" }
+      "visual": {
+        "id": "storySchema"
+      }
     },
     {
       "id": "kern",
       "title": "Die wichtigste Regel: der Sitz-Hold",
       "body": "U47 ist der fachliche Kern: Der gewählte Platz wird beim Checkout verbindlich reserviert, das verhindert Doppelbuchungen. Dieselbe Story taucht im Sequenzdiagramm und im Zustandsautomaten wieder auf.",
-      "visual": { "id": "storyKarte", "props": { "id": "U47" } }
+      "visual": {
+        "id": "storyKarte",
+        "props": {
+          "id": "U47"
+        }
+      }
     },
     {
       "id": "plan",
       "title": "Priorität und Release: der Bauplan",
       "body": "Jede Story trägt eine MoSCoW-Priorität und ein Release. Zusammen ergeben sie den Bauplan: Release 1 ist die schmale, lauffähige Scheibe, der MVP. Spätere Releases erweitern dort, wo es Wert stiftet.",
-      "visual": { "id": "storyVerteilung", "props": { "tier": "erweitert" } }
+      "visual": {
+        "id": "storyVerteilung",
+        "props": {
+          "tier": "erweitert"
+        }
+      }
     },
     {
       "id": "nachvollziehbar",

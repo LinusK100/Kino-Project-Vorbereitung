@@ -1,21 +1,40 @@
 {
   "steps": [
     {
-      "id": "feas",
-      "title": "Ideen über den MVP hinaus, ehrlich bewertet",
-      "body": "Recherchierte Zukunfts-Ideen über den MVP hinaus, eingeordnet nach Impact und Aufwand. Jede trägt ein begründetes Machbarkeits-Flag; AR-Hardware und ML-Modelle sind bewusst als Konzept markiert.",
+      "id": "matrix",
+      "title": "Sechs Ideen, nach Wirkung und Aufwand",
+      "body": "Recherchierte Ideen für die Zeit nach dem MVP, eingeordnet nach Impact und Aufwand. Manche sind im Rahmen machbar, andere bewusst Konzept.",
       "visual": { "id": "innovationsMatrix" }
     },
     {
-      "id": "anchor",
-      "title": "Verankert im Modell",
-      "body": "Keine losen Visionen: Jede Idee nennt ihre Persona, ihre User Stories und die betroffenen UML-Klassen. Die dynamischen Preise etwa erweitern Tarif um Preisregel und PreisService.",
-      "visual": { "id": "ideeVerankert" }
+      "id": "yield",
+      "title": "Dynamische Preise",
+      "body": "Ticketpreise passen sich regelbasiert an die Auslastung an, um Nachfragespitzen besser zu nutzen."
     },
     {
-      "id": "cards",
-      "title": "Zum Nachlesen",
-      "body": "Jede Karte auf der Seite öffnet Details mit Modell-Bezug und dem Hinweis, wo die Technik den Projektrahmen übersteigt. Impact und Aufwand stehen als Einschätzung an jeder Karte."
+      "id": "dsgvo",
+      "title": "Sicherheit & DSGVO-Governance",
+      "body": "Least-Privilege-Rollen, lückenloses Audit-Log, erzwungene 2FA sowie DSGVO-Auskunft und -Löschung."
+    },
+    {
+      "id": "ki-sitz",
+      "title": "KI-Sitzplatzempfehlung",
+      "body": "Die KI schlägt den besten freien Platz passend zu den Präferenzen vor, kein langes Suchen im Sitzplan."
+    },
+    {
+      "id": "ar-facility",
+      "title": "AR-Facility: Defekt melden",
+      "body": "Haustechnik meldet einen defekten Sitz per AR-Brille mit Foto und Sprachnotiz. Sofort entsteht ein Wartungsticket und der Sitz wird gesperrt."
+    },
+    {
+      "id": "ar-access",
+      "title": "AR-Barrierefreiheit",
+      "body": "Zu einer Vorstellung lässt sich eine Untertitel- oder Audiodeskriptions-Brille dazubuchen."
+    },
+    {
+      "id": "forecast",
+      "title": "Prädiktive Auslastungsprognose",
+      "body": "Die erwartete Auslastung kommender Vorstellungen wird prognostiziert, um Programm und Personal vorausschauend zu planen."
     }
   ]
 }

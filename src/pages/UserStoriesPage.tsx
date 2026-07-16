@@ -71,7 +71,7 @@ export default function UserStoriesPage() {
       icon={ListChecks}
       accent={ACCENT}
       presentation={steps}
-      intro={
+      help={
         <Callout kind="info" title="Schema">
           „Als <em>Persona</em> möchte ich <em>Ziel</em>, um <em>Nutzen</em>." Jede Story trägt Persona,
           Aktivität, Priorität (MoSCoW) und Release – und testbare Akzeptanzkriterien.
