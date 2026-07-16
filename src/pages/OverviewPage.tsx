@@ -36,7 +36,7 @@ const groupIntro: Record<string, string> = {
   Ergebnis: 'Der klickbare Prototyp des MVP – und recherchierte Ideen über ihn hinaus.',
 }
 
-const GROUPS = NAV.filter((g) => g.title !== 'Start')
+const GROUPS = NAV.filter((g) => g.title !== 'Start' && !g.meta)
 
 const HINWEISE = [
   {

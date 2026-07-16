@@ -265,3 +265,17 @@
   Grund bleibt filigran (hell #fbfbfa, dunkel #161619). Verifiziert:
   Build/Lint grün, alle 14 Touren (62 Folien) + Hintergrund hell/dunkel
   per Playwright, 0 Fehler.
+- 2026-07-16: Neuer Abschnitt „Arbeitsweise & Reproduzierbarkeit" (Owner-Wunsch,
+  Website-Abschnitt am Ende, Framing „Methodik & KI-gestützt"). Neue Seite
+  MethodikPage.tsx unter /arbeitsweise; neue Nav-Gruppe „Projekt" (meta:true —
+  erscheint nur in der Seitenleiste, nicht in den Drei-Stationen-Kacheln des
+  Dashboards; GROUPS-Filter in OverviewPage entsprechend). Inhalt: eine
+  Datenquelle (JSON→berechnete Zahlen/SVG), der 7-Schritt-Ablauf jeder
+  Änderung (Regeln→ändern→lint/build→Playwright→Daten-Check→PROGRESS→push),
+  die angelegten MD-Dateien mit Zweck, die Werkzeuge (Git, npm/Vite,
+  Playwright+System-Chrome, Node-Skripte, GitHub REST API, Claude Code;
+  Bild-MCP verfügbar aber ungenutzt), und Push→GitHub-Actions→Pages inkl.
+  Live-Gegenprüfung. Kompakte 4-Folien-Kino-Tour zum Präsentieren (Schluss
+  „KI-gestützt, aber überprüft"). Slate-Akzent #475569. README-Abschnitts-
+  tabelle ergänzt. Verifiziert: Build/Lint grün, Seite hell/dunkel + Tour
+  per Playwright, Dashboard-Kacheln unverändert (3), 0 Fehler.

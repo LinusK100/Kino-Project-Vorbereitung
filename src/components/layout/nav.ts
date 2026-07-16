@@ -1,10 +1,12 @@
 import {
   LayoutDashboard, Users, ListChecks, Map, Boxes, Workflow, CircleDot,
-  Sparkles, Smartphone,
+  Sparkles, Smartphone, GitBranch,
 } from 'lucide-react'
 
 export interface NavItem { path: string; label: string; icon: React.ElementType; accent: string }
-export interface NavGroup { title: string; items: NavItem[] }
+// meta = Abschnitt über das Projekt selbst (nicht Teil der Drei-Stationen-Story
+// des Dashboards; erscheint nur in der Seitenleiste, nicht in den Dashboard-Karten).
+export interface NavGroup { title: string; items: NavItem[]; meta?: boolean }
 
 export const NAV: NavGroup[] = [
   {
@@ -32,6 +34,13 @@ export const NAV: NavGroup[] = [
     items: [
       { path: '/prototyp', label: 'Prototyp', icon: Smartphone, accent: '#964219' },
       { path: '/innovation', label: 'Innovation', icon: Sparkles, accent: '#437a22' },
+    ],
+  },
+  {
+    title: 'Projekt',
+    meta: true,
+    items: [
+      { path: '/arbeitsweise', label: 'Arbeitsweise', icon: GitBranch, accent: '#475569' },
     ],
   },
 ]

@@ -34,6 +34,7 @@ Abschnitte teilen dieselbe Datenbasis und dasselbe Designsystem.
 | Anforderungen | Personas · User Stories · Story Map |
 | Modellierung | Klassendiagramm · Sequenzdiagramme · Zustandsdiagramme |
 | Ergebnis | Prototyp (startet die echte App) · Innovation |
+| Projekt | Arbeitsweise (wie die Website entsteht, geprüft und veröffentlicht wird) |
 
 Alle Inhalte stammen aus `src/data/*.json` (übernommen aus der
 Projektdokumentation v5.1, je Abschnitt als Basis- und Erweitert-Datensatz).

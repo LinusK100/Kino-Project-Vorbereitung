@@ -15,6 +15,7 @@ const SequencePage = lazy(() => import('@/pages/SequencePage'))
 const StatePage = lazy(() => import('@/pages/StatePage'))
 const InnovationPage = lazy(() => import('@/pages/InnovationPage'))
 const PrototypePage = lazy(() => import('@/pages/PrototypePage'))
+const MethodikPage = lazy(() => import('@/pages/MethodikPage'))
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'))
 
 function Skeleton() {
@@ -46,6 +47,7 @@ function AnimatedRoutes() {
           <Route path="/zustandsdiagramme" element={<StatePage />} />
           <Route path="/innovation" element={<InnovationPage />} />
           <Route path="/prototyp" element={<PrototypePage />} />
+          <Route path="/arbeitsweise" element={<MethodikPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
         </ErrorBoundary>
