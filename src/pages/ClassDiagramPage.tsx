@@ -8,8 +8,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { uml } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
 import { UML_GROUP_COLOR } from '@/lib/statusColors'
-import { UmlBuchungskette, UmlBuchungsmodell, UmlKomposition, UmlServices, UmlVererbung, UmlVorstellungSitz } from '@/components/presentation/visuals/uml'
-import type { UmlClass, PresentationStep, Mode } from '@/types'
+import { usePresentation } from '@/components/presentation/steps'
+import type { UmlClass } from '@/types'
 
 const ACCENT = '#7a39bb'
 
@@ -17,49 +17,12 @@ const CORE = ['Kette', 'Kino', 'Kinosaal', 'Sitzplatz', 'Tarif', 'Film', 'Vorste
 
 const groupLabel: Record<string, string> = { domain: 'Domäne', service: 'Services', store: 'Stores', dto: 'DTOs', enum: 'Enums' }
 
-// Die Tour erklärt, wie das System funktioniert – nicht, wie viele Klassen es hat.
-// Sie beginnt beim Buchungsmodell, weil dort die häufigste Verständnisfrage sitzt.
-function stepsFor(mode: Mode): PresentationStep[] {
-  const kern: PresentationStep[] = [
-    {
-      id: 'buchungsmodell', title: 'Das Herzstück: eine Buchung', visual: <UmlBuchungsmodell />,
-      body: 'Vier Klassen, vier klare Aufgaben: Eine Buchung ist der Kauf. Sie enthält für jeden Platz ein Ticket. Jedes Ticket gilt für einen VorstellungSitz – den Status eines Sitzes in genau dieser Vorstellung. Der physische Sitzplatz im Saal bleibt davon unberührt.',
-    },
-    {
-      id: 'assoc', title: 'Der Schlüssel: VorstellungSitz', visual: <UmlVorstellungSitz />,
-      body: 'Deshalb braucht es die Assoziationsklasse: Ein Sitzplatz existiert dauerhaft, sein Status wechselt aber je Vorstellung. reservieren(), belegen() und freigeben() setzen den Hold durch und verhindern Doppelbuchungen – für genau diese eine Vorstellung.',
-    },
-    {
-      id: 'ops', title: 'Wer macht was: Objekt vs. Service', visual: <UmlBuchungskette />,
-      body: 'Statusändernde Operationen sitzen am Objekt, dessen Zustand sie ändern: Zahlung.verarbeiten(), Buchung.bestätigen(), Ticket.einlösen(). Der BuchungService (nächste Folie) ruft sie nur auf – er hält selbst keine Daten. Buchung ≠ BuchungService.',
-    },
-    {
-      id: 'kern', title: 'Vom Saal zum einzelnen Sitz', visual: <UmlKomposition />,
-      body: 'Woher der Sitzplatz kommt: eine Kompositions-Kette (◆). Eine Kette umfasst Kinos, ein Kino besitzt Säle, ein Saal enthält Sitzplätze – der Teil existiert nicht ohne das Ganze.',
-    },
-  ]
-  const vertiefung: PresentationStep[] = [
-    {
-      id: 'services', title: 'Der BuchungService steuert nur', visual: <UmlServices />,
-      body: 'Die «control»-Schicht: Der BuchungService führt reservieren(), anlegen() und stornieren() aus und hängt nur lose (⇢ Abhängigkeit) an den Domänenobjekten. Er orchestriert die Abläufe – die Daten und ihren Zustand halten die Objekte selbst.',
-    },
-    {
-      id: 'vererbung', title: 'Rollen erben von Nutzer', visual: <UmlVererbung />,
-      body: 'Vom Kunden bis zum Administrator erben alle Akteure von Nutzer. Was jemand darf, entscheidet nicht die Klasse, sondern das Enum Nutzerrolle – geprüft über darf(aktion).',
-    },
-  ]
-  const schluss: PresentationStep = {
-    id: 'all', title: 'Das Modell beschreibt mehr als die App',
-    body: 'Der Prototyp setzt den Kern klickbar um – Buchung, Kasse, Manager-Cockpit, Einlass. Die übrigen Klassen (im Diagramm ohne grünen Punkt) sind bewusst als Roadmap modelliert: Das Klassendiagramm zeigt das ganze Produkt, nicht nur den MVP.',
-  }
-  return mode === 'einfach' ? [...kern, schluss] : [...kern, ...vertiefung, schluss]
-}
-
+// Tour-Texte (Buchungsmodell → Objekt vs. Service): src/data/presentations/klassendiagramm.json
 export default function ClassDiagramPage() {
   const { mode } = useAppStore()
   const [view, setView] = useState<string>('kern')
   const [selected, setSelected] = useState<string | null>(null)
-  const steps = useMemo(() => stepsFor(mode), [mode])
+  const steps = usePresentation('klassendiagramm')
 
   const views = mode === 'einfach'
     ? [{ id: 'kern', label: 'Kern' }, { id: 'enum', label: 'Enums' }]

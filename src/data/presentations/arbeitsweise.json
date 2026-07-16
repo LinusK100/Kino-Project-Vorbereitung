@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "id": "quelle",
+      "title": "Eine Datenquelle, ein Design",
+      "body": "Alle Inhalte liegen als JSON vor. Zahlen werden daraus berechnet, Diagramme live als SVG gerendert. Website und Daten können nicht auseinanderlaufen.",
+      "visual": { "id": "jsonZuSvg" }
+    },
+    {
+      "id": "verify",
+      "title": "Jede Änderung wird verifiziert",
+      "body": "Vor jeder Veröffentlichung müssen Lint und Build grün sein, alle Touren werden headless mit Playwright durchgeklickt (0 Konsolenfehler) und die Daten per Node-Skript gegengeprüft."
+    },
+    {
+      "id": "deploy",
+      "title": "Push → GitHub Actions → Live",
+      "body": "Ein Push auf main baut und veröffentlicht die Seite automatisch auf GitHub Pages. Danach wird die Live-Seite gegengeprüft: gleicher Build-Hash, Inhalt im Bundle, HTTP 200."
+    },
+    {
+      "id": "ki",
+      "title": "KI-gestützt, aber überprüft",
+      "body": "Umgesetzt mit Claude Code entlang der Regeln in CLAUDE.md. Der Wert liegt im festen Ablauf: gezielt ändern, real testen, dokumentieren, gegenprüfen."
+    }
+  ]
+}

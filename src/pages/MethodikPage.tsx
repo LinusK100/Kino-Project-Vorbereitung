@@ -8,8 +8,7 @@ import {
   Sparkles, BookOpenCheck,
 } from 'lucide-react'
 import { SectionShell } from '@/components/shared/SectionShell'
-import { JsonZuSvg } from '@/components/presentation/visuals/product'
-import type { PresentationStep } from '@/types'
+import { usePresentation } from '@/components/presentation/steps'
 
 const ACCENT = '#64748b'   // neutrales Slate, in Hell und Dunkel gut lesbar
 
@@ -44,26 +43,9 @@ const WEITERE = [
   { name: 'README.md', zweck: 'Einstieg, Live-Link, Schnellstart' },
 ]
 
-const steps: PresentationStep[] = [
-  {
-    id: 'quelle', title: 'Eine Datenquelle, ein Design', visual: <JsonZuSvg />,
-    body: 'Alle Inhalte liegen als JSON vor. Zahlen werden daraus berechnet, Diagramme live als SVG gerendert – Website und Daten können nicht auseinanderlaufen.',
-  },
-  {
-    id: 'verify', title: 'Jede Änderung wird verifiziert',
-    body: 'Vor jeder Veröffentlichung müssen Lint und Build grün sein, alle Touren werden headless mit Playwright durchgeklickt (0 Konsolenfehler) und die Daten per Node-Skript gegengeprüft.',
-  },
-  {
-    id: 'deploy', title: 'Push → GitHub Actions → Live',
-    body: 'Ein Push auf main baut und veröffentlicht die Seite automatisch auf GitHub Pages. Danach wird die Live-Seite gegengeprüft: gleicher Build-Hash, Inhalt im Bundle, HTTP 200.',
-  },
-  {
-    id: 'ki', title: 'KI-gestützt, aber überprüft',
-    body: 'Umgesetzt mit Claude Code entlang der Regeln in CLAUDE.md. Der Wert liegt im festen Ablauf – gezielt ändern, real testen, dokumentieren, gegenprüfen.',
-  },
-]
-
+// Folien-Texte der Kino-Tour: src/data/presentations/arbeitsweise.json
 export default function MethodikPage() {
+  const steps = usePresentation('arbeitsweise')
   return (
     <SectionShell
       kicker="Projekt"

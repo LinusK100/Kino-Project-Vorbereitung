@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { ChevronDown, Target, Frown, Quote, Users, Crown, GitBranch } from 'lucide-react'
 import { SectionShell } from '@/components/shared/SectionShell'
@@ -6,40 +6,16 @@ import { Callout } from '@/components/shared/Callout'
 import { containerVariants, cardVariants } from '@/lib/transitions'
 import { usePersonas, personaById } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
-import { PersonaBaum, PersonaKern, ZieleFrustrationen } from '@/components/presentation/visuals/people'
-import type { Persona, PresentationStep, Mode } from '@/types'
+import { usePresentation } from '@/components/presentation/steps'
+import type { Persona } from '@/types'
 
 const ACCENT = '#006494'
 
-// Die Tour stellt die wichtigen Personen konkret vor: wer sie sind, was sie
-// vom System brauchen – daraus entstehen später die Anforderungen.
-function stepsFor(mode: Mode): PresentationStep[] {
-  const basis: PresentationStep[] = [
-    { id: 'intro', title: 'Wer nutzt CineTicket?', body: 'Personas machen die Nutzergruppen greifbar: Wer arbeitet mit dem System – mit welchen Zielen und Frustrationen? Jede spätere User Story gehört zu genau einer Persona.' },
-    {
-      id: 'kern', title: 'Die Menschen rund ums Kino', visual: <PersonaKern />,
-      body: 'Vier Rollen tragen das System: Der Endkunde bucht online, Monika verkauft an der Kasse, Thomas managt Programm und Umsatz, Kevin kontrolliert den Einlass. Genau sie setzt der Prototyp klickbar um.',
-    },
-    {
-      id: 'monika', title: 'Monika an der Kasse', visual: <ZieleFrustrationen id="monika" />,
-      body: 'Monika will schnell, korrekt und freundlich verkaufen. Ihre Frustration sind langsame Systeme und umständliche Sitzwahl unter Zeitdruck – daraus entsteht der Schnellverkauf mit Tastatur-Shortcuts.',
-    },
-    {
-      id: 'endkunde', title: 'Der Endkunde, der online bucht', visual: <ZieleFrustrationen id="endkunde" />,
-      body: 'Der Endkunde will in unter einer Minute mobil buchen und seinen Lieblingsplatz sichern. Seine Frustrationen – lange Ladezeiten, umständliche Gruppenbuchung – prägen den Buchungs-Wizard und den Sitz-Hold.',
-    },
-  ]
-  const erweitert: PresentationStep = {
-    id: 'baum', title: 'Ein Endkunde ist nicht gleich Endkunde', visual: <PersonaBaum />,
-    body: 'Im Vollausbau differenziert sich der Endkunde in konkrete Profile – Stammkundin, Student, Seniorin, Familienmutter – jedes mit eigenen Bedürfnissen. So wird aus einer groben Rolle eine präzise Anforderungsquelle.',
-  }
-  return mode === 'einfach' ? basis : [...basis, erweitert]
-}
-
+// Tour-Texte (Kundschaft vs. Betrieb): src/data/presentations/personas.json
 export default function PersonasPage() {
   const personas = usePersonas()
   const { mode } = useAppStore()
-  const steps = useMemo(() => stepsFor(mode), [mode])
+  const steps = usePresentation('personas')
   const [group, setGroup] = useState<string>('all')
   const [allOpen, setAllOpen] = useState(false)
 

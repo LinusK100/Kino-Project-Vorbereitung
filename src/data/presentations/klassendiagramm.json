@@ -1,0 +1,76 @@
+{
+  "einfach": [
+    {
+      "id": "buchungsmodell",
+      "title": "Das Herzstück: eine Buchung",
+      "body": "Vier Klassen, vier klare Aufgaben: Eine Buchung ist der Kauf. Sie enthält für jeden Platz ein Ticket. Jedes Ticket gilt für einen VorstellungSitz, den Status eines Sitzes in genau dieser Vorstellung. Der physische Sitzplatz im Saal bleibt davon unberührt.",
+      "visual": { "id": "umlBuchungsmodell" }
+    },
+    {
+      "id": "assoc",
+      "title": "Der Schlüssel: VorstellungSitz",
+      "body": "Deshalb braucht es die Assoziationsklasse: Ein Sitzplatz existiert dauerhaft, sein Status wechselt aber je Vorstellung. reservieren(), belegen() und freigeben() setzen den Hold durch und verhindern Doppelbuchungen, für genau diese eine Vorstellung.",
+      "visual": { "id": "umlVorstellungSitz" }
+    },
+    {
+      "id": "ops",
+      "title": "Wer macht was: Objekt vs. Service",
+      "body": "Statusändernde Operationen sitzen am Objekt, dessen Zustand sie ändern: Zahlung.verarbeiten(), Buchung.bestätigen(), Ticket.einlösen(). Der BuchungService ruft sie nur auf und hält selbst keine Daten. Buchung ist nicht der BuchungService.",
+      "visual": { "id": "umlBuchungskette" }
+    },
+    {
+      "id": "kern",
+      "title": "Vom Saal zum einzelnen Sitz",
+      "body": "Woher der Sitzplatz kommt: eine Kompositions-Kette (◆). Eine Kette umfasst Kinos, ein Kino besitzt Säle, ein Saal enthält Sitzplätze. Der Teil existiert nicht ohne das Ganze.",
+      "visual": { "id": "umlKomposition" }
+    },
+    {
+      "id": "all",
+      "title": "Das Modell beschreibt mehr als die App",
+      "body": "Der Prototyp setzt den Kern klickbar um: Buchung, Kasse, Manager-Cockpit, Einlass. Die übrigen Klassen (im Diagramm ohne grünen Punkt) sind bewusst als Roadmap modelliert. Das Klassendiagramm zeigt das ganze Produkt, nicht nur den MVP."
+    }
+  ],
+  "erweitert": [
+    {
+      "id": "buchungsmodell",
+      "title": "Das Herzstück: eine Buchung",
+      "body": "Vier Klassen, vier klare Aufgaben: Eine Buchung ist der Kauf. Sie enthält für jeden Platz ein Ticket. Jedes Ticket gilt für einen VorstellungSitz, den Status eines Sitzes in genau dieser Vorstellung. Der physische Sitzplatz im Saal bleibt davon unberührt.",
+      "visual": { "id": "umlBuchungsmodell" }
+    },
+    {
+      "id": "assoc",
+      "title": "Der Schlüssel: VorstellungSitz",
+      "body": "Deshalb braucht es die Assoziationsklasse: Ein Sitzplatz existiert dauerhaft, sein Status wechselt aber je Vorstellung. reservieren(), belegen() und freigeben() setzen den Hold durch und verhindern Doppelbuchungen, für genau diese eine Vorstellung.",
+      "visual": { "id": "umlVorstellungSitz" }
+    },
+    {
+      "id": "ops",
+      "title": "Wer macht was: Objekt vs. Service",
+      "body": "Statusändernde Operationen sitzen am Objekt, dessen Zustand sie ändern: Zahlung.verarbeiten(), Buchung.bestätigen(), Ticket.einlösen(). Der BuchungService (nächste Folie) ruft sie nur auf und hält selbst keine Daten. Buchung ist nicht der BuchungService.",
+      "visual": { "id": "umlBuchungskette" }
+    },
+    {
+      "id": "kern",
+      "title": "Vom Saal zum einzelnen Sitz",
+      "body": "Woher der Sitzplatz kommt: eine Kompositions-Kette (◆). Eine Kette umfasst Kinos, ein Kino besitzt Säle, ein Saal enthält Sitzplätze. Der Teil existiert nicht ohne das Ganze.",
+      "visual": { "id": "umlKomposition" }
+    },
+    {
+      "id": "services",
+      "title": "Der BuchungService steuert nur",
+      "body": "Die «control»-Schicht: Der BuchungService führt reservieren(), anlegen() und stornieren() aus und hängt nur lose an den Domänenobjekten (⇢ Abhängigkeit). Er orchestriert die Abläufe; die Daten und ihren Zustand halten die Objekte selbst.",
+      "visual": { "id": "umlServices" }
+    },
+    {
+      "id": "vererbung",
+      "title": "Rollen erben von Nutzer",
+      "body": "Vom Kunden bis zum Administrator erben alle Akteure von Nutzer. Was jemand darf, entscheidet nicht die Klasse, sondern das Enum Nutzerrolle, geprüft über darf(aktion).",
+      "visual": { "id": "umlVererbung" }
+    },
+    {
+      "id": "all",
+      "title": "Das Modell beschreibt mehr als die App",
+      "body": "Der Prototyp setzt den Kern klickbar um: Buchung, Kasse, Manager-Cockpit, Einlass. Die übrigen Klassen (im Diagramm ohne grünen Punkt) sind bewusst als Roadmap modelliert. Das Klassendiagramm zeigt das ganze Produkt, nicht nur den MVP."
+    }
+  ]
+}

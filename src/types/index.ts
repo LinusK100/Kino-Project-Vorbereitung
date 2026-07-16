@@ -144,3 +144,24 @@ export interface PresentationStep {
   visual?: ReactNode       // abschnittsspezifisches Visual (aus JSON gerendert),
                            // z. B. ein Diagramm-Ausschnitt — Text wird zur Bildunterschrift
 }
+
+// ── JSON-Form der Touren (Text lebt in src/data/presentations/*.json) ──
+// Das Visual kann nicht als JSON gespeichert werden (React/SVG); stattdessen
+// verweist eine Kennung auf die Registry, die die Komponente rendert.
+export interface PresentationVisualSpec {
+  id: string                       // Registry-Schlüssel, z. B. 'umlBuchungsmodell'
+  props?: Record<string, unknown>  // statische Props, z. B. { tier: 'basis' }
+}
+export interface RawPresentationStep {
+  id: string
+  title: string
+  body: string
+  points?: string[]
+  visual?: PresentationVisualSpec
+}
+// Eine Abschnitts-Datei: modus-los (steps) ODER mit Einfach/Erweitert.
+export interface PresentationData {
+  steps?: RawPresentationStep[]
+  einfach?: RawPresentationStep[]
+  erweitert?: RawPresentationStep[]
+}

@@ -5,8 +5,8 @@ import {
 import { SectionShell } from '@/components/shared/SectionShell'
 import { Callout } from '@/components/shared/Callout'
 import { innovation, personaById } from '@/data/content'
-import { IdeeVerankert, InnovationsMatrix } from '@/components/presentation/visuals/product'
-import type { Innovation, PresentationStep } from '@/types'
+import { usePresentation } from '@/components/presentation/steps'
+import type { Innovation } from '@/types'
 
 const ACCENT = '#437a22'
 
@@ -22,24 +22,10 @@ const feasCfg: Record<string, { label: string; color: string }> = {
 }
 
 // Dieser Abschnitt kennt bewusst keinen Einfach/Erweitert-Modus:
-// alle Ideen werden immer gezeigt.
-const steps: PresentationStep[] = [
-  {
-    id: 'feas', title: 'Ideen über den MVP hinaus, ehrlich bewertet', visual: <InnovationsMatrix />,
-    body: 'Recherchierte Zukunfts-Ideen (2026) über den MVP hinaus, eingeordnet nach Impact und Aufwand. Jede trägt ein begründetes Machbarkeits-Flag – AR-Hardware und ML-Modelle sind bewusst als Konzept markiert.',
-  },
-  {
-    id: 'anchor', title: 'Verankert im Modell', visual: <IdeeVerankert />,
-    body: 'Keine losen Visionen: Jede Idee nennt ihre Persona, ihre User Stories und die betroffenen UML-Klassen. Die dynamischen Preise etwa erweitern Tarif um Preisregel und PreisService.',
-  },
-  {
-    id: 'cards', title: 'Zum Nachlesen',
-    body: 'Jede Karte auf der Seite öffnet Details mit Modell-Bezug und dem Hinweis, wo die Technik den Projektrahmen übersteigt. Impact und Aufwand stehen als Einschätzung an jeder Karte.',
-  },
-]
-
+// alle Ideen werden immer gezeigt. Folien-Texte: src/data/presentations/innovation.json
 export default function InnovationPage() {
   const items = innovation.innovations
+  const steps = usePresentation('innovation')
 
   return (
     <SectionShell

@@ -310,3 +310,20 @@
   Verifiziert: Build/Lint grün, hell/dunkel deterministisch (Element-Wait,
   0 Fehler). Hinweis: lokale/CI-Build-Hashes unterscheiden sich (macOS vs.
   Linux) – Inhalt wird am echten Live-Chunk gegengeprüft.
+- 2026-07-16: Präsentations-Inhalte nach JSON ausgelagert + inhaltlicher
+  Mehrwert-Check je Abschnitt (Owner). (1) Alle Tour-Texte liegen jetzt als
+  src/data/presentations/<abschnitt>.json (9 Dateien, einfach/erweitert oder
+  steps) — regelkonform zu CLAUDE.md „Inhalte nur aus src/data". Neue
+  Visual-Registry + Selektor usePresentation() in
+  components/presentation/steps.tsx (Text aus JSON, Visual per Kennung,
+  berechnete Zahlen bleiben in den Visuals). Alle 8 Seiten von inline
+  stepsFor auf usePresentation umgestellt; Typen RawPresentationStep etc.
+  (2) Personas inhaltlich umgebaut: statt beliebiger Einzel-Spotlights jetzt
+  die Abgrenzung Kundschaft vs. Betrieb im Zentrum (Folie „Kundschaft und
+  Betrieb", dann je ein Beispiel pro Seite). (3) Gezielt-leichter Sprach-
+  Feinschliff nach Leitfaden: Gedankenstrich-Pointen entschärft
+  („endet – garantiert" → „endet von selbst"), das eine forcierte → im
+  Fließtext ausgeschrieben, listige Dreier („konsistent, interaktiv und
+  jederzeit prüfbar") gestrafft, Meta-Schluss der Stories auf
+  Nachvollziehbarkeit umgestellt. Verifiziert: 14 Touren (71 Folien) per
+  Playwright, 0 Fehler; Build/Lint grün.

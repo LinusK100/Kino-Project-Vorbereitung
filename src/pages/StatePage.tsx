@@ -7,61 +7,19 @@ import { StateDiagram } from '@/components/diagram/StateDiagram'
 import { stateMachines } from '@/data/content'
 import { extraMachines } from '@/data/statesExtra'
 import { useAppStore } from '@/store/appStore'
-import { BuchungZyklus, SitzHappyPath, SitzRueckwege, TicketZyklus, ZahlungZyklus } from '@/components/presentation/visuals/flow'
-import { EnumAbgleich } from '@/components/presentation/visuals/uml'
-import type { StateMachine, PresentationStep, Mode } from '@/types'
+import { usePresentation } from '@/components/presentation/steps'
+import type { StateMachine } from '@/types'
 
 const ACCENT = '#7a39bb'
 
-// Einfach: Sitz + Ticket (wie die Seite). Erweitert vertieft Buchung und
-// Zahlung als eigene Automaten — dieselbe Erweiterung wie auf der Seite.
-function stepsFor(mode: Mode): PresentationStep[] {
-  const basis: PresentationStep[] = [
-    {
-      id: 'intro', title: 'Ein Objekt, sein Lebenszyklus',
-      body: mode === 'einfach'
-        ? 'Ein Zustandsautomat beschreibt genau ein Objekt über die Zeit: welche Zustände es annimmt und welche Ereignisse mit welchen Guards die Übergänge auslösen. Die nächsten Folien zeigen Sitz und Ticket.'
-        : 'Ein Zustandsautomat beschreibt genau ein Objekt über die Zeit: welche Zustände es annimmt und welche Ereignisse mit welchen Guards die Übergänge auslösen. Die nächsten Folien zeigen Sitz, Ticket, Buchung und Zahlung.',
-    },
-    {
-      id: 'sitz', title: 'Der Weg zum belegten Sitz', visual: <SitzHappyPath />,
-      body: 'Der Sitz je Vorstellung: auswählen ist nur lokal, reservieren() setzt den serverseitigen Hold, und erst belegen() nach erfolgreicher Zahlung macht den Platz endgültig zu.',
-    },
-    {
-      id: 'rueckwege', title: 'Jeder Hold endet – garantiert', visual: <SitzRueckwege />,
-      body: 'Läuft der 10-Minuten-Hold ab oder bricht der Kunde ab, wird der Sitz automatisch wieder FREI; ein Storno gibt auch belegte Plätze zurück. Kein Sitz bleibt für immer blockiert – und DEFEKT sperrt ihn bei Bedarf systemweit.',
-    },
-    {
-      id: 'ticket', title: 'Ein Anfang, drei Enden', visual: <TicketZyklus />,
-      body: 'Das Ticket entsteht erst, wenn der Sitz BELEGT wird – hier koppeln sich die Automaten. Danach gibt es genau drei Ausgänge: eingelöst am Einlass, storniert mit Erstattung oder abgelaufen nach der Vorstellung.',
-    },
-  ]
-  const vertiefung: PresentationStep[] = [
-    {
-      id: 'buchung', title: 'Die Buchung hält alles zusammen', visual: <BuchungZyklus />,
-      body: 'AUSSTEHEND beim Checkout, BESTÄTIGT mit erfolgreicher Zahlung, EINGELÖST am Einlass. Ein Storno bleibt auch nach der Bestätigung möglich – bis zum Vorstellungsbeginn.',
-    },
-    {
-      id: 'zahlung', title: 'Die Zahlung entscheidet den Rest', visual: <ZahlungZyklus />,
-      body: 'Verarbeiten gelingt oder scheitert – und erst ein Storno macht aus ERFOLGREICH ein ERSTATTET. Dieselbe Kette, die das Storno-Sequenzdiagramm über alle Objekte zeigt.',
-    },
-  ]
-  const enums: PresentationStep = {
-    id: 'enums', title: 'Exakt wie im Klassendiagramm', visual: <EnumAbgleich />,
-    body: mode === 'einfach'
-      ? 'Jeder Automat ist wertgleich mit seinem Status-Enum aus dem Klassendiagramm – Modellierung und Struktur widersprechen sich nie. Der Erweitert-Modus ergänzt Buchung und Zahlung als eigene Automaten.'
-      : 'Jeder Automat ist wertgleich mit seinem Status-Enum aus dem Klassendiagramm: Sitzstatus, Ticketstatus, Buchungsstatus und Zahlungsstatus. Modellierung und Struktur widersprechen sich nie.',
-  }
-  return mode === 'einfach' ? [...basis, enums] : [...basis, ...vertiefung, enums]
-}
-
+// Tour-Texte: src/data/presentations/zustandsdiagramme.json
 export default function StatePage() {
   const { mode } = useAppStore()
   const machines: StateMachine[] = useMemo(
     () => (mode === 'einfach' ? stateMachines.machines : [...stateMachines.machines, ...extraMachines]),
     [mode],
   )
-  const steps = useMemo(() => stepsFor(mode), [mode])
+  const steps = usePresentation('zustandsdiagramme')
   const [activeId, setActiveId] = useState(machines[0].id)
   // derive a valid id (active machine may disappear when switching mode)
   const effId = machines.some((m) => m.id === activeId) ? activeId : machines[0].id

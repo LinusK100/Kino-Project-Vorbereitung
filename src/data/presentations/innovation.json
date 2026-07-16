@@ -1,0 +1,21 @@
+{
+  "steps": [
+    {
+      "id": "feas",
+      "title": "Ideen über den MVP hinaus, ehrlich bewertet",
+      "body": "Recherchierte Zukunfts-Ideen über den MVP hinaus, eingeordnet nach Impact und Aufwand. Jede trägt ein begründetes Machbarkeits-Flag; AR-Hardware und ML-Modelle sind bewusst als Konzept markiert.",
+      "visual": { "id": "innovationsMatrix" }
+    },
+    {
+      "id": "anchor",
+      "title": "Verankert im Modell",
+      "body": "Keine losen Visionen: Jede Idee nennt ihre Persona, ihre User Stories und die betroffenen UML-Klassen. Die dynamischen Preise etwa erweitern Tarif um Preisregel und PreisService.",
+      "visual": { "id": "ideeVerankert" }
+    },
+    {
+      "id": "cards",
+      "title": "Zum Nachlesen",
+      "body": "Jede Karte auf der Seite öffnet Details mit Modell-Bezug und dem Hinweis, wo die Technik den Projektrahmen übersteigt. Impact und Aufwand stehen als Einschätzung an jeder Karte."
+    }
+  ]
+}

@@ -8,8 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useStories, personaById } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
-import { StoryKarte, StorySchema, StoryVerteilung } from '@/components/presentation/visuals/people'
-import type { UserStory, Priority, PresentationStep, Mode } from '@/types'
+import { usePresentation } from '@/components/presentation/steps'
+import type { UserStory, Priority } from '@/types'
 
 const ACCENT = '#006494'
 const priorities: Priority[] = ['high', 'medium', 'low']
@@ -19,36 +19,11 @@ const priorityColor: Record<Priority, string> = { high: '#ef4444', medium: '#f59
 const releaseLabel: Record<number, string> = { 1: 'R1 – MVP', 2: 'R2 – Erweiterung', 3: 'R3 – Vollausbau' }
 const releaseColor: Record<number, string> = { 1: '#437a22', 2: '#d19900', 3: '#a13544' }
 
-// Die Tour zeigt, wie eine Anforderung aussieht und wie sie sich liest –
-// mit echten Beispielen statt Verteilungszahlen.
-function stepsFor(mode: Mode): PresentationStep[] {
-  const beispiel: PresentationStep = mode === 'einfach'
-    ? {
-        id: 'beispiel', title: 'So liest sich eine Story', visual: <StoryKarte id="U01" />,
-        body: 'Monikas Schnellverkauf, komplett mit messbaren Akzeptanzkriterien: sichtbar, schnell, vorausgewählt. Genau so präzise ist jede Story formuliert – sie sagt, wann sie „fertig" ist.',
-      }
-    : {
-        id: 'kern', title: 'Die wichtigste Regel: der Sitz-Hold', visual: <StoryKarte id="U47" />,
-        body: 'U47 ist der fachliche Kern: Der gewählte Platz wird beim Checkout verbindlich reserviert – keine Doppelbuchung. Genau diese Story taucht im Sequenzdiagramm und im Zustandsautomaten wieder auf.',
-      }
-  return [
-    {
-      id: 'intro', title: 'Ein Satz, drei Antworten', visual: <StorySchema />,
-      body: 'Jede User Story beschreibt eine Anforderung aus Nutzersicht – in einem Satz, der Persona, Ziel und Nutzen festhält. Dazu kommen testbare Akzeptanzkriterien als Definition von „fertig".',
-    },
-    beispiel,
-    {
-      id: 'plan', title: 'Priorität und Release: der Bauplan', visual: <StoryVerteilung tier={mode === 'einfach' ? 'basis' : 'erweitert'} />,
-      body: 'Jede Story trägt eine MoSCoW-Priorität und ein Release. Zusammen ergeben sie den Bauplan: Release 1 ist die schmale, lauffähige Scheibe (der MVP), spätere Releases erweitern dort, wo es Wert stiftet.',
-    },
-    { id: 'arbeit', title: 'Arbeiten mit den Stories', body: 'Die Tabelle lässt sich nach Persona, Priorität, Release und Aktivität filtern; ein Klick auf eine Zeile öffnet die Story mit ihren Akzeptanzkriterien – Export als CSV inklusive.' },
-  ]
-}
-
+// Tour-Texte: src/data/presentations/user-stories.json
 export default function UserStoriesPage() {
   const stories = useStories()
   const { mode } = useAppStore()
-  const steps = useMemo(() => stepsFor(mode), [mode])
+  const steps = usePresentation('user-stories')
   const [selected, setSelected] = useState<UserStory | null>(null)
   const [persona, setPersona] = useState('all')
   const [priority, setPriority] = useState('all')

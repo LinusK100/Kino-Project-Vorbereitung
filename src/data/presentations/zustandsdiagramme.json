@@ -1,0 +1,76 @@
+{
+  "einfach": [
+    {
+      "id": "intro",
+      "title": "Ein Objekt, sein Lebenszyklus",
+      "body": "Ein Zustandsautomat beschreibt genau ein Objekt über die Zeit: welche Zustände es annimmt und welche Ereignisse mit welchen Guards die Übergänge auslösen. Die nächsten Folien zeigen Sitz und Ticket."
+    },
+    {
+      "id": "sitz",
+      "title": "Der Weg zum belegten Sitz",
+      "body": "Der Sitz je Vorstellung: auswählen ist nur lokal, reservieren() setzt den serverseitigen Hold, und erst belegen() nach erfolgreicher Zahlung macht den Platz endgültig zu.",
+      "visual": { "id": "sitzHappyPath" }
+    },
+    {
+      "id": "rueckwege",
+      "title": "Jeder Hold endet von selbst",
+      "body": "Läuft der 10-Minuten-Hold ab oder bricht der Kunde ab, wird der Sitz automatisch wieder FREI. Ein Storno gibt auch belegte Plätze zurück, und DEFEKT sperrt einen Sitz bei Bedarf systemweit. Kein Sitz bleibt für immer blockiert.",
+      "visual": { "id": "sitzRueckwege" }
+    },
+    {
+      "id": "ticket",
+      "title": "Ein Anfang, drei Enden",
+      "body": "Das Ticket entsteht erst, wenn der Sitz BELEGT wird; hier koppeln sich die Automaten. Danach gibt es genau drei Ausgänge: eingelöst am Einlass, storniert mit Erstattung oder abgelaufen nach der Vorstellung.",
+      "visual": { "id": "ticketZyklus" }
+    },
+    {
+      "id": "enums",
+      "title": "Exakt wie im Klassendiagramm",
+      "body": "Jeder Automat ist wertgleich mit seinem Status-Enum aus dem Klassendiagramm, Modellierung und Struktur widersprechen sich nie. Der Erweitert-Modus ergänzt Buchung und Zahlung als eigene Automaten.",
+      "visual": { "id": "enumAbgleich" }
+    }
+  ],
+  "erweitert": [
+    {
+      "id": "intro",
+      "title": "Ein Objekt, sein Lebenszyklus",
+      "body": "Ein Zustandsautomat beschreibt genau ein Objekt über die Zeit: welche Zustände es annimmt und welche Ereignisse mit welchen Guards die Übergänge auslösen. Die nächsten Folien zeigen Sitz, Ticket, Buchung und Zahlung."
+    },
+    {
+      "id": "sitz",
+      "title": "Der Weg zum belegten Sitz",
+      "body": "Der Sitz je Vorstellung: auswählen ist nur lokal, reservieren() setzt den serverseitigen Hold, und erst belegen() nach erfolgreicher Zahlung macht den Platz endgültig zu.",
+      "visual": { "id": "sitzHappyPath" }
+    },
+    {
+      "id": "rueckwege",
+      "title": "Jeder Hold endet von selbst",
+      "body": "Läuft der 10-Minuten-Hold ab oder bricht der Kunde ab, wird der Sitz automatisch wieder FREI. Ein Storno gibt auch belegte Plätze zurück, und DEFEKT sperrt einen Sitz bei Bedarf systemweit. Kein Sitz bleibt für immer blockiert.",
+      "visual": { "id": "sitzRueckwege" }
+    },
+    {
+      "id": "ticket",
+      "title": "Ein Anfang, drei Enden",
+      "body": "Das Ticket entsteht erst, wenn der Sitz BELEGT wird; hier koppeln sich die Automaten. Danach gibt es genau drei Ausgänge: eingelöst am Einlass, storniert mit Erstattung oder abgelaufen nach der Vorstellung.",
+      "visual": { "id": "ticketZyklus" }
+    },
+    {
+      "id": "buchung",
+      "title": "Die Buchung hält alles zusammen",
+      "body": "AUSSTEHEND beim Checkout, BESTÄTIGT mit erfolgreicher Zahlung, EINGELÖST am Einlass. Ein Storno bleibt auch nach der Bestätigung möglich, bis zum Vorstellungsbeginn.",
+      "visual": { "id": "buchungZyklus" }
+    },
+    {
+      "id": "zahlung",
+      "title": "Die Zahlung entscheidet den Rest",
+      "body": "Verarbeiten gelingt oder scheitert, und erst ein Storno macht aus ERFOLGREICH ein ERSTATTET. Dieselbe Kette, die das Storno-Sequenzdiagramm über alle Objekte zeigt.",
+      "visual": { "id": "zahlungZyklus" }
+    },
+    {
+      "id": "enums",
+      "title": "Exakt wie im Klassendiagramm",
+      "body": "Jeder Automat ist wertgleich mit seinem Status-Enum aus dem Klassendiagramm: Sitzstatus, Ticketstatus, Buchungsstatus und Zahlungsstatus. Modellierung und Struktur widersprechen sich nie.",
+      "visual": { "id": "enumAbgleich" }
+    }
+  ]
+}

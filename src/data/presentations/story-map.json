@@ -1,0 +1,50 @@
+{
+  "einfach": [
+    {
+      "id": "intro",
+      "title": "Zwei Dimensionen, ein Plan",
+      "body": "Die Story Map ordnet alle User Stories zweidimensional: waagerecht die Nutzerreise von der Aktivität zum Schritt, senkrecht die Auslieferung in Releases. So sieht man auf einen Blick, was zusammen den MVP ergibt."
+    },
+    {
+      "id": "backbone",
+      "title": "Das Backbone: die Nutzerreise",
+      "body": "Die Aktivitäten bilden das Rückgrat der Nutzerreise, vom Ticketkauf über Sitzplan und Einlass bis zur Verwaltung. Jede Story hängt an genau einem Schritt dieser Reise.",
+      "visual": { "id": "backboneChips", "props": { "tier": "basis" } }
+    },
+    {
+      "id": "releases",
+      "title": "Waagerecht schneiden: Releases",
+      "body": "Release 1 ist die schmale, lauffähige Scheibe quer durch alle Aktivitäten. Die weiteren Releases erweitern das System dort, wo es Wert stiftet, statt einfach „mehr Features“.",
+      "visual": { "id": "releaseBaender", "props": { "tier": "basis" } }
+    },
+    {
+      "id": "arbeit",
+      "title": "Arbeiten mit der Karte",
+      "body": "Auf der Website lässt sich jedes Release-Band hervorheben; jede Karte öffnet per Klick die Story mit Persona und Akzeptanzkriterien. Ziehen verschiebt eine Karte waagerecht durch die ganze Reise."
+    }
+  ],
+  "erweitert": [
+    {
+      "id": "intro",
+      "title": "Zwei Dimensionen, ein Plan",
+      "body": "Die Story Map ordnet alle User Stories zweidimensional: waagerecht die Nutzerreise von der Aktivität zum Schritt, senkrecht die Auslieferung in Releases. So sieht man auf einen Blick, was zusammen den MVP ergibt."
+    },
+    {
+      "id": "backbone",
+      "title": "Das Backbone: die Nutzerreise",
+      "body": "Die Aktivitäten bilden das Rückgrat der Nutzerreise, vom Ticketkauf über Sitzplan und Einlass bis zur Verwaltung. Der Erweitert-Modus ergänzt Gastro, Facility und Multi-Site, ohne die Struktur zu brechen.",
+      "visual": { "id": "backboneChips", "props": { "tier": "erweitert" } }
+    },
+    {
+      "id": "releases",
+      "title": "Waagerecht schneiden: Releases",
+      "body": "Release 1 ist die schmale, lauffähige Scheibe quer durch alle Aktivitäten. Die weiteren Releases erweitern das System dort, wo es Wert stiftet, statt einfach „mehr Features“.",
+      "visual": { "id": "releaseBaender", "props": { "tier": "erweitert" } }
+    },
+    {
+      "id": "arbeit",
+      "title": "Arbeiten mit der Karte",
+      "body": "Auf der Website lässt sich jedes Release-Band hervorheben; jede Karte öffnet per Klick die Story mit Persona und Akzeptanzkriterien. Ziehen verschiebt eine Karte waagerecht durch die ganze Reise."
+    }
+  ]
+}

@@ -11,8 +11,7 @@ import { Presentation } from '@/components/presentation/Presentation'
 import { useAppStore } from '@/store/appStore'
 import { innovation, personas, prototype, stories, storyMaps, uml, sequences, stateMachines } from '@/data/content'
 import { extraMachines } from '@/data/statesExtra'
-import { DreiStationen, JsonZuSvg, TeilmengeModi } from '@/components/presentation/visuals/product'
-import type { PresentationStep } from '@/types'
+import { usePresentation } from '@/components/presentation/steps'
 
 const ACCENT = '#01696f'
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1]
@@ -53,28 +52,7 @@ const HINWEISE = [
   },
 ]
 
-const tourSteps: PresentationStep[] = [
-  {
-    id: 'aufbau', title: 'Von der Idee zur klickbaren App', visual: <DreiStationen />,
-    body: 'CineTicket ist ein Kino-Ticketsystem für „Systemanalyse und Entwurf". Die Website folgt dem Weg der Systementwicklung: Aus den Anforderungen entstehen die Modelle, aus den Modellen der Prototyp – jede Station baut auf der vorigen auf.',
-  },
-  {
-    id: 'json', title: 'Alle Inhalte sind JSON-Daten', visual: <JsonZuSvg />,
-    body: 'Von den Personas bis zu den Zustandsautomaten liegt jeder Inhalt als strukturierte JSON-Datei vor. Die Diagramme werden daraus live als SVG gerendert – konsistent, interaktiv und jederzeit prüfbar.',
-  },
-  {
-    id: 'modi', title: 'Einfach ⊂ Erweitert', visual: <TeilmengeModi />,
-    body: 'Anforderungen und Modellierung haben zwei Detailgrade: Einfach zeigt den MVP-Kern, Erweitert den Vollausbau – die Basis ist immer eine echte Teilmenge. Prototyp und Innovation zeigen immer alles.',
-  },
-  {
-    id: 'ergebnis', title: 'Das Ergebnis: der klickbare Prototyp', visual: <DreiStationen />,
-    body: 'Am Ende steht die echte App: Der Kunde bucht im Wizard, die Kasse verkauft im Schnellmodus, der Manager sieht Umsatz und Auslastung, das Einlasspersonal scannt QR-Codes. Der Abschnitt „Prototyp" startet sie mit einem Klick – was darüber hinausgeht, ist im Modell als Roadmap verortet.',
-  },
-  {
-    id: 'praes', title: 'Präsentationsmodus',
-    body: 'Jeder Abschnitt erklärt seine wichtigsten Inhalte in einer solchen Kino-Tour – mit echten Ausschnitten aus den Diagrammen. Weiter per Pfeiltasten, automatisch mit einstellbarem Tempo, Esc beendet.',
-  },
-]
+// Tour-Texte: src/data/presentations/overview.json
 
 // gestaffeltes Einblenden (beide Ansichten)
 function useEnter() {
@@ -92,6 +70,7 @@ export default function OverviewPage() {
 // ── Dunkel: der Kinosaal ──
 function SaalAnsicht() {
   const enter = useEnter()
+  const tourSteps = usePresentation('overview')
   return (
     <motion.div
       variants={pageVariants} initial="initial" animate="animate" exit="exit"
@@ -233,6 +212,7 @@ const glas = {
 
 function AuroraAnsicht() {
   const enter = useEnter()
+  const tourSteps = usePresentation('overview')
   return (
     <motion.div
       variants={pageVariants} initial="initial" animate="animate" exit="exit"

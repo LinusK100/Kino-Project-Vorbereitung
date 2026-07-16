@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { Workflow } from 'lucide-react'
 import { SectionShell } from '@/components/shared/SectionShell'
 import { Callout } from '@/components/shared/Callout'
@@ -6,51 +6,16 @@ import { DiagramFrame } from '@/components/diagram/DiagramFrame'
 import { SequenceDiagram } from '@/components/diagram/SequenceDiagram'
 import { sequences } from '@/data/content'
 import { useAppStore } from '@/store/appStore'
-import { FlowUebersicht, SeqAusschnitt } from '@/components/presentation/visuals/flow'
-import type { SequenceDiagram as SeqType, PresentationStep, Mode } from '@/types'
+import { usePresentation } from '@/components/presentation/steps'
+import type { SequenceDiagram as SeqType } from '@/types'
 
 const ACCENT = '#7a39bb'
 
-// Einfach: der Happy Path der Online-Buchung. Erweitert vertieft die
-// Fehlerpfade (alt-Fragment) und den Storno quer über alle Objekte.
-function stepsFor(mode: Mode): PresentationStep[] {
-  const happy: PresentationStep[] = [
-    {
-      id: 'intro', title: 'Der Buchungsablauf über die Zeit', visual: <FlowUebersicht />,
-      body: 'Ein Sequenzdiagramm zeigt, wer wann welche Nachricht an wen schickt. Statt eines überladenen Diagramms gibt es fokussierte Abläufe – Online-Buchung, Kasse, Storno, Einlass. Die nächsten Folien zoomen in die Online-Buchung.',
-    },
-    {
-      id: 'hold', title: 'Der Hold: 10 Minuten verbindlich', visual: <SeqAusschnitt flow="online-buchung" msgSeqs={['6', '7', '8a', '9a']} />,
-      body: 'Beim Checkout ruft der BuchungService reservieren() am VorstellungSitz auf – der Sitz wird serverseitig RESERVIERT und ist für parallele Käufer blockiert. Das Badge zeigt den Statuswechsel.',
-    },
-    {
-      id: 'zahlung', title: 'Die Zahlung entscheidet', visual: <SeqAusschnitt flow="online-buchung" msgSeqs={['12', '13a', '14', '15', '16']} />,
-      body: 'Erst wenn die Zahlung ERFOLGREICH ist, wird der Sitz BELEGT, die Buchung BESTÄTIGT und das QR-Ticket erzeugt – vier Statuswechsel in genau dieser Reihenfolge.',
-    },
-  ]
-  const vertiefung: PresentationStep[] = [
-    {
-      id: 'fehler', title: 'Und wenn der Platz weg ist?', visual: <SeqAusschnitt flow="online-buchung" msgSeqs={['8b', '9b', '10b']} frame={{ label: 'alt', guard: '[Platz bereits vergeben]' }} />,
-      body: 'Kommt reservieren() zu spät, antwortet der Sitz mit false – der Kunde landet zurück in der Sitzwahl statt in einer Doppelbuchung. Auf der Seite zeigen die alt-/break-Fragmente auch Zahlungsfehler und Hold-Timeout.',
-    },
-    {
-      id: 'storno', title: 'Ein Storno wirkt überall', visual: <SeqAusschnitt flow="storno" msgSeqs={['2', '3', '4', '5']} />,
-      body: 'Vier Aufrufe, vier Objekte: Die Buchung wird STORNIERT, das Ticket ungültig, die Zahlung ERSTATTET und der Sitz wieder FREI – ein Vorgang, konsistent über alle Zustandsautomaten.',
-    },
-  ]
-  const lesehilfe: PresentationStep = {
-    id: 'lifelines', title: 'Lesehilfe für die Diagramme',
-    body: mode === 'einfach'
-      ? 'Oben die Teilnehmer: Akteur, «control»-Services, «entity»-Objekte. Die Zeit läuft an den Lebenslinien nach unten, Aktivierungsbalken zeigen, wer gerade arbeitet. Der Erweitert-Modus ergänzt die Fehlerpfade als alt-/break-Fragmente.'
-      : 'Oben die Teilnehmer: Akteur, «control»-Services, «entity»-Objekte. Die Zeit läuft an den Lebenslinien nach unten, Aktivierungsbalken zeigen, wer gerade arbeitet. Durchgezogene Pfeile sind Aufrufe, gestrichelte Rückgaben.',
-  }
-  return mode === 'einfach' ? [...happy, lesehilfe] : [...happy, ...vertiefung, lesehilfe]
-}
-
+// Tour-Texte: src/data/presentations/sequenzdiagramme.json
 export default function SequencePage() {
   const { mode } = useAppStore()
   const showFragments = mode === 'erweitert'
-  const steps = useMemo(() => stepsFor(mode), [mode])
+  const steps = usePresentation('sequenzdiagramme')
   const [activeId, setActiveId] = useState(sequences[0].id)
   const diagram = sequences.find((d) => d.id === activeId) ?? sequences[0]
 
