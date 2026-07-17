@@ -1,14 +1,13 @@
 // Druck-Ansicht der Gesamt-Präsentation: alle Folien gestapelt, eine je Seite
-// (16:9, 297×167 mm), immer hell, ohne Animationen. Nutzt dieselbe SlideView
-// wie der Präsentationsmodus — PDF und Vortrag sehen identisch aus.
-// Aus dieser Route erzeugt scripts/export-praesentation.mjs das PDF.
+// (16:9, 297×167 mm), immer hell, ohne Animationen. Nutzt SlideCard, Kopf- und
+// Fußleiste des Präsentationsmodus — jede PDF-Seite sieht exakt aus wie die
+// Präsentation auf der Website. Quelle für scripts/export-praesentation.mjs.
 import { useEffect } from 'react'
 import { MotionConfig } from 'motion/react'
 import { useAppStore } from '@/store/appStore'
 import { useGesamt, SECTION_META, type GesamtSlide } from '@/components/presentation/steps'
-import { Timeline } from '@/components/presentation/PresentationHost'
+import { PresFootBar, PresHeaderBar } from '@/components/presentation/PresentationHost'
 import { SlideCard, SlideView } from '@/components/presentation/SlideView'
-import { pres } from '@/components/presentation/visuals/core'
 
 export default function PraesentationDruckPage() {
   const deck = useGesamt()
@@ -35,7 +34,6 @@ export default function PraesentationDruckPage() {
 
 function DruckSeite({ step, index, deck }: { step: GesamtSlide; index: number; deck: GesamtSlide[] }) {
   const meta = SECTION_META[step.abschnitt] ?? SECTION_META.start
-  const P = pres()
   const total = deck.length
 
   return (
@@ -48,23 +46,24 @@ function DruckSeite({ step, index, deck }: { step: GesamtSlide; index: number; d
         display: 'flex', flexDirection: 'column',
       }}
     >
-      {/* Kopf */}
-      <div className="flex items-center justify-between px-10 pt-4 pb-2 text-[11px]" style={{ color: P.fgFaint }}>
-        <span className="font-bold uppercase tracking-[0.18em]">CineTicket — Systemanalyse und Entwurf</span>
-        <span className="font-mono">{index + 1} / {total}</span>
-      </div>
+      {/* identische Kopfleiste wie im Präsentationsmodus */}
+      <PresHeaderBar
+        light accent={meta.accent}
+        titel="CineTicket — Systemanalyse und Entwurf"
+        index={index} total={total}
+      />
 
       {/* Folie als Karte — identisches Layout wie im Präsentationsmodus */}
-      <div className="flex-1 min-h-0 px-8 pb-2">
+      <div className="relative flex-1 min-h-0 px-5 md:px-10 pt-4 pb-3">
         <SlideCard light accent={meta.accent}>
           <SlideView step={step} />
         </SlideCard>
       </div>
 
-      {/* Fuß: Abschnitts-Timeline wie im Präsentationsmodus */}
-      <div className="flex justify-center pb-4 px-12">
-        <Timeline deck={deck} index={index} onJump={() => {}} light />
-      </div>
+      {/* identische Fußleiste (Zurück · Timeline · Weiter) */}
+      <PresFootBar
+        deck={deck} index={index} light accent={meta.accent} atEnd={index === total - 1}
+      />
     </section>
   )
 }

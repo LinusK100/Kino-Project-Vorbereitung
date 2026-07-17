@@ -46,7 +46,6 @@ function CinemaMode() {
   const step = deck[index]
   const atEnd = index === total - 1
   const meta = SECTION_META[step?.abschnitt ?? 'start'] ?? SECTION_META.start
-  const P = pres()
   const light = presTheme === 'light'
 
   const go = useCallback(
@@ -118,45 +117,12 @@ function CinemaMode() {
         />
       )}
 
-      {/* Kopfzeile: farblich abgesetzt in der Abschnittsfarbe */}
-      <div
-        className="relative flex items-center justify-between px-5 py-2.5"
-        style={{
-          background: light
-            ? `linear-gradient(180deg, ${meta.accent}16 0%, ${meta.accent}0a 100%)`
-            : 'rgba(255,255,255,0.05)',
-          borderBottom: `1px solid ${light ? `${meta.accent}2e` : 'rgba(255,255,255,0.1)'}`,
-          transition: 'background 0.4s, border-color 0.4s',
-        }}
-      >
-        <div className="flex items-center gap-2.5 min-w-0 text-sm" style={{ color: P.fgFaint }}>
-          <PresentationIcon size={16} />
-          <span className="text-xs font-bold uppercase tracking-[0.18em]">Präsentation</span>
-          <span className="opacity-50">·</span>
-          <span className="truncate" style={{ fontFamily: 'var(--font-display)', color: P.fgSoft }}>
-            {run.scope === 'gesamt' ? 'CineTicket — Systemanalyse und Entwurf' : meta.label}
-          </span>
-        </div>
-        <div className="flex items-center gap-2.5 flex-shrink-0">
-          <span className="text-sm font-mono" style={{ color: P.fgFaint }}>{index + 1} / {total}</span>
-          <button
-            onClick={togglePresTheme}
-            aria-label={light ? 'Dunkler Modus' : 'Heller Modus'}
-            title={light ? 'Dunkler Modus' : 'Heller Modus'}
-            className="p-2 rounded-lg transition-colors"
-            style={{ color: P.fgSoft, border: `1px solid ${P.line}` }}
-          >
-            {light ? <Moon size={15} /> : <Sun size={15} />}
-          </button>
-          <button
-            onClick={close}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-colors"
-            style={{ background: P.chipStrong, color: P.fg }}
-          >
-            <X size={15} /> Beenden
-          </button>
-        </div>
-      </div>
+      <PresHeaderBar
+        light={light} accent={meta.accent}
+        titel={run.scope === 'gesamt' ? 'CineTicket — Systemanalyse und Entwurf' : meta.label}
+        index={index} total={total}
+        onToggleTheme={togglePresTheme} onClose={close}
+      />
 
       {/* Folie als Karte auf der Bühne — nutzt fast die ganze Fläche (Smart Board) */}
       <div className="relative flex-1 min-h-0 px-5 md:px-10 pt-4 pb-3">
@@ -167,24 +133,82 @@ function CinemaMode() {
         </SlideCard>
       </div>
 
-      {/* Untere Leiste: Zurück links, Timeline mittig, Weiter rechts */}
-      <div className="relative flex items-center gap-4 md:gap-6 px-6 md:px-10 pb-5 pt-1">
-        <CtrlBtn onClick={() => go(index - 1)} disabled={index === 0} label="Zurück" light={light}>
-          <ChevronLeft size={19} />
-        </CtrlBtn>
-        <Timeline deck={deck} index={index} onJump={go} light={light} />
-        <button
-          onClick={() => { if (atEnd) close(); else go(index + 1) }}
-          title={atEnd ? 'Präsentation beenden' : 'Nächste Folie (→)'}
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-white text-sm font-semibold transition-transform hover:-translate-y-0.5 flex-shrink-0"
-          style={{ background: meta.accent, boxShadow: `0 4px 16px ${meta.accent}50` }}
-        >
-          {atEnd ? <Check size={16} /> : <ChevronRight size={16} />}
-          {atEnd ? 'Fertig' : 'Weiter'}
-        </button>
-      </div>
+      <PresFootBar
+        deck={deck} index={index} light={light} accent={meta.accent} atEnd={atEnd}
+        onJump={go} onPrev={() => go(index - 1)} onNext={() => { if (atEnd) close(); else go(index + 1) }}
+      />
     </div>,
     document.body,
+  )
+}
+
+// ── Kopf- und Fußleiste: geteilt zwischen Live-Präsentation und Druck-Route,
+// damit das PDF exakt wie die Präsentation aussieht. ──
+export function PresHeaderBar({ light, accent, titel, index, total, onToggleTheme, onClose }: {
+  light: boolean; accent: string; titel: string; index: number; total: number
+  onToggleTheme?: () => void; onClose?: () => void
+}) {
+  const P = pres()
+  return (
+    <div
+      className="relative flex items-center justify-between px-5 py-2.5 flex-shrink-0"
+      style={{
+        background: light
+          ? `linear-gradient(180deg, ${accent}16 0%, ${accent}0a 100%)`
+          : 'rgba(255,255,255,0.05)',
+        borderBottom: `1px solid ${light ? `${accent}2e` : 'rgba(255,255,255,0.1)'}`,
+        transition: 'background 0.4s, border-color 0.4s',
+      }}
+    >
+      <div className="flex items-center gap-2.5 min-w-0 text-sm" style={{ color: P.fgFaint }}>
+        <PresentationIcon size={16} />
+        <span className="text-xs font-bold uppercase tracking-[0.18em]">Präsentation</span>
+        <span className="opacity-50">·</span>
+        <span className="truncate" style={{ fontFamily: 'var(--font-display)', color: P.fgSoft }}>{titel}</span>
+      </div>
+      <div className="flex items-center gap-2.5 flex-shrink-0">
+        <span className="text-sm font-mono" style={{ color: P.fgFaint }}>{index + 1} / {total}</span>
+        <button
+          onClick={onToggleTheme}
+          aria-label={light ? 'Dunkler Modus' : 'Heller Modus'}
+          title={light ? 'Dunkler Modus' : 'Heller Modus'}
+          className="p-2 rounded-lg transition-colors"
+          style={{ color: P.fgSoft, border: `1px solid ${P.line}` }}
+        >
+          {light ? <Moon size={15} /> : <Sun size={15} />}
+        </button>
+        <button
+          onClick={onClose}
+          className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-colors"
+          style={{ background: P.chipStrong, color: P.fg }}
+        >
+          <X size={15} /> Beenden
+        </button>
+      </div>
+    </div>
+  )
+}
+
+export function PresFootBar({ deck, index, light, accent, atEnd, onJump, onPrev, onNext }: {
+  deck: GesamtSlide[]; index: number; light: boolean; accent: string; atEnd: boolean
+  onJump?: (i: number) => void; onPrev?: () => void; onNext?: () => void
+}) {
+  return (
+    <div className="relative flex items-center gap-4 md:gap-6 px-6 md:px-10 pb-5 pt-1 flex-shrink-0">
+      <CtrlBtn onClick={onPrev ?? (() => {})} disabled={index === 0} label="Zurück" light={light}>
+        <ChevronLeft size={19} />
+      </CtrlBtn>
+      <Timeline deck={deck} index={index} onJump={onJump ?? (() => {})} light={light} />
+      <button
+        onClick={onNext}
+        title={atEnd ? 'Präsentation beenden' : 'Nächste Folie (→)'}
+        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-white text-sm font-semibold transition-transform hover:-translate-y-0.5 flex-shrink-0"
+        style={{ background: accent, boxShadow: `0 4px 16px ${accent}50` }}
+      >
+        {atEnd ? <Check size={16} /> : <ChevronRight size={16} />}
+        {atEnd ? 'Fertig' : 'Weiter'}
+      </button>
+    </div>
   )
 }
 

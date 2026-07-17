@@ -441,3 +441,10 @@
   ablesbar, U47 als „der Kern" hervorgehoben). Abschnitts-Tour behält die
   Detailkarte. Skript-Folie 9 nachgezogen. Lint 0, Playwright ALLES GRÜN,
   PDF neu exportiert.
+- 2026-07-17 (7): PDF = Präsentation (Owner). Kopf- und Fußleiste des
+  Präsentationsmodus als geteilte Komponenten extrahiert (PresHeaderBar/
+  PresFootBar in PresentationHost.tsx) und in der Druck-Route verwendet:
+  Jede PDF-Seite zeigt jetzt exakt die Live-Ansicht — getönte Kopfleiste mit
+  Icon/„PRÄSENTATION"/Zähler/Mond/Beenden, unten Zurück-Knopf, Timeline und
+  Weiter/Fertig-Pill. Lint 0, Playwright ALLES GRÜN, PDF neu exportiert und
+  Seite für Seite gegengeprüft.
