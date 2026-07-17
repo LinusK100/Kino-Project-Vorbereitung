@@ -457,3 +457,12 @@
   Danke-Banner. (3) Website-Link als Pill mit Globus-Icon auf Titel- UND
   Schlussfolie (neues link-Feld in den Folien-Typen, klickbar auch im PDF).
   Skript nachgezogen. Lint 0, Playwright 26er-Durchlauf ALLES GRÜN.
+- 2026-07-17 (9): Fazit + PDF-Verfahren (Owner). (1) Fazit-Folie auf reine
+  Schlagwort-Kacheln reduziert (Icon + Begriff: Daten statt Dokumente,
+  Roter Faden U47, Modell als Bauplan, Erst testen dann live); die Sätze
+  dazu stehen im Vortrags-Skript. (2) PDF-Export komplett neu: Statt Print-
+  Rendering fotografiert der Export jede Folie der LAUFENDEN Präsentation
+  (Playwright, 1600×900 bei 2×, JPEG 92) und bindet die Screenshots zu einem
+  PDF — Abweichungen vom Live-Aussehen sind damit konstruktionsbedingt
+  unmöglich. Titel-/Schlussseite verlinken auf die Website. Druck-Route
+  bleibt für manuelles Drucken bestehen. Lint 0, Playwright ALLES GRÜN.

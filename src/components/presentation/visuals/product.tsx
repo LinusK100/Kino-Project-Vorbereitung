@@ -1,7 +1,7 @@
 // Folien-Visuals für Dashboard, Prototyp, Innovation und den Abschluss.
 // Alle Zahlen/Listen werden aus den JSON-Daten berechnet.
 import { motion, useReducedMotion } from 'motion/react'
-import { Boxes, Braces, ListChecks, MonitorPlay, Rocket } from 'lucide-react'
+import { BadgeCheck, Boxes, Braces, ListChecks, MonitorPlay, Rocket, Route } from 'lucide-react'
 import { innovation, personas, prototype, sequences, stateMachines, stories, storyMaps, uml } from '@/data/content'
 import { extraMachines } from '@/data/statesExtra'
 import { bright, pop, pres } from './core'
@@ -422,40 +422,34 @@ export function AgendaListe() {
 export function Fundament() {
   const reduce = useReducedMotion()
   const P = pres()
+  // Nur Schlagworte — die Sätze dazu spricht die Person, die präsentiert.
   const punkte = [
-    {
-      c: '#006494', t: 'Daten statt Dokumente',
-      s: `${personas.erweitert.length} Personas, ${stories.erweitert.length} Stories, ${uml.classes.length} Klassen als JSON. Ein Coding-Agent liest sie direkt: als Datenbankschema, Seed-Daten und Testfälle.`,
-    },
-    {
-      c: '#01696f', t: 'Ein roter Faden',
-      s: 'U47 führt von der Story über die Sequenz bis zum Automaten. Jede Änderung lässt sich bis zur Anforderung zurückverfolgen.',
-    },
-    {
-      c: '#7a39bb', t: 'Spezifikation statt Prompt',
-      s: 'Modell, Automaten und Akzeptanzkriterien sind präzise genug, dass Agenten daraus Backend und Features bauen. Aus den Enums und Sequenzen werden die Tests.',
-    },
-    {
-      c: '#437a22', t: 'Der Ablauf sichert die Qualität',
-      s: 'Feste Regeln, echte Browser-Tests, Gegenprüfung vor jedem Stand. So ist diese Website entstanden, so entsteht auch das fertige System.',
-    },
+    { c: '#006494', icon: Braces, t: 'Daten statt Dokumente' },
+    { c: '#01696f', icon: Route, t: 'Roter Faden U47' },
+    { c: '#7a39bb', icon: Boxes, t: 'Modell als Bauplan' },
+    { c: '#437a22', icon: BadgeCheck, t: 'Erst testen, dann live' },
   ]
   return (
-    <div className="w-full flex flex-col gap-4" style={{ maxWidth: 1240 }}>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3.5">
-        {punkte.map((k, i) => (
-          <motion.div
-            key={k.t} {...pop(i * 2, reduce)}
-            className="rounded-2xl overflow-hidden text-left"
-            style={{ background: P.chip, border: `1px solid ${P.line}` }}
-          >
-            <div className="h-[3px]" style={{ background: bright(k.c) }} />
-            <div className="p-4">
-              <div className="text-[15px] font-bold mb-1.5" style={{ color: bright(k.c) }}>{k.t}</div>
-              <p className="text-[12.5px] leading-relaxed" style={{ color: P.fgSoft }}>{k.s}</p>
-            </div>
-          </motion.div>
-        ))}
+    <div className="w-full flex flex-col gap-5" style={{ maxWidth: 1180 }}>
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+        {punkte.map((k, i) => {
+          const Icon = k.icon
+          return (
+            <motion.div
+              key={k.t} {...pop(i * 2, reduce)}
+              className="rounded-2xl overflow-hidden text-center"
+              style={{ background: P.chip, border: `1px solid ${P.line}` }}
+            >
+              <div className="h-[4px]" style={{ background: bright(k.c) }} />
+              <div className="px-4 py-6 flex flex-col items-center gap-3">
+                <span className="w-11 h-11 rounded-xl flex items-center justify-center" style={{ background: `${k.c}18`, color: bright(k.c) }}>
+                  <Icon size={22} />
+                </span>
+                <span className="text-[16px] font-bold leading-tight" style={{ color: P.fg }}>{k.t}</span>
+              </div>
+            </motion.div>
+          )
+        })}
       </div>
       {/* Der Weg weiter: was schon steht, und wie es umgesetzt wird */}
       <div className="flex items-center justify-center flex-wrap gap-x-1.5 gap-y-2">
