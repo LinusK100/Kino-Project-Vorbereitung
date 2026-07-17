@@ -255,6 +255,54 @@ const prioCfg: Record<string, { label: string; color: string }> = {
 const relColor: Record<number, string> = { 1: '#437a22', 2: '#d19900', 3: '#a13544' }
 const relLabel: Record<number, string> = { 1: 'Release 1 – MVP', 2: 'Release 2 – Erweiterung', 3: 'Release 3 – Vollausbau' }
 
+// ── Mehrere Stories kompakt nebeneinander: zeigt die Bandbreite (Persona,
+// Priorität, Release), ohne Akzeptanzkriterien. „markiert" hebt den Kern hervor.
+export function StoryGalerie({ ids, markiert }: { ids: string[]; markiert?: string }) {
+  const reduce = useReducedMotion()
+  const P = pres()
+  const acc = bright('#006494')
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full" style={{ maxWidth: 1060 }}>
+      {ids.map((id, i) => {
+        const s = stories.erweitert.find((x) => x.id === id)
+        if (!s) return null
+        const p = personaById[s.persona]
+        const prio = prioCfg[s.priority]
+        const kern = id === markiert
+        return (
+          <motion.div
+            key={id} {...pop(i, reduce)}
+            className="rounded-2xl text-left"
+            style={{
+              background: kern ? `${'#006494'}0f` : P.chip,
+              border: kern ? `1.5px solid ${acc}88` : `1px solid ${P.line}`,
+              padding: '14px 18px',
+            }}
+          >
+            <div className="flex items-center gap-2 flex-wrap mb-1.5">
+              <span className="font-mono text-[14px] font-bold" style={{ color: acc }}>{s.id}</span>
+              {kern && (
+                <span className="text-[9.5px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wide" style={{ background: `${'#006494'}22`, color: acc }}>
+                  der Kern
+                </span>
+              )}
+              <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold" style={{ background: `${prio.color}26`, color: bright(prio.color) }}>{prio.label}</span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold" style={{ background: `${relColor[s.release]}26`, color: bright(relColor[s.release]) }}>{relLabel[s.release]}</span>
+              {p && (
+                <span className="ml-auto inline-flex items-center gap-1.5 text-[11px]" style={{ color: pres().fgSoft }}>
+                  <span className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[8px] font-bold" style={{ background: p.color }}>{p.avatar}</span>
+                  {p.name.split(' ')[0]}
+                </span>
+              )}
+            </div>
+            <p className="text-[12.5px] italic leading-relaxed" style={{ color: P.fg }}>{s.story}</p>
+          </motion.div>
+        )
+      })}
+    </div>
+  )
+}
+
 export function StoryKarte({ id }: { id: string }) {
   const reduce = useReducedMotion()
   const s = stories.erweitert.find((x) => x.id === id)!

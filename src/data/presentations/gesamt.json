@@ -90,13 +90,27 @@
     },
     {
       "abschnitt": "user-stories",
-      "ref": "user-stories.kern",
-      "body": "U47 verhindert Doppelbuchungen",
+      "id": "beispiele",
+      "title": "So verschieden sind die Stories",
+      "body": "Vier Beispiele: verschiedene Personas, Prioritäten und Releases",
       "points": [
-        "Beim Checkout wird der Platz verbindlich reserviert",
-        "Priorität hoch, eingeplant für Release 1",
-        "Taucht wieder auf: im Sequenzdiagramm und im Zustandsautomaten"
-      ]
+        "Von der Kasse über den Einlass bis zur Komfort-Suche",
+        "U47, der Sitz-Hold, ist der fachliche Kern: er verhindert Doppelbuchungen",
+        "Akzeptanzkriterien öffnen sich auf der Website je Karte"
+      ],
+      "visual": {
+        "id": "storyGalerie",
+        "props": {
+          "ids": [
+            "U47",
+            "U01",
+            "U15",
+            "U22"
+          ],
+          "markiert": "U47"
+        }
+      },
+      "kernsatz": "U47 taucht wieder auf: im Sequenzdiagramm und im Zustandsautomaten."
     },
     {
       "abschnitt": "story-map",

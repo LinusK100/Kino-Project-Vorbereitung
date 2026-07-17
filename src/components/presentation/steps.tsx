@@ -18,7 +18,7 @@ import {
   DreiStationen, JsonZuSvg, TeilmengeModi, InnovationsMatrix, IdeeVerankert,
   IdeenListe, RollenLive, LiveDemo, Fundament, AgendaListe,
 } from './visuals/product'
-import { PersonaKern, PersonaBaum, ZieleFrustrationen, StorySchema, StoryKarte, StoryVerteilung, BackboneChips, ReleaseBaender, StoryMapMini } from './visuals/people'
+import { PersonaKern, PersonaBaum, ZieleFrustrationen, StorySchema, StoryKarte, StoryVerteilung, BackboneChips, ReleaseBaender, StoryMapMini, StoryGalerie } from './visuals/people'
 import { FlowUebersicht, SeqAusschnitt, SitzHappyPath, SitzRueckwege, TicketZyklus, BuchungZyklus, ZahlungZyklus, AutomatenKurz } from './visuals/flow'
 import { UmlBuchungsmodell, UmlVorstellungSitz, UmlBuchungskette, UmlKomposition, UmlServices, UmlVererbung, EnumAbgleich } from './visuals/uml'
 import { AblaufFlow, WerkzeugChips, DateiChips, ArbeitsweiseKompakt } from './visuals/meta'
@@ -58,6 +58,7 @@ const VISUALS: Record<string, (p: P) => ReactNode> = {
   backboneChips: (p) => <BackboneChips tier={(p?.tier as Tier) ?? 'basis'} />,
   releaseBaender: (p) => <ReleaseBaender tier={(p?.tier as Tier) ?? 'basis'} />,
   storyMapMini: () => <StoryMapMini />,
+  storyGalerie: (p) => <StoryGalerie ids={(p?.ids as string[]) ?? []} markiert={p?.markiert as string | undefined} />,
   flowUebersicht: () => <FlowUebersicht />,
   seqAusschnitt: (p) => <SeqAusschnitt flow={p?.flow as string} msgSeqs={p?.msgSeqs as string[]} frame={p?.frame as { label: string; guard: string } | undefined} />,
   sitzHappyPath: () => <SitzHappyPath />,

@@ -434,3 +434,10 @@
   via margin:auto am Inhalt statt items-center am Container (Flex-Center
   machte den linken/oberen Überlauf unerreichbar). Skript auf 25 Folien
   nachgezogen. Lint 0, Playwright 25er-Durchlauf ALLES GRÜN, PDF neu.
+- 2026-07-17 (6): User-Stories-Folie der Gesamt-Präsentation (Owner): statt
+  einer ausführlichen U47-Karte mit Akzeptanzkriterien jetzt eine Galerie
+  aus vier kompakten Stories (storyGalerie-Visual: U47/U01/U15/U22 —
+  Stammkundin, Kasse, Einlass, Student; Prioritäten und Releases als Chips
+  ablesbar, U47 als „der Kern" hervorgehoben). Abschnitts-Tour behält die
+  Detailkarte. Skript-Folie 9 nachgezogen. Lint 0, Playwright ALLES GRÜN,
+  PDF neu exportiert.
