@@ -396,7 +396,7 @@ export function AgendaListe() {
   const reduce = useReducedMotion()
   const P = pres()
   return (
-    <div className="grid grid-cols-2 xl:grid-cols-3 gap-3.5 w-full" style={{ maxWidth: 1080 }}>
+    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 w-full" style={{ maxWidth: 1220 }}>
       {AGENDA.map((a, i) => (
         <motion.div
           key={a.t} {...pop(i, reduce)}
@@ -404,11 +404,11 @@ export function AgendaListe() {
           style={{ background: P.chip, border: `1px solid ${P.line}` }}
         >
           <div className="h-[3px]" style={{ background: bright(a.c) }} />
-          <div className="px-5 py-4 flex items-start gap-3.5">
-            <span className="text-[26px] font-bold leading-none" style={{ color: bright(a.c) }}>{i + 1}</span>
+          <div className="px-6 py-5 flex items-start gap-4">
+            <span className="text-[32px] font-bold leading-none" style={{ color: bright(a.c) }}>{i + 1}</span>
             <span className="min-w-0">
-              <span className="block text-[15px] font-bold leading-tight" style={{ color: P.fg }}>{a.t}</span>
-              <span className="block text-[12px] mt-1" style={{ color: P.fgSoft }}>{a.s}</span>
+              <span className="block text-[17px] font-bold leading-tight" style={{ color: P.fg }}>{a.t}</span>
+              <span className="block text-[13px] mt-1.5" style={{ color: P.fgSoft }}>{a.s}</span>
             </span>
           </div>
         </motion.div>

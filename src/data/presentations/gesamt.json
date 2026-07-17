@@ -100,22 +100,18 @@
     },
     {
       "abschnitt": "story-map",
-      "ref": "story-map.backbone",
+      "id": "map",
+      "title": "Die Story Map",
       "body": "Waagerecht die Nutzerreise, senkrecht die Releases",
       "points": [
-        "Das Rückgrat: Aktivitäten vom Ticketkauf bis zur Verwaltung",
-        "Der Vollausbau ergänzt Gastro, Facility und Multi-Site"
-      ]
-    },
-    {
-      "abschnitt": "story-map",
-      "ref": "story-map.releases",
-      "body": "Release 1: die schmale, lauffähige Scheibe",
-      "points": [
-        "Kern-Aktivitäten: kaufen, Sitz wählen, einlösen, verwalten",
+        "Oben die Aktivitäten, vom Ticketkauf bis zur Verwaltung",
+        "Release 1 ist die schmale, lauffähige Scheibe: kaufen, Sitz wählen, einlösen, verwalten",
         "Suche, Gastro, Facility und Marke folgen in Release 2 und 3"
       ],
-      "kernsatz": "Auf der Website ist die Karte interaktiv: Bänder hervorheben, jede Karte öffnet ihre Story."
+      "visual": {
+        "id": "storyMapMini"
+      },
+      "kernsatz": "Auf der Website ist die Karte interaktiv: jede Karte öffnet ihre Story."
     },
     {
       "abschnitt": "klassendiagramm",

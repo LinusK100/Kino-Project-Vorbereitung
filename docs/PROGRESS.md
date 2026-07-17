@@ -423,3 +423,14 @@
   sichert die Qualität"); schwache Karten gestrichen. (5) Skript auf 26
   Folien inkl. Rückfragen zum agentischen Weg aktualisiert (MD+PDF in
   ~/Downloads). Lint 0, Playwright 26er-Durchlauf ALLES GRÜN, PDF neu.
+- 2026-07-17 (5): Feinschliff-Paket (Owner). (1) Agenda-Karten größer (px-6
+  py-5, Nummern 32px, maxWidth 1220). (2) UML-Legende erklärt jetzt die
+  Schichten: „Jede Kachel im Diagramm ist eine Klasse" + je Gruppe Anzahl,
+  Erklärung und Beispielklassen (Domäne/Services/Stores/DTOs/Enums); grüner
+  Punkt erklärt. (3) Story Map in der Präsentation: statt zwei unlesbarer
+  Chip-/Band-Folien EINE Matrix-Folie (storyMapMini: Aktivitäten × Releases
+  mit Story-Zahlen aus den Daten, gestrichelt = Vollausbau) → 25 Folien.
+  (4) Diagramm-Vollbild: horizontal UND vertikal scrollbar — Zentrierung
+  via margin:auto am Inhalt statt items-center am Container (Flex-Center
+  machte den linken/oberen Überlauf unerreichbar). Skript auf 25 Folien
+  nachgezogen. Lint 0, Playwright 25er-Durchlauf ALLES GRÜN, PDF neu.

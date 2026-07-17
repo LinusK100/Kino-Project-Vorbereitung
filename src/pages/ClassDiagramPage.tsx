@@ -107,14 +107,46 @@ export default function ClassDiagramPage() {
   )
 }
 
+// Erklärung je Schicht — beantwortet „wo sind die Klassen?": Jede Kachel im
+// Diagramm IST eine Klasse; die Farbe zeigt nur, zu welcher Schicht sie gehört.
+const gruppenInfo: Record<string, { text: string; beispiele: string[] }> = {
+  domain: { text: 'die fachlichen Klassen, das Herz des Systems', beispiele: ['Buchung', 'Ticket', 'Sitzplatz'] },
+  service: { text: 'steuern die Abläufe zwischen den Klassen', beispiele: ['BuchungService'] },
+  store: { text: 'halten den Zustand der Oberfläche', beispiele: [] },
+  dto: { text: 'Datenpakete zwischen Frontend und Server', beispiele: [] },
+  enum: { text: 'feste Wertelisten', beispiele: ['Sitzstatus', 'Nutzerrolle'] },
+}
+
 function ClassLegend() {
+  const anzahl = useMemo(() => {
+    const n: Record<string, number> = {}
+    for (const c of uml.classes) n[c.group] = (n[c.group] ?? 0) + 1
+    return n
+  }, [])
   return (
-    <div className="flex flex-wrap gap-x-5 gap-y-2 text-xs" style={{ color: 'var(--text-secondary)' }}>
-      {Object.entries(groupLabel).map(([g, l]) => (
-        <span key={g} className="flex items-center gap-1.5"><span className="w-3 h-3 rounded" style={{ background: UML_GROUP_COLOR[g] }} />{l}</span>
-      ))}
-      <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full" style={{ background: '#4ade80' }} /> implementiert</span>
-      <span>◆ Komposition · ▷ Vererbung · → Assoziation · ⇢ Abhängigkeit</span>
+    <div className="text-xs" style={{ color: 'var(--text-secondary)' }}>
+      <p className="mb-2.5">
+        <strong style={{ color: 'var(--text-primary)' }}>Jede Kachel im Diagramm ist eine Klasse.</strong>{' '}
+        Die Farbe zeigt, zu welcher Schicht sie gehört:
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-1.5 mb-3">
+        {Object.entries(groupLabel).map(([g, l]) => {
+          const info = gruppenInfo[g]
+          return (
+            <span key={g} className="flex items-start gap-1.5 leading-snug">
+              <span className="mt-[3px] w-3 h-3 rounded flex-shrink-0" style={{ background: UML_GROUP_COLOR[g] }} />
+              <span>
+                <strong style={{ color: 'var(--text-primary)' }}>{l}</strong> ({anzahl[g] ?? 0}): {info.text}
+                {info.beispiele.length > 0 && <>, z.&nbsp;B. {info.beispiele.join(', ')}</>}
+              </span>
+            </span>
+          )
+        })}
+      </div>
+      <div className="flex flex-wrap gap-x-5 gap-y-1.5">
+        <span className="flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full" style={{ background: '#4ade80' }} /> grüner Punkt = im Prototyp implementiert</span>
+        <span>◆ Komposition · ▷ Vererbung · → Assoziation · ⇢ Abhängigkeit</span>
+      </div>
     </div>
   )
 }

@@ -1,10 +1,81 @@
 // Folien-Visuals für Anforderungen: Personas, User Stories, Story Map.
 // Alle Karten/Balken werden aus den JSON-Daten berechnet.
+import { Fragment } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
 import { CheckCircle2, Crown, Frown, Target } from 'lucide-react'
 import { personas, personaById, stories, storyMaps } from '@/data/content'
 import { zahlwort } from '@/lib/utils'
 import { bright, draw, pop, VEASE, pres } from './core'
+
+// ── Story Map als lesbare Matrix: Aktivitäten × Releases mit Story-Zahlen ──
+const REL_CFG = [
+  { r: 1, label: 'Release 1 · MVP', c: '#437a22' },
+  { r: 2, label: 'Release 2', c: '#d19900' },
+  { r: 3, label: 'Release 3', c: '#a13544' },
+]
+
+export function StoryMapMini() {
+  const reduce = useReducedMotion()
+  const P = pres()
+  const acts = storyMaps.erweitert.activities
+  const basisIds = new Set(storyMaps.basis.activities.map((a) => a.id))
+  const release = (id: string) => stories.erweitert.find((s) => s.id === id)?.release
+  const count = (aktIdx: number, r: number) =>
+    acts[aktIdx].steps.flatMap((st) => st.stories ?? []).filter((id) => release(id) === r).length
+
+  return (
+    <div style={{ width: 128 + acts.length * 94 }}>
+      <div className="grid gap-1.5" style={{ gridTemplateColumns: `120px repeat(${acts.length}, 1fr)` }}>
+        {/* Kopfzeile: die Nutzerreise */}
+        <div className="flex items-end pb-1 text-[9px] font-bold uppercase tracking-wider" style={{ color: P.fgFaint }}>
+          Nutzerreise →
+        </div>
+        {acts.map((a, i) => (
+          <motion.div
+            key={a.id} {...pop(i, reduce, 0.15)}
+            className="rounded-lg px-1.5 py-2 text-center text-[9.5px] font-bold uppercase leading-tight flex items-center justify-center"
+            style={{
+              background: P.chipStrong, color: P.fg, minHeight: 44,
+              border: basisIds.has(a.id) ? `1px solid ${P.line}` : `1px dashed ${P.lineStrong}`,
+            }}
+            title={basisIds.has(a.id) ? undefined : 'kommt im Vollausbau dazu'}
+          >
+            {a.name}
+          </motion.div>
+        ))}
+        {/* Release-Zeilen: Zahl = Stories dieser Aktivität im Release */}
+        {REL_CFG.map((rel, ri) => (
+          <Fragment key={rel.r}>
+            <motion.div
+              key={`l${rel.r}`} {...pop(acts.length + ri * 3, reduce, 0.15)}
+              className="rounded-lg px-2.5 flex items-center text-[11px] font-bold"
+              style={{ background: `${rel.c}22`, color: bright(rel.c), border: `1px solid ${bright(rel.c)}55`, minHeight: 42 }}
+            >
+              {rel.label}
+            </motion.div>
+            {acts.map((a, ai) => {
+              const n = count(ai, rel.r)
+              return (
+                <motion.div
+                  key={`${rel.r}-${a.id}`} {...pop(acts.length + ri * 3 + 1 + (ai % 2), reduce, 0.15)}
+                  className="rounded-lg flex items-center justify-center text-[13px] font-bold"
+                  style={n > 0
+                    ? { background: `${rel.c}2e`, color: bright(rel.c), border: `1px solid ${bright(rel.c)}44`, minHeight: 42 }
+                    : { background: P.chip, color: P.fgFaint, border: `1px solid ${P.line}`, minHeight: 42, opacity: 0.55 }}
+                >
+                  {n > 0 ? n : '–'}
+                </motion.div>
+              )
+            })}
+          </Fragment>
+        ))}
+      </div>
+      <motion.p {...pop(acts.length + 10, reduce, 0.2)} className="mt-2.5 text-[10.5px] text-center" style={{ color: P.fgFaint }}>
+        Zahl = User Stories der Aktivität im Release · gestrichelte Aktivitäten kommen im Vollausbau dazu
+      </motion.p>
+    </div>
+  )
+}
 
 // ── Personas: die vier Kern-Personas des MVP ──
 export function PersonaKern() {

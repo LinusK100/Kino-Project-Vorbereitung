@@ -271,13 +271,16 @@ function DiagramFullscreen({ children, legend, onClose }: { children: React.Reac
           </button>
         </div>
       </div>
+      {/* Zentrierung über margin:auto am Inhalt (nicht items-center am Container):
+          sonst ist bei Inhalt größer als der Viewport der linke/obere Überlauf
+          unerreichbar und horizontales/vertikales Scrollen wirkt kaputt. */}
       <div
         ref={scrollRef}
-        className="flex-1 overflow-auto select-none flex items-center justify-center"
+        className="flex-1 overflow-auto select-none flex"
         style={{ cursor: dragging ? 'grabbing' : 'grab' }}
         onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
       >
-        <div ref={contentRef} style={{ zoom, width: 'max-content', padding: 24 }}>{children}</div>
+        <div ref={contentRef} style={{ zoom, width: 'max-content', padding: 24, margin: 'auto' }}>{children}</div>
       </div>
       {legend && <div className="px-4 py-3 border-t flex-shrink-0" style={{ borderColor: 'var(--border-color)' }}>{legend}</div>}
     </div>,
