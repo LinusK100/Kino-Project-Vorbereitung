@@ -466,3 +466,10 @@
   PDF — Abweichungen vom Live-Aussehen sind damit konstruktionsbedingt
   unmöglich. Titel-/Schlussseite verlinken auf die Website. Druck-Route
   bleibt für manuelles Drucken bestehen. Lint 0, Playwright ALLES GRÜN.
+- 2026-07-17 (10): PDF-Export: Aufnahme jetzt stabilitätsbasiert statt fester
+  Wartezeit (Owner-Fund: Story-Map-Folie war mitten in der Einblend-
+  Staffelung fotografiert, ~1,9 s > 1,3 s Wartezeit; Innovations-Matrix und
+  Fazit lagen knapp an der Grenze). Der Export fotografiert jede Folie so
+  lange, bis zwei aufeinanderfolgende Aufnahmen pixelidentisch sind (max.
+  ~5,5 s) — jede Folie ist damit garantiert fertig animiert. Story-Map- und
+  Matrix-Seite im PDF gegengeprüft: vollständig.

@@ -58,10 +58,23 @@ if (isMain) {
     const folien = await page.locator('[role="tablist"] button').count()
     if (folien < 10) throw new Error(`Nur ${folien} Folien erkannt — Präsentation defekt?`)
 
+    // Fotografieren, bis zwei aufeinanderfolgende Aufnahmen pixelidentisch sind:
+    // Folien mit langer Einblend-Staffelung (z. B. die Story-Map-Matrix) sind so
+    // garantiert fertig animiert, ohne pauschal lange zu warten.
+    const stabilesFoto = async () => {
+      let prev = await page.screenshot({ type: 'jpeg', quality: 92 })
+      for (let t = 0; t < 12; t++) {
+        await page.waitForTimeout(400)
+        const cur = await page.screenshot({ type: 'jpeg', quality: 92 })
+        if (cur.equals(prev)) return cur
+        prev = cur
+      }
+      return prev
+    }
     const bilder = []
     for (let i = 0; i < folien; i++) {
-      await page.waitForTimeout(1300) // Einblend-Animationen und FitVisual ausklingen lassen
-      bilder.push(await page.screenshot({ type: 'jpeg', quality: 92 }))
+      await page.waitForTimeout(700) // Folienwechsel-Übergang abwarten
+      bilder.push(await stabilesFoto())
       if (i < folien - 1) await page.keyboard.press('ArrowRight')
     }
     if (errors.length) throw new Error('Seitenfehler: ' + errors.join(' | '))
