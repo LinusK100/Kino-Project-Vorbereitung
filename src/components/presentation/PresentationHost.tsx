@@ -34,12 +34,15 @@ function CinemaMode() {
 
   const gesamtDeck = useGesamt()
   const sectionSteps = usePresentation(run.section)
-  const deck: GesamtSlide[] = useMemo(
-    () => (run.scope === 'gesamt'
-      ? gesamtDeck
-      : sectionSteps.map((s) => ({ ...s, abschnitt: run.section }))),
-    [run.scope, run.section, gesamtDeck, sectionSteps],
-  )
+  // „Nur diesen Abschnitt" zeigt exakt die Folien der Gesamt-Präsentation dieses
+  // Abschnitts (inkl. Überschreibungen aus dem Drehbuch) — gleicher Inhalt, nur
+  // kürzer. Abschnitte ohne eigene Gesamt-Folien (Website-Tour, Arbeitsweise)
+  // behalten ihre eigenständige Tour.
+  const deck: GesamtSlide[] = useMemo(() => {
+    if (run.scope === 'gesamt') return gesamtDeck
+    const teil = gesamtDeck.filter((s) => s.abschnitt === run.section)
+    return teil.length > 0 ? teil : sectionSteps.map((s) => ({ ...s, abschnitt: run.section }))
+  }, [run.scope, run.section, gesamtDeck, sectionSteps])
 
   const total = deck.length
   const index = Math.max(0, Math.min(total - 1, run.index))
@@ -53,11 +56,18 @@ function CinemaMode() {
     [total, setPresIndex],
   )
   // Beenden merkt sich die Stelle der Gesamt-Präsentation („Ab hier weitermachen");
-  // ein Abschluss auf der letzten Folie setzt sie zurück.
-  const close = useCallback(
-    () => closePres(atEnd ? null : index),
-    [closePres, atEnd, index],
-  )
+  // ein Abschluss auf der letzten Folie setzt sie zurück. Wer die Gesamt-
+  // Präsentation zu Ende geführt hat („Fertig"), landet oben auf dem Dashboard.
+  const close = useCallback(() => {
+    const heim = atEnd && run.scope === 'gesamt'
+    closePres(atEnd ? null : index)
+    if (heim) {
+      if (location.pathname !== '/') navigate('/')
+      // Scroll erst nach dem Schließen zurücksetzen — solange das Overlay offen
+      // ist, sperrt body.overflow die Seite.
+      requestAnimationFrame(() => window.scrollTo(0, 0))
+    }
+  }, [closePres, atEnd, index, run.scope, location.pathname, navigate])
 
   // Hintergrund folgt dem Abschnitt der aktuellen Folie — unsichtbar unter dem
   // opaken Overlay, aber beim Beenden steht man auf der richtigen Seite.

@@ -91,7 +91,7 @@ export function Presentation({ section, accent, label = 'Präsentation', invert,
             <StartOption
               icon={Play} accent={accent}
               title={sectionLabel ?? 'Nur diesen Abschnitt'}
-              desc="Die kurze Tour dieses Abschnitts"
+              desc={sectionLabel ? 'Die kurze Tour dieses Abschnitts' : 'Die Folien dieses Abschnitts, wie im Gesamtvortrag'}
               onClick={() => start('abschnitt')}
             />
           </div>
