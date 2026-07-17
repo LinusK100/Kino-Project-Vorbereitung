@@ -5,7 +5,8 @@
       "art": "titel",
       "id": "titel",
       "title": "CineTicket",
-      "body": "Ein Kino-Ticketsystem. Von der Anforderungsanalyse über die UML-Modelle bis zum klickbaren Prototyp."
+      "body": "Ein Kino-Ticketsystem. Von der Anforderungsanalyse über die UML-Modelle bis zum klickbaren Prototyp.",
+      "link": "https://linusk100.github.io/Kino-Project-Vorbereitung/"
     },
     {
       "abschnitt": "start",
@@ -294,8 +295,15 @@
       "body": "Mit diesen Artefakten und agentischem Coding wird aus dem Entwurf das echte System",
       "visual": {
         "id": "fundament"
-      },
-      "kernsatz": "Vielen Dank. Fragen und Diskussion."
+      }
+    },
+    {
+      "abschnitt": "abschluss",
+      "art": "titel",
+      "id": "danke",
+      "title": "Vielen Dank",
+      "body": "Fragen und Diskussion. Alle Details, Diagramme und der Prototyp stehen auf der Projekt-Website.",
+      "link": "https://linusk100.github.io/Kino-Project-Vorbereitung/"
     }
   ]
 }

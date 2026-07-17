@@ -90,7 +90,7 @@ function renderVisual(spec?: PresentationVisualSpec): ReactNode {
 function resolve(raw: RawPresentationStep[]): PresentationStep[] {
   return raw.map((s) => ({
     id: s.id, title: s.title, body: s.body, points: s.points,
-    visual: renderVisual(s.visual), kernsatz: s.kernsatz, art: s.art,
+    visual: renderVisual(s.visual), kernsatz: s.kernsatz, art: s.art, link: s.link,
   }))
 }
 
@@ -146,6 +146,7 @@ function resolveGesamt(): GesamtSlide[] {
       visual: f.visual ?? base?.visual,
       kernsatz: f.kernsatz ?? base?.kernsatz,
       art: f.art ?? base?.art,
+      link: f.link ?? base?.link,
     }
     return { ...resolve([merged])[0], abschnitt: f.abschnitt }
   })

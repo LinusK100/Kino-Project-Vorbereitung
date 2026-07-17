@@ -145,6 +145,7 @@ export interface PresentationStep {
                            // z. B. ein Diagramm-Ausschnitt — Text wird zur Bildunterschrift
   kernsatz?: string        // hervorgehobener Merksatz im Banner unter der Folie
   art?: 'titel'            // Sonder-Layout (Titelfolie: größer, ohne Zähler-Kicker)
+  link?: string            // Website-Link (Titel- und Schlussfolie)
 }
 
 // ── JSON-Form der Touren (Text lebt in src/data/presentations/*.json) ──
@@ -162,6 +163,7 @@ export interface RawPresentationStep {
   visual?: PresentationVisualSpec
   kernsatz?: string
   art?: 'titel'
+  link?: string
 }
 // Eine Abschnitts-Datei: modus-los (steps) ODER mit Einfach/Erweitert.
 export interface PresentationData {
@@ -183,5 +185,6 @@ export interface GesamtEintrag {
   visual?: PresentationVisualSpec
   kernsatz?: string
   art?: 'titel'
+  link?: string
 }
 export interface GesamtData { folien: GesamtEintrag[] }

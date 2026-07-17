@@ -5,6 +5,7 @@
 // Wird vom PresentationHost UND von der Druck-Route verwendet: PDF = Vortrag.
 import { useLayoutEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'motion/react'
+import { Globe } from 'lucide-react'
 import { useAppStore } from '@/store/appStore'
 import { SECTION_META, type GesamtSlide } from './steps'
 import { bright, pres } from './visuals/core'
@@ -82,6 +83,15 @@ export function SlideView({ step }: { step: GesamtSlide }) {
         <motion.p variants={itemV} className="leading-relaxed" style={{ color: P.fgSoft, fontSize: 'clamp(1.05rem, 1.8vw, 1.4rem)', maxWidth: 700, textWrap: 'pretty' }}>
           {step.body}
         </motion.p>
+        {step.link && (
+          <motion.a
+            variants={itemV} href={step.link} target="_blank" rel="noreferrer"
+            className="inline-flex items-center gap-2 mt-7 px-4 py-2 rounded-full font-mono text-[13px] font-medium"
+            style={{ color: acc, border: `1px solid ${acc}55`, background: `${meta.accent}0d` }}
+          >
+            <Globe size={14} /> {step.link.replace('https://', '').replace(/\/$/, '')}
+          </motion.a>
+        )}
       </motion.div>
     )
   }

@@ -448,3 +448,12 @@
   Icon/„PRÄSENTATION"/Zähler/Mond/Beenden, unten Zurück-Knopf, Timeline und
   Weiter/Fertig-Pill. Lint 0, Playwright ALLES GRÜN, PDF neu exportiert und
   Seite für Seite gegengeprüft.
+- 2026-07-17 (8): PDF-Fidelity + Schlussfolie (Owner). (1) Diagramme im PDF
+  waren klein/abgeschnitten (Sequenz-Folien): Druckseiten und Export jetzt
+  exakt in Live-Größe 1600×900 px, Chromium mit --hide-scrollbars (die
+  Scrollbar der gestapelten Druckseiten verschob sonst die Messung von
+  FitVisual gegenüber dem Print-Layout). PDF-Seiten = 1:1 die Live-Ansicht.
+  (2) Neue Schlussfolie „Vielen Dank" (Titel-Layout) → 26 Folien; Fazit ohne
+  Danke-Banner. (3) Website-Link als Pill mit Globus-Icon auf Titel- UND
+  Schlussfolie (neues link-Feld in den Folien-Typen, klickbar auch im PDF).
+  Skript nachgezogen. Lint 0, Playwright 26er-Durchlauf ALLES GRÜN.

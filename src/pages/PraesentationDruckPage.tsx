@@ -1,5 +1,5 @@
 // Druck-Ansicht der Gesamt-Präsentation: alle Folien gestapelt, eine je Seite
-// (16:9, 297×167 mm), immer hell, ohne Animationen. Nutzt SlideCard, Kopf- und
+// (16:9, 1600×900 px = Live-Viewport), immer hell, ohne Animationen. Nutzt SlideCard, Kopf- und
 // Fußleiste des Präsentationsmodus — jede PDF-Seite sieht exakt aus wie die
 // Präsentation auf der Website. Quelle für scripts/export-praesentation.mjs.
 import { useEffect } from 'react'
@@ -39,7 +39,7 @@ function DruckSeite({ step, index, deck }: { step: GesamtSlide; index: number; d
   return (
     <section
       style={{
-        width: '297mm', height: '167mm',
+        width: 1600, height: 900,
         pageBreakAfter: index < total - 1 ? 'always' : undefined,
         position: 'relative', overflow: 'hidden',
         background: `radial-gradient(120% 80% at 50% 0%, ${meta.accent}14 0%, transparent 55%), linear-gradient(180deg, #eef1f6 0%, #e6eaf1 100%)`,

@@ -39,10 +39,11 @@ if (isMain) {
 
     console.log('→ Druck-Route rendern …')
     const { chromium } = await import('playwright-core')
-    const browser = await chromium.launch({ channel: 'chrome', headless: true })
-    // Viewport exakt in Seitengröße (297×167 mm bei 96 dpi): Sonst reflowt die
-    // Print-Pipeline auf die schmalere Seite und breite Visuals brechen um.
-    const page = await browser.newPage({ viewport: { width: 1122, height: 631 } })
+    const browser = await chromium.launch({ channel: 'chrome', headless: true, args: ['--hide-scrollbars'] })
+    // Viewport exakt in Seitengröße (1600×900 = Live-Ansicht) und ohne Scroll-
+    // balken: Sonst reflowt die Print-Pipeline und die Maße weichen von der
+    // Website-Präsentation ab.
+    const page = await browser.newPage({ viewport: { width: 1600, height: 900 } })
     const errors = []
     page.on('pageerror', (e) => errors.push(String(e)))
     await page.goto(`${BASE}/praesentation/druck`, { waitUntil: 'networkidle' })
@@ -53,7 +54,7 @@ if (isMain) {
 
     await page.pdf({
       path: PDF,
-      width: '297mm', height: '167mm',
+      width: '1600px', height: '900px',
       printBackground: true,
       margin: { top: 0, bottom: 0, left: 0, right: 0 },
     })
