@@ -4,6 +4,7 @@ import { AnimatePresence } from 'motion/react'
 import { AppShell } from '@/components/layout/AppShell'
 import { ErrorBoundary } from '@/components/shared/ErrorBoundary'
 import { PresentationHost } from '@/components/presentation/PresentationHost'
+import { useAppStore } from '@/store/appStore'
 import { useTheme } from '@/hooks/useTheme'
 import '@/styles/globals.css'
 
@@ -35,25 +36,34 @@ function Skeleton() {
 
 function AnimatedRoutes() {
   const location = useLocation()
+  // Während der Präsentation navigiert der Hintergrund in schneller Folge unter
+  // dem opaken Overlay. Mit mode="wait" darf die neue Seite erst einhängen, wenn
+  // die Exit-Animation der alten fertig ist — wird die unter dem Overlay
+  // ausgebremst oder abgebrochen, bleibt die alte Seite dauerhaft stehen.
+  // Deshalb: solange die Präsentation läuft, Routen ohne Übergangsanimation.
+  // Der Wechsel des Wrappers baut den Routen-Baum beim Öffnen/Schließen zudem
+  // frisch auf, sodass beim Beenden garantiert die aktuelle Seite steht.
+  const presAktiv = useAppStore((s) => s.pres !== null)
+  const inhalt = (
+    <ErrorBoundary key={location.pathname}>
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<OverviewPage />} />
+        <Route path="/personas" element={<PersonasPage />} />
+        <Route path="/user-stories" element={<UserStoriesPage />} />
+        <Route path="/story-map" element={<StoryMapPage />} />
+        <Route path="/klassendiagramm" element={<ClassDiagramPage />} />
+        <Route path="/sequenzdiagramme" element={<SequencePage />} />
+        <Route path="/zustandsdiagramme" element={<StatePage />} />
+        <Route path="/innovation" element={<InnovationPage />} />
+        <Route path="/prototyp" element={<PrototypePage />} />
+        <Route path="/arbeitsweise" element={<MethodikPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </ErrorBoundary>
+  )
   return (
     <Suspense fallback={<Skeleton />}>
-      <AnimatePresence mode="wait">
-        <ErrorBoundary key={location.pathname}>
-        <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<OverviewPage />} />
-          <Route path="/personas" element={<PersonasPage />} />
-          <Route path="/user-stories" element={<UserStoriesPage />} />
-          <Route path="/story-map" element={<StoryMapPage />} />
-          <Route path="/klassendiagramm" element={<ClassDiagramPage />} />
-          <Route path="/sequenzdiagramme" element={<SequencePage />} />
-          <Route path="/zustandsdiagramme" element={<StatePage />} />
-          <Route path="/innovation" element={<InnovationPage />} />
-          <Route path="/prototyp" element={<PrototypePage />} />
-          <Route path="/arbeitsweise" element={<MethodikPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-        </ErrorBoundary>
-      </AnimatePresence>
+      {presAktiv ? inhalt : <AnimatePresence mode="wait">{inhalt}</AnimatePresence>}
     </Suspense>
   )
 }
